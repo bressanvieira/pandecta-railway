@@ -1,0 +1,17 @@
+{
+  "name": "pandecta-railway",
+  "version": "2.0.0",
+  "description": "Pandecta — Inteligência Jurídica (Railway)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0",
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
