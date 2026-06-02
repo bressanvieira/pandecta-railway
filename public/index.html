@@ -999,7 +999,7 @@ function exportarWord() {
       if (/^##[^#]/.test(l))  { html += `<h2 style="font-family:Arial;font-size:13pt;font-weight:bold;border-bottom:1.5pt solid #C8A96B;padding-bottom:3pt;margin:16pt 0 8pt;">${inline(l.replace(/^##\s*/,''))}</h2>`; i++; continue; }
       if (/^###[^#]/.test(l)) { html += `<h3 style="font-family:Arial;font-size:12pt;font-weight:bold;font-style:italic;margin:14pt 0 6pt;">${inline(l.replace(/^###\s*/,''))}</h3>`; i++; continue; }
       if (/^####/.test(l))    { html += `<h4 style="font-family:Arial;font-size:12pt;font-weight:bold;margin:10pt 0 4pt;">${inline(l.replace(/^####\s*/,''))}</h4>`; i++; continue; }
-      if (/^---+$/.test(l.trim())) { html += '<hr style="border:none;border-top:1pt solid #C8A96B;margin:10pt 0;">'; i++; continue; }
+      if (/^---+$/.test(l.trim())) { html += '<p style="margin:6pt 0;">&nbsp;</p>'; i++; continue; }
       if (/^>\s/.test(l))     { html += `<blockquote style="font-family:Arial;font-size:11pt;font-style:italic;border-left:3pt solid #C8A96B;margin:8pt 0 8pt 20pt;padding:4pt 0 4pt 12pt;color:#333;">${inline(l.replace(/^>\s*/,''))}</blockquote>`; i++; continue; }
       if (/^[-*]\s/.test(l))  { html += `<p style="font-family:Arial;font-size:11pt;margin:3pt 0 3pt 20pt;">• ${inline(l.replace(/^[-*]\s+/,''))}</p>`; i++; continue; }
       if (/^\d+\.\s/.test(l)) { html += `<p style="font-family:Arial;font-size:11pt;margin:3pt 0 3pt 20pt;">${inline(l)}</p>`; i++; continue; }
