@@ -6,7 +6,6 @@
 <title>Pandecta — Inteligência Jurídica</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
 <style>
 :root{
   --navy:#001B2A;--navy-mid:#012338;--gold:#C8A96B;--gold-light:#e2c98e;--gold-dark:#9a7d48;
@@ -962,212 +961,93 @@ function copiar() {
 }
 
 // ════════════════════════════════════════════
-//  EXPORTAR WORD
+//  EXPORTAR WORD — HTML-to-Doc (sem biblioteca externa)
 // ════════════════════════════════════════════
-async function exportarWord() {
+function exportarWord() {
   if (!textoGerado) return;
 
-  if (typeof docx === 'undefined') {
-    toast('Aguarde a biblioteca Word carregar...', 'err');
-    return;
-  }
+  // Converte markdown para HTML com formatação jurídica
+  function mdParaHtml(md) {
+    const linhas = md.split('\n');
+    let html = '';
+    let i = 0;
+    while (i < linhas.length) {
+      const l = linhas[i];
 
-  const { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel,
-          BorderStyle, WidthType, TableRow, TableCell, Table } = docx;
-
-  const CM = 567; // twips per cm
-  const paragraphs = [];
-  const lines = textoGerado.split('\n');
-
-  function parseInline(text) {
-    // Processa bold e italic inline
-    const runs = [];
-    const regex = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|(.+?)(?=\*\*\*|\*\*|\*|$))/g;
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      if (!match[0]) break;
-      if (match[2]) runs.push(new TextRun({ text: match[2], bold: true, italics: true, font: 'Arial', size: 24 }));
-      else if (match[3]) runs.push(new TextRun({ text: match[3], bold: true, font: 'Arial', size: 24 }));
-      else if (match[4]) runs.push(new TextRun({ text: match[4], italics: true, font: 'Arial', size: 24 }));
-      else if (match[5]) runs.push(new TextRun({ text: match[5], font: 'Arial', size: 24 }));
-    }
-    if (runs.length === 0) runs.push(new TextRun({ text, font: 'Arial', size: 24 }));
-    return runs;
-  }
-
-  let i = 0;
-  while (i < lines.length) {
-    const line = lines[i];
-
-    // H1
-    if (/^#\s+/.test(line) && !/^##/.test(line)) {
-      const text = line.replace(/^#\s+/, '').replace(/\*\*/g, '');
-      paragraphs.push(new Paragraph({
-        children: [new TextRun({ text, bold: true, font: 'Arial', size: 28, color: '001B2A' })],
-        alignment: AlignmentType.CENTER,
-        spacing: { before: 480, after: 240 },
-      }));
-      i++; continue;
-    }
-
-    // H2
-    if (/^##\s+/.test(line) && !/^###/.test(line)) {
-      const text = line.replace(/^##\s+/, '').replace(/\*\*/g, '');
-      paragraphs.push(new Paragraph({
-        children: [new TextRun({ text, bold: true, font: 'Arial', size: 26 })],
-        spacing: { before: 360, after: 160 },
-        border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: 'C8A96B', space: 4 } },
-      }));
-      i++; continue;
-    }
-
-    // H3
-    if (/^###\s+/.test(line)) {
-      const text = line.replace(/^###\s+/, '').replace(/\*\*/g, '');
-      paragraphs.push(new Paragraph({
-        children: [new TextRun({ text, bold: true, italics: true, font: 'Arial', size: 24 })],
-        spacing: { before: 280, after: 120 },
-      }));
-      i++; continue;
-    }
-
-    // H4
-    if (/^####\s+/.test(line)) {
-      const text = line.replace(/^####\s+/, '').replace(/\*\*/g, '');
-      paragraphs.push(new Paragraph({
-        children: [new TextRun({ text, bold: true, font: 'Arial', size: 24 })],
-        spacing: { before: 200, after: 100 },
-      }));
-      i++; continue;
-    }
-
-    // Separador ---
-    if (/^---+$/.test(line.trim())) {
-      paragraphs.push(new Paragraph({
-        children: [new TextRun({ text: '', font: 'Arial', size: 24 })],
-        spacing: { before: 120, after: 120 },
-        border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: 'C8A96B', space: 4 } },
-      }));
-      i++; continue;
-    }
-
-    // Blockquote
-    if (/^>\s+/.test(line)) {
-      const text = line.replace(/^>\s+/, '').replace(/\*\*/g, '');
-      paragraphs.push(new Paragraph({
-        children: [new TextRun({ text, italics: true, font: 'Arial', size: 24, color: '444444' })],
-        indent: { left: 720, right: 360 },
-        spacing: { before: 120, after: 120 },
-        border: { left: { style: BorderStyle.SINGLE, size: 12, color: 'C8A96B', space: 8 } },
-      }));
-      i++; continue;
-    }
-
-    // Tabela Markdown
-    if (/^\|/.test(line)) {
-      const tableLines = [];
-      while (i < lines.length && /^\|/.test(lines[i])) {
-        tableLines.push(lines[i]);
-        i++;
+      // Tabela markdown
+      if (/^\|/.test(l)) {
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;width:100%;margin:12pt 0;">';
+        let primeiro = true;
+        while (i < linhas.length && /^\|/.test(linhas[i])) {
+          if (/^\|[-:\s|]+\|$/.test(linhas[i].trim())) { i++; continue; }
+          const celulas = linhas[i].split('|').filter((c,idx,arr) => idx > 0 && idx < arr.length-1);
+          html += '<tr>';
+          celulas.forEach(c => {
+            const tag = primeiro ? 'th' : 'td';
+            const bg  = primeiro ? 'background:#F0EBE0;' : '';
+            html += `<${tag} style="${bg}font-family:Arial;font-size:11pt;padding:5pt 8pt;">${inline(c.trim())}</${tag}>`;
+          });
+          html += '</tr>';
+          primeiro = false;
+          i++;
+        }
+        html += '</table>';
+        continue;
       }
-      // Filtra linha separadora
-      const rows = tableLines.filter(l => !/^\|[-:\s|]+\|$/.test(l.trim()));
-      const tableRows = rows.map((row, ri) => {
-        const cells = row.split('|').filter((c,idx) => idx > 0 && idx < row.split('|').length-1);
-        return new TableRow({
-          children: cells.map(cell => new TableCell({
-            children: [new Paragraph({
-              children: [new TextRun({
-                text: cell.trim().replace(/\*\*/g,''),
-                bold: ri === 0,
-                font: 'Arial',
-                size: 22,
-              })],
-            })],
-            shading: ri === 0 ? { fill: 'F0EBE0' } : {},
-          })),
-        });
-      });
-      if (tableRows.length > 0) {
-        paragraphs.push(new Table({
-          width: { size: 100, type: WidthType.PERCENTAGE },
-          rows: tableRows,
-        }));
-      }
-      continue;
-    }
 
-    // Lista com bullet
-    if (/^[-*]\s+/.test(line)) {
-      const text = line.replace(/^[-*]\s+/, '');
-      paragraphs.push(new Paragraph({
-        children: parseInline(text),
-        bullet: { level: 0 },
-        spacing: { before: 60, after: 60 },
-      }));
-      i++; continue;
-    }
+      if (/^#[^#]/.test(l))   { html += `<h1 style="font-family:Arial;font-size:14pt;font-weight:bold;text-align:center;margin:18pt 0 10pt;">${inline(l.replace(/^#\s*/,''))}</h1>`; i++; continue; }
+      if (/^##[^#]/.test(l))  { html += `<h2 style="font-family:Arial;font-size:13pt;font-weight:bold;border-bottom:1.5pt solid #C8A96B;padding-bottom:3pt;margin:16pt 0 8pt;">${inline(l.replace(/^##\s*/,''))}</h2>`; i++; continue; }
+      if (/^###[^#]/.test(l)) { html += `<h3 style="font-family:Arial;font-size:12pt;font-weight:bold;font-style:italic;margin:14pt 0 6pt;">${inline(l.replace(/^###\s*/,''))}</h3>`; i++; continue; }
+      if (/^####/.test(l))    { html += `<h4 style="font-family:Arial;font-size:12pt;font-weight:bold;margin:10pt 0 4pt;">${inline(l.replace(/^####\s*/,''))}</h4>`; i++; continue; }
+      if (/^---+$/.test(l.trim())) { html += '<hr style="border:none;border-top:1pt solid #C8A96B;margin:10pt 0;">'; i++; continue; }
+      if (/^>\s/.test(l))     { html += `<blockquote style="font-family:Arial;font-size:11pt;font-style:italic;border-left:3pt solid #C8A96B;margin:8pt 0 8pt 20pt;padding:4pt 0 4pt 12pt;color:#333;">${inline(l.replace(/^>\s*/,''))}</blockquote>`; i++; continue; }
+      if (/^[-*]\s/.test(l))  { html += `<p style="font-family:Arial;font-size:11pt;margin:3pt 0 3pt 20pt;">• ${inline(l.replace(/^[-*]\s+/,''))}</p>`; i++; continue; }
+      if (/^\d+\.\s/.test(l)) { html += `<p style="font-family:Arial;font-size:11pt;margin:3pt 0 3pt 20pt;">${inline(l)}</p>`; i++; continue; }
+      if (!l.trim())          { html += '<p style="margin:4pt 0;">&nbsp;</p>'; i++; continue; }
 
-    // Lista numerada
-    if (/^\d+\.\s+/.test(line)) {
-      const text = line.replace(/^\d+\.\s+/, '');
-      paragraphs.push(new Paragraph({
-        children: parseInline(text),
-        numbering: { reference: 'pandecta-numbering', level: 0 },
-        spacing: { before: 60, after: 60 },
-      }));
-      i++; continue;
+      html += `<p style="font-family:Arial;font-size:11pt;line-height:1.5;margin:6pt 0;text-align:justify;text-indent:35pt;">${inline(l)}</p>`;
+      i++;
     }
-
-    // Linha vazia
-    if (!line.trim()) {
-      paragraphs.push(new Paragraph({ children: [new TextRun({ text: '', font: 'Arial', size: 24 })], spacing: { before: 60, after: 60 } }));
-      i++; continue;
-    }
-
-    // Parágrafo normal
-    paragraphs.push(new Paragraph({
-      children: parseInline(line),
-      spacing: { before: 120, after: 120 },
-      indent: { firstLine: 709 }, // ~1.25cm
-    }));
-    i++;
+    return html;
   }
 
-  const areaNames = {consumidor:'Direito do Consumidor',civil:'Direito Civil',trabalhista:'Trabalhista',familia:'Família'};
+  function inline(txt) {
+    return txt
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>');
+  }
+
   const tipoNames = {peticao_inicial:'Petição Inicial',recurso:'Recurso',defesa:'Contestação',notificacao:'Notificação',contrato:'Contrato'};
   const autor = document.getElementById('w-autor').value.trim().split(',')[0] || 'Autor';
-  const nomeArq = `Pandecta_${tipoNames[wizTipoPeca]||'Documento'}_${autor.replace(/\s+/g,'-')}.docx`;
+  const nomeArq = `Pandecta_${(tipoNames[wizTipoPeca]||'Documento').replace(/\s/g,'-')}_${autor.replace(/\s+/g,'-')}.doc`;
 
-  const doc = new Document({
-    numbering: {
-      config: [{
-        reference: 'pandecta-numbering',
-        levels: [{ level: 0, format: 'decimal', text: '%1.', alignment: AlignmentType.START,
-          style: { paragraph: { indent: { left: 720, hanging: 360 } } } }],
-      }],
-    },
-    sections: [{
-      properties: {
-        page: {
-          margin: { top: 3*CM, bottom: 2*CM, left: 3*CM, right: 2*CM },
-        },
-      },
-      children: paragraphs,
-    }],
-  });
+  const corpo = mdParaHtml(textoGerado);
 
-  try {
-    const blob = await Packer.toBlob(doc);
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url; a.download = nomeArq; a.click();
-    URL.revokeObjectURL(url);
-    toast('Word exportado!', 'ok');
-  } catch(err) {
-    console.error('Erro Word:', err);
-    toast('Erro ao gerar Word: ' + err.message, 'err');
-  }
+  const wordHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office'
+    xmlns:w='urn:schemas-microsoft-com:office:word'
+    xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+  <meta charset='utf-8'>
+  <title>Pandecta</title>
+  <!--[if gte mso 9]>
+  <xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml>
+  <![endif]-->
+  <style>
+    @page { margin: 3cm 2cm 2cm 3cm; size: A4; }
+    body { font-family: Arial; font-size: 11pt; color: #000; }
+  </style>
+</head>
+<body>${corpo}</body>
+</html>`;
+
+  const blob = new Blob(['﻿', wordHtml], { type: 'application/msword;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = nomeArq; a.click();
+  URL.revokeObjectURL(url);
+  toast('Word exportado! (' + nomeArq + ')', 'ok');
 }
 
 // ── Toast ──
