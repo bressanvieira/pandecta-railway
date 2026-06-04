@@ -216,16 +216,20 @@ Gere o documento completo, técnico e formal, citando os artigos fornecidos acim
 Siga rigorosamente a estrutura e todas as regras do system prompt.`;
 
   // SSE headers
-  res.setHeader('Content-Type',      'text/event-stream');
-  res.setHeader('Cache-Control',     'no-cache');
-  res.setHeader('Connection',        'keep-alive');
-  res.setHeader('X-Accel-Buffering', 'no');
+  res.setHeader('Content-Type',               'text/event-stream');
+  res.setHeader('Cache-Control',              'no-cache, no-transform');
+  res.setHeader('Connection',                 'keep-alive');
+  res.setHeader('X-Accel-Buffering',          'no');
+  res.setHeader('Transfer-Encoding',          'chunked');
+  res.setHeader('Access-Control-Allow-Origin','*');
   res.flushHeaders();
 
-  // Keep-alive para evitar timeout de proxy reverso
+  // Keep-alive agressivo — SSE data a cada 3s para manter proxy vivo
   const keepAlive = setInterval(() => {
-    res.write(': keep-alive\n\n');
-  }, 15000);
+    try {
+      res.write(`data: ${JSON.stringify({ type: 'ping' })}\n\n`);
+    } catch(e) { clearInterval(keepAlive); }
+  }, 3000);
 
   try {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
