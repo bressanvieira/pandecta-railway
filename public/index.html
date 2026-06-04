@@ -3,754 +3,1289 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pandecta — Inteligência Jurídica</title>
+<title>Pandecta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
-:root{
-  --navy:#001B2A;--navy-mid:#012338;--gold:#C8A96B;--gold-light:#e2c98e;--gold-dark:#9a7d48;
-  --white:#F4F4F4;--muted:#7A93A8;--success:#27ae60;--danger:#e74c3c;
-  --card-bg:rgba(255,255,255,0.04);--card-border:rgba(200,169,107,0.15);
-  --radius:12px;--radius-sm:8px;
+:root {
+  --bg:    #07090E;
+  --s1:    #0B0F18;
+  --s2:    #101520;
+  --s3:    #161D2A;
+  --b1:    rgba(255,255,255,0.05);
+  --b2:    rgba(255,255,255,0.09);
+  --b3:    rgba(255,255,255,0.15);
+  --t1:    #DCE4F2;
+  --t2:    rgba(220,228,242,0.50);
+  --t3:    rgba(220,228,242,0.25);
+  --gold:  #B8976A;
+  --gold2: rgba(184,151,106,0.10);
+  --gold3: rgba(184,151,106,0.20);
+  --ok:    #4ADE80;
+  --err:   #F87171;
+  --r:     10px;
+  --r-lg:  18px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--navy);color:var(--white);min-height:100vh;overflow-x:hidden;}
-.screen{display:none;min-height:100vh;}
-.screen.active{display:flex;}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--t1);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
 
-/* TOPBAR */
-.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;
-  background:rgba(0,27,42,0.96);backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--card-border);
-  display:flex;align-items:center;justify-content:space-between;padding:0 28px;}
-.topbar-user{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;}
-.avatar{width:32px;height:32px;border-radius:50%;background:var(--gold-dark);
-  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--navy);}
+/* ── SCREENS ── */
+.screen { display:none; width:100%; height:100vh; flex-direction:column; }
+.screen.active { display:flex; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+.screen.active { animation: fadeIn .25s ease; }
 
-/* SIDEBAR */
-.sidebar{width:210px;min-height:100vh;background:rgba(0,0,0,0.2);
-  border-right:1px solid var(--card-border);padding:72px 0 24px;
-  display:flex;flex-direction:column;flex-shrink:0;}
-.sb-section{padding:8px 16px 4px;font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;}
-.sb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;
-  color:var(--muted);cursor:pointer;transition:all .15s;}
-.sb-item:hover{color:var(--white);background:rgba(255,255,255,0.04);}
-.sb-item.active{color:var(--gold);background:rgba(200,169,107,0.08);border-right:2px solid var(--gold);}
-.sb-badge{margin-left:auto;background:var(--gold);color:var(--navy);font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;}
-.sb-soon{margin-left:auto;font-size:10px;color:var(--muted);background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;}
+/* ── TOPBAR ── */
+.topbar {
+  height: 52px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--b1);
+  background: rgba(7,9,14,0.85);
+  backdrop-filter: blur(16px);
+  position: relative; z-index: 10;
+}
+.topbar-logo { display:flex; align-items:center; gap:10px; cursor:pointer; }
+.topbar-logo img { height:22px; opacity:.9; }
+.topbar-right { display:flex; align-items:center; gap:12px; }
+.topbar-btn {
+  padding: 5px 12px; border-radius:6px; font-size:12px; font-weight:500;
+  background: var(--b1); border:1px solid var(--b2); color: var(--t2);
+  cursor:pointer; transition: all .15s;
+}
+.topbar-btn:hover { background:var(--b2); color:var(--t1); }
+.avatar-sm {
+  width:28px; height:28px; border-radius:50%;
+  background: var(--s3); border:1px solid var(--b2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:600; color:var(--gold); cursor:pointer;
+}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-sm);
-  font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;}
-.btn-primary{background:var(--gold);color:var(--navy);}
-.btn-primary:hover{background:var(--gold-light);}
-.btn-ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.1);}
-.btn-ghost:hover{color:var(--white);border-color:rgba(255,255,255,0.25);}
-.btn-danger{background:rgba(231,76,60,.1);color:var(--danger);border:1px solid rgba(231,76,60,.2);}
+/* ══════════════════════════════════════════
+   LOGIN
+══════════════════════════════════════════ */
+#screen-login {
+  align-items:center; justify-content:center;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, #0E1525, var(--bg) 70%);
+}
+.login-wrap { width:100%; max-width:360px; padding:0 20px; }
+.login-icon {
+  width:44px; height:44px; border-radius:12px;
+  background: var(--gold2); border:1px solid var(--gold3);
+  display:flex; align-items:center; justify-content:center;
+  margin: 0 auto 28px;
+}
+.login-icon img { height:26px; opacity:.9; }
+.login-head { text-align:center; margin-bottom:36px; }
+.login-head h1 { font-size:22px; font-weight:600; letter-spacing:-.3px; margin-bottom:6px; }
+.login-head p { font-size:13px; color:var(--t2); }
+.login-field { margin-bottom:14px; }
+.login-label { font-size:11px; font-weight:500; color:var(--t3); letter-spacing:.5px; text-transform:uppercase; margin-bottom:7px; display:block; }
+.login-input {
+  width:100%; padding:11px 14px;
+  background:var(--s2); border:1px solid var(--b2); border-radius:var(--r);
+  color:var(--t1); font-size:14px; font-family:inherit; outline:none;
+  transition: border .15s;
+}
+.login-input:focus { border-color: var(--gold3); }
+.login-input::placeholder { color:var(--t3); }
+.login-submit {
+  width:100%; padding:12px; margin-top:8px;
+  background:var(--gold); color:#07090E;
+  border:none; border-radius:var(--r); font-size:14px; font-weight:600;
+  font-family:inherit; cursor:pointer; transition:opacity .15s;
+}
+.login-submit:hover { opacity:.88; }
+.login-err { font-size:12px; color:var(--err); text-align:center; margin-top:12px; display:none; }
+.login-footer { text-align:center; margin-top:28px; font-size:11px; color:var(--t3); }
 
-/* FORMS */
-.label{font-size:11px;letter-spacing:.5px;color:var(--muted);display:block;margin-bottom:6px;}
-.input,.select,.textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);
-  color:var(--white);font-size:13px;outline:none;transition:border .15s;font-family:inherit;}
-.input:focus,.select:focus,.textarea:focus{border-color:var(--gold);}
-.input::placeholder,.textarea::placeholder{color:var(--muted);}
-.select option{background:#012338;}
-.textarea{resize:vertical;line-height:1.6;}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+/* ══════════════════════════════════════════
+   HOME
+══════════════════════════════════════════ */
+#screen-home { background: var(--bg); }
+.home-body { flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px; overflow-y:auto; }
+.home-center { width:100%; max-width:640px; }
+.home-eyebrow { font-size:11px; font-weight:500; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:20px; opacity:.8; }
+.home-headline { font-size:36px; font-weight:600; line-height:1.15; letter-spacing:-.6px; margin-bottom:12px; }
+.home-sub { font-size:15px; color:var(--t2); margin-bottom:36px; line-height:1.6; }
+.home-input-wrap {
+  display:flex; align-items:flex-end; gap:10px;
+  background:var(--s2); border:1px solid var(--b2); border-radius:var(--r-lg);
+  padding:14px 14px 14px 18px; transition:border .2s;
+}
+.home-input-wrap:focus-within { border-color:var(--b3); }
+.home-textarea {
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--t1); font-size:15px; font-family:inherit; resize:none;
+  line-height:1.5; max-height:160px; min-height:24px; overflow-y:auto;
+}
+.home-textarea::placeholder { color:var(--t3); }
+.home-send {
+  width:36px; height:36px; border-radius:8px; flex-shrink:0;
+  background:var(--gold); border:none; cursor:pointer; display:flex;
+  align-items:center; justify-content:center; transition:opacity .15s; color:#07090E;
+}
+.home-send:hover { opacity:.85; }
+.home-send svg { width:16px; height:16px; }
+.home-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+.home-chip {
+  padding:7px 14px; border-radius:30px; font-size:12px; font-weight:500; color:var(--t2);
+  background:var(--s1); border:1px solid var(--b2); cursor:pointer; transition:all .15s;
+}
+.home-chip:hover { border-color:var(--b3); color:var(--t1); }
+.home-links { display:flex; gap:20px; margin-top:32px; }
+.home-link { font-size:12px; color:var(--t3); cursor:pointer; transition:color .15s; text-decoration:none; }
+.home-link:hover { color:var(--t2); }
 
-/* LOGIN */
-#screen-login{flex-direction:column;align-items:center;justify-content:center;
-  background:radial-gradient(ellipse at 50% 0%,#012c44 0%,var(--navy) 70%);}
-.login-box{width:100%;max-width:400px;padding:44px 38px;
-  background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;}
-.login-logo{text-align:center;margin-bottom:36px;}
-.login-sub{font-size:11px;color:var(--muted);letter-spacing:2px;margin-top:8px;}
-.login-btn{width:100%;padding:12px;margin-top:8px;background:var(--gold);color:var(--navy);
-  border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;}
-.login-btn:hover{background:var(--gold-light);}
-.login-footer{text-align:center;margin-top:20px;font-size:11px;color:var(--muted);}
-.login-error{color:var(--danger);font-size:12px;text-align:center;margin-top:10px;display:none;}
+/* ══════════════════════════════════════════
+   GENERATOR
+══════════════════════════════════════════ */
+#screen-gen { flex-direction:row !important; animation:none !important; }
+#screen-gen .topbar { display:none; }
 
-/* DASHBOARD */
-#screen-dashboard{flex-direction:column;align-items:center;justify-content:center;}
-.dash-wrap{width:100%;max-width:960px;padding:0 24px;}
-.dash-title{font-family:Georgia,serif;font-size:26px;margin-bottom:4px;text-align:center;}
-.dash-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:36px;}
-.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:32px;}
-.mod-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);
-  padding:26px 22px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
-.mod-card:hover:not(.disabled){border-color:var(--gold);background:rgba(200,169,107,0.06);transform:translateY(-2px);}
-.mod-card.disabled{opacity:.45;cursor:default;}
-.mod-card.featured{border-color:rgba(200,169,107,0.4);}
-.mod-icon{font-size:30px;margin-bottom:14px;}
-.mod-name{font-size:15px;font-weight:600;margin-bottom:5px;}
-.mod-desc{font-size:12px;color:var(--muted);line-height:1.5;}
-.mod-tag{position:absolute;top:14px;right:14px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;}
-.tag-active{background:rgba(39,174,96,.15);color:#2ecc71;}
-.tag-new{background:rgba(200,169,107,.15);color:var(--gold);}
-.tag-soon{background:rgba(255,255,255,.05);color:var(--muted);}
-.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-.stat-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:18px 22px;}
-.stat-val{font-family:Georgia,serif;font-size:30px;color:var(--gold);}
-.stat-lbl{font-size:11px;color:var(--muted);margin-top:3px;}
+/* ── CHAT PANEL ── */
+.chat-panel {
+  width:400px; flex-shrink:0; height:100vh;
+  display:flex; flex-direction:column;
+  border-right:1px solid var(--b1);
+  background:var(--s1);
+}
+.chat-header {
+  height:52px; flex-shrink:0; display:flex; align-items:center;
+  justify-content:space-between; padding:0 18px;
+  border-bottom:1px solid var(--b1);
+}
+.chat-header-left { display:flex; align-items:center; gap:12px; }
+.chat-back {
+  width:28px; height:28px; border-radius:6px; background:var(--b1);
+  border:none; cursor:pointer; color:var(--t2); display:flex; align-items:center;
+  justify-content:center; font-size:14px; transition:all .15s;
+}
+.chat-back:hover { background:var(--b2); color:var(--t1); }
+.chat-title { font-size:13px; font-weight:500; color:var(--t1); }
+.chat-status { font-size:11px; color:var(--t3); }
+.chat-new {
+  font-size:11px; padding:4px 10px; border-radius:5px;
+  background:var(--b1); border:1px solid var(--b2); color:var(--t2);
+  cursor:pointer; transition:all .15s;
+}
+.chat-new:hover { background:var(--b2); color:var(--t1); }
 
-/* ACERVO */
-#screen-acervo{flex-direction:column;}
-.acervo-body{display:flex;flex:1;padding-top:56px;}
-.acervo-main{flex:1;padding:28px 36px;}
-.page-title{font-family:Georgia,serif;font-size:24px;margin-bottom:4px;}
-.page-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
-.session-note{background:rgba(200,169,107,0.06);border:1px solid rgba(200,169,107,0.2);
-  border-radius:8px;padding:10px 14px;font-size:12px;color:var(--gold);margin-bottom:20px;display:flex;gap:8px;}
-.type-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
-.chip{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:30px;
-  border:1px solid var(--card-border);background:var(--card-bg);
-  font-size:13px;cursor:pointer;transition:all .15s;}
-.chip:hover{border-color:var(--gold);color:var(--gold);}
-.chip.selected{background:rgba(200,169,107,.12);border-color:var(--gold);color:var(--gold);}
-.chip-count{font-size:11px;color:var(--muted);background:rgba(255,255,255,.07);padding:1px 7px;border-radius:10px;}
-.chip.selected .chip-count{background:rgba(200,169,107,.2);color:var(--gold-dark);}
-.drop-zone{border:2px dashed rgba(200,169,107,.3);border-radius:var(--radius);
-  padding:36px;text-align:center;background:rgba(200,169,107,.02);margin-bottom:20px;cursor:pointer;transition:all .2s;}
-.drop-zone:hover,.drop-zone.drag{border-color:var(--gold);background:rgba(200,169,107,.05);}
-.drop-icon{font-size:32px;margin-bottom:8px;}
-.drop-title{font-size:15px;font-weight:600;margin-bottom:4px;}
-.drop-sub{font-size:12px;color:var(--muted);margin-bottom:14px;}
-.prog-wrap{display:none;margin-bottom:16px;}
-.prog-header{display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px;}
-.prog-bar{background:rgba(255,255,255,.08);border-radius:4px;height:5px;overflow:hidden;}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold));border-radius:4px;transition:width .3s;}
-.file-table{width:100%;border-collapse:collapse;}
-.file-table th{text-align:left;font-size:10px;letter-spacing:1px;color:var(--muted);
-  text-transform:uppercase;padding:7px 10px;border-bottom:1px solid var(--card-border);}
-.file-table td{padding:10px;font-size:12px;border-bottom:1px solid rgba(255,255,255,.03);}
-.file-table tr:hover td{background:rgba(255,255,255,.02);}
-.file-name-cell{display:flex;align-items:center;gap:8px;}
-.file-ico{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;}
-.ico-pdf{background:rgba(192,57,43,.15);}
-.ico-doc{background:rgba(41,128,185,.15);}
-.tipo-badge{font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(200,169,107,.1);color:var(--gold-dark);}
-.tbl-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-.empty-state{text-align:center;padding:32px;color:var(--muted);font-size:13px;}
+/* Messages */
+.chat-messages {
+  flex:1; overflow-y:auto; padding:20px 18px;
+  display:flex; flex-direction:column; gap:16px;
+  scroll-behavior:smooth;
+}
+.chat-messages::-webkit-scrollbar { width:3px; }
+.chat-messages::-webkit-scrollbar-thumb { background:var(--b2); border-radius:3px; }
 
-/* ═══ GERADOR ═══ */
-#screen-gerador{flex-direction:column;}
-.gerador-body{display:flex;flex:1;padding-top:56px;height:calc(100vh - 56px);}
+/* AI message */
+.msg-ai { display:flex; gap:10px; align-items:flex-start; }
+.msg-ai-avatar {
+  width:26px; height:26px; border-radius:7px; flex-shrink:0;
+  background:var(--gold2); border:1px solid var(--gold3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; color:var(--gold); margin-top:1px;
+}
+.msg-ai-body { flex:1; }
+.msg-ai-text {
+  font-size:13.5px; line-height:1.6; color:var(--t1); padding:2px 0;
+}
+@keyframes msgIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+.msg-ai { animation: msgIn .2s ease; }
 
-/* WIZARD PANEL */
-.wizard-panel{width:420px;flex-shrink:0;background:rgba(0,0,0,0.15);
-  border-right:1px solid var(--card-border);display:flex;flex-direction:column;overflow:hidden;}
+/* User message */
+.msg-user { display:flex; justify-content:flex-end; animation: msgIn .2s ease; }
+.msg-user-bubble {
+  max-width:80%; padding:9px 14px; border-radius:12px 12px 2px 12px;
+  background:var(--s3); border:1px solid var(--b2);
+  font-size:13.5px; line-height:1.5; color:var(--t1);
+}
 
-/* Step indicator */
-.wizard-header{padding:28px 28px 0;}
-.wizard-step-label{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:16px;}
-.step-track{display:flex;align-items:center;gap:0;margin-bottom:28px;}
-.step-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;flex-shrink:0;transition:all .3s;border:2px solid transparent;}
-.step-dot.done{background:var(--gold);color:var(--navy);border-color:var(--gold);}
-.step-dot.active{background:transparent;color:var(--gold);border-color:var(--gold);}
-.step-dot.pending{background:transparent;color:var(--muted);border-color:rgba(255,255,255,0.1);}
-.step-line{flex:1;height:2px;background:rgba(255,255,255,0.08);transition:background .3s;}
-.step-line.done{background:var(--gold);}
+/* Typing indicator */
+.msg-typing { display:flex; gap:10px; align-items:center; animation: msgIn .15s ease; }
+.typing-dots { display:flex; gap:4px; align-items:center; padding:6px 0; }
+.typing-dot {
+  width:5px; height:5px; border-radius:50%; background:var(--t3);
+  animation: typePulse 1.2s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay:.2s; }
+.typing-dot:nth-child(3) { animation-delay:.4s; }
+@keyframes typePulse { 0%,80%,100%{opacity:.3;transform:scale(.85)} 40%{opacity:1;transform:scale(1)} }
 
-/* Wizard slides */
-.wizard-slides{flex:1;overflow:hidden;position:relative;}
-.wizard-slide{position:absolute;inset:0;padding:0 28px 20px;overflow-y:auto;
-  opacity:0;pointer-events:none;transform:translateX(30px);transition:all .35s cubic-bezier(.4,0,.2,1);}
-.wizard-slide.active{opacity:1;pointer-events:all;transform:translateX(0);}
-.wizard-slide.exit-left{opacity:0;transform:translateX(-30px);}
+/* Chips inline */
+.msg-chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+.msg-chip {
+  padding:7px 14px; border-radius:8px; font-size:12.5px; font-weight:500;
+  background:var(--s2); border:1px solid var(--b2); color:var(--t2);
+  cursor:pointer; transition:all .15s;
+}
+.msg-chip:hover { border-color:var(--gold3); color:var(--t1); background:var(--gold2); }
+.msg-chip.selected { border-color:var(--gold3); background:var(--gold2); color:var(--gold); }
+.msg-chip.disabled { opacity:.4; cursor:default; pointer-events:none; }
 
-.slide-question{font-family:Georgia,serif;font-size:20px;line-height:1.3;
-  margin-bottom:6px;color:var(--white);}
-.slide-hint{font-size:12px;color:var(--muted);margin-bottom:24px;line-height:1.5;}
+/* Gerador prompt (inline resultado) */
+.msg-generating {
+  font-size:12px; color:var(--gold); display:flex; align-items:center; gap:8px;
+  padding:8px 0;
+}
+.gen-pulse { width:6px; height:6px; border-radius:50%; background:var(--gold); animation:typePulse 1.2s infinite; }
 
-/* Area cards */
-.area-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.area-card{padding:16px 14px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.08);
-  background:rgba(255,255,255,0.03);cursor:pointer;transition:all .2s;text-align:center;}
-.area-card:hover{border-color:rgba(200,169,107,0.4);background:rgba(200,169,107,0.05);}
-.area-card.selected{border-color:var(--gold);background:rgba(200,169,107,0.1);}
-.area-card-icon{font-size:24px;margin-bottom:8px;}
-.area-card-name{font-size:13px;font-weight:600;color:var(--white);}
-.area-card-desc{font-size:10px;color:var(--muted);margin-top:3px;}
+/* ── CHAT INPUT ZONE ── */
+.chat-input-zone {
+  flex-shrink:0; padding:14px 18px;
+  border-top:1px solid var(--b1); background:var(--s1);
+}
+.chat-input-row {
+  display:flex; align-items:flex-end; gap:10px;
+  background:var(--s2); border:1px solid var(--b2); border-radius:var(--r);
+  padding:10px 10px 10px 14px; transition:border .15s;
+}
+.chat-input-row:focus-within { border-color:var(--b3); }
+.chat-field {
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--t1); font-size:13.5px; font-family:inherit;
+  resize:none; line-height:1.5; max-height:120px; min-height:20px;
+}
+.chat-field::placeholder { color:var(--t3); }
+.chat-send {
+  width:30px; height:30px; border-radius:6px; flex-shrink:0;
+  background:var(--gold); border:none; cursor:pointer; display:flex;
+  align-items:center; justify-content:center; transition:opacity .15s; color:#07090E;
+}
+.chat-send:hover { opacity:.85; }
+.chat-send:disabled { opacity:.35; cursor:default; }
+.chat-send svg { width:13px; height:13px; }
+.chat-hint { font-size:11px; color:var(--t3); margin-top:8px; text-align:center; }
 
-/* Tipo chips */
-.tipo-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
-.tipo-chip{padding:8px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);
-  background:rgba(255,255,255,0.03);cursor:pointer;font-size:12px;font-weight:600;
-  color:var(--muted);transition:all .2s;}
-.tipo-chip:hover{border-color:rgba(200,169,107,.3);color:var(--white);}
-.tipo-chip.selected{border-color:var(--gold);background:rgba(200,169,107,.1);color:var(--gold);}
+/* ── DOCUMENT PANEL ── */
+.doc-panel {
+  flex:1; height:100vh; display:flex; flex-direction:column;
+  background: var(--bg);
+}
+.doc-header {
+  height:52px; flex-shrink:0; display:flex; align-items:center;
+  justify-content:space-between; padding:0 24px;
+  border-bottom:1px solid var(--b1);
+}
+.doc-title { font-size:12px; font-weight:500; color:var(--t2); display:flex; align-items:center; gap:8px; }
+.doc-title-dot { width:6px; height:6px; border-radius:50%; background:var(--b3); }
+.doc-title-dot.live { background:var(--gold); animation:typePulse 1.2s infinite; }
+.doc-actions { display:flex; gap:8px; }
+.doc-btn {
+  padding:5px 12px; border-radius:6px; font-size:12px; font-weight:500;
+  background:var(--b1); border:1px solid var(--b2); color:var(--t2);
+  cursor:pointer; transition:all .15s; font-family:inherit;
+}
+.doc-btn:hover { background:var(--b2); color:var(--t1); }
+.doc-btn.primary { background:var(--gold2); border-color:var(--gold3); color:var(--gold); }
+.doc-btn.primary:hover { background:var(--gold3); }
 
-/* Big inputs */
-.big-input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);
-  color:var(--white);font-size:15px;outline:none;transition:border .15s;font-family:inherit;
-  margin-bottom:14px;}
-.big-input:focus{border-color:var(--gold);}
-.big-input::placeholder{color:rgba(122,147,168,0.6);}
-.big-textarea{width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);
-  color:var(--white);font-size:13px;outline:none;transition:border .15s;font-family:inherit;
-  resize:none;line-height:1.7;}
-.big-textarea:focus{border-color:var(--gold);}
-.big-textarea::placeholder{color:rgba(122,147,168,0.6);}
-.char-count{font-size:10px;color:var(--muted);text-align:right;margin-top:-10px;margin-bottom:12px;}
+.doc-scroll { flex:1; overflow-y:auto; padding:36px 32px; display:flex; justify-content:center; }
+.doc-scroll::-webkit-scrollbar { width:4px; }
+.doc-scroll::-webkit-scrollbar-thumb { background:var(--b2); border-radius:4px; }
 
-/* Wizard footer */
-.wizard-footer{padding:16px 28px;border-top:1px solid var(--card-border);display:flex;gap:10px;align-items:center;}
-.btn-nav{padding:11px 22px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;
-  cursor:pointer;border:none;transition:all .2s;}
-.btn-back{background:rgba(255,255,255,0.06);color:var(--muted);}
-.btn-back:hover{background:rgba(255,255,255,0.1);color:var(--white);}
-.btn-next{background:var(--gold);color:var(--navy);flex:1;}
-.btn-next:hover{background:var(--gold-light);}
-.btn-next:disabled{opacity:.4;cursor:default;}
-.btn-gerar{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);flex:1;
-  font-size:14px;padding:13px;display:flex;align-items:center;justify-content:center;gap:8px;}
-.btn-gerar:hover{opacity:.9;}
-.btn-gerar:disabled{opacity:.4;cursor:default;}
+/* Empty state */
+.doc-empty {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; color:var(--t3); gap:12px;
+}
+.doc-empty-icon { font-size:32px; opacity:.3; }
+.doc-empty-text { font-size:13px; }
 
-/* Step summary pill */
-.summary-pill{background:rgba(200,169,107,0.06);border:1px solid rgba(200,169,107,0.15);
-  border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:11px;line-height:1.6;}
-.summary-pill strong{color:var(--gold);}
+/* Paper document */
+.doc-paper {
+  width:100%; max-width:720px;
+  background:#FAFAF8; color:#1A1A1A;
+  border-radius:3px;
+  box-shadow: 0 2px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.15);
+  padding:4.5cm 3.5cm;
+  min-height:29.7cm;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size:11.5pt;
+  line-height:1.65;
+}
+.doc-paper h1 {
+  font-size:13pt; font-weight:700; text-align:center;
+  margin:0 0 18pt; font-family:inherit;
+}
+.doc-paper h2 {
+  font-size:12pt; font-weight:700; margin:20pt 0 8pt;
+  padding-bottom:4pt; border-bottom:0.5pt solid #CCC;
+  font-family:inherit;
+}
+.doc-paper h3 {
+  font-size:11.5pt; font-weight:700; font-style:italic;
+  margin:16pt 0 6pt; font-family:inherit;
+}
+.doc-paper h4 {
+  font-size:11.5pt; font-weight:700; margin:12pt 0 4pt;
+  font-family:inherit;
+}
+.doc-paper p {
+  margin:0 0 8pt; text-indent:1.25cm; text-align:justify;
+}
+.doc-paper p.no-indent { text-indent:0; }
+.doc-paper blockquote {
+  margin:10pt 0 10pt 1.5cm; padding-left:0.6cm;
+  border-left:2pt solid #CCC; font-style:italic; color:#333;
+}
+.doc-paper ul, .doc-paper ol { margin:6pt 0 6pt 1.5cm; }
+.doc-paper li { margin-bottom:3pt; }
+.doc-paper table {
+  width:100%; border-collapse:collapse; margin:12pt 0; font-size:10.5pt;
+}
+.doc-paper th {
+  background:#EEEBE5; padding:5pt 8pt; text-align:left;
+  border:0.5pt solid #CCC; font-weight:700;
+}
+.doc-paper td { padding:5pt 8pt; border:0.5pt solid #DDD; }
+.doc-paper hr { border:none; border-top:0.5pt solid #DDD; margin:12pt 0; }
+.cursor-blink {
+  display:inline-block; width:2px; height:14px; background:#333;
+  animation:blink .8s infinite; vertical-align:text-bottom; margin-left:1px;
+}
+@keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
 
-/* Estilo select */
-.estilo-select{width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);
-  color:var(--white);font-size:13px;outline:none;font-family:inherit;margin-bottom:14px;}
-.estilo-select option{background:#012338;}
-.estilo-select:focus{border-color:var(--gold);}
+/* ══════════════════════════════════════════
+   ACERVO
+══════════════════════════════════════════ */
+#screen-acervo { background:var(--bg); }
+.acervo-body { flex:1; overflow-y:auto; padding:40px 48px; }
+.acervo-body::-webkit-scrollbar { width:4px; }
+.acervo-body::-webkit-scrollbar-thumb { background:var(--b2); border-radius:4px; }
+.acervo-head { margin-bottom:32px; }
+.acervo-head h1 { font-size:22px; font-weight:600; letter-spacing:-.3px; margin-bottom:6px; }
+.acervo-head p { font-size:13px; color:var(--t2); }
+.acervo-notice {
+  display:inline-flex; align-items:center; gap:7px; margin-top:12px;
+  padding:6px 12px; border-radius:6px; background:var(--gold2);
+  border:1px solid var(--gold3); font-size:11px; color:var(--gold);
+}
+.drop-zone {
+  border:1.5px dashed var(--b3); border-radius:var(--r-lg);
+  padding:40px 32px; text-align:center; cursor:pointer;
+  transition:all .2s; background:transparent; margin-bottom:28px;
+}
+.drop-zone:hover, .drop-zone.drag { border-color:var(--gold3); background:var(--gold2); }
+.drop-icon { font-size:28px; margin-bottom:10px; opacity:.5; }
+.drop-text { font-size:14px; font-weight:500; margin-bottom:4px; }
+.drop-sub { font-size:12px; color:var(--t3); margin-bottom:16px; }
+.drop-btn {
+  padding:8px 18px; border-radius:8px; font-size:13px; font-weight:500;
+  background:var(--s3); border:1px solid var(--b2); color:var(--t2);
+  cursor:pointer; transition:all .15s; font-family:inherit;
+}
+.drop-btn:hover { background:var(--b2); color:var(--t1); }
 
-/* RAG toggle inline */
-.rag-row{display:flex;align-items:center;gap:10px;padding:10px 12px;
-  border-radius:var(--radius-sm);background:rgba(200,169,107,.04);
-  border:1px solid rgba(200,169,107,.15);cursor:pointer;margin-bottom:14px;}
-.toggle{width:36px;height:20px;border-radius:10px;position:relative;flex-shrink:0;transition:background .2s;}
-.toggle.on{background:var(--gold);}
-.toggle.off{background:rgba(255,255,255,.15);}
-.toggle-knob{width:14px;height:14px;border-radius:50%;background:var(--navy);position:absolute;top:3px;transition:left .2s;}
-.toggle.on .toggle-knob{left:19px;}
-.toggle.off .toggle-knob{left:3px;}
+/* Type filter */
+.type-filter { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+.type-pill {
+  padding:5px 14px; border-radius:20px; font-size:12px; font-weight:500;
+  background:var(--s1); border:1px solid var(--b2); color:var(--t3);
+  cursor:pointer; transition:all .15s;
+}
+.type-pill:hover { color:var(--t2); border-color:var(--b3); }
+.type-pill.active { background:var(--gold2); border-color:var(--gold3); color:var(--gold); }
+.type-count { margin-left:5px; font-size:11px; opacity:.7; }
 
-/* OUTPUT PANEL */
-.output-panel{flex:1;padding:24px 28px;display:flex;flex-direction:column;overflow:hidden;}
-.output-card{background:var(--card-bg);border:1px solid var(--card-border);
-  border-radius:var(--radius);flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.out-header{padding:14px 18px;border-bottom:1px solid var(--card-border);
-  display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
-.out-title{font-size:13px;font-weight:600;}
-.out-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  color:var(--muted);gap:10px;}
-.out-empty-icon{font-size:36px;opacity:.35;}
-.out-body{flex:1;padding:22px;font-size:13px;line-height:1.85;overflow-y:auto;white-space:pre-wrap;}
-.out-fontes{padding:10px 18px;border-top:1px solid var(--card-border);font-size:11px;color:var(--gold);flex-shrink:0;}
-.dots{display:flex;gap:4px;align-items:center;}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.2s infinite;}
-.dot:nth-child(2){animation-delay:.2s;}
-.dot:nth-child(3){animation-delay:.4s;}
-@keyframes pulse{0%,80%,100%{opacity:.3}40%{opacity:1}}
-.streaming-row{display:none;align-items:center;gap:10px;padding:20px;color:var(--gold);font-size:12px;flex-shrink:0;}
+/* Doc cards */
+.doc-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; }
+.doc-card {
+  background:var(--s1); border:1px solid var(--b1); border-radius:var(--r);
+  padding:16px 18px; transition:border .15s;
+}
+.doc-card:hover { border-color:var(--b2); }
+.doc-card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:10px; }
+.doc-card-icon {
+  width:34px; height:34px; border-radius:8px; background:var(--s2);
+  display:flex; align-items:center; justify-content:center; font-size:16px;
+}
+.doc-card-rm {
+  background:transparent; border:none; cursor:pointer; color:var(--t3);
+  font-size:14px; padding:2px 4px; transition:color .15s;
+}
+.doc-card-rm:hover { color:var(--err); }
+.doc-card-name {
+  font-size:12px; font-weight:500; color:var(--t1);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  margin-bottom:4px;
+}
+.doc-card-meta { display:flex; align-items:center; gap:8px; }
+.doc-tag {
+  font-size:10px; padding:2px 7px; border-radius:4px;
+  background:var(--gold2); border:1px solid var(--gold3); color:var(--gold);
+}
+.doc-chunks { font-size:10px; color:var(--t3); }
+.doc-empty-state { text-align:center; padding:48px; color:var(--t3); font-size:13px; }
 
-/* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  background:#1a2e3d;border:1px solid var(--card-border);border-radius:8px;
-  padding:10px 20px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;}
-.toast.show{opacity:1;}
-.toast.ok{border-color:rgba(39,174,96,.4);color:#2ecc71;}
-.toast.err{border-color:rgba(231,76,60,.4);color:var(--danger);}
-::-webkit-scrollbar{width:5px;}
-::-webkit-scrollbar-thumb{background:rgba(200,169,107,.2);border-radius:3px;}
+/* Progress */
+.prog-wrap { display:none; margin-bottom:16px; }
+.prog-row { display:flex; justify-content:space-between; font-size:11px; color:var(--t2); margin-bottom:6px; }
+.prog-track { height:3px; background:var(--b2); border-radius:3px; overflow:hidden; }
+.prog-fill { height:100%; background:var(--gold); border-radius:3px; transition:width .3s; }
+
+/* ── TOAST ── */
+.toast {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+  background:var(--s2); border:1px solid var(--b2); border-radius:8px;
+  padding:9px 18px; font-size:12.5px; z-index:1000;
+  opacity:0; transition:opacity .25s; pointer-events:none; white-space:nowrap;
+}
+.toast.show { opacity:1; }
+.toast.ok  { border-color:rgba(74,222,128,.25); color:var(--ok); }
+.toast.err { border-color:rgba(248,113,113,.25); color:var(--err); }
+
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-thumb { background:var(--b2); border-radius:4px; }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ═══════════════ LOGIN ═══════════════ -->
 <div id="screen-login" class="screen active">
-  <div class="login-box">
-    <div class="login-logo">
-      <img src="/pandecta-icone.png" style="width:80px;height:80px;object-fit:contain;display:block;margin:0 auto 14px;">
-      <div class="login-sub">INTELIGÊNCIA JURÍDICA</div>
+  <div class="login-wrap">
+    <div class="login-icon">
+      <img src="/pandecta-icone.png" alt="Pandecta">
     </div>
-    <div style="margin-bottom:16px">
-      <label class="label">USUÁRIO</label>
-      <input class="input" id="inp-user" type="text" placeholder="seu.usuario" autocomplete="username">
+    <div class="login-head">
+      <h1>Pandecta</h1>
+      <p>Inteligência jurídica de precisão</p>
     </div>
-    <div style="margin-bottom:18px">
-      <label class="label">SENHA</label>
-      <input class="input" id="inp-pass" type="password" placeholder="••••••••">
+    <div class="login-field">
+      <label class="login-label">Usuário</label>
+      <input class="login-input" id="inp-user" type="text" placeholder="seu.usuario" autocomplete="username">
     </div>
-    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
-    <div class="login-error" id="login-error">Usuário ou senha incorretos.</div>
-    <p class="login-footer">🔒 Demonstração segura · Pandecta AI</p>
+    <div class="login-field">
+      <label class="login-label">Senha</label>
+      <input class="login-input" id="inp-pass" type="password" placeholder="••••••••">
+    </div>
+    <button class="login-submit" onclick="fazerLogin()">Entrar</button>
+    <div class="login-err" id="login-err">Usuário ou senha incorretos.</div>
+    <p class="login-footer">Acesso restrito · Pandecta AI</p>
   </div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="screen-dashboard" class="screen">
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="screen-home" class="screen">
   <div class="topbar">
-    <img src="/pandecta-logo-horizontal.png" style="height:28px;object-fit:contain;">
-    <div class="topbar-user">
-      <span id="user-top">–</span><div class="avatar" id="av-top">–</div>
+    <div class="topbar-logo" onclick="go('home')">
+      <img src="/pandecta-logo-horizontal.png" alt="Pandecta">
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" onclick="go('acervo')">📂 Acervo</button>
+      <div class="avatar-sm" id="home-av">–</div>
     </div>
   </div>
-  <div class="dash-wrap">
-    <div class="dash-title">Bom dia, <span id="user-display">–</span>.</div>
-    <div class="dash-sub">O que vamos fazer hoje?</div>
-    <div class="modules-grid">
-      <div class="mod-card featured" onclick="go('gerador')">
-        <div class="mod-tag tag-active">ATIVO</div>
-        <div class="mod-icon">⚖️</div>
-        <div class="mod-name">Gerador de Peças</div>
-        <div class="mod-desc">Petições, recursos e memoriais com fundamentação jurídica precisa.</div>
+  <div class="home-body">
+    <div class="home-center">
+      <div class="home-eyebrow">Pandecta AI</div>
+      <h1 class="home-headline">O que você precisa<br>redigir hoje?</h1>
+      <p class="home-sub">Petições, contratos e peças jurídicas com inteligência contextual.<br>Descreva o caso e eu conduzo o restante.</p>
+      <div class="home-input-wrap">
+        <textarea class="home-textarea" id="home-input" placeholder="Descreva seu caso ou o que precisa redigir..." rows="1"
+          oninput="autoResize(this)" onkeydown="homeKeydown(event)"></textarea>
+        <button class="home-send" onclick="iniciarConversa()">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="14" x2="8" y2="2"/><polyline points="2,8 8,2 14,8"/>
+          </svg>
+        </button>
       </div>
-      <div class="mod-card" onclick="go('acervo')">
-        <div class="mod-tag tag-new">SESSÃO</div>
-        <div class="mod-icon">📂</div>
-        <div class="mod-name">Acervo da Sessão</div>
-        <div class="mod-desc">Carregue seus documentos para que o Pandecta use como referência.</div>
+      <div class="home-chips">
+        <div class="home-chip" onclick="sugestao('Preciso de uma petição inicial contra plano de saúde por negativa de cobertura')">Inicial contra plano de saúde</div>
+        <div class="home-chip" onclick="sugestao('Preciso de uma contestação trabalhista por verbas rescisórias')">Contestação trabalhista</div>
+        <div class="home-chip" onclick="sugestao('Preciso de um contrato de prestação de serviços advocatícios')">Contrato de serviços</div>
+        <div class="home-chip" onclick="sugestao('Petição inicial no JEC por produto defeituoso')">Produto defeituoso — JEC</div>
       </div>
-      <div class="mod-card disabled">
-        <div class="mod-tag tag-soon">EM BREVE</div>
-        <div class="mod-icon">📋</div>
-        <div class="mod-name">Análise de Contratos</div>
-        <div class="mod-desc">Revisão inteligente e identificação de cláusulas de risco.</div>
+      <div class="home-links">
+        <a class="home-link" onclick="go('acervo')">Acervo da sessão</a>
+        <span style="color:var(--b3)">·</span>
+        <a class="home-link" onclick="novaConversa()">Nova peça</a>
       </div>
-      <div class="mod-card disabled">
-        <div class="mod-tag tag-soon">EM BREVE</div>
-        <div class="mod-icon">🔍</div>
-        <div class="mod-name">Jurisprudência</div>
-        <div class="mod-desc">Busca de precedentes relevantes para o seu caso.</div>
-      </div>
-      <div class="mod-card disabled">
-        <div class="mod-tag tag-soon">EM BREVE</div>
-        <div class="mod-icon">📝</div>
-        <div class="mod-name">Modelos Inteligentes</div>
-        <div class="mod-desc">Templates que aprendem com o seu estilo de escrita.</div>
-      </div>
-      <div class="mod-card disabled">
-        <div class="mod-tag tag-soon">EM BREVE</div>
-        <div class="mod-icon">📊</div>
-        <div class="mod-name">Gestão de Prazos</div>
-        <div class="mod-desc">Controle processual integrado à sua rotina.</div>
-      </div>
-    </div>
-    <div class="dash-stats">
-      <div class="stat-card"><div class="stat-val" id="stat-docs">0</div><div class="stat-lbl">Documentos carregados</div></div>
-      <div class="stat-card"><div class="stat-val" id="stat-chunks">0</div><div class="stat-lbl">Trechos disponíveis</div></div>
-      <div class="stat-card"><div class="stat-val" style="color:var(--success)">⚡</div><div class="stat-lbl">Claude Sonnet · Ativo</div></div>
     </div>
   </div>
 </div>
 
-<!-- ACERVO -->
+<!-- ═══════════════ GENERATOR ═══════════════ -->
+<div id="screen-gen" class="screen">
+
+  <!-- CHAT PANEL -->
+  <div class="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <button class="chat-back" onclick="go('home')">←</button>
+        <div>
+          <div class="chat-title">Nova peça</div>
+          <div class="chat-status" id="chat-status">Iniciando...</div>
+        </div>
+      </div>
+      <button class="chat-new" onclick="novaConversa()">↺ Recomeçar</button>
+    </div>
+
+    <div class="chat-messages" id="chat-msgs"></div>
+
+    <div class="chat-input-zone" id="chat-input-zone">
+      <div class="chat-input-row" id="chat-input-row">
+        <textarea class="chat-field" id="chat-field" rows="1"
+          placeholder="Digite sua resposta..."
+          oninput="autoResize(this)" onkeydown="chatKeydown(event)"></textarea>
+        <button class="chat-send" id="chat-send-btn" onclick="submitChat()">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="14" x2="8" y2="2"/><polyline points="2,8 8,2 14,8"/>
+          </svg>
+        </button>
+      </div>
+      <div class="chat-hint" id="chat-hint">Enter para enviar · Shift+Enter para nova linha</div>
+    </div>
+  </div>
+
+  <!-- DOCUMENT PANEL -->
+  <div class="doc-panel">
+    <div class="doc-header">
+      <div class="doc-title">
+        <div class="doc-title-dot" id="doc-dot"></div>
+        <span id="doc-title-text">Aguardando dados...</span>
+      </div>
+      <div class="doc-actions" id="doc-actions" style="display:none">
+        <button class="doc-btn" onclick="copiarDoc()">Copiar</button>
+        <button class="doc-btn primary" onclick="exportarWord()">↓ Word</button>
+      </div>
+    </div>
+    <div class="doc-scroll" id="doc-scroll">
+      <div class="doc-empty" id="doc-empty">
+        <div class="doc-empty-icon">⚖️</div>
+        <div class="doc-empty-text">Sua peça aparecerá aqui enquanto a IA redige</div>
+      </div>
+      <div class="doc-paper" id="doc-paper" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ACERVO ═══════════════ -->
 <div id="screen-acervo" class="screen">
   <div class="topbar">
-    <img src="/pandecta-logo-horizontal.png" style="height:28px;object-fit:contain;">
-    <div class="topbar-user"><span id="user-ac">–</span><div class="avatar" id="av-ac">–</div></div>
+    <div class="topbar-logo" onclick="go('home')">
+      <img src="/pandecta-logo-horizontal.png" alt="Pandecta">
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" onclick="go('home')">← Voltar</button>
+      <div class="avatar-sm" id="ac-av">–</div>
+    </div>
   </div>
   <div class="acervo-body">
-    <div class="sidebar">
-      <div class="sb-section">Módulos</div>
-      <div class="sb-item" onclick="go('dashboard')"><span>🏠</span> Início</div>
-      <div class="sb-item" onclick="go('gerador')"><span>⚖️</span> Gerador de Peças</div>
-      <div class="sb-item active"><span>📂</span> Acervo</div>
-      <div style="flex:1"></div>
-      <div class="sb-section">Conta</div>
-      <div class="sb-item" onclick="go('login')"><span>🔒</span> Sair</div>
-    </div>
-    <div class="acervo-main">
-      <div class="page-title">Acervo da Sessão</div>
-      <div class="page-sub">Carregue seus documentos para que o Pandecta use como referência ao gerar peças.</div>
-      <div class="session-note">
-        ℹ️ <span>Os documentos ficam <strong>apenas na memória desta sessão</strong> — não são enviados nem armazenados em nenhum servidor.</span>
-      </div>
-      <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:10px;">TIPO DE DOCUMENTO</div>
-      <div class="type-chips">
-        <div class="chip selected" data-tipo="Contrato" onclick="selTipo(this)">📄 Contratos <span class="chip-count" id="cnt-Contrato">0</span></div>
-        <div class="chip" data-tipo="Petição" onclick="selTipo(this)">⚖️ Petições <span class="chip-count" id="cnt-Petição">0</span></div>
-        <div class="chip" data-tipo="Parecer" onclick="selTipo(this)">📋 Pareceres <span class="chip-count" id="cnt-Parecer">0</span></div>
-        <div class="chip" data-tipo="Imobiliário" onclick="selTipo(this)">🏠 Imobiliário <span class="chip-count" id="cnt-Imobiliário">0</span></div>
-        <div class="chip" data-tipo="Modelo" onclick="selTipo(this)">📝 Modelos <span class="chip-count" id="cnt-Modelo">0</span></div>
-        <div class="chip" data-tipo="Outro" onclick="selTipo(this)">📁 Outros <span class="chip-count" id="cnt-Outro">0</span></div>
-      </div>
-      <div class="drop-zone" id="drop-zone"
-           ondragover="event.preventDefault();this.classList.add('drag')"
-           ondragleave="this.classList.remove('drag')"
-           ondrop="handleDrop(event)">
-        <div class="drop-icon">📁</div>
-        <div class="drop-title" id="drop-title">Adicionar Contratos</div>
-        <div class="drop-sub">Arraste arquivos aqui ou clique para selecionar</div>
-        <button class="btn btn-primary" onclick="document.getElementById('file-in').click()">Selecionar arquivos</button>
-        <div style="font-size:11px;color:var(--muted);margin-top:12px">PDF · DOCX · TXT</div>
-        <input type="file" id="file-in" multiple accept=".pdf,.docx,.txt" style="display:none" onchange="handleFiles(this.files)">
-      </div>
-      <div class="prog-wrap" id="prog-wrap">
-        <div class="prog-header">
-          <span id="prog-text">Processando...</span>
-          <span id="prog-pct" style="color:var(--gold)">0%</span>
-        </div>
-        <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
-      </div>
-      <div class="tbl-header">
-        <div style="font-size:12px;color:var(--muted)" id="tbl-count">Nenhum documento carregado ainda.</div>
-      </div>
-      <table class="file-table">
-        <thead><tr><th>Arquivo</th><th>Tipo</th><th>Trechos</th><th></th></tr></thead>
-        <tbody id="file-tbody"></tbody>
-      </table>
-      <div class="empty-state" id="empty-state">Selecione arquivos acima para começar.</div>
-    </div>
-  </div>
-</div>
-
-<!-- GERADOR -->
-<div id="screen-gerador" class="screen">
-  <div class="topbar">
-    <img src="/pandecta-logo-horizontal.png" style="height:28px;object-fit:contain;">
-    <div class="topbar-user"><span id="user-ge">–</span><div class="avatar" id="av-ge">–</div></div>
-  </div>
-  <div class="gerador-body">
-
-    <!-- WIZARD PANEL -->
-    <div class="wizard-panel">
-      <div class="wizard-header">
-        <div class="wizard-step-label" id="wiz-step-label">Passo 1 de 4</div>
-        <div class="step-track">
-          <div class="step-dot active" id="sd-1">1</div>
-          <div class="step-line" id="sl-1"></div>
-          <div class="step-dot pending" id="sd-2">2</div>
-          <div class="step-line" id="sl-2"></div>
-          <div class="step-dot pending" id="sd-3">3</div>
-          <div class="step-line" id="sl-3"></div>
-          <div class="step-dot pending" id="sd-4">4</div>
-        </div>
-      </div>
-
-      <div class="wizard-slides">
-
-        <!-- STEP 1: Área e Tipo -->
-        <div class="wizard-slide active" id="slide-1">
-          <div class="slide-question">Qual é a área jurídica?</div>
-          <div class="slide-hint">Selecione a área e o tipo de documento que deseja gerar.</div>
-          <div class="area-grid">
-            <div class="area-card selected" data-area="consumidor" onclick="selArea(this)">
-              <div class="area-card-icon">⚖️</div>
-              <div class="area-card-name">Consumidor</div>
-              <div class="area-card-desc">CDC · JEC · Marketplace</div>
-            </div>
-            <div class="area-card" data-area="civil" onclick="selArea(this)">
-              <div class="area-card-icon">📋</div>
-              <div class="area-card-name">Civil</div>
-              <div class="area-card-desc">CC · Contratos · Danos</div>
-            </div>
-            <div class="area-card" data-area="trabalhista" onclick="selArea(this)">
-              <div class="area-card-icon">👷</div>
-              <div class="area-card-name">Trabalhista</div>
-              <div class="area-card-desc">CLT · TST · FGTS</div>
-            </div>
-            <div class="area-card" data-area="familia" onclick="selArea(this)">
-              <div class="area-card-icon">👨‍👩‍👧</div>
-              <div class="area-card-name">Família</div>
-              <div class="area-card-desc">Guarda · Alimentos</div>
-            </div>
-          </div>
-          <label class="label">TIPO DE PEÇA</label>
-          <div class="tipo-grid">
-            <div class="tipo-chip selected" data-tipo="peticao_inicial" onclick="selTipoPeca(this)">Petição Inicial</div>
-            <div class="tipo-chip" data-tipo="recurso" onclick="selTipoPeca(this)">Recurso / Apelação</div>
-            <div class="tipo-chip" data-tipo="defesa" onclick="selTipoPeca(this)">Contestação</div>
-            <div class="tipo-chip" data-tipo="notificacao" onclick="selTipoPeca(this)">Notificação</div>
-            <div class="tipo-chip" data-tipo="contrato" onclick="selTipoPeca(this)">Contrato</div>
-          </div>
-        </div>
-
-        <!-- STEP 2: Partes -->
-        <div class="wizard-slide" id="slide-2">
-          <div class="slide-question">Quem são as partes?</div>
-          <div class="slide-hint">Informe o nome completo do autor e do réu. Pode incluir qualificação se tiver.</div>
-          <label class="label">AUTOR / REQUERENTE</label>
-          <input class="big-input" id="w-autor" type="text" placeholder="Ex: Carlos Eduardo Mendes, brasileiro, solteiro, ...">
-          <label class="label">RÉU / REQUERIDO</label>
-          <input class="big-input" id="w-reu" type="text" placeholder="Ex: Samsung Electronics Brasil Ltda., CNPJ ...">
-          <div style="background:rgba(200,169,107,0.05);border:1px solid rgba(200,169,107,0.15);border-radius:8px;padding:12px 14px;font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px;">
-            💡 Quanto mais dados de qualificação você informar, mais completo será o cabeçalho da petição.
-          </div>
-        </div>
-
-        <!-- STEP 3: Fatos -->
-        <div class="wizard-slide" id="slide-3">
-          <div class="slide-question">Descreva os fatos do caso.</div>
-          <div class="slide-hint">Seja cronológico. Inclua datas, valores, protocolos e o que aconteceu. Quanto mais detalhado, melhor a petição.</div>
-          <textarea class="big-textarea" id="w-fatos" rows="14"
-            placeholder="Ex: Em 10/03/2026 o cliente adquiriu um notebook Samsung Galaxy Book3 pelo valor de R$ 5.200,00 no Mercado Livre...&#10;&#10;Em 15/03/2026 recebeu o produto...&#10;&#10;Em 20/03/2026 o notebook apresentou manchas na tela e travamentos constantes..."
-            oninput="contarChars(this,'chars-fatos')"></textarea>
-          <div class="char-count" id="chars-fatos">0 caracteres</div>
-        </div>
-
-        <!-- STEP 4: Pedido e Configurações -->
-        <div class="wizard-slide" id="slide-4">
-          <div class="slide-question">Qual é o pedido?</div>
-          <div class="slide-hint">Descreva o que o cliente quer obter. E configure as preferências abaixo.</div>
-
-          <div class="summary-pill" id="wiz-summary"></div>
-
-          <label class="label">PEDIDO ESPECÍFICO</label>
-          <textarea class="big-textarea" id="w-pedido" rows="4"
-            placeholder="Ex: Substituição do produto por outro novo e idêntico, ou restituição do valor pago, além de indenização por danos morais e materiais."></textarea>
-
-          <label class="label" style="margin-top:12px">ESTILO DE ESCRITA</label>
-          <select class="estilo-select" id="w-estilo">
-            <option value="">Padrão Pandecta</option>
-            <option value="Parágrafos curtos, máximo 5 linhas. Um raciocínio por parágrafo. Conclusão clara ao final de cada argumento.">Estilo Fabiano (parágrafos curtos)</option>
-            <option value="Linguagem formal clássica, argumentação extensiva.">Formal clássico</option>
-            <option value="Objetivo e técnico, sem ornamentos retóricos.">Técnico objetivo</option>
-          </select>
-
-          <div class="rag-row" onclick="toggleRAG()">
-            <div class="toggle on" id="rag-sw"><div class="toggle-knob"></div></div>
-            <div>
-              <div style="font-size:13px">Usar acervo da sessão</div>
-              <div style="font-size:11px;color:var(--muted)" id="rag-sub">carregando...</div>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /wizard-slides -->
-
-      <div class="wizard-footer">
-        <button class="btn-nav btn-back" id="btn-back" onclick="wizBack()" style="display:none">← Voltar</button>
-        <button class="btn-nav btn-next" id="btn-next" onclick="wizNext()">Próximo →</button>
-        <button class="btn-nav btn-gerar" id="btn-gerar" onclick="gerar()" style="display:none">✦ Gerar Petição</button>
-      </div>
+    <div class="acervo-head">
+      <h1>Acervo da Sessão</h1>
+      <p>Documentos carregados que a IA usa como referência contextual.</p>
+      <div class="acervo-notice">🔒 Processados localmente · não enviados ao servidor</div>
     </div>
 
-    <!-- OUTPUT PANEL -->
-    <div class="output-panel">
-      <div class="output-card">
-        <div class="out-header">
-          <div class="out-title">Resultado</div>
-          <div style="display:flex;gap:7px">
-            <button class="btn btn-ghost" onclick="copiar()" style="font-size:12px;padding:6px 12px">📋 Copiar</button>
-            <button class="btn btn-ghost" id="btn-word" onclick="exportarWord()" style="font-size:12px;padding:6px 12px;display:none">📄 Exportar Word</button>
-          </div>
-        </div>
-        <div class="out-empty" id="out-empty">
-          <div class="out-empty-icon">⚖️</div>
-          <div style="font-size:13px;text-align:center;line-height:1.7;color:var(--muted)">
-            Preencha os campos no painel ao lado<br>e clique em <strong style="color:var(--white)">Gerar Petição</strong>
-          </div>
-        </div>
-        <div class="streaming-row" id="streaming-row">
-          <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-          Pandecta está redigindo...
-        </div>
-        <div class="out-body" id="out-body" style="display:none"></div>
-        <div class="out-fontes" id="out-fontes" style="display:none"></div>
-      </div>
+    <div class="drop-zone" id="drop-zone"
+      ondragover="event.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="handleDrop(event)" onclick="document.getElementById('file-in').click()">
+      <div class="drop-icon">📁</div>
+      <div class="drop-text">Adicionar documentos</div>
+      <div class="drop-sub">PDF, DOCX ou TXT — arraste ou clique</div>
+      <button class="drop-btn" onclick="event.stopPropagation();document.getElementById('file-in').click()">Selecionar arquivos</button>
+      <input type="file" id="file-in" multiple accept=".pdf,.docx,.txt" style="display:none" onchange="handleFiles(this.files)">
     </div>
 
+    <div class="prog-wrap" id="prog-wrap">
+      <div class="prog-row"><span id="prog-text">Processando...</span><span id="prog-pct">0%</span></div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="type-filter" id="type-filter">
+      <div class="type-pill active" data-tipo="Todos" onclick="selTipo(this)">Todos <span class="type-count" id="cnt-Todos">0</span></div>
+      <div class="type-pill" data-tipo="Contrato" onclick="selTipo(this)">Contratos <span class="type-count" id="cnt-Contrato">0</span></div>
+      <div class="type-pill" data-tipo="Petição" onclick="selTipo(this)">Petições <span class="type-count" id="cnt-Petição">0</span></div>
+      <div class="type-pill" data-tipo="Parecer" onclick="selTipo(this)">Pareceres <span class="type-count" id="cnt-Parecer">0</span></div>
+      <div class="type-pill" data-tipo="Modelo" onclick="selTipo(this)">Modelos <span class="type-count" id="cnt-Modelo">0</span></div>
+      <div class="type-pill" data-tipo="Outro" onclick="selTipo(this)">Outros <span class="type-count" id="cnt-Outro">0</span></div>
+    </div>
+
+    <div class="doc-cards" id="doc-cards"></div>
+    <div class="doc-empty-state" id="ac-empty">Nenhum documento carregado nesta sessão.</div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ── PDF.js ──
-if (typeof pdfjsLib !== 'undefined') {
+// ─────────────────────────────────────────────
+//  CONFIG
+// ─────────────────────────────────────────────
+if (typeof pdfjsLib !== 'undefined')
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-}
 
-// ── Estado global ──
 const USERS = { fabiano:'Pandecta2026', admin:'Pandecta2026' };
-let usuario = null;
-let ragAtivo = true;
-let tipoSel  = 'Contrato';
-let wizStep  = 1;
-let wizArea  = 'consumidor';
-let wizTipoPeca = 'peticao_inicial';
+
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+let usuario     = null;
+let tipoSel     = 'Todos';
+let textoGerado = '';
+let ragAtivo    = true;
 const sessionFiles = [];
 
-// ── Navegação de telas ──
-function go(tela) {
+// ─────────────────────────────────────────────
+//  NAVIGATION
+// ─────────────────────────────────────────────
+function go(screen) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-'+tela).classList.add('active');
-  window.scrollTo(0,0);
-  ['top','ac','ge'].forEach(s => {
-    const el = document.getElementById('user-'+s);
-    if (el) el.textContent = usuario || '–';
-    const av = document.getElementById('av-'+s);
-    if (av) av.textContent = usuario ? usuario[0].toUpperCase() : '–';
-  });
-  if (tela === 'dashboard') atualizarDash();
-  if (tela === 'acervo')    renderTabela();
-  if (tela === 'gerador')   { atualizarPilula(); resetWizard(); }
+  document.getElementById('screen-'+screen).classList.add('active');
+  if (screen === 'home')   updateAvatars();
+  if (screen === 'acervo') renderCards();
 }
 
-// ── Login ──
+function updateAvatars() {
+  const init = usuario ? usuario[0].toUpperCase() : '–';
+  ['home-av','ac-av'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = init;
+  });
+}
+
+// ─────────────────────────────────────────────
+//  LOGIN
+// ─────────────────────────────────────────────
 function fazerLogin() {
   const u = document.getElementById('inp-user').value.trim().toLowerCase();
   const p = document.getElementById('inp-pass').value;
-  const err = document.getElementById('login-error');
+  const err = document.getElementById('login-err');
   if (USERS[u] && USERS[u] === p) {
     usuario = u;
     err.style.display = 'none';
-    document.getElementById('user-display').textContent = u[0].toUpperCase() + u.slice(1);
-    go('dashboard');
+    updateAvatars();
+    go('home');
   } else {
     err.style.display = 'block';
   }
 }
-document.getElementById('inp-pass').addEventListener('keydown', e => { if (e.key==='Enter') fazerLogin(); });
+document.getElementById('inp-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') fazerLogin();
+});
 
-// ════════════════════════════════════════════
-//  WIZARD
-// ════════════════════════════════════════════
-function resetWizard() {
-  wizStep = 1;
-  renderWizardStep();
+// ─────────────────────────────────────────────
+//  HOME
+// ─────────────────────────────────────────────
+function homeKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); iniciarConversa(); }
+}
+function sugestao(txt) {
+  document.getElementById('home-input').value = txt;
+  iniciarConversa();
+}
+function novaConversa() {
+  engine.reset();
+  go('gen');
+}
+function iniciarConversa() {
+  const txt = document.getElementById('home-input').value.trim();
+  engine.reset(txt);
+  document.getElementById('home-input').value = '';
+  go('gen');
 }
 
-function selArea(el) {
-  document.querySelectorAll('.area-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  wizArea = el.dataset.area;
+// ─────────────────────────────────────────────
+//  AUTO RESIZE TEXTAREA
+// ─────────────────────────────────────────────
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
 }
 
-function selTipoPeca(el) {
-  document.querySelectorAll('.tipo-chip').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  wizTipoPeca = el.dataset.tipo;
-}
-
-function contarChars(el, countId) {
-  document.getElementById(countId).textContent = el.value.length + ' caracteres';
-}
-
-function wizNext() {
-  // Validação por step
-  if (wizStep === 2) {
-    const autor = document.getElementById('w-autor').value.trim();
-    if (!autor) { toast('Informe o nome do autor', 'err'); return; }
-  }
-  if (wizStep === 3) {
-    const fatos = document.getElementById('w-fatos').value.trim();
-    if (fatos.length < 30) { toast('Descreva os fatos com mais detalhes', 'err'); return; }
-  }
-  if (wizStep < 4) {
-    wizStep++;
-    renderWizardStep();
-  }
-}
-
-function wizBack() {
-  if (wizStep > 1) {
-    wizStep--;
-    renderWizardStep();
-  }
-}
-
-function renderWizardStep() {
-  // Atualiza step indicator
-  const labels = ['Passo 1 de 4 — Área e Tipo','Passo 2 de 4 — Partes','Passo 3 de 4 — Fatos','Passo 4 de 4 — Pedido'];
-  document.getElementById('wiz-step-label').textContent = labels[wizStep-1];
-
-  for (let i=1; i<=4; i++) {
-    const dot  = document.getElementById('sd-'+i);
-    const line = document.getElementById('sl-'+i);
-    if (i < wizStep)       { dot.className='step-dot done'; dot.textContent='✓'; }
-    else if (i === wizStep){ dot.className='step-dot active'; dot.textContent=i; }
-    else                   { dot.className='step-dot pending'; dot.textContent=i; }
-    if (line) line.className = i < wizStep ? 'step-line done' : 'step-line';
+// ─────────────────────────────────────────────
+//  CONVERSATION ENGINE
+//  Architecture ready for Caminho B (real AI multi-turn)
+//  To upgrade: replace engine.respond() with an API call
+// ─────────────────────────────────────────────
+class ConversationEngine {
+  constructor() {
+    this.messages  = [];   // Full conversation history (ready for Caminho B)
+    this.formData  = {};   // Collected structured data
+    this.step      = 0;
+    this.locked    = false;
+    this.steps     = this._defineSteps();
   }
 
-  // Slides
-  for (let i=1; i<=4; i++) {
-    const slide = document.getElementById('slide-'+i);
-    if (i === wizStep) {
-      slide.classList.remove('exit-left');
-      slide.classList.add('active');
+  _defineSteps() {
+    return [
+      {
+        key: 'area',
+        type: 'chips',
+        ask: () => 'Qual é a área jurídica do caso?',
+        options: [
+          { label:'⚖️ Consumidor', value:'consumidor', sub:'CDC · JEC · Marketplace' },
+          { label:'📋 Civil',       value:'civil',       sub:'CC · Contratos · Danos' },
+          { label:'👷 Trabalhista', value:'trabalhista', sub:'CLT · TST · Rescisão' },
+          { label:'👨‍👩‍👧 Família',   value:'familia',     sub:'Guarda · Alimentos' },
+        ],
+      },
+      {
+        key: 'tipo',
+        type: 'chips',
+        ask: (d) => `Certo — ${this._areaLabel(d.area)}. Que tipo de peça você precisa redigir?`,
+        options: [
+          { label:'Petição Inicial', value:'peticao_inicial' },
+          { label:'Contestação',     value:'defesa' },
+          { label:'Recurso',         value:'recurso' },
+          { label:'Notificação',     value:'notificacao' },
+          { label:'Contrato',        value:'contrato' },
+        ],
+      },
+      {
+        key: 'autor',
+        type: 'text',
+        ask: () => 'Qual é o nome e qualificação do autor?',
+        placeholder: 'Ex: João Silva, brasileiro, solteiro, engenheiro de software...',
+      },
+      {
+        key: 'reu',
+        type: 'text',
+        ask: () => 'Quem é o réu nesta ação?',
+        placeholder: 'Ex: Samsung Electronics Brasil Ltda., CNPJ 00.280.273/0001-37...',
+      },
+      {
+        key: 'fatos',
+        type: 'textarea',
+        ask: () => 'Descreva os fatos do caso — com datas, valores e o que aconteceu:',
+        placeholder: 'Quanto mais detalhes você fornecer, mais precisa será a peça...',
+      },
+      {
+        key: 'pedido',
+        type: 'textarea',
+        ask: () => 'Qual é o pedido? O que seu cliente quer obter com esta ação?',
+        placeholder: 'Ex: Substituição do produto, indenização por danos morais e materiais...',
+      },
+    ];
+  }
+
+  _areaLabel(a) {
+    return {consumidor:'Direito do Consumidor',civil:'Direito Civil',trabalhista:'Direito Trabalhista',familia:'Direito de Família'}[a] || a;
+  }
+
+  _tipoLabel(t) {
+    return {peticao_inicial:'Petição Inicial',defesa:'Contestação',recurso:'Recurso',notificacao:'Notificação',contrato:'Contrato'}[t] || t;
+  }
+
+  // Parse initial context from home input (smart skip)
+  _parseContext(txt) {
+    if (!txt) return;
+    const lo = txt.toLowerCase();
+    // Area detection
+    if (lo.match(/consumidor|cdc|produto|jec|plano.de.saúde|seguro|loja/))
+      this.formData.area = 'consumidor';
+    else if (lo.match(/trabalhista|clt|rescisão|demissão|emprego|salário/))
+      this.formData.area = 'trabalhista';
+    else if (lo.match(/família|guarda|alimentos|divórcio|adoção/))
+      this.formData.area = 'familia';
+    else if (lo.match(/civil|contrato|dano|indenização/))
+      this.formData.area = 'civil';
+    // Tipo detection
+    if (lo.match(/contestação|contestar/))
+      this.formData.tipo = 'defesa';
+    else if (lo.match(/recurso|apelaç/))
+      this.formData.tipo = 'recurso';
+    else if (lo.match(/notificaç/))
+      this.formData.tipo = 'notificacao';
+    else if (lo.match(/contrato/))
+      this.formData.tipo = 'contrato';
+    else if (lo.match(/petição|inicial|ação/))
+      this.formData.tipo = 'peticao_inicial';
+    // Store as fatos context if descriptive
+    if (txt.length > 30) this._ctxFatos = txt;
+  }
+
+  reset(initialContext = null) {
+    this.messages  = [];
+    this.formData  = {};
+    this.step      = 0;
+    this.locked    = false;
+    this._ctxFatos = null;
+    document.getElementById('chat-msgs').innerHTML = '';
+    document.getElementById('doc-paper').style.display  = 'none';
+    document.getElementById('doc-empty').style.display  = 'flex';
+    document.getElementById('doc-actions').style.display = 'none';
+    document.getElementById('doc-title-text').textContent = 'Aguardando dados...';
+    document.getElementById('doc-dot').className = 'doc-title-dot';
+    document.getElementById('chat-status').textContent = 'Iniciando...';
+    textoGerado = '';
+    this._enableInput();
+    if (initialContext) this._parseContext(initialContext);
+    // Greet + first question
+    this._addAiMessage({ type:'text', content:'Olá. Vou te ajudar a redigir sua peça jurídica. Responda as perguntas abaixo e eu cuido do restante.' });
+    setTimeout(() => this._nextStep(), 900);
+  }
+
+  _currentStep() {
+    return this.steps.find(s => !this.formData[s.key]);
+  }
+
+  async _nextStep() {
+    const step = this._currentStep();
+    if (!step) {
+      // All data collected → generate
+      await this._generate();
+      return;
+    }
+    // Show typing
+    const typingId = this._addTyping();
+    await sleep(550);
+    this._removeTyping(typingId);
+    // Add AI question
+    const msg = {
+      type: step.type,
+      content: step.ask(this.formData),
+      options: step.options,
+      placeholder: step.placeholder,
+      key: step.key,
+    };
+    this._addAiMessage(msg);
+    // Update input zone
+    this._setInput(step);
+    document.getElementById('chat-status').textContent = 'Aguardando resposta...';
+  }
+
+  async answer(key, value, displayValue) {
+    if (this.locked) return;
+    // Add user bubble
+    this._addUserMessage(displayValue || value);
+    // Store data
+    this.formData[key] = value;
+    // Disable current input
+    this._disableCurrentChips();
+    // Next step
+    await sleep(200);
+    this._nextStep();
+  }
+
+  // ── Message rendering ──────────────────────
+  _addAiMessage(msg) {
+    const id = 'msg-' + Date.now();
+    msg.id = id;
+    this.messages.push({ role:'ai', ...msg });
+    const el = document.createElement('div');
+    el.className = 'msg-ai';
+    el.id = id;
+    el.innerHTML = `
+      <div class="msg-ai-avatar">P</div>
+      <div class="msg-ai-body">
+        <div class="msg-ai-text">${escHtml(msg.content)}</div>
+        ${msg.type === 'chips' ? this._renderChips(msg.options, msg.key) : ''}
+      </div>`;
+    document.getElementById('chat-msgs').appendChild(el);
+    scrollBottom();
+    return id;
+  }
+
+  _addUserMessage(text) {
+    this.messages.push({ role:'user', content:text });
+    const el = document.createElement('div');
+    el.className = 'msg-user';
+    el.innerHTML = `<div class="msg-user-bubble">${escHtml(text)}</div>`;
+    document.getElementById('chat-msgs').appendChild(el);
+    scrollBottom();
+  }
+
+  _addTyping() {
+    const id = 'typing-' + Date.now();
+    const el = document.createElement('div');
+    el.className = 'msg-ai msg-typing';
+    el.id = id;
+    el.innerHTML = `
+      <div class="msg-ai-avatar">P</div>
+      <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>`;
+    document.getElementById('chat-msgs').appendChild(el);
+    scrollBottom();
+    return id;
+  }
+
+  _removeTyping(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  _renderChips(options, key) {
+    return `<div class="msg-chips" id="chips-${key}">
+      ${options.map(o => `
+        <div class="msg-chip" onclick="engine.chipSelect('${key}','${o.value}','${escHtml(o.label)}',this)">
+          ${escHtml(o.label)}
+          ${o.sub ? `<span style="font-size:10px;color:var(--t3);display:block;margin-top:2px">${escHtml(o.sub)}</span>` : ''}
+        </div>`).join('')}
+    </div>`;
+  }
+
+  chipSelect(key, value, label, el) {
+    if (el.classList.contains('disabled')) return;
+    // Mark all chips as disabled, highlight selected
+    el.closest('.msg-chips').querySelectorAll('.msg-chip').forEach(c => c.classList.add('disabled'));
+    el.classList.add('selected');
+    this.answer(key, value, label);
+  }
+
+  _disableCurrentChips() {
+    const step = this.steps.find(s => s.type === 'chips' && !this.formData[s.key]);
+    // Already disabled by chipSelect
+  }
+
+  // ── Input zone ─────────────────────────────
+  _setInput(step) {
+    const zone = document.getElementById('chat-input-zone');
+    const row  = document.getElementById('chat-input-row');
+    const field = document.getElementById('chat-field');
+    const hint  = document.getElementById('chat-hint');
+
+    if (step.type === 'chips') {
+      // Chips are inline — hide the text input
+      row.style.display = 'none';
+      hint.textContent  = 'Selecione uma opção acima';
     } else {
-      slide.classList.remove('active');
-      if (i < wizStep) slide.classList.add('exit-left');
-      else slide.classList.remove('exit-left');
+      row.style.display = 'flex';
+      field.value       = '';
+      field.style.height = 'auto';
+      field.placeholder = step.placeholder || 'Digite sua resposta...';
+      field.setAttribute('data-key', step.key);
+      if (step.type === 'textarea') {
+        hint.textContent = 'Shift+Enter para nova linha · Enter para enviar';
+      } else {
+        hint.textContent = 'Enter para enviar';
+      }
+      setTimeout(() => field.focus(), 50);
     }
   }
 
-  // Botões
-  document.getElementById('btn-back').style.display = wizStep > 1 ? '' : 'none';
-  document.getElementById('btn-next').style.display  = wizStep < 4 ? '' : 'none';
-  document.getElementById('btn-gerar').style.display = wizStep === 4 ? '' : 'none';
+  _enableInput() {
+    document.getElementById('chat-input-row').style.display = 'flex';
+    document.getElementById('chat-field').disabled = false;
+    document.getElementById('chat-send-btn').disabled = false;
+  }
 
-  // Summary no step 4
-  if (wizStep === 4) {
-    const areaNames = {consumidor:'Direito do Consumidor',civil:'Direito Civil',trabalhista:'Trabalhista',familia:'Família'};
-    const tipoNames = {peticao_inicial:'Petição Inicial',recurso:'Recurso/Apelação',defesa:'Contestação',notificacao:'Notificação',contrato:'Contrato'};
-    const autor = document.getElementById('w-autor').value.trim();
-    const reu   = document.getElementById('w-reu').value.trim();
-    document.getElementById('wiz-summary').innerHTML =
-      `<strong>${areaNames[wizArea]}</strong> · ${tipoNames[wizTipoPeca]}<br>` +
-      `Autor: <strong>${autor||'–'}</strong><br>` +
-      (reu ? `Réu: <strong>${reu}</strong>` : '');
+  _disableInput(msg) {
+    document.getElementById('chat-input-row').style.display = 'none';
+    document.getElementById('chat-hint').textContent = msg || '';
+  }
+
+  // ── Generation ─────────────────────────────
+  async _generate() {
+    this.locked = true;
+    this._disableInput('Redigindo...');
+    document.getElementById('chat-status').textContent = 'Redigindo...';
+    document.getElementById('doc-status').style.display = 'none';
+
+    // AI message: generating
+    const genId = 'gen-' + Date.now();
+    const genEl = document.createElement('div');
+    genEl.className = 'msg-ai';
+    genEl.id = genId;
+    genEl.innerHTML = `
+      <div class="msg-ai-avatar">P</div>
+      <div class="msg-ai-body">
+        <div class="msg-generating">
+          <div class="gen-pulse"></div>
+          Redigindo sua ${this._tipoLabel(this.formData.tipo)}...
+        </div>
+      </div>`;
+    document.getElementById('chat-msgs').appendChild(genEl);
+    scrollBottom();
+
+    // Show document panel
+    document.getElementById('doc-empty').style.display  = 'none';
+    document.getElementById('doc-paper').style.display  = 'block';
+    document.getElementById('doc-paper').innerHTML      = '';
+    document.getElementById('doc-dot').className = 'doc-title-dot live';
+    document.getElementById('doc-title-text').textContent =
+      `${this._tipoLabel(this.formData.tipo)} — ${(this.formData.autor||'').split(',')[0]}`;
+
+    // RAG chunks
+    let chunks_acervo = [];
+    if (ragAtivo && sessionFiles.length > 0) {
+      const q = `${this.formData.area} ${this.formData.tipo} ${(this.formData.fatos||'').slice(0,300)}`;
+      chunks_acervo = buscarChunks(q, 5).map(c => ({ texto:c.texto, fonte:c.fonte }));
+    }
+
+    // API call
+    textoGerado = '';
+    try {
+      const resp = await fetch('/api/gerar', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          area:   this.formData.area,
+          tipo:   this.formData.tipo,
+          autor:  this.formData.autor,
+          reu:    this.formData.reu,
+          fatos:  this.formData.fatos,
+          pedido: this.formData.pedido || '',
+          estilo: '',
+          chunks_acervo,
+        }),
+      });
+
+      if (!resp.ok || !resp.headers.get('content-type')?.includes('event-stream')) {
+        const txt = await resp.text();
+        let msg = 'Erro ' + resp.status;
+        try { msg = JSON.parse(txt).error || msg; } catch(e) { msg = txt || msg; }
+        throw new Error(msg);
+      }
+
+      const reader = resp.body.getReader();
+      const dec    = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const raw = dec.decode(value);
+        for (const linha of raw.split('\n')) {
+          if (!linha.startsWith('data: ')) continue;
+          const payload = linha.slice(6);
+          if (payload === '[DONE]') break;
+          try {
+            const d = JSON.parse(payload);
+            if (d.type === 'content_block_delta' && d.delta?.type === 'text_delta') {
+              textoGerado += d.delta.text;
+              renderDoc(textoGerado, true);
+            }
+          } catch(e) {}
+        }
+      }
+
+      // Done
+      renderDoc(textoGerado, false);
+      document.getElementById('doc-dot').className = 'doc-title-dot';
+      document.getElementById('doc-actions').style.display = 'flex';
+      document.getElementById('chat-status').textContent = 'Peça concluída';
+
+      // Remove generating message, add done message
+      document.getElementById(genId)?.remove();
+      this._addAiMessage({ type:'text', content:`Pronto. Sua ${this._tipoLabel(this.formData.tipo)} está à direita. Você pode copiar ou exportar para Word.` });
+      document.getElementById('chat-input-row').style.display = 'none';
+      document.getElementById('chat-hint').textContent = '';
+
+    } catch(err) {
+      document.getElementById(genId)?.remove();
+      this._addAiMessage({ type:'text', content:`⚠️ Erro ao gerar: ${err.message}` });
+      document.getElementById('chat-status').textContent = 'Erro';
+      this.locked = false;
+    }
   }
 }
 
-// ── Acervo ──
-function selTipo(el) {
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  tipoSel = el.dataset.tipo;
-  document.getElementById('drop-title').textContent = 'Adicionar ' + tipoSel;
-  renderTabela();
+const engine = new ConversationEngine();
+
+// ─────────────────────────────────────────────
+//  CHAT INPUT
+// ─────────────────────────────────────────────
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    submitChat();
+  }
+}
+function submitChat() {
+  const field = document.getElementById('chat-field');
+  const val   = field.value.trim();
+  const key   = field.getAttribute('data-key');
+  if (!val || !key) return;
+  field.value = '';
+  field.style.height = 'auto';
+  engine.answer(key, val, val);
 }
 
-function atualizarContadores() {
+// ─────────────────────────────────────────────
+//  DOCUMENT RENDERER (Markdown → styled HTML)
+// ─────────────────────────────────────────────
+function renderDoc(md, streaming) {
+  const paper = document.getElementById('doc-paper');
+  paper.innerHTML = mdToDocHtml(md) + (streaming ? '<span class="cursor-blink"></span>' : '');
+  // Auto-scroll doc panel to bottom during streaming
+  const scroll = document.getElementById('doc-scroll');
+  scroll.scrollTop = scroll.scrollHeight;
+}
+
+function mdToDocHtml(md) {
+  const lines = md.split('\n');
+  let html = '';
+  let i = 0;
+  while (i < lines.length) {
+    const l = lines[i];
+
+    // Table
+    if (/^\|/.test(l)) {
+      html += '<table>';
+      let first = true;
+      while (i < lines.length && /^\|/.test(lines[i])) {
+        if (/^\|[-:\s|]+\|$/.test(lines[i].trim())) { i++; continue; }
+        const cells = lines[i].split('|').filter((c,idx,a)=>idx>0&&idx<a.length-1);
+        html += '<tr>' + cells.map(c =>
+          first ? `<th>${inlineParse(c.trim())}</th>` : `<td>${inlineParse(c.trim())}</td>`
+        ).join('') + '</tr>';
+        first = false;
+        i++;
+      }
+      html += '</table>';
+      continue;
+    }
+
+    if (/^# /.test(l) && !/^##/.test(l)) { html += `<h1>${inlineParse(l.slice(2))}</h1>`; i++; continue; }
+    if (/^## /.test(l) && !/^###/.test(l)){ html += `<h2>${inlineParse(l.slice(3))}</h2>`; i++; continue; }
+    if (/^### /.test(l)&& !/^####/.test(l)){ html += `<h3>${inlineParse(l.slice(4))}</h3>`; i++; continue; }
+    if (/^#### /.test(l))                  { html += `<h4>${inlineParse(l.slice(5))}</h4>`; i++; continue; }
+    if (/^---+$/.test(l.trim()))           { html += '<hr>'; i++; continue; }
+    if (/^> /.test(l))                     { html += `<blockquote>${inlineParse(l.slice(2))}</blockquote>`; i++; continue; }
+    if (/^[*-] /.test(l))                  { html += `<p class="no-indent">· ${inlineParse(l.slice(2))}</p>`; i++; continue; }
+    if (/^\d+\. /.test(l))                 { html += `<p class="no-indent">${inlineParse(l)}</p>`; i++; continue; }
+    if (!l.trim())                          { html += '<p>&nbsp;</p>'; i++; continue; }
+
+    html += `<p>${inlineParse(l)}</p>`;
+    i++;
+  }
+  return html;
+}
+
+function inlineParse(txt) {
+  return txt
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>');
+}
+
+// ─────────────────────────────────────────────
+//  COPY & WORD EXPORT
+// ─────────────────────────────────────────────
+function copiarDoc() {
+  if (!textoGerado) return;
+  navigator.clipboard.writeText(textoGerado).then(() => toast('Copiado!','ok'));
+}
+
+function exportarWord() {
+  if (!textoGerado) return;
+  const autor = (engine.formData.autor || 'Autor').split(',')[0].trim();
+  const tipo  = {peticao_inicial:'Petição-Inicial',defesa:'Contestação',recurso:'Recurso',notificacao:'Notificação',contrato:'Contrato'}[engine.formData.tipo] || 'Documento';
+  const nome  = `Pandecta_${tipo}_${autor.replace(/\s+/g,'-')}.doc`;
+
+  function mdToWordHtml(md) {
+    const lines = md.split('\n');
+    let html = '', i = 0;
+    while (i < lines.length) {
+      const l = lines[i];
+      if (/^\|/.test(l)) {
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;width:100%;margin:10pt 0;">';
+        let first = true;
+        while (i < lines.length && /^\|/.test(lines[i])) {
+          if (/^\|[-:\s|]+\|$/.test(lines[i].trim())) { i++; continue; }
+          const cells = lines[i].split('|').filter((c,idx,a)=>idx>0&&idx<a.length-1);
+          html += '<tr>' + cells.map(c => {
+            const bg = first ? 'background:#F0EBE0;' : '';
+            const tag = first ? 'th' : 'td';
+            return `<${tag} style="${bg}font-family:Arial;font-size:11pt;padding:4pt 7pt;">${wordInline(c.trim())}</${tag}>`;
+          }).join('') + '</tr>';
+          first = false; i++;
+        }
+        html += '</table>';
+        continue;
+      }
+      if (/^# /.test(l)&&!/^##/.test(l)) { html+=`<h1 style="font-family:Arial;font-size:14pt;font-weight:bold;text-align:center;margin:14pt 0 8pt;">${wordInline(l.slice(2))}</h1>`; i++; continue; }
+      if (/^## /.test(l)&&!/^###/.test(l)){ html+=`<h2 style="font-family:Arial;font-size:13pt;font-weight:bold;border-bottom:1pt solid #CCC;padding-bottom:3pt;margin:14pt 0 6pt;">${wordInline(l.slice(3))}</h2>`; i++; continue; }
+      if (/^### /.test(l))                { html+=`<h3 style="font-family:Arial;font-size:12pt;font-weight:bold;font-style:italic;margin:10pt 0 4pt;">${wordInline(l.slice(4))}</h3>`; i++; continue; }
+      if (/^#### /.test(l))               { html+=`<h4 style="font-family:Arial;font-size:12pt;font-weight:bold;margin:8pt 0 4pt;">${wordInline(l.slice(5))}</h4>`; i++; continue; }
+      if (/^---+$/.test(l.trim()))        { html+=`<p style="margin:6pt 0;">&nbsp;</p>`; i++; continue; }
+      if (/^> /.test(l))                  { html+=`<p style="font-family:Arial;font-size:11pt;font-style:italic;border-left:2pt solid #CCC;margin:6pt 0 6pt 1.5cm;padding-left:.5cm;">${wordInline(l.slice(2))}</p>`; i++; continue; }
+      if (/^[*-] /.test(l))              { html+=`<p style="font-family:Arial;font-size:11pt;margin:3pt 0 3pt 1cm;">• ${wordInline(l.slice(2))}</p>`; i++; continue; }
+      if (!l.trim())                      { html+=`<p style="margin:4pt 0;">&nbsp;</p>`; i++; continue; }
+      html+=`<p style="font-family:Arial;font-size:11pt;line-height:1.5;margin:6pt 0;text-align:justify;text-indent:35pt;">${wordInline(l)}</p>`;
+      i++;
+    }
+    return html;
+  }
+  function wordInline(t) {
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>');
+  }
+
+  const wordDoc = `<html xmlns:o='urn:schemas-microsoft-com:office:office'
+    xmlns:w='urn:schemas-microsoft-com:office:word'
+    xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset='utf-8'>
+<style>@page{margin:3cm 2cm 2cm 3cm;size:A4;}body{font-family:Arial;font-size:11pt;}</style>
+</head><body>${mdToWordHtml(textoGerado)}</body></html>`;
+
+  const blob = new Blob(['﻿', wordDoc], { type:'application/msword;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href=url; a.download=nome; a.click();
+  URL.revokeObjectURL(url);
+  toast('Word exportado!','ok');
+}
+
+// ─────────────────────────────────────────────
+//  ACERVO
+// ─────────────────────────────────────────────
+function selTipo(el) {
+  document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  tipoSel = el.dataset.tipo;
+  renderCards();
+}
+
+function renderCards() {
+  const cards  = document.getElementById('doc-cards');
+  const empty  = document.getElementById('ac-empty');
+  const filter = tipoSel === 'Todos' ? sessionFiles : sessionFiles.filter(f => f.tipo === tipoSel);
+  empty.style.display = filter.length ? 'none' : 'block';
+  cards.innerHTML = filter.map((f, idx) => {
+    const ext = f.nome.split('.').pop().toLowerCase();
+    const icon = ext === 'pdf' ? '📕' : ext === 'docx' ? '📄' : '📝';
+    const realIdx = sessionFiles.indexOf(f);
+    return `<div class="doc-card">
+      <div class="doc-card-top">
+        <div class="doc-card-icon">${icon}</div>
+        <button class="doc-card-rm" onclick="remover(${realIdx})" title="Remover">✕</button>
+      </div>
+      <div class="doc-card-name" title="${escHtml(f.nome)}">${escHtml(f.nome)}</div>
+      <div class="doc-card-meta">
+        <span class="doc-tag">${f.tipo}</span>
+        <span class="doc-chunks">${f.chunks.length} trechos</span>
+      </div>
+    </div>`;
+  }).join('');
+  updateCounters();
+}
+
+function remover(idx) {
+  sessionFiles.splice(idx, 1);
+  renderCards();
+}
+
+function updateCounters() {
   const tipos = {};
   sessionFiles.forEach(f => { tipos[f.tipo] = (tipos[f.tipo]||0)+1; });
-  document.querySelectorAll('.chip[data-tipo]').forEach(c => {
-    const el = document.getElementById('cnt-'+c.dataset.tipo);
-    if (el) el.textContent = tipos[c.dataset.tipo] || 0;
+  ['Contrato','Petição','Parecer','Modelo','Outro'].forEach(t => {
+    const el = document.getElementById('cnt-'+t);
+    if (el) el.textContent = tipos[t] || 0;
   });
-}
-
-function renderTabela() {
-  const tbody = document.getElementById('file-tbody');
-  const visible = sessionFiles.filter(f => f.tipo === tipoSel);
-  const total = sessionFiles.length;
-  document.getElementById('tbl-count').textContent =
-    total === 0 ? 'Nenhum documento carregado ainda.' :
-    visible.length + ' ' + tipoSel.toLowerCase() + '(s) · ' + total + ' total na sessão';
-  document.getElementById('empty-state').style.display = visible.length ? 'none' : 'block';
-  tbody.innerHTML = visible.map((f) => {
-    const ext = f.nome.split('.').pop().toLowerCase();
-    const [cls,em] = ext==='pdf' ? ['ico-pdf','📕'] : ['ico-doc','📄'];
-    return `<tr>
-      <td><div class="file-name-cell">
-        <div class="file-ico ${cls}">${em}</div>
-        <span style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.nome}</span>
-      </div></td>
-      <td><span class="tipo-badge">${f.tipo}</span></td>
-      <td style="color:var(--muted)">${f.chunks.length}</td>
-      <td><button class="btn btn-danger" style="font-size:11px;padding:4px 10px" onclick="removerArquivo(${sessionFiles.indexOf(f)})">Remover</button></td>
-    </tr>`;
-  }).join('');
-  atualizarDash();
-}
-
-function removerArquivo(idx) {
-  sessionFiles.splice(idx, 1);
-  atualizarContadores();
-  renderTabela();
-  atualizarPilula();
-}
-
-function atualizarDash() {
-  const totalChunks = sessionFiles.reduce((s,f) => s+f.chunks.length, 0);
-  document.getElementById('stat-docs').textContent   = sessionFiles.length;
-  document.getElementById('stat-chunks').textContent = totalChunks;
+  const tot = document.getElementById('cnt-Todos');
+  if (tot) tot.textContent = sessionFiles.length;
 }
 
 function handleDrop(e) {
@@ -767,298 +1302,102 @@ async function handleFiles(files) {
   const txt  = document.getElementById('prog-text');
   const pct  = document.getElementById('prog-pct');
   prog.style.display = 'block';
-  let ok=0, dup=0;
+  let ok = 0, dup = 0;
   for (let i=0; i<arr.length; i++) {
     const f = arr[i];
     fill.style.width = Math.round(i/arr.length*100)+'%';
     pct.textContent  = Math.round(i/arr.length*100)+'%';
-    txt.textContent  = 'Lendo: '+f.name;
-    if (sessionFiles.find(x => x.nome === f.name)) { dup++; continue; }
+    txt.textContent  = 'Processando: '+f.name;
+    if (sessionFiles.find(x => x.nome===f.name)) { dup++; continue; }
     try {
       const texto = await lerArquivo(f);
       if (!texto.trim()) continue;
       const chunks = chunkar(texto, f.name);
-      sessionFiles.push({ nome:f.name, tipo:tipoSel, chunks });
+      // Auto-detect type
+      const lo = f.name.toLowerCase();
+      let tipo = 'Outro';
+      if (lo.includes('contrat')) tipo = 'Contrato';
+      else if (lo.includes('petição')||lo.includes('peticao')||lo.includes('inicial')) tipo = 'Petição';
+      else if (lo.includes('parecer')) tipo = 'Parecer';
+      else if (lo.includes('modelo')) tipo = 'Modelo';
+      sessionFiles.push({ nome:f.name, tipo, chunks });
       ok++;
     } catch(e) { console.error(f.name, e); }
   }
-  fill.style.width='100%'; pct.textContent='100%'; pct.style.color='#2ecc71';
-  txt.textContent = `✓ ${ok} indexado(s)${dup ? ', '+dup+' duplicado(s)' : ''}`;
-  setTimeout(() => { prog.style.display='none'; fill.style.width='0%'; pct.style.color=''; }, 3000);
-  atualizarContadores(); renderTabela(); atualizarPilula();
-  document.getElementById('file-in').value = '';
+  fill.style.width='100%'; pct.textContent='100%';
+  txt.textContent=`✓ ${ok} indexado(s)${dup?', '+dup+' duplicado(s)':''}`;
+  setTimeout(()=>{ prog.style.display='none'; fill.style.width='0%'; },2500);
+  renderCards();
+  document.getElementById('file-in').value='';
+  toast(ok+' documento(s) indexado(s)','ok');
 }
 
 async function lerArquivo(file) {
   const ext = file.name.split('.').pop().toLowerCase();
-  if (ext === 'txt') {
-    return new Promise((res,rej) => {
-      const r = new FileReader();
-      r.onload = e => res(e.target.result);
-      r.onerror = rej;
-      r.readAsText(file, 'UTF-8');
-    });
-  }
+  if (ext === 'txt') return new Promise((res,rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.onerror = rej;
+    r.readAsText(file,'UTF-8');
+  });
   if (ext === 'docx') {
     const buf = await file.arrayBuffer();
-    const result = await mammoth.extractRawText({ arrayBuffer: buf });
-    return result.value;
+    return (await mammoth.extractRawText({arrayBuffer:buf})).value;
   }
   if (ext === 'pdf' && typeof pdfjsLib !== 'undefined') {
     const buf = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
-    let texto = '';
-    for (let i=1; i<=pdf.numPages; i++) {
+    const pdf = await pdfjsLib.getDocument({data:buf}).promise;
+    let t='';
+    for(let i=1;i<=pdf.numPages;i++){
       const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      texto += content.items.map(s => s.str).join(' ') + '\n';
+      const c = await page.getTextContent();
+      t += c.items.map(s=>s.str).join(' ') + '\n';
     }
-    return texto;
+    return t;
   }
   return '';
 }
 
 function chunkar(texto, fonte, size=500, overlap=80) {
-  const chunks = [];
-  let i = 0;
-  while (i < texto.length) {
-    const trecho = texto.slice(i, i+size).trim();
-    if (trecho) chunks.push({ texto: trecho, fonte });
-    i += size - overlap;
+  const chunks=[]; let i=0;
+  while(i<texto.length){
+    const t=texto.slice(i,i+size).trim();
+    if(t) chunks.push({texto:t,fonte});
+    i+=size-overlap;
   }
   return chunks;
 }
 
 function buscarChunks(query, top=5) {
-  const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
-  if (!words.length) return [];
-  const scored = [];
-  sessionFiles.forEach(f => {
-    f.chunks.forEach(c => {
-      const low = c.texto.toLowerCase();
-      const score = words.filter(w => low.includes(w)).length / words.length;
-      if (score > 0) scored.push({ ...c, score });
+  const words = query.toLowerCase().split(/\s+/).filter(w=>w.length>3);
+  if(!words.length) return [];
+  const scored=[];
+  sessionFiles.forEach(f=>{
+    f.chunks.forEach(c=>{
+      const lo=c.texto.toLowerCase();
+      const score=words.filter(w=>lo.includes(w)).length/words.length;
+      if(score>0) scored.push({...c,score});
     });
   });
-  return scored.sort((a,b) => b.score-a.score).slice(0,top);
+  return scored.sort((a,b)=>b.score-a.score).slice(0,top);
 }
 
-function toggleRAG() {
-  ragAtivo = !ragAtivo;
-  document.getElementById('rag-sw').className = 'toggle ' + (ragAtivo?'on':'off');
+// ─────────────────────────────────────────────
+//  UTILS
+// ─────────────────────────────────────────────
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+function scrollBottom() {
+  const el=document.getElementById('chat-msgs');
+  setTimeout(()=>{ el.scrollTop=el.scrollHeight; },50);
 }
-
-function atualizarPilula() {
-  const total = sessionFiles.length;
-  const chunks = sessionFiles.reduce((s,f) => s+f.chunks.length, 0);
-  const sub = document.getElementById('rag-sub');
-  if (sub) sub.textContent = total > 0 ? `${chunks} trechos disponíveis` : 'Nenhum documento na sessão';
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
-// ════════════════════════════════════════════
-//  GERAR
-// ════════════════════════════════════════════
-let textoGerado = '';
-
-async function gerar() {
-  const autor  = document.getElementById('w-autor').value.trim();
-  const reu    = document.getElementById('w-reu').value.trim();
-  const fatos  = document.getElementById('w-fatos').value.trim();
-  const pedido = document.getElementById('w-pedido').value.trim();
-  const estilo = document.getElementById('w-estilo').value;
-
-  if (!autor || !fatos) { toast('Preencha pelo menos Autor e Fatos', 'err'); return; }
-
-  const btn = document.getElementById('btn-gerar');
-  btn.disabled = true; btn.textContent = '⏳ Gerando...';
-  document.getElementById('btn-word').style.display = 'none';
-  textoGerado = '';
-
-  document.getElementById('out-empty').style.display = 'none';
-  document.getElementById('out-body').style.display  = 'none';
-  document.getElementById('out-fontes').style.display = 'none';
-  document.getElementById('streaming-row').style.display = 'flex';
-
-  let chunks_acervo = [], fontes = [];
-  if (ragAtivo && sessionFiles.length > 0) {
-    const query = `${wizArea} ${wizTipoPeca} ${fatos.slice(0,300)}`;
-    chunks_acervo = buscarChunks(query, 5).map(c => ({ texto: c.texto, fonte: c.fonte }));
-    fontes = [...new Set(chunks_acervo.map(c => c.fonte))];
-  }
-
-  try {
-    const resp = await fetch('/api/gerar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ area: wizArea, tipo: wizTipoPeca, autor, reu, fatos, pedido, estilo, chunks_acervo })
-    });
-
-    if (!resp.ok || !resp.headers.get('content-type')?.includes('event-stream')) {
-      const errTxt = await resp.text();
-      let msg = 'Erro ' + resp.status;
-      try { msg = JSON.parse(errTxt).error || msg; } catch(ex) { msg = errTxt || msg; }
-      document.getElementById('streaming-row').style.display = 'none';
-      document.getElementById('out-empty').style.display = 'flex';
-      document.getElementById('out-empty').innerHTML =
-        '<div style="color:var(--danger);font-size:13px;padding:20px;text-align:center">' +
-        '<strong>⚠️ Erro ao gerar</strong><br><br>' + msg + '</div>';
-      btn.disabled = false; btn.textContent = '✦ Gerar Petição';
-      return;
-    }
-
-    const reader = resp.body.getReader();
-    const dec = new TextDecoder();
-    const outBody = document.getElementById('out-body');
-    document.getElementById('streaming-row').style.display = 'none';
-    outBody.style.display = 'block';
-    outBody.textContent = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const raw = dec.decode(value);
-      const linhas = raw.split('\n').filter(l => l.startsWith('data: '));
-      for (const linha of linhas) {
-        const payload = linha.slice(6);
-        if (payload === '[DONE]') break;
-        try {
-          const d = JSON.parse(payload);
-          if (d.type === 'content_block_delta' && d.delta?.type === 'text_delta') {
-            textoGerado += d.delta.text;
-            outBody.textContent = textoGerado;
-            outBody.scrollTop = outBody.scrollHeight;
-          }
-        } catch(ex) {}
-      }
-    }
-
-    if (!textoGerado.trim()) {
-      outBody.style.display = 'none';
-      document.getElementById('out-empty').style.display = 'flex';
-    } else {
-      document.getElementById('btn-word').style.display = '';
-    }
-
-    if (fontes.length) {
-      const fEl = document.getElementById('out-fontes');
-      fEl.style.display = 'block';
-      fEl.innerHTML = '📂 Referências do acervo: ' + fontes.join(' · ');
-    }
-
-  } catch(e) {
-    document.getElementById('streaming-row').style.display = 'none';
-    document.getElementById('out-empty').style.display = 'flex';
-    document.getElementById('out-empty').innerHTML =
-      '<div style="color:var(--danger);font-size:13px;padding:20px;text-align:center"><strong>⚠️ ' + e.message + '</strong></div>';
-  }
-
-  btn.disabled = false; btn.textContent = '✦ Gerar Petição';
+function toast(msg,tipo='ok'){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className='toast show '+tipo;
+  setTimeout(()=>{ el.className='toast'; },2800);
 }
-
-function copiar() {
-  if (!textoGerado) return;
-  navigator.clipboard.writeText(textoGerado).then(() => toast('Copiado!', 'ok'));
-}
-
-// ════════════════════════════════════════════
-//  EXPORTAR WORD — HTML-to-Doc (sem biblioteca externa)
-// ════════════════════════════════════════════
-function exportarWord() {
-  if (!textoGerado) return;
-
-  // Converte markdown para HTML com formatação jurídica
-  function mdParaHtml(md) {
-    const linhas = md.split('\n');
-    let html = '';
-    let i = 0;
-    while (i < linhas.length) {
-      const l = linhas[i];
-
-      // Tabela markdown
-      if (/^\|/.test(l)) {
-        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;width:100%;margin:12pt 0;">';
-        let primeiro = true;
-        while (i < linhas.length && /^\|/.test(linhas[i])) {
-          if (/^\|[-:\s|]+\|$/.test(linhas[i].trim())) { i++; continue; }
-          const celulas = linhas[i].split('|').filter((c,idx,arr) => idx > 0 && idx < arr.length-1);
-          html += '<tr>';
-          celulas.forEach(c => {
-            const tag = primeiro ? 'th' : 'td';
-            const bg  = primeiro ? 'background:#F0EBE0;' : '';
-            html += `<${tag} style="${bg}font-family:Arial;font-size:11pt;padding:5pt 8pt;">${inline(c.trim())}</${tag}>`;
-          });
-          html += '</tr>';
-          primeiro = false;
-          i++;
-        }
-        html += '</table>';
-        continue;
-      }
-
-      if (/^#[^#]/.test(l))   { html += `<h1 style="font-family:Arial;font-size:14pt;font-weight:bold;text-align:center;margin:18pt 0 10pt;">${inline(l.replace(/^#\s*/,''))}</h1>`; i++; continue; }
-      if (/^##[^#]/.test(l))  { html += `<h2 style="font-family:Arial;font-size:13pt;font-weight:bold;border-bottom:1.5pt solid #C8A96B;padding-bottom:3pt;margin:16pt 0 8pt;">${inline(l.replace(/^##\s*/,''))}</h2>`; i++; continue; }
-      if (/^###[^#]/.test(l)) { html += `<h3 style="font-family:Arial;font-size:12pt;font-weight:bold;font-style:italic;margin:14pt 0 6pt;">${inline(l.replace(/^###\s*/,''))}</h3>`; i++; continue; }
-      if (/^####/.test(l))    { html += `<h4 style="font-family:Arial;font-size:12pt;font-weight:bold;margin:10pt 0 4pt;">${inline(l.replace(/^####\s*/,''))}</h4>`; i++; continue; }
-      if (/^---+$/.test(l.trim())) { html += '<p style="margin:6pt 0;">&nbsp;</p>'; i++; continue; }
-      if (/^>\s/.test(l))     { html += `<blockquote style="font-family:Arial;font-size:11pt;font-style:italic;border-left:3pt solid #C8A96B;margin:8pt 0 8pt 20pt;padding:4pt 0 4pt 12pt;color:#333;">${inline(l.replace(/^>\s*/,''))}</blockquote>`; i++; continue; }
-      if (/^[-*]\s/.test(l))  { html += `<p style="font-family:Arial;font-size:11pt;margin:3pt 0 3pt 20pt;">• ${inline(l.replace(/^[-*]\s+/,''))}</p>`; i++; continue; }
-      if (/^\d+\.\s/.test(l)) { html += `<p style="font-family:Arial;font-size:11pt;margin:3pt 0 3pt 20pt;">${inline(l)}</p>`; i++; continue; }
-      if (!l.trim())          { html += '<p style="margin:4pt 0;">&nbsp;</p>'; i++; continue; }
-
-      html += `<p style="font-family:Arial;font-size:11pt;line-height:1.5;margin:6pt 0;text-align:justify;text-indent:35pt;">${inline(l)}</p>`;
-      i++;
-    }
-    return html;
-  }
-
-  function inline(txt) {
-    return txt
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
-      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g,'<em>$1</em>');
-  }
-
-  const tipoNames = {peticao_inicial:'Petição Inicial',recurso:'Recurso',defesa:'Contestação',notificacao:'Notificação',contrato:'Contrato'};
-  const autor = document.getElementById('w-autor').value.trim().split(',')[0] || 'Autor';
-  const nomeArq = `Pandecta_${(tipoNames[wizTipoPeca]||'Documento').replace(/\s/g,'-')}_${autor.replace(/\s+/g,'-')}.doc`;
-
-  const corpo = mdParaHtml(textoGerado);
-
-  const wordHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office'
-    xmlns:w='urn:schemas-microsoft-com:office:word'
-    xmlns='http://www.w3.org/TR/REC-html40'>
-<head>
-  <meta charset='utf-8'>
-  <title>Pandecta</title>
-  <!--[if gte mso 9]>
-  <xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml>
-  <![endif]-->
-  <style>
-    @page { margin: 3cm 2cm 2cm 3cm; size: A4; }
-    body { font-family: Arial; font-size: 11pt; color: #000; }
-  </style>
-</head>
-<body>${corpo}</body>
-</html>`;
-
-  const blob = new Blob(['﻿', wordHtml], { type: 'application/msword;charset=utf-8' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = nomeArq; a.click();
-  URL.revokeObjectURL(url);
-  toast('Word exportado! (' + nomeArq + ')', 'ok');
-}
-
-// ── Toast ──
-function toast(msg, tipo='ok') {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.className = 'toast show ' + tipo;
-  setTimeout(() => { el.className = 'toast'; }, 3000);
-}
-
-// ── Init ──
-atualizarPilula();
 </script>
 </body>
 </html>
