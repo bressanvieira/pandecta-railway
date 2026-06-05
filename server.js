@@ -1,22 +1,241 @@
 // ═══════════════════════════════════════════════════════════════════
-//  PANDECTA — Express Server para Railway  (System Prompt v4)
-//  POST /api/gerar
-//  Body: { area, tipo, autor, reu, fatos, pedido, estilo, chunks_acervo }
-//  Response: text/event-stream (SSE)
-//  Sem timeout — servidor persistente
+//  PANDECTA — Express Server v3  (Railway)
+//  - SQLite persistence: lawyers, office, history, acervo
+//  - POST /api/gerar           → SSE stream de petição
+//  - CRUD /api/lawyers
+//  - GET/PUT /api/office
+//  - CRUD /api/history
+//  - CRUD /api/acervo  +  POST /api/acervo/buscar
 // ═══════════════════════════════════════════════════════════════════
 
-const express  = require('express');
-const Anthropic = require('@anthropic-ai/sdk');
-const path     = require('path');
+const express   = require('express');
+const Anthropic  = require('@anthropic-ai/sdk');
+const path      = require('path');
+const fs        = require('fs');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json({ limit: '2mb' }));
+// ── DATABASE ──────────────────────────────────────────────────────────────────
+
+let db = null;
+try {
+  const Database = require('better-sqlite3');
+  const dbDir  = process.env.DB_PATH
+    ? path.dirname(process.env.DB_PATH)
+    : path.join(__dirname, 'data');
+  const dbPath = process.env.DB_PATH || path.join(dbDir, 'pandecta.db');
+
+  if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
+
+  db = new Database(dbPath);
+  db.pragma('journal_mode = WAL');
+
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS lawyers (
+      id         INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome       TEXT NOT NULL,
+      oab        TEXT DEFAULT '',
+      uf         TEXT DEFAULT '',
+      email      TEXT DEFAULT '',
+      cargo      TEXT DEFAULT '',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS office (
+      id        INTEGER PRIMARY KEY CHECK (id = 1),
+      nome      TEXT DEFAULT '',
+      endereco  TEXT DEFAULT '',
+      cidade    TEXT DEFAULT '',
+      cep       TEXT DEFAULT '',
+      telefone  TEXT DEFAULT '',
+      email     TEXT DEFAULT ''
+    );
+    INSERT OR IGNORE INTO office (id) VALUES (1);
+
+    CREATE TABLE IF NOT EXISTS history (
+      id            INTEGER PRIMARY KEY AUTOINCREMENT,
+      usuario       TEXT DEFAULT '',
+      tipo          TEXT DEFAULT '',
+      tipo_label    TEXT DEFAULT '',
+      area_label    TEXT DEFAULT '',
+      autor         TEXT DEFAULT '',
+      responsavel_id INTEGER,
+      texto         TEXT DEFAULT '',
+      created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS acervo (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome        TEXT NOT NULL,
+      tipo        TEXT DEFAULT 'Outro',
+      chunks      TEXT DEFAULT '[]',
+      chunk_count INTEGER DEFAULT 0,
+      created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  console.log('✅  Database:', dbPath);
+} catch (err) {
+  console.error('⚠️  Database init error (running without persistence):', err.message);
+}
+
+// ── MIDDLEWARE ────────────────────────────────────────────────────────────────
+
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ── SYSTEM PROMPT V4 ─────────────────────────────────────────────────────────
+// ── LAWYERS ───────────────────────────────────────────────────────────────────
+
+app.get('/api/lawyers', (req, res) => {
+  if (!db) return res.json([]);
+  try {
+    res.json(db.prepare('SELECT id, nome, oab, uf, email, cargo FROM lawyers ORDER BY nome ASC').all());
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/lawyers', (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { nome, oab = '', uf = '', email = '', cargo = '' } = req.body;
+  if (!nome) return res.status(400).json({ error: 'Nome obrigatório.' });
+  try {
+    const r = db.prepare('INSERT INTO lawyers (nome,oab,uf,email,cargo) VALUES (?,?,?,?,?)').run(
+      nome.trim(), oab.trim(), uf.trim().toUpperCase(), email.trim(), cargo.trim()
+    );
+    res.json({ id: r.lastInsertRowid, nome, oab, uf: uf.toUpperCase(), email, cargo });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/lawyers/:id', (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { nome, oab = '', uf = '', email = '', cargo = '' } = req.body;
+  try {
+    db.prepare('UPDATE lawyers SET nome=?,oab=?,uf=?,email=?,cargo=? WHERE id=?').run(
+      nome, oab, uf.toUpperCase(), email, cargo, req.params.id
+    );
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/lawyers/:id', (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    db.prepare('DELETE FROM lawyers WHERE id=?').run(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── OFFICE ────────────────────────────────────────────────────────────────────
+
+app.get('/api/office', (req, res) => {
+  if (!db) return res.json({});
+  try {
+    res.json(db.prepare('SELECT nome,endereco,cidade,cep,telefone,email FROM office WHERE id=1').get() || {});
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/office', (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { nome = '', endereco = '', cidade = '', cep = '', telefone = '', email = '' } = req.body;
+  try {
+    db.prepare('UPDATE office SET nome=?,endereco=?,cidade=?,cep=?,telefone=?,email=? WHERE id=1').run(
+      nome, endereco, cidade, cep, telefone, email
+    );
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── HISTORY ───────────────────────────────────────────────────────────────────
+
+app.get('/api/history', (req, res) => {
+  if (!db) return res.json([]);
+  try {
+    res.json(db.prepare(
+      'SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto,created_at FROM history ORDER BY created_at DESC LIMIT 100'
+    ).all());
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/history', (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { usuario='',tipo='',tipo_label='',area_label='',autor='',responsavel_id=null,texto='' } = req.body;
+  try {
+    const r = db.prepare(
+      'INSERT INTO history (usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto) VALUES (?,?,?,?,?,?,?)'
+    ).run(usuario, tipo, tipo_label, area_label, autor, responsavel_id || null, texto);
+    res.json(db.prepare('SELECT * FROM history WHERE id=?').get(r.lastInsertRowid));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/history/:id', (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { texto = '' } = req.body;
+  try {
+    db.prepare('UPDATE history SET texto=? WHERE id=?').run(texto, req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/history/:id', (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    db.prepare('DELETE FROM history WHERE id=?').run(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ACERVO ────────────────────────────────────────────────────────────────────
+
+app.get('/api/acervo', (req, res) => {
+  if (!db) return res.json([]);
+  try {
+    res.json(db.prepare('SELECT id,nome,tipo,chunk_count,created_at FROM acervo ORDER BY created_at DESC').all());
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/acervo', (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { nome, tipo = 'Outro', chunks = [] } = req.body;
+  if (!nome) return res.status(400).json({ error: 'Nome obrigatório.' });
+  try {
+    const r = db.prepare('INSERT INTO acervo (nome,tipo,chunks,chunk_count) VALUES (?,?,?,?)').run(
+      nome, tipo, JSON.stringify(chunks), chunks.length
+    );
+    res.json({ id: r.lastInsertRowid, nome, tipo, chunk_count: chunks.length });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/acervo/:id', (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    db.prepare('DELETE FROM acervo WHERE id=?').run(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/acervo/buscar', (req, res) => {
+  if (!db) return res.json([]);
+  const { query = '', top = 5 } = req.body;
+  const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+  if (!words.length) return res.json([]);
+  try {
+    const rows = db.prepare('SELECT nome, chunks FROM acervo').all();
+    const scored = [];
+    rows.forEach(row => {
+      let chunks;
+      try { chunks = JSON.parse(row.chunks || '[]'); } catch (e) { chunks = []; }
+      chunks.forEach(c => {
+        const lo = (c.texto || '').toLowerCase();
+        const score = words.filter(w => lo.includes(w)).length / words.length;
+        if (score > 0) scored.push({ texto: c.texto, fonte: row.nome, score });
+      });
+    });
+    scored.sort((a, b) => b.score - a.score);
+    res.json(scored.slice(0, top).map(c => ({ texto: c.texto, fonte: c.fonte })));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── SYSTEM PROMPT V4 ──────────────────────────────────────────────────────────
 
 const SYSTEM_PROMPT_V4 = `Você é o Pandecta — assistente jurídico de precisão especializado em direito brasileiro.
 Seu papel é auxiliar advogados a redigir documentos jurídicos de alta qualidade com base nos fatos fornecidos.
@@ -82,7 +301,7 @@ V — Dos Pedidos (a, b, c — com alternatividade)
 VI — Do Valor da Causa (≤ 40 SM)
 VII — Dos Requerimentos Finais (documental + depoimento pessoal — SEM pericial)`;
 
-// ── BASE DE CONHECIMENTO ─────────────────────────────────────────────────────
+// ── BASE DE CONHECIMENTO ──────────────────────────────────────────────────────
 
 const LEGAL_CONTEXTS = {
   consumidor: `LEGISLAÇÃO — DIREITO DO CONSUMIDOR:
@@ -152,43 +371,35 @@ const AREA_LABELS = {
   familia:     'Direito de Família',
 };
 
-// ── ROTA PRINCIPAL ────────────────────────────────────────────────────────────
+// ── ROTA PRINCIPAL — GERAR ────────────────────────────────────────────────────
 
 app.post('/api/gerar', async (req, res) => {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin',  '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const { area = 'consumidor', tipo = 'peticao_inicial', autor, reu, fatos, pedido, estilo = '', chunks_acervo = [] } = req.body || {};
+  const { area='consumidor', tipo='peticao_inicial', autor, reu, fatos, pedido, estilo='', chunks_acervo=[] } = req.body || {};
 
-  if (!autor || !fatos) {
+  if (!autor || !fatos)
     return res.status(400).json({ error: 'Campos obrigatórios: autor, fatos.' });
-  }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return res.status(500).json({ error: 'ANTHROPIC_API_KEY não configurada nas variáveis de ambiente.' });
-  }
+  if (!process.env.ANTHROPIC_API_KEY)
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY não configurada.' });
 
-  const areaLabel = AREA_LABELS[area]  || AREA_LABELS.consumidor;
-  const tipoLabel = TIPO_LABELS[tipo]  || 'Petição Inicial';
-  const contexto  = LEGAL_CONTEXTS[area] || LEGAL_CONTEXTS.consumidor;
-  const systemPrompt = SYSTEM_PROMPT_V4;
-
-  const today = new Date().toLocaleDateString('pt-BR', {
-    day: '2-digit', month: 'long', year: 'numeric', timeZone: 'America/Sao_Paulo'
+  const areaLabel    = AREA_LABELS[area]  || AREA_LABELS.consumidor;
+  const tipoLabel    = TIPO_LABELS[tipo]  || 'Petição Inicial';
+  const contexto     = LEGAL_CONTEXTS[area] || LEGAL_CONTEXTS.consumidor;
+  const today        = new Date().toLocaleDateString('pt-BR', {
+    day:'2-digit', month:'long', year:'numeric', timeZone:'America/Sao_Paulo'
   });
 
-  let acervoContexto = '';
-  if (chunks_acervo && chunks_acervo.length > 0) {
-    acervoContexto = '\n\nREFERÊNCIAS DO ACERVO DO ESCRITÓRIO\n';
-    acervoContexto += '(Trechos selecionados da base local — use como referência de estilo e linguagem)\n\n';
-    chunks_acervo.forEach((c, i) => {
-      acervoContexto += `[Ref ${i+1} — ${c.fonte}]\n${c.texto}\n\n`;
-    });
+  let acervoCtx = '';
+  if (chunks_acervo?.length) {
+    acervoCtx = '\n\nREFERÊNCIAS DO ACERVO DO ESCRITÓRIO\n(Trechos selecionados da base local)\n\n';
+    chunks_acervo.forEach((c, i) => { acervoCtx += `[Ref ${i+1} — ${c.fonte}]\n${c.texto}\n\n`; });
   }
 
-  const estiloContexto = estilo ? `\nESTILO DO ADVOGADO:\n${estilo}\n` : '';
+  const estiloCtx = estilo ? `\nESTILO DO ADVOGADO:\n${estilo}\n` : '';
 
   const userPrompt = `DATA DE HOJE (use como data da petição e para calcular dias de privação/prejuízo): ${today}
 
@@ -210,12 +421,11 @@ ${fatos}
 
 PEDIDO ESPECÍFICO:
 ${pedido || 'Reparação integral dos danos conforme os fatos narrados'}
-${estiloContexto}${acervoContexto}
+${estiloCtx}${acervoCtx}
 ---
 Gere o documento completo, técnico e formal, citando os artigos fornecidos acima.
 Siga rigorosamente a estrutura e todas as regras do system prompt.`;
 
-  // SSE headers
   res.setHeader('Content-Type',               'text/event-stream');
   res.setHeader('Cache-Control',              'no-cache, no-transform');
   res.setHeader('Connection',                 'keep-alive');
@@ -224,33 +434,28 @@ Siga rigorosamente a estrutura e todas as regras do system prompt.`;
   res.setHeader('Access-Control-Allow-Origin','*');
   res.flushHeaders();
 
-  // Keep-alive agressivo — SSE data a cada 3s para manter proxy vivo
   const keepAlive = setInterval(() => {
-    try {
-      res.write(`data: ${JSON.stringify({ type: 'ping' })}\n\n`);
-    } catch(e) { clearInterval(keepAlive); }
+    try { res.write(`data: ${JSON.stringify({ type: 'ping' })}\n\n`); }
+    catch (e) { clearInterval(keepAlive); }
   }, 3000);
 
   try {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
     const stream = await client.messages.stream({
       model:       'claude-sonnet-4-6',
       max_tokens:  16000,
       temperature: 0.3,
-      system:      systemPrompt,
+      system:      SYSTEM_PROMPT_V4,
       messages:    [{ role: 'user', content: userPrompt }],
     });
 
     for await (const event of stream) {
-      if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta') {
+      if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta')
         res.write(`data: ${JSON.stringify(event)}\n\n`);
-      }
     }
 
     res.write('data: [DONE]\n\n');
     res.end();
-
   } catch (err) {
     console.error('Erro ao gerar:', err.message);
     res.write(`data: ${JSON.stringify({ type: 'error', message: err.message })}\n\n`);
@@ -270,11 +475,9 @@ app.options('/api/gerar', (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', version: '2.0.0', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', version: '3.0.0', db: !!db, timestamp: new Date().toISOString() });
 });
 
 // ── START ─────────────────────────────────────────────────────────────────────
 
-app.listen(PORT, () => {
-  console.log(`Pandecta server rodando na porta ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Pandecta v3 na porta ${PORT}`));
