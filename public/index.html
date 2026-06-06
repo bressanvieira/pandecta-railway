@@ -275,11 +275,24 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .page-s{font-size:13.5px;color:var(--t2);margin-bottom:24px;}
 
 /* ════ FORM CARD ════ */
-.form-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:22px 24px;max-width:640px;margin-bottom:20px;}
-.form-card-t{font-size:14px;font-weight:600;margin-bottom:16px;color:var(--t1);}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:28px 32px;max-width:820px;margin-bottom:20px;}
+.form-card-t{font-size:15px;font-weight:700;color:var(--t1);letter-spacing:-.2px;margin-bottom:24px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .form-grid.full{grid-template-columns:1fr;}
-.save-btn{padding:9px 22px;background:var(--t1);color:#FFF;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;transition:opacity .13s;}
+/* row logo + nome */
+.cfg-top-row{display:flex;gap:20px;align-items:flex-start;margin-bottom:4px;}
+.cfg-logo-col{flex:0 0 auto;}
+.cfg-logo-label{font-size:10px;font-weight:600;letter-spacing:.9px;text-transform:uppercase;color:var(--t3);margin-bottom:7px;}
+.cfg-logo-zone{width:240px;min-height:112px;border:1.5px dashed var(--bd-md);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .16s;padding:20px;}
+.cfg-logo-zone:hover{border-color:var(--bd-dk);background:var(--surface);}
+.cfg-logo-zone-ico{color:var(--t3);}
+.cfg-logo-zone-t{font-size:13px;font-weight:500;color:var(--t1);}
+.cfg-logo-zone-s{font-size:11.5px;color:var(--t3);}
+.cfg-nome-col{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;}
+/* botão salvar */
+.cfg-save-btn{padding:12px 28px;background:var(--t1);color:#FFF;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:opacity .13s;margin-top:8px;}
+.cfg-save-btn:hover{opacity:.85;}
+.save-btn{padding:10px 22px;background:var(--t1);color:#FFF;border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:opacity .13s;}
 .save-btn:hover{opacity:.85;}
 
 /* ════ EQUIPE ════ */
@@ -776,24 +789,112 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="app-shell">
     <div id="sb-config"></div>
     <div class="main-area">
+
       <div class="topbar">
-        <div class="tb-left"><span class="tb-crumb" onclick="go('home')">Início</span><span class="tb-sep">/</span><span class="tb-page">Configurações</span></div>
-        <div class="tb-right"><div class="tb-user"><div class="tb-av" id="av-cfg">A</div><div><div class="tb-uname" id="nm-cfg">–</div><div class="tb-usess">Sessão atual</div></div></div></div>
+        <div class="tb-left">
+          <span class="tb-crumb" onclick="go('home')">Início</span>
+          <span class="tb-sep">/</span>
+          <span class="tb-page">Configurações</span>
+        </div>
+        <div class="tb-right">
+          <button class="tb-icon-btn" title="Buscar">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><line x1="9.5" y1="9.5" x2="12.5" y2="12.5"/></svg>
+          </button>
+          <button class="tb-icon-btn" title="Notificações">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M7 1.5a4 4 0 014 4v2.5l1 1.5H2L3 8V5.5a4 4 0 014-4z"/><path d="M5.5 11.5a1.5 1.5 0 003 0"/></svg>
+          </button>
+          <div class="tb-user" onclick="toggleDD('dd-cfg')">
+            <div class="tb-av" id="av-cfg">A</div>
+            <div><div class="tb-uname" id="nm-cfg">–</div><div class="tb-usess">Sessão atual</div></div>
+          </div>
+          <div class="tb-dropdown" id="dd-cfg">
+            <div class="dd-item" onclick="go('equipe')">👥 Equipe</div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="go('login')">🔒 Sair</div>
+          </div>
+        </div>
       </div>
+
       <div class="page-body">
         <div class="page-h">Configurações do escritório</div>
         <div class="page-s">Informações utilizadas no cabeçalho das peças exportadas para Word.</div>
+
         <div class="form-card">
           <div class="form-card-t">Dados do escritório</div>
-          <div class="form-grid">
-            <div class="lf" style="grid-column:1/-1"><label>Nome do escritório</label><input id="cfg-nome" type="text" placeholder="Silva &amp; Associados Advogados"></div>
-            <div class="lf" style="grid-column:1/-1"><label>Endereço</label><input id="cfg-end" type="text" placeholder="Av. Paulista, 1000, sala 101"></div>
-            <div class="lf"><label>Cidade / Estado</label><input id="cfg-cidade" type="text" placeholder="São Paulo / SP"></div>
-            <div class="lf"><label>CEP</label><input id="cfg-cep" type="text" placeholder="01310-100"></div>
-            <div class="lf"><label>Telefone</label><input id="cfg-tel" type="text" placeholder="(11) 99999-9999"></div>
-            <div class="lf"><label>E-mail</label><input id="cfg-email" type="text" placeholder="contato@silva.adv.br"></div>
+
+          <!-- logo + nome -->
+          <div class="cfg-top-row">
+            <div class="cfg-logo-col">
+              <div class="cfg-logo-label">Logo do escritório</div>
+              <div class="cfg-logo-zone" onclick="document.getElementById('cfg-logo-in').click()">
+                <div class="cfg-logo-zone-ico">
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="24" height="18" rx="3"/><circle cx="9" cy="12" r="2.5"/>
+                    <path d="M2 19l6-5 5 4 4-3.5 9 5"/>
+                  </svg>
+                </div>
+                <div class="cfg-logo-zone-t">Adicionar logo</div>
+                <div class="cfg-logo-zone-s">PNG ou JPG · até 2MB</div>
+                <input type="file" id="cfg-logo-in" accept=".png,.jpg,.jpeg" style="display:none">
+              </div>
+            </div>
+            <div class="cfg-nome-col">
+              <div class="lf">
+                <label>Nome do escritório</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="4" width="11" height="9" rx="1.5"/><path d="M5 4V3a2 2 0 014 0v1"/><line x1="5" y1="7" x2="9" y2="7"/></svg>
+                  <input id="cfg-nome" type="text" placeholder="Silva &amp; Associados Advogados">
+                </div>
+              </div>
+            </div>
           </div>
-          <button class="save-btn" onclick="salvarConfig()">Salvar configurações</button>
+
+          <!-- Endereço -->
+          <div class="lf">
+            <label>Endereço</label>
+            <div class="inp-icn">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 1.5C4.5 1.5 2.5 3.5 2.5 6c0 3.2 4.5 6.5 4.5 6.5S11.5 9.2 11.5 6c0-2.5-2-4.5-4.5-4.5z"/><circle cx="7" cy="6" r="1.4"/></svg>
+              <input id="cfg-end" type="text" placeholder="Av. Paulista, 1000, sala 101">
+            </div>
+          </div>
+
+          <!-- Cidade + CEP -->
+          <div class="form-grid">
+            <div class="lf">
+              <label>Cidade / Estado</label>
+              <div class="inp-icn">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="4" width="11" height="9" rx="1.5"/><path d="M5 4V3a2 2 0 014 0v1"/></svg>
+                <input id="cfg-cidade" type="text" placeholder="São Paulo / SP">
+              </div>
+            </div>
+            <div class="lf">
+              <label>CEP</label>
+              <div class="inp-icn">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="1.5" width="11" height="11" rx="2"/><line x1="4.5" y1="5" x2="9.5" y2="5"/><line x1="4.5" y1="7" x2="9.5" y2="7"/><line x1="4.5" y1="9" x2="7" y2="9"/></svg>
+                <input id="cfg-cep" type="text" placeholder="01310-100">
+              </div>
+            </div>
+          </div>
+
+          <!-- Telefone + E-mail -->
+          <div class="form-grid">
+            <div class="lf">
+              <label>Telefone</label>
+              <div class="inp-icn">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 2.5A1 1 0 013 1.5h2l1 3-1.5 1a9 9 0 004 4L10 8l3 1v2a1 1 0 01-1 1A11 11 0 012 2.5z"/></svg>
+                <input id="cfg-tel" type="text" placeholder="(11) 99999-9999">
+              </div>
+            </div>
+            <div class="lf">
+              <label>E-mail</label>
+              <div class="inp-icn">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="3" width="11" height="8" rx="1.5"/><path d="M1.5 5l5.5 3.5L12.5 5"/></svg>
+                <input id="cfg-email" type="text" placeholder="contato@silva.adv.br">
+              </div>
+            </div>
+          </div>
+
+          <button class="cfg-save-btn" onclick="salvarConfig()">Salvar configurações</button>
         </div>
       </div>
     </div>
@@ -948,13 +1049,12 @@ async function loadData(){
 // ════ SIDEBAR FACTORY ════
 function mkSidebar(active){
   const nav=[
-    {id:'home',   label:'Início',         icon:'<path d="M2 8.5L9 2l7 6.5V16a1 1 0 01-1 1H3a1 1 0 01-1-1z"/><path d="M6.5 17v-6h5v6"/>',        action:"go('home')"},
-    {id:'gen',    label:'Peças',          icon:'<rect x="3" y="2" width="12" height="16" rx="2"/><path d="M7 6h7M7 9h7M7 12h4"/><path d="M3 6v0"/>',action:'novaConversa()'},
-    {id:'historico',label:'Histórico',    icon:'<circle cx="9" cy="9" r="6.5"/><path d="M9 6v3.5l2 1.5"/>',                                        action:"go('historico')"},
-    {id:'acervo', label:'Acervo',         icon:'<path d="M2 6a2 2 0 012-2h3.5l2 2H14a2 2 0 012 2v5a2 2 0 01-2 2H4a2 2 0 01-2-2z"/>',             action:"go('acervo')"},
-    {id:'',       label:'Modelos',        icon:'<rect x="3" y="2" width="12" height="16" rx="2"/><path d="M6 7h6M6 10h6M6 13h4"/>',               dim:true},
-    {id:'equipe', label:'Equipe',         icon:'<circle cx="7" cy="6" r="3"/><path d="M2 17c0-3 2.5-5 5-5s5 2 5 5"/><circle cx="14" cy="6" r="2.5"/><path d="M15.5 17c0-2 1.5-3.5 3-3.5"/>',action:"go('equipe')"},
-    {id:'config', label:'Configurações',  icon:'<circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1.1 1.1M12.8 12.8l1.1 1.1M4.1 13.9l1.1-1.1M12.8 5.2l1.1-1.1"/>',action:"go('config')"},
+    {id:'home',     label:'Início',        icon:'<path d="M2 8.5L9 2l7 6.5V16a1 1 0 01-1 1H3a1 1 0 01-1-1z"/><path d="M6.5 17v-6h5v6"/>',       action:"go('home')"},
+    {id:'historico',label:'Histórico',     icon:'<circle cx="9" cy="9" r="6.5"/><path d="M9 6v3.5l2 1.5"/>',                                      action:"go('historico')"},
+    {id:'acervo',   label:'Acervo',        icon:'<path d="M2 6a2 2 0 012-2h3.5l2 2H14a2 2 0 012 2v5a2 2 0 01-2 2H4a2 2 0 01-2-2z"/>',            action:"go('acervo')"},
+    {id:'',         label:'Modelos',       icon:'<rect x="3" y="2" width="12" height="16" rx="2"/><path d="M6 7h6M6 10h6M6 13h4"/>',              dim:true},
+    {id:'equipe',   label:'Equipe',        icon:'<circle cx="7" cy="6" r="3"/><path d="M2 17c0-3 2.5-5 5-5s5 2 5 5"/><circle cx="14" cy="6" r="2.5"/><path d="M15.5 17c0-2 1.5-3.5 3-3.5"/>',action:"go('equipe')"},
+    {id:'config',   label:'Configurações', icon:'<circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1.1 1.1M12.8 12.8l1.1 1.1M4.1 13.9l1.1-1.1M12.8 5.2l1.1-1.1"/>',action:"go('config')"},
   ];
   return `<nav class="sidebar">
     <div class="sb-top">
