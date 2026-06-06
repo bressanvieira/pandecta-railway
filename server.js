@@ -71,9 +71,15 @@ try {
       tipo        TEXT DEFAULT 'Outro',
       chunks      TEXT DEFAULT '[]',
       chunk_count INTEGER DEFAULT 0,
+      tamanho     INTEGER DEFAULT 0,
+      enviado_por TEXT DEFAULT '',
       created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
     );
   `);
+
+  // migrations — adiciona colunas sem quebrar banco existente
+  try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
+  try { db.exec(`ALTER TABLE acervo ADD COLUMN enviado_por TEXT DEFAULT ''`); } catch(e) {}
 
   console.log('✅  Database:', dbPath);
 } catch (err) {
@@ -189,19 +195,19 @@ app.delete('/api/history/:id', (req, res) => {
 app.get('/api/acervo', (req, res) => {
   if (!db) return res.json([]);
   try {
-    res.json(db.prepare('SELECT id,nome,tipo,chunk_count,created_at FROM acervo ORDER BY created_at DESC').all());
+    res.json(db.prepare('SELECT id,nome,tipo,chunk_count,tamanho,enviado_por,created_at FROM acervo ORDER BY created_at DESC').all());
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.post('/api/acervo', (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
-  const { nome, tipo = 'Outro', chunks = [] } = req.body;
+  const { nome, tipo = 'Outro', chunks = [], tamanho = 0, enviado_por = '' } = req.body;
   if (!nome) return res.status(400).json({ error: 'Nome obrigatório.' });
   try {
-    const r = db.prepare('INSERT INTO acervo (nome,tipo,chunks,chunk_count) VALUES (?,?,?,?)').run(
-      nome, tipo, JSON.stringify(chunks), chunks.length
+    const r = db.prepare('INSERT INTO acervo (nome,tipo,chunks,chunk_count,tamanho,enviado_por) VALUES (?,?,?,?,?,?)').run(
+      nome, tipo, JSON.stringify(chunks), chunks.length, tamanho, enviado_por
     );
-    res.json({ id: r.lastInsertRowid, nome, tipo, chunk_count: chunks.length });
+    res.json({ id: r.lastInsertRowid, nome, tipo, chunk_count: chunks.length, tamanho, enviado_por });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 

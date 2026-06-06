@@ -344,16 +344,38 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .t-pill:hover{border-color:var(--bd-dk);color:var(--t1);}
 .t-pill.active{background:var(--t1);border-color:var(--t1);color:#FFF;}
 .t-cnt{font-size:11px;opacity:.65;margin-left:4px;}
-.ac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
-.ac-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:16px;}
-.ac-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
-.ac-ico{width:34px;height:34px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:15px;}
-.ac-rm{background:transparent;border:none;cursor:pointer;color:var(--t3);font-size:13px;padding:2px;transition:color .12s;}
-.ac-rm:hover{color:var(--err);}
-.ac-name{font-size:12.5px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px;}
-.ac-meta{display:flex;align-items:center;gap:7px;}
-.ac-tag{font-size:9.5px;padding:2px 7px;border-radius:4px;background:var(--gold-bg);border:1px solid var(--gold-bd);color:var(--gold);}
-.ac-chunks{font-size:10.5px;color:var(--t3);}
+/* tabela de arquivos */
+.ac-table-wrap{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);overflow:hidden;margin-bottom:16px;}
+.ac-table{width:100%;border-collapse:collapse;}
+.ac-table thead th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.9px;color:var(--t3);padding:11px 16px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap;background:var(--card);}
+.ac-table thead th:last-child{text-align:right;padding-right:20px;}
+.ac-table tbody tr{transition:background .1s;}
+.ac-table tbody tr:hover{background:rgba(0,0,0,.018);}
+.ac-table tbody td{padding:13px 16px;border-bottom:1px solid var(--bd);vertical-align:middle;font-size:13px;color:var(--t1);}
+.ac-table tbody tr:last-child td{border-bottom:none;}
+.ac-file-cell{display:flex;align-items:center;gap:10px;min-width:0;}
+.ac-file-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ac-file-ico.pdf{background:rgba(220,38,38,.08);color:#DC2626;}
+.ac-file-ico.docx{background:rgba(37,99,235,.08);color:#2563EB;}
+.ac-file-ico.txt,.ac-file-ico.other{background:var(--surface);color:var(--t3);}
+.ac-file-name{font-size:13px;font-weight:500;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;}
+.ac-cat-pill{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;background:var(--gold-bg);border:1px solid var(--gold-bd);color:var(--gold);white-space:nowrap;}
+.ac-fmt-badge{display:inline-flex;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.ac-fmt-badge.pdf{background:rgba(220,38,38,.08);color:#DC2626;}
+.ac-fmt-badge.docx{background:rgba(37,99,235,.08);color:#2563EB;}
+.ac-fmt-badge.txt,.ac-fmt-badge.other{background:var(--surface);color:var(--t2);}
+.ac-chunks-val{font-size:12.5px;color:var(--t2);font-weight:500;}
+.ac-td-muted{font-size:12.5px;color:var(--t2);}
+.ac-actions{display:flex;justify-content:flex-end;position:relative;}
+.ac-menu-btn{width:28px;height:28px;border-radius:6px;background:transparent;border:1px solid transparent;color:var(--t3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;transition:all .12s;font-family:inherit;letter-spacing:.5px;}
+.ac-menu-btn:hover{background:var(--surface);border-color:var(--bd);color:var(--t1);}
+.ac-menu-drop{position:absolute;right:0;top:34px;background:var(--card);border:1px solid var(--bd-md);border-radius:var(--r);padding:5px;min-width:164px;box-shadow:0 8px 28px rgba(0,0,0,.11);z-index:200;display:none;}
+.ac-menu-drop.open{display:block;}
+.ac-menu-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;font-size:12.5px;color:var(--t1);cursor:pointer;transition:background .1s;}
+.ac-menu-item:hover{background:var(--surface);}
+.ac-menu-item.danger{color:var(--err);}
+.ac-menu-item.danger:hover{background:rgba(220,38,38,.07);}
+/* empty state */
 .ac-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 40px;text-align:center;}
 .ac-empty-ico{width:56px;height:56px;border-radius:16px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--t3);margin-bottom:18px;}
 .ac-empty-t{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:6px;}
@@ -689,7 +711,23 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="t-pill" data-tipo="Outro" onclick="selTipo(this)">Outros <span class="t-cnt" id="cnt-Outro">0</span></div>
         </div>
 
-        <div class="ac-grid" id="doc-cards"></div>
+        <div class="ac-table-wrap" id="ac-table-wrap" style="display:none">
+          <table class="ac-table">
+            <thead>
+              <tr>
+                <th>Arquivo</th>
+                <th>Categoria</th>
+                <th>Trechos</th>
+                <th>Formato</th>
+                <th>Tamanho</th>
+                <th>Enviado por</th>
+                <th>Upload</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="ac-tbody"></tbody>
+          </table>
+        </div>
 
         <div class="ac-empty" id="ac-empty">
           <div class="ac-empty-ico">
@@ -1264,15 +1302,71 @@ async function loadAcervo(){
   try{sessionFiles=await api('GET','/api/acervo');}catch(e){sessionFiles=[];}
   renderCards();updateSb();
 }
+// ── helpers acervo ────────────────────────────────────────────────────────────
+function fmtTamanho(b){if(!b)return'—';if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(0)+' KB';return(b/1048576).toFixed(1)+' MB';}
+function fmtRelDate(s){
+  if(!s)return'—';
+  try{
+    const d=new Date(s),now=new Date(),diff=now-d,day=86400000;
+    if(diff<day)return'Hoje às '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',timeZone:'America/Sao_Paulo'});
+    if(diff<day*2)return'Ontem';
+    if(diff<day*7)return`há ${Math.floor(diff/day)} dias`;
+    return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'});
+  }catch(e){return s;}
+}
+function toggleAcMenu(id){
+  const drop=document.getElementById('acm-'+id);
+  const isOpen=drop&&drop.classList.contains('open');
+  closeAcMenus();
+  if(!isOpen&&drop)drop.classList.add('open');
+}
+function closeAcMenus(){document.querySelectorAll('.ac-menu-drop').forEach(d=>d.classList.remove('open'));}
+document.addEventListener('click',e=>{if(!e.target.closest('.ac-actions'))closeAcMenus();});
+
 function renderCards(){
-  const grid=document.getElementById('doc-cards'),empty=document.getElementById('ac-empty');
-  if(!grid)return;
+  const tbody=document.getElementById('ac-tbody');
+  const wrap=document.getElementById('ac-table-wrap');
+  const empty=document.getElementById('ac-empty');
+  if(!tbody)return;
   const vis=tipoSel==='Todos'?sessionFiles:sessionFiles.filter(f=>f.tipo===tipoSel);
-  empty.style.display=vis.length?'none':'block';
-  grid.innerHTML=vis.map(f=>{
-    const ext=(f.nome||'').split('.').pop().toLowerCase();
-    const ico=ext==='pdf'?'📕':ext==='docx'?'📄':'📝';
-    return`<div class="ac-card"><div class="ac-card-top"><div class="ac-ico">${ico}</div><button class="ac-rm" onclick="remDoc(${f.id})">✕</button></div><div class="ac-name" title="${esc(f.nome)}">${esc(f.nome)}</div><div class="ac-meta"><span class="ac-tag">${esc(f.tipo)}</span><span class="ac-chunks">${f.chunk_count||0} trechos</span></div></div>`;
+  empty.style.display=vis.length?'none':'flex';
+  if(wrap)wrap.style.display=vis.length?'block':'none';
+  const fileIcoSvg='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1h6l3 3v9H3V1z"/><path d="M9 1v3h3"/><line x1="5" y1="6.5" x2="9" y2="6.5"/><line x1="5" y1="8.5" x2="9" y2="8.5"/><line x1="5" y1="10.5" x2="7.5" y2="10.5"/></svg>';
+  tbody.innerHTML=vis.map(f=>{
+    const extRaw=(f.nome||'').split('.').pop();
+    const ext=extRaw.toLowerCase();
+    const extUp=extRaw.toUpperCase();
+    const cls=ext==='pdf'?'pdf':ext==='docx'?'docx':ext==='txt'?'txt':'other';
+    return`<tr>
+      <td style="max-width:260px">
+        <div class="ac-file-cell">
+          <div class="ac-file-ico ${cls}">${fileIcoSvg}</div>
+          <span class="ac-file-name" title="${esc(f.nome)}">${esc(f.nome)}</span>
+        </div>
+      </td>
+      <td><span class="ac-cat-pill">${esc(f.tipo||'Outro')}</span></td>
+      <td><span class="ac-chunks-val">${(f.chunk_count||0).toLocaleString('pt-BR')} chunks</span></td>
+      <td><span class="ac-fmt-badge ${cls}">${esc(extUp)}</span></td>
+      <td class="ac-td-muted">${fmtTamanho(f.tamanho)}</td>
+      <td class="ac-td-muted">${esc(f.enviado_por||'—')}</td>
+      <td class="ac-td-muted">${fmtRelDate(f.created_at)}</td>
+      <td style="text-align:right;padding-right:20px">
+        <div class="ac-actions">
+          <button class="ac-menu-btn" onclick="toggleAcMenu(${f.id})" title="Ações">···</button>
+          <div class="ac-menu-drop" id="acm-${f.id}">
+            <div class="ac-menu-item" onclick="closeAcMenus();toast('Download em breve','ok')">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6.5 2v7M3.5 7.5l3 3 3-3"/><line x1="2" y1="11.5" x2="11" y2="11.5"/></svg>Baixar
+            </div>
+            <div class="ac-menu-item" onclick="closeAcMenus();toast('Reindexando...','ok')">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 6.5A4.5 4.5 0 0111 4"/><path d="M11 1v3H8"/><path d="M11 6.5A4.5 4.5 0 012 9"/><path d="M2 12V9h3"/></svg>Reindexar
+            </div>
+            <div class="ac-menu-item danger" onclick="closeAcMenus();remDoc(${f.id})">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="1.5,3.5 11.5,3.5"/><path d="M4.5 3.5V2.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v1"/><path d="M5 6v4M8 6v4"/><rect x="2.5" y="3.5" width="8" height="8" rx="1"/></svg>Excluir
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>`;
   }).join('');
   updCnt();updateSb();
 }
@@ -1310,7 +1404,7 @@ async function handleFiles(files){
       else if(lo.match(/petição|peticao|inicial/))tipo='Petição';
       else if(lo.match(/parecer/))tipo='Parecer';
       else if(lo.match(/modelo/))tipo='Modelo';
-      const result=await api('POST','/api/acervo',{nome:f.name,tipo,chunks});
+      const result=await api('POST','/api/acervo',{nome:f.name,tipo,chunks,tamanho:f.size,enviado_por:usuario||''});
       sessionFiles.push(result);ok++;
     }catch(e){console.error(f.name,e);}
   }
