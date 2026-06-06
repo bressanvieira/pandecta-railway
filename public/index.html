@@ -114,6 +114,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .sb-logo-name{font-size:12.5px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.88);text-transform:uppercase;line-height:1;}
 .sb-logo-ai{color:var(--gold);font-weight:400;}
 .sb-nav{flex:1;padding:10px 10px;overflow-y:auto;}
+.sb-novo{display:flex;align-items:center;gap:9px;width:100%;padding:9px 10px;margin-bottom:6px;border-radius:8px;background:var(--gold-bg);border:1px solid var(--gold-bd);color:var(--gold);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .13s;text-align:left;}
+.sb-novo:hover{background:rgba(200,164,106,.18);color:var(--gold-h);}
 .sb-lbl{font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.2);padding:8px 8px 4px;}
 .sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;margin-bottom:2px;font-size:13px;color:var(--sb-t);cursor:pointer;transition:all .12s;border:none;border-left:2px solid transparent;background:transparent;font-family:inherit;text-align:left;width:100%;}
 .sb-item:hover{background:var(--sb-hov);color:rgba(220,230,248,.9);}
@@ -266,11 +268,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 @keyframes cb{0%,50%{opacity:1}51%,100%{opacity:0}}
 
 /* ════ GENERIC CONTENT PAGE ════ */
-.page-body{flex:1;overflow-y:auto;padding:32px 36px;}
+.page-body{flex:1;overflow-y:auto;padding:36px 48px;}
 .page-body::-webkit-scrollbar{width:4px;}
 .page-body::-webkit-scrollbar-thumb{background:var(--bd-md);border-radius:4px;}
-.page-h{font-size:19px;font-weight:600;margin-bottom:4px;}
-.page-s{font-size:12.5px;color:var(--t2);margin-bottom:24px;}
+.page-h{font-size:26px;font-weight:700;color:var(--t1);letter-spacing:-.3px;margin-bottom:6px;}
+.page-s{font-size:13.5px;color:var(--t2);margin-bottom:24px;}
 
 /* ════ FORM CARD ════ */
 .form-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:22px 24px;max-width:640px;margin-bottom:20px;}
@@ -325,33 +327,37 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .hist-textarea:focus{border-color:var(--bd-dk);}
 
 /* ════ ACERVO ════ */
-.ac-notice{display:inline-flex;align-items:center;gap:6px;margin-bottom:22px;padding:5px 10px;border-radius:5px;background:var(--surface);border:1px solid var(--bd);font-size:11px;color:var(--t2);}
-.drop-z{border:1.5px dashed var(--bd-md);border-radius:var(--r-lg);padding:32px 22px;text-align:center;cursor:pointer;transition:all .17s;margin-bottom:20px;background:var(--card);}
-.drop-z:hover,.drop-z.drag{border-color:var(--bd-dk);background:var(--surface);}
-.drop-ico{font-size:22px;opacity:.28;margin-bottom:7px;}
-.drop-t{font-size:14px;font-weight:500;margin-bottom:3px;}
-.drop-s{font-size:12px;color:var(--t3);margin-bottom:13px;}
-.drop-btn{padding:7px 15px;border-radius:var(--r-sm);font-size:12px;font-weight:500;background:var(--t1);color:#FFF;border:none;cursor:pointer;font-family:inherit;}
-.prog-w{display:none;margin-bottom:14px;}
-.prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:5px;}
+.ac-notice{display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;padding:6px 12px;border-radius:6px;background:var(--surface);border:1px solid var(--bd);font-size:12px;color:var(--t2);}
+.drop-z{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:52px 32px;text-align:center;cursor:pointer;transition:all .18s;margin-bottom:24px;}
+.drop-z:hover,.drop-z.drag{border-color:var(--bd-md);box-shadow:0 4px 24px rgba(0,0,0,.06);}
+.drop-ico{color:var(--t3);margin-bottom:16px;display:flex;justify-content:center;}
+.drop-t{font-size:16px;font-weight:600;color:var(--t1);margin-bottom:6px;}
+.drop-s{font-size:13px;color:var(--t2);margin-bottom:22px;}
+.drop-btn{padding:10px 24px;border-radius:var(--r-sm);font-size:13.5px;font-weight:600;background:var(--t1);color:#FFF;border:none;cursor:pointer;font-family:inherit;transition:opacity .13s;}
+.drop-btn:hover{opacity:.85;}
+.prog-w{display:none;margin-bottom:16px;}
+.prog-row{display:flex;justify-content:space-between;font-size:11.5px;color:var(--t2);margin-bottom:6px;}
 .prog-track{height:3px;background:var(--bd);border-radius:3px;overflow:hidden;}
 .prog-fill{height:100%;background:var(--t1);border-radius:3px;transition:width .3s;}
-.type-f{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:17px;}
-.t-pill{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;background:var(--card);border:1px solid var(--bd);color:var(--t2);cursor:pointer;transition:all .12s;}
-.t-pill:hover{border-color:var(--bd-md);color:var(--t1);}
+.type-f{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.t-pill{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:500;background:var(--card);border:1px solid var(--bd-md);color:var(--t2);cursor:pointer;transition:all .13s;}
+.t-pill:hover{border-color:var(--bd-dk);color:var(--t1);}
 .t-pill.active{background:var(--t1);border-color:var(--t1);color:#FFF;}
-.t-cnt{font-size:10px;opacity:.6;margin-left:3px;}
-.ac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}
-.ac-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:13px 14px;}
-.ac-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
-.ac-ico{width:30px;height:30px;border-radius:7px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:14px;}
+.t-cnt{font-size:11px;opacity:.65;margin-left:4px;}
+.ac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.ac-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:16px;}
+.ac-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.ac-ico{width:34px;height:34px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:15px;}
 .ac-rm{background:transparent;border:none;cursor:pointer;color:var(--t3);font-size:13px;padding:2px;transition:color .12s;}
 .ac-rm:hover{color:var(--err);}
-.ac-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px;}
-.ac-meta{display:flex;align-items:center;gap:6px;}
-.ac-tag{font-size:9.5px;padding:2px 6px;border-radius:4px;background:var(--gold-bg);border:1px solid var(--gold-bd);color:var(--gold);}
-.ac-chunks{font-size:10px;color:var(--t3);}
-.ac-empty{text-align:center;padding:38px;font-size:13px;color:var(--t3);}
+.ac-name{font-size:12.5px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px;}
+.ac-meta{display:flex;align-items:center;gap:7px;}
+.ac-tag{font-size:9.5px;padding:2px 7px;border-radius:4px;background:var(--gold-bg);border:1px solid var(--gold-bd);color:var(--gold);}
+.ac-chunks{font-size:10.5px;color:var(--t3);}
+.ac-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 40px;text-align:center;}
+.ac-empty-ico{width:56px;height:56px;border-radius:16px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--t3);margin-bottom:18px;}
+.ac-empty-t{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:6px;}
+.ac-empty-s{font-size:13px;color:var(--t2);}
 
 /* ════ TOAST ════ */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--t1);color:#FFF;border-radius:7px;padding:8px 16px;font-size:12.5px;z-index:500;opacity:0;transition:opacity .22s;pointer-events:none;white-space:nowrap;}
@@ -617,25 +623,85 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="app-shell">
     <div id="sb-ac"></div>
     <div class="main-area">
+
       <div class="topbar">
-        <div class="tb-left"><span class="tb-crumb" onclick="go('home')">Início</span><span class="tb-sep">/</span><span class="tb-page">Acervo</span></div>
-        <div class="tb-right"><div class="tb-user" onclick="toggleDD('dd-ac')"><div class="tb-av" id="av-ac">A</div><div><div class="tb-uname" id="nm-ac">–</div><div class="tb-usess">Sessão atual</div></div></div><div class="tb-dropdown" id="dd-ac"><div class="dd-item" onclick="go('config')">⚙️ Configurações</div><div class="dd-item" onclick="go('equipe')">👥 Equipe</div><div class="dd-sep"></div><div class="dd-item" onclick="go('login')">🔒 Sair</div></div></div>
+        <div class="tb-left">
+          <span class="tb-crumb" onclick="go('home')">Início</span>
+          <span class="tb-sep">/</span>
+          <span class="tb-page">Acervo</span>
+        </div>
+        <div class="tb-right">
+          <button class="tb-icon-btn" title="Buscar">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><line x1="9.5" y1="9.5" x2="12.5" y2="12.5"/></svg>
+          </button>
+          <button class="tb-icon-btn" title="Notificações">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M7 1.5a4 4 0 014 4v2.5l1 1.5H2L3 8V5.5a4 4 0 014-4z"/><path d="M5.5 11.5a1.5 1.5 0 003 0"/></svg>
+          </button>
+          <div class="tb-user" onclick="toggleDD('dd-ac')">
+            <div class="tb-av" id="av-ac">A</div>
+            <div><div class="tb-uname" id="nm-ac">–</div><div class="tb-usess">Sessão atual</div></div>
+          </div>
+          <div class="tb-dropdown" id="dd-ac">
+            <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
+            <div class="dd-item" onclick="go('equipe')">👥 Equipe</div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="go('login')">🔒 Sair</div>
+          </div>
+        </div>
       </div>
+
       <div class="page-body">
         <div class="page-h">Acervo do escritório</div>
         <div class="page-s">Documentos de referência — persistidos no banco de dados.</div>
-        <div class="ac-notice">🔒 Extração local · chunks salvos no servidor</div>
-        <div class="drop-z" id="drop-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)" onclick="document.getElementById('file-in').click()">
-          <div class="drop-ico">↑</div><div class="drop-t">Adicionar documentos</div>
+        <div class="ac-notice">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1.5" y="5.5" width="10" height="6" rx="1"/><path d="M4 5.5V3.5a2.5 2.5 0 015 0v2"/></svg>
+          Extração local · chunks salvos no servidor
+        </div>
+
+        <div class="drop-z" id="drop-zone"
+             ondragover="event.preventDefault();this.classList.add('drag')"
+             ondragleave="this.classList.remove('drag')"
+             ondrop="handleDrop(event)"
+             onclick="document.getElementById('file-in').click()">
+          <div class="drop-ico">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="28" x2="18" y2="10"/><polyline points="10,18 18,10 26,18"/>
+              <line x1="8" y1="30" x2="28" y2="30"/>
+            </svg>
+          </div>
+          <div class="drop-t">Adicionar documentos</div>
           <div class="drop-s">PDF, DOCX ou TXT</div>
           <button class="drop-btn" onclick="event.stopPropagation();document.getElementById('file-in').click()">Selecionar arquivos</button>
           <input type="file" id="file-in" multiple accept=".pdf,.docx,.txt" style="display:none" onchange="handleFiles(this.files)">
         </div>
-        <div class="prog-w" id="prog-wrap"><div class="prog-row"><span id="prog-text">Processando...</span><span id="prog-pct">0%</span></div><div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div></div>
-        <div class="type-f"><div class="t-pill active" data-tipo="Todos" onclick="selTipo(this)">Todos <span class="t-cnt" id="cnt-Todos">0</span></div><div class="t-pill" data-tipo="Contrato" onclick="selTipo(this)">Contratos <span class="t-cnt" id="cnt-Contrato">0</span></div><div class="t-pill" data-tipo="Petição" onclick="selTipo(this)">Petições <span class="t-cnt" id="cnt-Petição">0</span></div><div class="t-pill" data-tipo="Parecer" onclick="selTipo(this)">Pareceres <span class="t-cnt" id="cnt-Parecer">0</span></div><div class="t-pill" data-tipo="Modelo" onclick="selTipo(this)">Modelos <span class="t-cnt" id="cnt-Modelo">0</span></div><div class="t-pill" data-tipo="Outro" onclick="selTipo(this)">Outros <span class="t-cnt" id="cnt-Outro">0</span></div></div>
+
+        <div class="prog-w" id="prog-wrap">
+          <div class="prog-row"><span id="prog-text">Processando...</span><span id="prog-pct">0%</span></div>
+          <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+        </div>
+
+        <div class="type-f">
+          <div class="t-pill active" data-tipo="Todos" onclick="selTipo(this)">Todos <span class="t-cnt" id="cnt-Todos">0</span></div>
+          <div class="t-pill" data-tipo="Contrato" onclick="selTipo(this)">Contratos <span class="t-cnt" id="cnt-Contrato">0</span></div>
+          <div class="t-pill" data-tipo="Petição" onclick="selTipo(this)">Petições <span class="t-cnt" id="cnt-Petição">0</span></div>
+          <div class="t-pill" data-tipo="Parecer" onclick="selTipo(this)">Pareceres <span class="t-cnt" id="cnt-Parecer">0</span></div>
+          <div class="t-pill" data-tipo="Modelo" onclick="selTipo(this)">Modelos <span class="t-cnt" id="cnt-Modelo">0</span></div>
+          <div class="t-pill" data-tipo="Outro" onclick="selTipo(this)">Outros <span class="t-cnt" id="cnt-Outro">0</span></div>
+        </div>
+
         <div class="ac-grid" id="doc-cards"></div>
-        <div class="ac-empty" id="ac-empty">Nenhum documento no acervo.</div>
+
+        <div class="ac-empty" id="ac-empty">
+          <div class="ac-empty-ico">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8a2 2 0 012-2h5l2.5 2.5H21a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <div class="ac-empty-t">Nenhum documento no acervo.</div>
+          <div class="ac-empty-s">Adicione documentos para visualizá-los aqui.</div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -759,6 +825,10 @@ function mkSidebar(active){
       </div>
     </div>
     <div class="sb-nav">
+      <button class="sb-novo" onclick="novaConversa()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6.5" y1="11" x2="6.5" y2="2"/><line x1="2" y1="6.5" x2="11" y2="6.5"/></svg>
+        Novo
+      </button>
       ${nav.map(it=>{
         if(it.dim) return `<button class="sb-item dim"><svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg>${it.label}<span class="sb-chip">Em breve</span></button>`;
         const isActive=it.id===active||(it.id==='gen'&&active==='gen');
