@@ -49,7 +49,8 @@ try {
       cidade    TEXT DEFAULT '',
       cep       TEXT DEFAULT '',
       telefone  TEXT DEFAULT '',
-      email     TEXT DEFAULT ''
+      email     TEXT DEFAULT '',
+      logo      TEXT DEFAULT ''
     );
     INSERT OR IGNORE INTO office (id) VALUES (1);
 
@@ -80,6 +81,7 @@ try {
   // migrations — adiciona colunas sem quebrar banco existente
   try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN enviado_por TEXT DEFAULT ''`); } catch(e) {}
+  try { db.exec(`ALTER TABLE office ADD COLUMN logo TEXT DEFAULT ''`); } catch(e) {}
 
   console.log('✅  Database:', dbPath);
 } catch (err) {
@@ -136,16 +138,16 @@ app.delete('/api/lawyers/:id', (req, res) => {
 app.get('/api/office', (req, res) => {
   if (!db) return res.json({});
   try {
-    res.json(db.prepare('SELECT nome,endereco,cidade,cep,telefone,email FROM office WHERE id=1').get() || {});
+    res.json(db.prepare('SELECT nome,endereco,cidade,cep,telefone,email,logo FROM office WHERE id=1').get() || {});
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.put('/api/office', (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
-  const { nome = '', endereco = '', cidade = '', cep = '', telefone = '', email = '' } = req.body;
+  const { nome = '', endereco = '', cidade = '', cep = '', telefone = '', email = '', logo = '' } = req.body;
   try {
-    db.prepare('UPDATE office SET nome=?,endereco=?,cidade=?,cep=?,telefone=?,email=? WHERE id=1').run(
-      nome, endereco, cidade, cep, telefone, email
+    db.prepare('UPDATE office SET nome=?,endereco=?,cidade=?,cep=?,telefone=?,email=?,logo=? WHERE id=1').run(
+      nome, endereco, cidade, cep, telefone, email, logo
     );
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -239,6 +241,67 @@ app.post('/api/acervo/buscar', (req, res) => {
     scored.sort((a, b) => b.score - a.score);
     res.json(scored.slice(0, top).map(c => ({ texto: c.texto, fonte: c.fonte })));
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ASSISTENTE PANDECTA ───────────────────────────────────────────────────────
+
+const ASSISTENTE_PROMPT = `Você é o assistente do Pandecta AI — plataforma de inteligência jurídica para advogados brasileiros.
+Responda dúvidas sobre as funcionalidades do sistema de forma clara, direta e amigável.
+
+FUNCIONALIDADES DO PANDECTA:
+• Nova Peça (botão "+ Novo"): Gera petições iniciais, contestações, recursos, notificações e contratos via IA. O fluxo coleta área jurídica, tipo de peça, dados do autor/réu, fatos e pedido.
+• Histórico: Lista todas as peças geradas. É possível editar, copiar ou exportar para Word (.doc) com cabeçalho do escritório.
+• Acervo: Base de documentos do escritório (PDF, DOCX, TXT). Os arquivos são lidos, divididos em trechos (chunks) e indexados. Esses trechos são usados como contexto na geração de peças — funciona como RAG (Retrieval-Augmented Generation).
+• Equipe: Cadastro de advogados (nome, OAB, e-mail, cargo). O advogado responsável é selecionado ao gerar cada peça e aparece na assinatura do Word exportado.
+• Configurações: Dados do escritório (nome, endereço, logo, cidade, CEP, telefone, e-mail) para o cabeçalho dos documentos exportados.
+• Exportação Word: Gera arquivo .doc com cabeçalho do escritório (logo + dados), corpo da peça em formato jurídico e assinatura do advogado responsável.
+• Sistema jurídico: Especializado em Direito do Consumidor (CDC/JEC), Civil, Trabalhista e de Família. Aplica regras automáticas como triage CDC, regras do JEC e estrutura em 7 seções para petições.
+
+REGRAS:
+- Seja objetivo, amigável e claro
+- Responda sempre em português brasileiro
+- Se a dúvida não for sobre o Pandecta, redirecione gentilmente
+- Para dúvidas técnicas de uso, dê passos práticos
+- Máximo 3–4 parágrafos por resposta`;
+
+app.post('/api/assistente', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { pergunta } = req.body || {};
+  if (!pergunta) return res.status(400).json({ error: 'Pergunta obrigatória.' });
+  if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'API key não configurada.' });
+
+  res.setHeader('Content-Type',               'text/event-stream');
+  res.setHeader('Cache-Control',              'no-cache, no-transform');
+  res.setHeader('Connection',                 'keep-alive');
+  res.setHeader('X-Accel-Buffering',          'no');
+  res.flushHeaders();
+
+  try {
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const stream = await client.messages.stream({
+      model:       'claude-haiku-4-5-20251001',
+      max_tokens:  1024,
+      temperature: 0.4,
+      system:      ASSISTENTE_PROMPT,
+      messages:    [{ role: 'user', content: pergunta }],
+    });
+    for await (const event of stream) {
+      if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta')
+        res.write(`data: ${JSON.stringify(event)}\n\n`);
+    }
+    res.write('data: [DONE]\n\n');
+    res.end();
+  } catch (err) {
+    res.write(`data: ${JSON.stringify({ type: 'error', message: err.message })}\n\n`);
+    res.end();
+  }
+});
+
+app.options('/api/assistente', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.status(200).end();
 });
 
 // ── SYSTEM PROMPT V4 ──────────────────────────────────────────────────────────

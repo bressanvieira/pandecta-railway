@@ -191,6 +191,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .home-chips{display:flex;flex-wrap:wrap;gap:8px;}
 .hchip{padding:7px 14px;border-radius:20px;font-size:12.5px;color:var(--t2);background:var(--card);border:1px solid var(--bd-md);cursor:pointer;transition:all .12s;}
 .hchip:hover{border-color:var(--bd-dk);color:var(--t1);}
+/* home faq response */
+.home-faq-wrap{margin-top:16px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 20px;animation:fu .2s ease;}
+.home-faq-msg{display:flex;gap:10px;align-items:flex-start;}
+.home-faq-av{width:28px;height:28px;border-radius:7px;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#FFF;flex-shrink:0;margin-top:2px;}
+.home-faq-text{font-size:13.5px;line-height:1.75;color:var(--t1);flex:1;}
+.home-faq-text strong{font-weight:600;}
+.home-faq-foot{display:flex;justify-content:flex-end;margin-top:12px;}
+.home-faq-clear{font-size:11.5px;color:var(--t3);background:transparent;border:none;cursor:pointer;font-family:inherit;padding:0;transition:color .12s;}
+.home-faq-clear:hover{color:var(--t2);}
 
 /* ════ GENERATOR ════ */
 .gen-layout{flex:1;display:flex;overflow:hidden;}
@@ -528,12 +537,22 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
               Inteligência que entende o direito.<br>
               Estratégia que <span class="accent">transforma decisões</span>.
             </h1>
-            <p class="home-sub">Descreva o caso ou o que precisa redigir e a IA constrói com você.</p>
+            <p class="home-sub">Tem dúvidas sobre o Pandecta? Pode me perguntar que eu te ajudo.</p>
             <div class="home-inp">
-              <textarea class="home-ta" id="home-txt" rows="1" placeholder="Descreva o caso ou o que precisa redigir..." oninput="ar(this)" onkeydown="homeKey(event)"></textarea>
-              <button class="home-send" onclick="iniciarConversa()">
+              <textarea class="home-ta" id="home-txt" rows="1" placeholder="Ex: Como funciona o Acervo? Como exporto para Word?..." oninput="ar(this)" onkeydown="homeKey(event)"></textarea>
+              <button class="home-send" onclick="perguntarAssistente()">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="12" x2="7" y2="2"/><polyline points="3,6 7,2 11,6"/></svg>
               </button>
+            </div>
+            <!-- resposta do assistente -->
+            <div class="home-faq-wrap" id="home-faq-wrap" style="display:none">
+              <div class="home-faq-msg">
+                <div class="home-faq-av">P</div>
+                <div class="home-faq-text" id="home-faq-text"></div>
+              </div>
+              <div class="home-faq-foot">
+                <button class="home-faq-clear" onclick="clearFaq()">Limpar</button>
+              </div>
             </div>
           </div>
 
@@ -574,10 +593,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           </div>
 
           <div class="home-chips">
-            <div class="hchip" onclick="sug('Petição inicial no JEC — produto defeituoso')">Produto com defeito no JEC</div>
-            <div class="hchip" onclick="sug('Negativa de cobertura médica pelo plano de saúde')">Negativa de cobertura médica</div>
-            <div class="hchip" onclick="sug('Contestação trabalhista — verbas rescisórias')">Contestação trabalhista</div>
-            <div class="hchip" onclick="sug('Contrato de prestação de serviços advocatícios')">Contrato de prestação de serviços</div>
+            <div class="hchip" onclick="sug('Como funciona o Acervo e a indexação de documentos?')">Como funciona o Acervo?</div>
+            <div class="hchip" onclick="sug('Como exportar uma peça para Word com assinatura do advogado?')">Como exportar para Word?</div>
+            <div class="hchip" onclick="sug('Como adicionar advogados na equipe e vincular a uma peça?')">Como cadastrar advogados?</div>
+            <div class="hchip" onclick="sug('Quais áreas jurídicas e tipos de peças o Pandecta suporta?')">Quais peças ele gera?</div>
           </div>
         </div>
 
@@ -1130,11 +1149,50 @@ async function fazerLogin(){
 document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin();});
 
 // ════ HOME ════
-function homeKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();iniciarConversa();}}
-function sug(t){document.getElementById('home-txt').value=t;iniciarConversa();}
+function homeKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();perguntarAssistente();}}
+function sug(t){const ta=document.getElementById('home-txt');ta.value=t;ar(ta);perguntarAssistente();}
 function iniciarConversa(){const txt=document.getElementById('home-txt').value.trim();engine.reset(txt);document.getElementById('home-txt').value='';go('gen');}
 function novaConversa(){engine.reset();go('gen');}
 function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,140)+'px';}
+
+function mdSimple(t){
+  return String(t||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/\n/g,'<br>');
+}
+
+async function perguntarAssistente(){
+  const ta=document.getElementById('home-txt');
+  const txt=ta.value.trim();if(!txt)return;
+  ta.value='';ta.style.height='auto';
+  const wrap=document.getElementById('home-faq-wrap');
+  const textEl=document.getElementById('home-faq-text');
+  wrap.style.display='block';
+  textEl.innerHTML='<span class="cur"></span>';
+  try{
+    const resp=await fetch('/api/assistente',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pergunta:txt})});
+    if(!resp.ok||!resp.headers.get('content-type')?.includes('event-stream')){
+      const e=await resp.json().catch(()=>({}));textEl.textContent=e.error||'Erro ao conectar.';return;
+    }
+    const reader=resp.body.getReader(),dec=new TextDecoder();
+    let answer='';
+    while(true){
+      const{done,value}=await reader.read();if(done)break;
+      for(const ln of dec.decode(value).split('\n')){
+        if(!ln.startsWith('data: '))continue;
+        const p=ln.slice(6);if(p==='[DONE]')break;
+        try{const d=JSON.parse(p);if(d.type==='content_block_delta'&&d.delta?.type==='text_delta'){answer+=d.delta.text;textEl.innerHTML=mdSimple(answer)+'<span class="cur"></span>';}}catch(e){}
+      }
+    }
+    textEl.innerHTML=mdSimple(answer);
+  }catch(err){textEl.textContent='Erro de conexão. Verifique sua internet.';}
+}
+function clearFaq(){
+  document.getElementById('home-faq-wrap').style.display='none';
+  document.getElementById('home-faq-text').innerHTML='';
+}
 
 // ════ CONVERSATION ENGINE ════
 class ConversationEngine{
@@ -1438,13 +1496,48 @@ async function exportarWordHist(){
 }
 
 // ════ CONFIGURAÇÕES ════
+let _logoBase64='';
+
+function _renderLogoZone(src){
+  const zone=document.querySelector('.cfg-logo-zone');if(!zone)return;
+  if(src){
+    zone.innerHTML=`<img src="${src}" style="max-height:80px;max-width:200px;object-fit:contain;border-radius:4px">
+      <div class="cfg-logo-zone-s" style="margin-top:6px">Clique para trocar</div>
+      <input type="file" id="cfg-logo-in" accept=".png,.jpg,.jpeg" style="display:none" onchange="handleLogoChange(this)">`;
+  }else{
+    zone.innerHTML=`<div class="cfg-logo-zone-ico"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="24" height="18" rx="3"/><circle cx="9" cy="12" r="2.5"/><path d="M2 19l6-5 5 4 4-3.5 9 5"/></svg></div>
+      <div class="cfg-logo-zone-t">Adicionar logo</div>
+      <div class="cfg-logo-zone-s">PNG ou JPG · até 2MB</div>
+      <input type="file" id="cfg-logo-in" accept=".png,.jpg,.jpeg" style="display:none" onchange="handleLogoChange(this)">`;
+  }
+  _logoBase64=src||'';
+}
+
+function handleLogoChange(input){
+  const f=input.files[0];if(!f)return;
+  if(f.size>2097152){toast('Logo muito grande. Máx 2MB.','err');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>_renderLogoZone(ev.target.result);
+  reader.readAsDataURL(f);
+}
+
 async function carregarConfig(){
   try{officeData=await api('GET','/api/office');}catch(e){}
   const m={nome:'cfg-nome',endereco:'cfg-end',cidade:'cfg-cidade',cep:'cfg-cep',telefone:'cfg-tel',email:'cfg-email'};
   Object.entries(m).forEach(([k,id])=>{const el=document.getElementById(id);if(el)el.value=officeData[k]||'';});
+  _renderLogoZone(officeData.logo||'');
 }
+
 async function salvarConfig(){
-  const data={nome:document.getElementById('cfg-nome').value.trim(),endereco:document.getElementById('cfg-end').value.trim(),cidade:document.getElementById('cfg-cidade').value.trim(),cep:document.getElementById('cfg-cep').value.trim(),telefone:document.getElementById('cfg-tel').value.trim(),email:document.getElementById('cfg-email').value.trim()};
+  const data={
+    nome:document.getElementById('cfg-nome').value.trim(),
+    endereco:document.getElementById('cfg-end').value.trim(),
+    cidade:document.getElementById('cfg-cidade').value.trim(),
+    cep:document.getElementById('cfg-cep').value.trim(),
+    telefone:document.getElementById('cfg-tel').value.trim(),
+    email:document.getElementById('cfg-email').value.trim(),
+    logo:_logoBase64||''
+  };
   try{await api('PUT','/api/office',data);officeData=data;toast('Configurações salvas!','ok');}
   catch(e){toast('Erro: '+e.message,'err');}
 }
