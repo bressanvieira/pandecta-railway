@@ -60,25 +60,46 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 @keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 .icon{width:15px;height:15px;flex-shrink:0;}
 
-/* ════ LOGIN ════ */
-#screen-login{align-items:center;justify-content:center;background:var(--bg);}
-.login-card{width:100%;max-width:380px;background:var(--card);border:1px solid var(--bd-md);border-radius:var(--r-lg);padding:40px 36px;box-shadow:0 4px 24px rgba(0,0,0,.07);}
-.login-logo{text-align:center;margin-bottom:28px;}
-.login-logo img{height:44px;object-fit:contain;}
-.login-logo-fallback{font-size:20px;font-weight:700;color:var(--t1);display:none;letter-spacing:-.3px;}
-.login-head{margin-bottom:24px;}
-.login-head h2{font-size:17px;font-weight:600;margin-bottom:4px;}
-.login-head p{font-size:12.5px;color:var(--t2);line-height:1.5;}
-.lf{margin-bottom:14px;}
-.lf label{display:block;font-size:10.5px;font-weight:500;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;}
-.lf input,.lf select,.lf textarea{width:100%;padding:9px 12px;border-radius:var(--r-sm);border:1px solid var(--bd-md);background:var(--bg);color:var(--t1);font-size:13px;font-family:inherit;outline:none;transition:border .15s;}
-.lf input:focus,.lf select:focus,.lf textarea:focus{border-color:var(--bd-dk);background:var(--card);}
+/* ════ LOGIN SPLIT ════ */
+#screen-login{background:#0C1020;}
+.login-split{display:flex;width:100%;height:100%;}
+
+/* ── Painel esquerdo — dark brand ── */
+.login-left{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 64px;position:relative;overflow:hidden;background:#0C1020;}
+/* brilho radial dourado sutil ao centro */
+.login-left::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(200,130,58,.09) 0%,transparent 70%);pointer-events:none;}
+/* reflexo no canto inferior */
+.login-left::after{content:'';position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(200,130,58,.06) 0%,transparent 65%);pointer-events:none;}
+.ll-logo-img{width:88%;max-width:380px;object-fit:contain;display:block;position:relative;z-index:1;}
+.ll-body{text-align:center;margin-top:40px;position:relative;z-index:1;}
+.ll-h1{font-family:'Georgia','Times New Roman',serif;font-size:24px;font-weight:700;line-height:1.38;color:rgba(255,255,255,.92);margin-bottom:14px;max-width:340px;margin-left:auto;margin-right:auto;}
+.ll-sub{font-size:13px;color:rgba(190,210,235,.45);line-height:1.75;max-width:320px;margin:0 auto;}
+.ll-foot{display:flex;align-items:center;gap:14px;margin-top:auto;padding-top:40px;position:relative;z-index:1;}
+.ll-foot-line{width:44px;height:1px;background:rgba(200,130,58,.32);}
+.ll-foot-txt{font-size:10px;color:rgba(190,210,235,.28);letter-spacing:1.2px;text-transform:uppercase;}
+
+/* ── Painel direito — formulário ── */
+.login-right{width:460px;flex-shrink:0;background:var(--card);display:flex;flex-direction:column;justify-content:center;padding:68px 52px;border-left:1px solid rgba(0,0,0,.06);}
+.lr-head{margin-bottom:34px;}
+.lr-h2{font-size:26px;font-weight:700;color:var(--t1);margin-bottom:8px;letter-spacing:-.4px;}
+.lr-sub{font-size:13px;color:var(--t2);line-height:1.6;}
+
+/* Campos */
+.lf{margin-bottom:16px;}
+.lf label{display:block;font-size:10px;font-weight:600;color:var(--t3);letter-spacing:.9px;text-transform:uppercase;margin-bottom:7px;}
+.lf input,.lf select,.lf textarea{width:100%;padding:10px 12px;border-radius:var(--r-sm);border:1px solid var(--bd-md);background:var(--bg);color:var(--t1);font-size:13px;font-family:inherit;outline:none;transition:border .15s,background .15s;}
+.lf input:focus,.lf select:focus,.lf textarea:focus{border-color:var(--bd-dk);background:#fff;}
 .lf input::placeholder,.lf textarea::placeholder{color:var(--t3);}
 .lf select option{background:#fff;}
-.login-btn{width:100%;padding:11px;margin-top:6px;background:var(--t1);color:#FFF;border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:opacity .15s;}
-.login-btn:hover{opacity:.85;}
+.inp-icn{position:relative;}
+.inp-icn svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none;}
+.inp-icn input{padding-left:34px;}
+
+/* Botão */
+.login-btn{width:100%;padding:13px;margin-top:6px;background:var(--t1);color:#FFF;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;letter-spacing:.3px;transition:box-shadow .22s,opacity .15s;}
+.login-btn:hover{opacity:.93;box-shadow:0 0 0 2.5px var(--gold),0 0 22px rgba(184,145,106,.20);}
 .login-err{font-size:11.5px;color:var(--err);margin-top:10px;display:none;}
-.login-note{font-size:11px;color:var(--t3);text-align:center;margin-top:18px;}
+.login-note{font-size:11px;color:var(--t3);text-align:center;margin-top:20px;}
 
 /* ════ APP SHELL ════ */
 .app-shell{flex:1;display:flex;height:100vh;}
@@ -338,18 +359,59 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 <!-- ════ LOGIN ════ -->
 <div id="screen-login" class="screen active">
-  <div class="login-card">
-    <div class="login-logo">
-      <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI"
-           onerror="this.style.display='none';document.querySelector('.login-logo-fallback').style.display='block'">
-      <div class="login-logo-fallback">Pandecta AI</div>
+  <div class="login-split">
+
+    <!-- Painel esquerdo — branding dark -->
+    <div class="login-left">
+      <img class="ll-logo-img"
+           src="/pandecta-logo-horizontal.png"
+           alt="Pandecta AI"
+           onerror="this.style.display='none'">
+
+      <div class="ll-body">
+        <h1 class="ll-h1">Inteligência jurídica construída para decisões melhores.</h1>
+        <p class="ll-sub">Construa petições, contratos e manifestações com assistência contextual inteligente.</p>
+      </div>
+
+      <div class="ll-foot">
+        <div class="ll-foot-line"></div>
+        <span class="ll-foot-txt">Acesso exclusivo · Pandecta AI</span>
+        <div class="ll-foot-line"></div>
+      </div>
     </div>
-    <div class="login-head"><h2>Bem-vindo</h2><p>Plataforma de inteligência jurídica para construção de peças.</p></div>
-    <div class="lf"><label>Usuário</label><input id="inp-user" type="text" placeholder="seu.usuario" autocomplete="username"></div>
-    <div class="lf"><label>Senha</label><input id="inp-pass" type="password" placeholder="••••••••"></div>
-    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
-    <div class="login-err" id="login-err">Usuário ou senha incorretos.</div>
-    <p class="login-note">Acesso restrito · Pandecta AI</p>
+
+    <!-- Painel direito — formulário -->
+    <div class="login-right">
+      <div class="lr-head">
+        <h2 class="lr-h2">Bem-vindo</h2>
+        <p class="lr-sub">Entre com suas credenciais para acessar a plataforma.</p>
+      </div>
+
+      <div class="lf">
+        <label>Usuário</label>
+        <div class="inp-icn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 5-4s5 1.5 5 4"/>
+          </svg>
+          <input id="inp-user" type="text" placeholder="seu.usuario" autocomplete="username">
+        </div>
+      </div>
+
+      <div class="lf">
+        <label>Senha</label>
+        <div class="inp-icn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="6" width="8" height="6" rx="1.5"/><path d="M5 6V4.5a2 2 0 014 0V6"/>
+          </svg>
+          <input id="inp-pass" type="password" placeholder="••••••••">
+        </div>
+      </div>
+
+      <button class="login-btn" onclick="fazerLogin()">Entrar</button>
+      <div class="login-err" id="login-err">Usuário ou senha incorretos.</div>
+      <p class="login-note">Acesso restrito · Pandecta AI</p>
+    </div>
+
   </div>
 </div>
 
