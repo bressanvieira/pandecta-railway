@@ -282,20 +282,47 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .save-btn{padding:9px 22px;background:var(--t1);color:#FFF;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;transition:opacity .13s;}
 .save-btn:hover{opacity:.85;}
 
-/* ════ LAWYERS ════ */
-.lawyers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:11px;max-width:900px;margin-bottom:20px;}
-.law-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:15px 16px;}
-.law-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
-.law-av{width:36px;height:36px;border-radius:50%;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#FFF;flex-shrink:0;}
-.law-actions{display:flex;gap:5px;}
-.law-btn{font-size:11px;padding:3px 8px;border-radius:5px;background:var(--surface);border:1px solid var(--bd-md);color:var(--t2);cursor:pointer;font-family:inherit;transition:all .12s;}
-.law-btn:hover{background:var(--bd-md);color:var(--t1);}
-.law-btn.del:hover{background:rgba(220,38,38,.1);color:var(--err);border-color:rgba(220,38,38,.2);}
-.law-name{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:3px;}
-.law-oab{font-size:11.5px;color:var(--t2);margin-bottom:2px;}
-.law-email{font-size:11px;color:var(--t3);}
-.add-law-btn{display:flex;align-items:center;gap:8px;padding:9px 16px;background:var(--card);border:1.5px dashed var(--bd-md);border-radius:var(--r);color:var(--t2);font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s;max-width:200px;}
-.add-law-btn:hover{border-color:var(--bd-dk);color:var(--t1);}
+/* ════ EQUIPE ════ */
+/* layout split: lista (esq) + painel form (dir) */
+.equipe-layout{display:flex;gap:28px;align-items:flex-start;}
+.equipe-main{flex:0 0 340px;min-width:0;}
+.equipe-form-panel{flex:1;min-width:0;display:none;}
+.equipe-form-panel.open{display:block;animation:fu .2s ease;}
+
+/* botão Adicionar */
+.add-law-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:var(--card);border:1px solid var(--bd-md);border-radius:var(--r-sm);color:var(--t1);font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .14s;margin-bottom:18px;}
+.add-law-btn:hover{border-color:var(--bd-dk);background:var(--bg);}
+.add-law-btn.active{background:var(--gold-bg);border-color:var(--gold-bd);color:var(--gold);}
+
+/* lawyers list */
+.lawyers-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+.law-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:16px;display:flex;align-items:center;gap:14px;}
+.law-av{width:40px;height:40px;border-radius:50%;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#FFF;flex-shrink:0;}
+.law-info{flex:1;min-width:0;}
+.law-name{font-size:13.5px;font-weight:600;color:var(--t1);margin-bottom:2px;}
+.law-oab{font-size:12px;color:var(--t2);margin-bottom:1px;}
+.law-email{font-size:11.5px;color:var(--t3);}
+.law-actions{display:flex;gap:6px;flex-shrink:0;}
+.law-btn{font-size:12px;padding:5px 10px;border-radius:6px;background:var(--surface);border:1px solid var(--bd-md);color:var(--t2);cursor:pointer;font-family:inherit;transition:all .12s;font-weight:500;}
+.law-btn:hover{background:var(--bd);color:var(--t1);}
+.law-btn.del:hover{background:rgba(220,38,38,.08);color:var(--err);border-color:rgba(220,38,38,.2);}
+
+/* empty state equipe */
+.law-empty{font-size:13px;color:var(--t3);padding:4px 0;}
+
+/* form card inline */
+.law-form-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:32px 36px;box-shadow:0 4px 28px rgba(0,0,0,.06);}
+.law-form-title{font-size:19px;font-weight:700;color:var(--t1);margin-bottom:28px;letter-spacing:-.3px;}
+.law-form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.law-form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:28px;padding-top:20px;border-top:1px solid var(--bd);}
+.law-cancel-btn{padding:10px 20px;border-radius:var(--r-sm);background:transparent;border:1px solid var(--bd-md);color:var(--t2);font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .13s;}
+.law-cancel-btn:hover{border-color:var(--bd-dk);color:var(--t1);}
+.law-save-btn{padding:10px 24px;border-radius:var(--r-sm);background:var(--t1);color:#FFF;font-size:13.5px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:opacity .13s;}
+.law-save-btn:hover{opacity:.85;}
+
+/* select com seta */
+.lf select{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:32px;}
+.inp-icn select{padding-left:34px;}
 
 /* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.30);z-index:300;display:none;align-items:center;justify-content:center;}
@@ -778,38 +805,112 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="app-shell">
     <div id="sb-equipe"></div>
     <div class="main-area">
+
       <div class="topbar">
-        <div class="tb-left"><span class="tb-crumb" onclick="go('home')">Início</span><span class="tb-sep">/</span><span class="tb-page">Equipe</span></div>
-        <div class="tb-right"><div class="tb-user"><div class="tb-av" id="av-eq">A</div><div><div class="tb-uname" id="nm-eq">–</div><div class="tb-usess">Sessão atual</div></div></div></div>
+        <div class="tb-left">
+          <span class="tb-crumb" onclick="go('home')">Início</span>
+          <span class="tb-sep">/</span>
+          <span class="tb-page">Equipe</span>
+        </div>
+        <div class="tb-right">
+          <button class="tb-icon-btn" title="Buscar">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><line x1="9.5" y1="9.5" x2="12.5" y2="12.5"/></svg>
+          </button>
+          <button class="tb-icon-btn" title="Notificações">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M7 1.5a4 4 0 014 4v2.5l1 1.5H2L3 8V5.5a4 4 0 014-4z"/><path d="M5.5 11.5a1.5 1.5 0 003 0"/></svg>
+          </button>
+          <div class="tb-user" onclick="toggleDD('dd-eq')">
+            <div class="tb-av" id="av-eq">A</div>
+            <div><div class="tb-uname" id="nm-eq">–</div><div class="tb-usess">Sessão atual</div></div>
+          </div>
+          <div class="tb-dropdown" id="dd-eq">
+            <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="go('login')">🔒 Sair</div>
+          </div>
+        </div>
       </div>
+
       <div class="page-body">
         <div class="page-h">Advogados cadastrados</div>
         <div class="page-s">Cadastre os advogados do escritório. O responsável é selecionado ao gerar cada documento.</div>
-        <div class="lawyers-grid" id="lawyers-grid"></div>
-        <button class="add-law-btn" onclick="openLawModal()">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="7" y1="12" x2="7" y2="2"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
-          Adicionar advogado
-        </button>
-        <div id="lawyers-empty" style="font-size:13px;color:var(--t3);margin-top:14px;display:none">Nenhum advogado cadastrado.</div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal advogado -->
-<div class="modal-overlay" id="law-modal">
-  <div class="modal">
-    <div class="modal-t" id="law-modal-t">Adicionar advogado</div>
-    <div class="lf"><label>Nome completo</label><input id="law-nome" type="text" placeholder="Dr. João Silva"></div>
-    <div class="form-grid">
-      <div class="lf"><label>Número OAB</label><input id="law-oab" type="text" placeholder="123456"></div>
-      <div class="lf"><label>UF da OAB</label><input id="law-uf" type="text" placeholder="SP" maxlength="2"></div>
-    </div>
-    <div class="lf"><label>E-mail</label><input id="law-email" type="text" placeholder="joao@escritorio.adv.br"></div>
-    <div class="lf"><label>Cargo / Especialidade</label><input id="law-cargo" type="text" placeholder="Advogado · Direito do Consumidor"></div>
-    <div class="modal-acts">
-      <button class="modal-cancel" onclick="closeLawModal()">Cancelar</button>
-      <button class="modal-save" onclick="salvarAdvogado()">Salvar</button>
+        <div class="equipe-layout">
+
+          <!-- esquerda: botão + lista -->
+          <div class="equipe-main">
+            <button class="add-law-btn" id="add-law-btn" onclick="openLawModal()">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="7" y1="12" x2="7" y2="2"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+              Adicionar advogado
+            </button>
+            <div class="lawyers-grid" id="lawyers-grid"></div>
+            <div class="law-empty" id="lawyers-empty" style="display:none">Nenhum advogado cadastrado.</div>
+          </div>
+
+          <!-- direita: painel form inline -->
+          <div class="equipe-form-panel" id="law-form-panel">
+            <div class="law-form-card">
+              <div class="law-form-title" id="law-form-title">Adicionar advogado</div>
+
+              <div class="lf">
+                <label>Nome completo</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 5-4s5 1.5 5 4"/></svg>
+                  <input id="law-nome" type="text" placeholder="Dr. João Silva">
+                </div>
+              </div>
+
+              <div class="law-form-row">
+                <div class="lf">
+                  <label>Número OAB</label>
+                  <div class="inp-icn">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="3" width="10" height="8" rx="1.5"/><line x1="5" y1="6" x2="9" y2="6"/><line x1="5" y1="8.5" x2="7.5" y2="8.5"/></svg>
+                    <input id="law-oab" type="text" placeholder="123456">
+                  </div>
+                </div>
+                <div class="lf">
+                  <label>UF da OAB</label>
+                  <div class="inp-icn">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 1.5C4.5 1.5 2.5 3.5 2.5 6c0 3.2 4.5 6.5 4.5 6.5S11.5 9.2 11.5 6c0-2.5-2-4.5-4.5-4.5z"/><circle cx="7" cy="6" r="1.4"/></svg>
+                    <select id="law-uf">
+                      <option value="">UF</option>
+                      <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+                      <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+                      <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+                      <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+                      <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                      <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+                      <option>SP</option><option>SE</option><option>TO</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="lf">
+                <label>E-mail</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="3" width="11" height="8" rx="1.5"/><path d="M1.5 5l5.5 3.5L12.5 5"/></svg>
+                  <input id="law-email" type="text" placeholder="joao@escritorio.adv.br">
+                </div>
+              </div>
+
+              <div class="lf">
+                <label>Cargo / Especialidade</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="2" width="11" height="10" rx="1.5"/><line x1="4" y1="5" x2="10" y2="5"/><line x1="4" y1="7.5" x2="10" y2="7.5"/><line x1="4" y1="10" x2="7" y2="10"/></svg>
+                  <input id="law-cargo" type="text" placeholder="Advogado · Direito do Consumidor">
+                </div>
+              </div>
+
+              <div class="law-form-actions">
+                <button class="law-cancel-btn" onclick="closeLawModal()">Cancelar</button>
+                <button class="law-save-btn" onclick="salvarAdvogado()">Salvar</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1256,28 +1357,38 @@ async function renderLawyers(){
   empty.style.display=lawyers.length?'none':'block';
   grid.innerHTML=lawyers.map(l=>`
     <div class="law-card">
-      <div class="law-card-top">
-        <div class="law-av">${(l.nome||'?')[0].toUpperCase()}</div>
-        <div class="law-actions">
-          <button class="law-btn" onclick="editLaw(${l.id})">Editar</button>
-          <button class="law-btn del" onclick="deleteLaw(${l.id})">Remover</button>
-        </div>
+      <div class="law-av">${(l.nome||'?')[0].toUpperCase()}</div>
+      <div class="law-info">
+        <div class="law-name">${esc(l.nome)}</div>
+        <div class="law-oab">OAB/${esc(l.uf||'—')} nº ${esc(l.oab||'—')}</div>
+        ${l.cargo?`<div class="law-email">${esc(l.cargo)}</div>`:''}
+        ${l.email?`<div class="law-email">${esc(l.email)}</div>`:''}
       </div>
-      <div class="law-name">${esc(l.nome)}</div>
-      <div class="law-oab">OAB/${esc(l.uf)} nº ${esc(l.oab)}</div>
-      ${l.cargo?`<div class="law-email">${esc(l.cargo)}</div>`:''}
-      ${l.email?`<div class="law-email">${esc(l.email)}</div>`:''}
+      <div class="law-actions">
+        <button class="law-btn" onclick="editLaw(${l.id})">Editar</button>
+        <button class="law-btn del" onclick="deleteLaw(${l.id})">Remover</button>
+      </div>
     </div>`).join('');
 }
 function openLawModal(id){
   editingLawId=id||null;
-  document.getElementById('law-modal-t').textContent=id?'Editar advogado':'Adicionar advogado';
+  const title=document.getElementById('law-form-title');
+  if(title) title.textContent=id?'Editar advogado':'Adicionar advogado';
   const law=id?lawyers.find(l=>l.id===id):null;
   ['nome','oab','uf','email','cargo'].forEach(k=>{const el=document.getElementById('law-'+k);if(el)el.value=law?law[k]||'':''});
-  document.getElementById('law-modal').classList.add('open');
-  setTimeout(()=>document.getElementById('law-nome').focus(),50);
+  const panel=document.getElementById('law-form-panel');
+  if(panel) panel.classList.add('open');
+  const btn=document.getElementById('add-law-btn');
+  if(btn) btn.classList.add('active');
+  setTimeout(()=>document.getElementById('law-nome')?.focus(),80);
 }
-function closeLawModal(){document.getElementById('law-modal').classList.remove('open');editingLawId=null;}
+function closeLawModal(){
+  const panel=document.getElementById('law-form-panel');
+  if(panel) panel.classList.remove('open');
+  const btn=document.getElementById('add-law-btn');
+  if(btn) btn.classList.remove('active');
+  editingLawId=null;
+}
 function editLaw(id){openLawModal(id);}
 async function deleteLaw(id){
   if(!confirm('Remover este advogado?'))return;
