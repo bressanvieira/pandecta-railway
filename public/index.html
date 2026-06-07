@@ -159,7 +159,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .home-body::-webkit-scrollbar{width:4px;}
 .home-body::-webkit-scrollbar-thumb{background:var(--bd-md);border-radius:4px;}
 /* hero */
-.home-hero{padding:52px 56px 36px;display:flex;align-items:center;gap:52px;min-height:300px;}
+.home-hero{padding:48px 56px 32px;display:flex;align-items:center;gap:52px;min-height:260px;}
 .home-hero-content{flex:1;min-width:0;max-width:520px;}
 .home-tag{font-size:9.5px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
 .home-h1{font-family:'Georgia','Times New Roman',serif;font-size:36px;font-weight:700;line-height:1.22;color:var(--t1);margin-bottom:16px;}
@@ -174,9 +174,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* mockup 3D — flex item, não absoluto */
 .home-mockup{flex-shrink:0;pointer-events:none;}
 .mock-scene{perspective:1000px;}
-.mock-card{width:248px;height:178px;background:linear-gradient(148deg,#2C3249 0%,#1B1F30 100%);border-radius:20px;transform:rotateY(-18deg) rotateX(7deg);box-shadow:28px 32px 64px rgba(0,0,0,.22),4px 4px 20px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.mock-card::before{content:'';position:absolute;inset:0;background:linear-gradient(140deg,rgba(255,255,255,.08) 0%,transparent 55%);border-radius:20px;}
-.mock-card img{width:86px;height:86px;object-fit:contain;mix-blend-mode:screen;position:relative;z-index:1;}
+.mock-card{width:248px;height:178px;background:#0C1020;border-radius:20px;transform:rotateY(-18deg) rotateX(7deg);box-shadow:28px 32px 64px rgba(0,0,0,.25),4px 4px 20px rgba(0,0,0,.14);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.mock-card::before{content:'';position:absolute;inset:0;background:linear-gradient(140deg,rgba(255,255,255,.055) 0%,transparent 55%);border-radius:20px;}
+.mock-card img{width:104px;height:104px;object-fit:contain;position:relative;z-index:1;}
 .mock-shadow{width:196px;height:18px;background:radial-gradient(ellipse,rgba(0,0,0,.15) 0%,transparent 70%);margin:18px auto 0;border-radius:50%;}
 /* quick cards */
 .home-cards-sect{padding:0 56px 36px;}
@@ -596,23 +596,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
               Inteligência que entende o direito.<br>
               Estratégia que <span class="accent">transforma decisões</span>.
             </h1>
-            <p class="home-sub">Tem dúvidas sobre o Pandecta? Pode me perguntar que eu te ajudo.</p>
-            <div class="home-inp">
-              <textarea class="home-ta" id="home-txt" rows="1" placeholder="Ex: Como funciona o Acervo? Como exporto para Word?..." oninput="ar(this)" onkeydown="homeKey(event)"></textarea>
-              <button class="home-send" onclick="perguntarAssistente()">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="12" x2="7" y2="2"/><polyline points="3,6 7,2 11,6"/></svg>
-              </button>
-            </div>
-            <!-- resposta do assistente -->
-            <div class="home-faq-wrap" id="home-faq-wrap" style="display:none">
-              <div class="home-faq-msg">
-                <div class="home-faq-av"><img src="/pandecta-icone.png" alt="P"></div>
-                <div class="home-faq-text" id="home-faq-text"></div>
-              </div>
-              <div class="home-faq-foot">
-                <button class="home-faq-clear" onclick="clearFaq()">Limpar</button>
-              </div>
-            </div>
+            <p class="home-sub">Construa petições, contratos e manifestações com precisão. Selecione uma das opções abaixo para começar.</p>
           </div>
 
           <!-- Card 3D flutuante -->
@@ -651,12 +635,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             </div>
           </div>
 
-          <div class="home-chips">
-            <div class="hchip" onclick="sug('Como funciona o Acervo e a indexação de documentos?')">Como funciona o Acervo?</div>
-            <div class="hchip" onclick="sug('Como exportar uma peça para Word com assinatura do advogado?')">Como exportar para Word?</div>
-            <div class="hchip" onclick="sug('Como adicionar advogados na equipe e vincular a uma peça?')">Como cadastrar advogados?</div>
-            <div class="hchip" onclick="sug('Quais áreas jurídicas e tipos de peças o Pandecta suporta?')">Quais peças ele gera?</div>
-          </div>
         </div>
 
       </div>
