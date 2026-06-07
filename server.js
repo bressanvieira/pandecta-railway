@@ -266,7 +266,7 @@ REGRAS:
 
 app.post('/api/assistente', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  const { pergunta } = req.body || {};
+  const { pergunta, historico = [] } = req.body || {};
   if (!pergunta) return res.status(400).json({ error: 'Pergunta obrigatória.' });
   if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'API key não configurada.' });
 
@@ -276,6 +276,12 @@ app.post('/api/assistente', async (req, res) => {
   res.setHeader('X-Accel-Buffering',          'no');
   res.flushHeaders();
 
+  // monta historico multi-turn + pergunta atual
+  const messages = [
+    ...historico.slice(-16).map(m => ({ role: m.role, content: m.content })),
+    { role: 'user', content: pergunta },
+  ];
+
   try {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
     const stream = await client.messages.stream({
@@ -283,7 +289,7 @@ app.post('/api/assistente', async (req, res) => {
       max_tokens:  1024,
       temperature: 0.4,
       system:      ASSISTENTE_PROMPT,
-      messages:    [{ role: 'user', content: pergunta }],
+      messages,
     });
     for await (const event of stream) {
       if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta')
