@@ -194,7 +194,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* home faq response */
 .home-faq-wrap{margin-top:16px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 20px;animation:fu .2s ease;}
 .home-faq-msg{display:flex;gap:10px;align-items:flex-start;}
-.home-faq-av{width:28px;height:28px;border-radius:7px;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#FFF;flex-shrink:0;margin-top:2px;}
+.home-faq-av{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:#0C1020;overflow:hidden;margin-top:2px;}
+.home-faq-av img{width:100%;height:100%;object-fit:contain;display:block;}
 .home-faq-text{font-size:13.5px;line-height:1.75;color:var(--t1);flex:1;}
 .home-faq-text strong{font-weight:600;}
 .home-faq-foot{display:flex;justify-content:flex-end;margin-top:12px;}
@@ -213,7 +214,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .chat-msgs::-webkit-scrollbar{width:3px;}
 .chat-msgs::-webkit-scrollbar-thumb{background:var(--bd-md);border-radius:3px;}
 .msg-ai{display:flex;gap:9px;align-items:flex-start;animation:mi .18s ease;}
-.msg-ai-av{width:24px;height:24px;border-radius:6px;flex-shrink:0;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:#FFF;margin-top:1px;}
+.msg-ai-av{width:26px;height:26px;border-radius:7px;flex-shrink:0;background:#0C1020;overflow:hidden;margin-top:1px;}
+.msg-ai-av img{width:100%;height:100%;object-fit:contain;display:block;}
 .msg-ai-text{font-size:13px;line-height:1.6;color:var(--t1);padding-top:2px;}
 .msg-user{display:flex;justify-content:flex-end;animation:mi .17s ease;}
 .msg-user-b{max-width:84%;padding:8px 13px;background:var(--t1);border-radius:11px 11px 2px 11px;font-size:13px;line-height:1.5;color:#FFF;}
@@ -436,7 +438,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* chat */
 .sup-chat{flex:1;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);overflow:hidden;min-height:0;}
 .sup-chat-hd{padding:14px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;flex-shrink:0;background:var(--card);}
-.sup-chat-av{width:34px;height:34px;border-radius:9px;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#FFF;flex-shrink:0;}
+.sup-chat-av{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:#0C1020;overflow:hidden;}
+.sup-chat-av img{width:100%;height:100%;object-fit:contain;display:block;}
 .sup-chat-title{font-size:13.5px;font-weight:600;color:var(--t1);line-height:1.2;}
 .sup-chat-sub{font-size:11.5px;color:var(--t2);}
 .sup-online{width:8px;height:8px;border-radius:50%;background:#16A34A;margin-left:auto;flex-shrink:0;box-shadow:0 0 0 2px rgba(22,163,74,.2);}
@@ -445,7 +448,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .sup-msgs::-webkit-scrollbar-thumb{background:var(--bd-md);border-radius:3px;}
 /* mensagens AI */
 .smsg-ai{display:flex;gap:10px;align-items:flex-start;animation:fu .18s ease;}
-.smsg-ai-av{width:28px;height:28px;border-radius:7px;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#FFF;flex-shrink:0;margin-top:2px;}
+.smsg-ai-av{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:#0C1020;overflow:hidden;margin-top:2px;}
+.smsg-ai-av img{width:100%;height:100%;object-fit:contain;display:block;}
 .smsg-ai-bbl{background:var(--bg);border:1px solid var(--bd);border-radius:12px 12px 12px 2px;padding:12px 14px;font-size:13.5px;line-height:1.72;color:var(--t1);max-width:82%;}
 .smsg-ai-bbl strong{font-weight:600;}
 /* mensagens user */
@@ -602,7 +606,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <!-- resposta do assistente -->
             <div class="home-faq-wrap" id="home-faq-wrap" style="display:none">
               <div class="home-faq-msg">
-                <div class="home-faq-av">P</div>
+                <div class="home-faq-av"><img src="/pandecta-icone.png" alt="P"></div>
                 <div class="home-faq-text" id="home-faq-text"></div>
               </div>
               <div class="home-faq-foot">
@@ -1017,7 +1021,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <!-- CHAT -->
           <div class="sup-chat">
             <div class="sup-chat-hd">
-              <div class="sup-chat-av">P</div>
+              <div class="sup-chat-av"><img src="/pandecta-icone.png" alt="P"></div>
               <div>
                 <div class="sup-chat-title">Assistente Pandecta</div>
                 <div class="sup-chat-sub">Responde em segundos</div>
@@ -1389,7 +1393,7 @@ function _supAddMsg(role,text){
   el.id=id;
   if(role==='ai'){
     el.className='smsg-ai';
-    el.innerHTML=`<div class="smsg-ai-av">P</div><div class="smsg-ai-bbl">${mdSimple(text)}</div>`;
+    el.innerHTML=`<div class="smsg-ai-av"><img src="/pandecta-icone.png" alt="P"></div><div class="smsg-ai-bbl">${mdSimple(text)}</div>`;
   }else{
     el.className='smsg-user';
     el.innerHTML=`<div class="smsg-user-bbl">${esc(text)}</div>`;
@@ -1412,7 +1416,7 @@ function _supTyping(){
   if(!msgs)return id;
   const el=document.createElement('div');
   el.id=id;el.className='smsg-ai';
-  el.innerHTML=`<div class="smsg-ai-av">P</div><div class="smsg-ai-bbl"><div class="smsg-typing"><div class="smsg-dot"></div><div class="smsg-dot"></div><div class="smsg-dot"></div></div></div>`;
+  el.innerHTML=`<div class="smsg-ai-av"><img src="/pandecta-icone.png" alt="P"></div><div class="smsg-ai-bbl"><div class="smsg-typing"><div class="smsg-dot"></div><div class="smsg-dot"></div><div class="smsg-dot"></div></div></div>`;
   msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
   return id;
 }
@@ -1538,7 +1542,7 @@ class ConversationEngine{
   _ai(msg){
     const id='m'+Date.now();this.msgs.push({role:'ai',...msg,id});
     const el=document.createElement('div');el.className='msg-ai';el.id=id;
-    el.innerHTML=`<div class="msg-ai-av">P</div><div><div class="msg-ai-text">${esc(msg.content)}</div>${msg.type==='chips'?this._chips(msg.opts,msg.key):''}</div>`;
+    el.innerHTML=`<div class="msg-ai-av"><img src="/pandecta-icone.png" alt="P"></div><div><div class="msg-ai-text">${esc(msg.content)}</div>${msg.type==='chips'?this._chips(msg.opts,msg.key):''}</div>`;
     document.getElementById('chat-msgs').appendChild(el);scrB();return id;
   }
   _uMsg(t){
@@ -1547,7 +1551,7 @@ class ConversationEngine{
     el.innerHTML=`<div class="msg-user-b">${esc(t)}</div>`;
     document.getElementById('chat-msgs').appendChild(el);scrB();
   }
-  _typ(){const id='t'+Date.now();const el=document.createElement('div');el.className='msg-ai typing-w';el.id=id;el.innerHTML=`<div class="msg-ai-av">P</div><div style="display:flex;gap:4px;padding:4px 0"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;document.getElementById('chat-msgs').appendChild(el);scrB();return id;}
+  _typ(){const id='t'+Date.now();const el=document.createElement('div');el.className='msg-ai typing-w';el.id=id;el.innerHTML=`<div class="msg-ai-av"><img src="/pandecta-icone.png" alt="P"></div><div style="display:flex;gap:4px;padding:4px 0"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;document.getElementById('chat-msgs').appendChild(el);scrB();return id;}
   _rmTyp(id){const el=document.getElementById(id);if(el)el.remove();}
   _chips(opts,key){return `<div class="msg-chips" id="chips-${key}">${opts.map(o=>`<div class="m-chip" onclick="engine.cSel('${key}','${esc(o.v)}','${esc(o.l)}',this)">${esc(o.l)}${o.s?`<span class="m-chip-sub">${esc(o.s)}</span>`:''}</div>`).join('')}</div>`;}
   cSel(key,val,lbl,el){if(el.classList.contains('dis'))return;el.closest('.msg-chips').querySelectorAll('.m-chip').forEach(c=>c.classList.add('dis'));el.classList.add('sel');this.answer(key,val,lbl);}
@@ -1564,7 +1568,7 @@ class ConversationEngine{
     document.getElementById('tb-status').textContent='Gerando...';
     const gid='g'+Date.now();
     const gel=document.createElement('div');gel.className='msg-ai';gel.id=gid;
-    gel.innerHTML=`<div class="msg-ai-av">P</div><div><div class="msg-gen"><div class="gen-dot"></div>Redigindo ${this._tL(this.data.tipo)}...</div></div>`;
+    gel.innerHTML=`<div class="msg-ai-av"><img src="/pandecta-icone.png" alt="P"></div><div><div class="msg-gen"><div class="gen-dot"></div>Redigindo ${this._tL(this.data.tipo)}...</div></div>`;
     document.getElementById('chat-msgs').appendChild(gel);scrB();
     document.getElementById('doc-empty').style.display='none';
     document.getElementById('doc-paper').style.display='block';
