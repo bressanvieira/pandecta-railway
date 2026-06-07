@@ -1454,40 +1454,86 @@ async function enviarSuporte(){
 class ConversationEngine{
   constructor(){this.msgs=[];this.data={};this.locked=false;}
   _steps(){
-    const base=[
-      {key:'area',type:'chips',ask:()=>'Qual é a área jurídica do caso?',opts:[
+    const d=this.data;
+    const steps=[];
+
+    // ── 1. O que construir? ──────────────────────────────────────────
+    steps.push({key:'tipo',type:'chips',ask:()=>'O que deseja construir?',opts:[
+      {l:'Petição Inicial',  v:'peticao_inicial', s:'Ação judicial · JEC · Vara cível'},
+      {l:'Contestação',      v:'defesa',          s:'Resposta à ação judicial'},
+      {l:'Recurso',          v:'recurso',         s:'Apelação · Embargos · Agravo'},
+      {l:'Manifestação',     v:'manifestacao',    s:'Petição complementar · Memorial'},
+      {l:'Contrato',         v:'contrato',        s:'Prestação de serviços · Honorários'},
+      {l:'Parecer',          v:'parecer',         s:'Opinião jurídica fundamentada'},
+      {l:'Notificação',      v:'notificacao',     s:'Extrajudicial · Interpelação'},
+    ]});
+
+    // ── 2a. Subtipo de contrato ──────────────────────────────────────
+    if(d.tipo==='contrato'){
+      steps.push({key:'subtipo',type:'chips',ask:()=>'Que tipo de contrato?',opts:[
+        {l:'Prestação de serviços',    v:'servicos'},
+        {l:'Honorários advocatícios',  v:'honorarios'},
+        {l:'Confidencialidade (NDA)',  v:'nda'},
+        {l:'Locação',                  v:'locacao'},
+        {l:'Outro',                    v:'outro'},
+      ]});
+    }
+
+    // ── 2b. Área jurídica (exceto Contrato e Parecer) ────────────────
+    if(d.tipo&&d.tipo!=='contrato'&&d.tipo!=='parecer'){
+      steps.push({key:'area',type:'chips',ask:()=>'Qual é a área jurídica?',opts:[
         {l:'⚖️ Consumidor',v:'consumidor',s:'CDC · JEC · Marketplace'},
-        {l:'📋 Civil',v:'civil',s:'CC · Contratos · Danos'},
+        {l:'📋 Civil',      v:'civil',     s:'CC · Contratos · Danos'},
         {l:'👷 Trabalhista',v:'trabalhista',s:'CLT · TST · Rescisão'},
-        {l:'👨‍👩‍👧 Família',v:'familia',s:'Guarda · Alimentos'},
-      ]},
-      {key:'tipo',type:'chips',ask:(d)=>`${this._aL(d.area)} — que tipo de peça?`,opts:[
-        {l:'Petição Inicial',v:'peticao_inicial'},{l:'Contestação',v:'defesa'},
-        {l:'Recurso',v:'recurso'},{l:'Notificação',v:'notificacao'},{l:'Contrato',v:'contrato'},
-      ]},
-      {key:'autor',type:'text',ask:()=>'Qual é o nome e qualificação do autor?',ph:'Ex: João Silva, brasileiro, solteiro, engenheiro...'},
-      {key:'reu',type:'text',ask:()=>'Quem é o réu nesta ação?',ph:'Ex: Samsung Electronics Brasil Ltda., CNPJ...'},
-      {key:'fatos',type:'textarea',ask:()=>'Descreva os fatos — com datas, valores e o que aconteceu:',ph:'Quanto mais detalhes, melhor a qualidade da peça...'},
-      {key:'pedido',type:'textarea',ask:()=>'Qual é o pedido?',ph:'Ex: Substituição do produto, indenização...'},
-    ];
-    if(lawyers.length>0) base.push({
-      key:'responsavel',type:'chips',
+        {l:'👨‍👩‍👧 Família',  v:'familia',  s:'Guarda · Alimentos'},
+      ]});
+    }
+
+    // ── 3. Partes — labels variam por tipo ───────────────────────────
+    const isCtr=d.tipo==='contrato';
+    const isNtf=d.tipo==='notificacao';
+    steps.push({key:'autor',type:'text',
+      ask:()=>isCtr?'Qual é o nome e dados do contratante?':isNtf?'Quem é o notificante?':'Qual é o nome e qualificação do autor/requerente?',
+      ph:isCtr?'Ex: João Silva, empresário, CPF 000.000.000-00...':'Ex: João Silva, brasileiro, solteiro, engenheiro...'
+    });
+    steps.push({key:'reu',type:'text',
+      ask:()=>isCtr?'Qual é o nome e dados do contratado?':isNtf?'Quem é o notificado?':'Quem é o réu/requerido?',
+      ph:isCtr?'Ex: Empresa XYZ Ltda., CNPJ 00.000.000/0001-00...':'Ex: Samsung Electronics Brasil Ltda., CNPJ...'
+    });
+
+    // ── 4. Fatos / Objeto ────────────────────────────────────────────
+    steps.push({key:'fatos',type:'textarea',
+      ask:()=>isCtr?'Descreva o objeto e contexto do contrato:':'Descreva os fatos — com datas, valores e o que ocorreu:',
+      ph:isCtr?'Ex: Prestação de serviços de consultoria jurídica por 12 meses, valor R$ 5.000/mês...':'Quanto mais detalhes, melhor a qualidade da peça...'
+    });
+
+    // ── 5. Pedido / Objetivo ─────────────────────────────────────────
+    steps.push({key:'pedido',type:'textarea',
+      ask:()=>isCtr?'Qual é o objetivo e cláusulas principais desejadas?':'Qual é o pedido?',
+      ph:isCtr?'Ex: Prazo 12 meses, pagamento mensal, cláusula de confidencialidade e multa...':'Ex: Substituição do produto, indenização por danos morais...'
+    });
+
+    // ── 6. Responsável ───────────────────────────────────────────────
+    if(lawyers.length>0) steps.push({key:'responsavel',type:'chips',
       ask:()=>'Qual advogado será responsável por esta peça?',
       opts:lawyers.map(l=>({l:l.nome,v:String(l.id),s:`OAB/${l.uf} nº ${l.oab}`})),
     });
-    return base;
+
+    return steps;
   }
-  _aL(a){return{consumidor:'Consumidor',civil:'Civil',trabalhista:'Trabalhista',familia:'Família'}[a]||a;}
-  _tL(t){return{peticao_inicial:'Petição Inicial',defesa:'Contestação',recurso:'Recurso',notificacao:'Notificação',contrato:'Contrato'}[t]||t;}
+  _aL(a){return{consumidor:'Consumidor',civil:'Civil',trabalhista:'Trabalhista',familia:'Família'}[a]||'Jurídico';}
+  _tL(t){return{
+    peticao_inicial:'Petição Inicial',defesa:'Contestação',recurso:'Recurso',
+    notificacao:'Notificação',contrato:'Contrato',parecer:'Parecer',manifestacao:'Manifestação'
+  }[t]||'Documento';}
   _parse(txt){
     if(!txt)return;const lo=txt.toLowerCase();
-    if(lo.match(/consumidor|cdc|produto|jec|saúde|samsung/))this.data.area='consumidor';
-    else if(lo.match(/trabalhista|clt|rescisão|emprego/))this.data.area='trabalhista';
-    else if(lo.match(/família|guarda|alimentos/))this.data.area='familia';
-    else if(lo.match(/civil|contrato|dano/))this.data.area='civil';
-    if(lo.match(/contestação/))this.data.tipo='defesa';
-    else if(lo.match(/recurso/))this.data.tipo='recurso';
+    if(lo.match(/contestação|defesa/))this.data.tipo='defesa';
+    else if(lo.match(/recurso|apelação/))this.data.tipo='recurso';
     else if(lo.match(/contrato/))this.data.tipo='contrato';
+    else if(lo.match(/notificação/))this.data.tipo='notificacao';
+    else if(lo.match(/parecer/))this.data.tipo='parecer';
+    else if(lo.match(/manifestação/))this.data.tipo='manifestacao';
     else if(lo.match(/petição|inicial/))this.data.tipo='peticao_inicial';
   }
   reset(ctx=null){
@@ -1560,7 +1606,8 @@ class ConversationEngine{
     }catch(e){}
     textoGerado='';
     try{
-      const resp=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({area:this.data.area,tipo:this.data.tipo,autor:this.data.autor,reu:this.data.reu,fatos:this.data.fatos,pedido:this.data.pedido||'',estilo:'',chunks_acervo:ca})});
+      const _area=this.data.area||(['contrato','parecer'].includes(this.data.tipo)?'civil':'consumidor');
+      const resp=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({area:_area,tipo:this.data.tipo,subtipo:this.data.subtipo||'',autor:this.data.autor,reu:this.data.reu,fatos:this.data.fatos,pedido:this.data.pedido||'',estilo:'',chunks_acervo:ca})});
       if(!resp.ok||!resp.headers.get('content-type')?.includes('event-stream')){const t=await resp.text();let m='Erro '+resp.status;try{m=JSON.parse(t).error||m;}catch(e){}throw new Error(m);}
       const reader=resp.body.getReader(),dec=new TextDecoder();
       while(true){const{done,value}=await reader.read();if(done)break;for(const ln of dec.decode(value).split('\n')){if(!ln.startsWith('data: '))continue;const p=ln.slice(6);if(p==='[DONE]')break;try{const d=JSON.parse(p);if(d.type==='content_block_delta'&&d.delta?.type==='text_delta'){textoGerado+=d.delta.text;renderDoc(textoGerado,true);}}catch(e){}}}

@@ -433,10 +433,20 @@ Súmula 358 STJ — Cancelamento de alimentos do filho maior: depende de decisã
 
 const TIPO_LABELS = {
   peticao_inicial: 'Petição Inicial',
-  recurso:         'Recurso / Apelação',
-  notificacao:     'Notificação Extrajudicial',
-  contrato:        'Contrato',
   defesa:          'Contestação / Defesa',
+  recurso:         'Recurso / Apelação',
+  manifestacao:    'Manifestação / Memorial',
+  contrato:        'Contrato',
+  parecer:         'Parecer Jurídico',
+  notificacao:     'Notificação Extrajudicial',
+};
+
+const SUBTIPO_LABELS = {
+  servicos:   'Prestação de Serviços',
+  honorarios: 'Honorários Advocatícios',
+  nda:        'Confidencialidade (NDA)',
+  locacao:    'Locação',
+  outro:      'Contrato Diverso',
 };
 
 const AREA_LABELS = {
@@ -453,7 +463,7 @@ app.post('/api/gerar', async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const { area='consumidor', tipo='peticao_inicial', autor, reu, fatos, pedido, estilo='', chunks_acervo=[] } = req.body || {};
+  const { area='consumidor', tipo='peticao_inicial', subtipo='', autor, reu, fatos, pedido, estilo='', chunks_acervo=[] } = req.body || {};
 
   if (!autor || !fatos)
     return res.status(400).json({ error: 'Campos obrigatórios: autor, fatos.' });
@@ -463,6 +473,7 @@ app.post('/api/gerar', async (req, res) => {
 
   const areaLabel    = AREA_LABELS[area]  || AREA_LABELS.consumidor;
   const tipoLabel    = TIPO_LABELS[tipo]  || 'Petição Inicial';
+  const subtipoLabel = subtipo ? (SUBTIPO_LABELS[subtipo] || subtipo) : '';
   const contexto     = LEGAL_CONTEXTS[area] || LEGAL_CONTEXTS.consumidor;
   const today        = new Date().toLocaleDateString('pt-BR', {
     day:'2-digit', month:'long', year:'numeric', timeZone:'America/Sao_Paulo'
@@ -483,7 +494,7 @@ LEGISLAÇÃO E JURISPRUDÊNCIA RELEVANTE:
 ${contexto}
 ───────────────────────────────────────
 
-TAREFA: Redija uma ${tipoLabel} completa para ${areaLabel}.
+TAREFA: Redija ${subtipoLabel?`um ${subtipoLabel} (${tipoLabel})`:`uma ${tipoLabel} para ${areaLabel}`} completo(a) e formal.
 
 DADOS DO AUTOR / RECLAMANTE:
 ${autor}
