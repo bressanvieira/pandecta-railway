@@ -2006,11 +2006,13 @@ async function handleFiles(files){
       const texto=await lerArq(f);if(!texto.trim())continue;
       const chunks=chunkar(texto,f.name);
       const lo=f.name.toLowerCase();
-      let tipo='Outro';
-      if(lo.match(/contrat/))tipo='Contrato';
-      else if(lo.match(/petição|peticao|inicial/))tipo='Petição';
-      else if(lo.match(/parecer/))tipo='Parecer';
-      else if(lo.match(/modelo/))tipo='Modelo';
+      let tipo=(tipoSel&&tipoSel!=='Todos')?tipoSel:'Outro';
+      if(tipo==='Outro'){
+        if(lo.match(/contrat/))tipo='Contrato';
+        else if(lo.match(/petição|peticao|inicial/))tipo='Petição';
+        else if(lo.match(/parecer/))tipo='Parecer';
+        else if(lo.match(/modelo/))tipo='Modelo';
+      }
       const result=await api('POST','/api/acervo',{nome:f.name,tipo,chunks,tamanho:f.size,enviado_por:usuario||''});
       sessionFiles.push(result);ok++;
     }catch(e){console.error(f.name,e);}

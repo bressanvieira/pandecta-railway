@@ -91,7 +91,18 @@ try {
 // ── MIDDLEWARE ────────────────────────────────────────────────────────────────
 
 app.use(express.json({ limit: '10mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: '30d',
+  etag: true,
+  setHeaders: (res, filePath) => {
+    // index.html nunca fica em cache — garante que o usuário sempre carrega a versão atual
+    if (filePath.endsWith('index.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
+// Servir logos da pasta brand/ com cache longo
+app.use('/brand', express.static(path.join(__dirname, 'brand'), { maxAge: '30d', etag: true }));
 
 // ── LAWYERS ───────────────────────────────────────────────────────────────────
 
