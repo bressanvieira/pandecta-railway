@@ -181,6 +181,52 @@ app.get('/api/auth/me', requireAuth, (req, res) => {
   res.json({ userId: req.user.userId, email: req.user.email, nome: req.user.nome, role: req.user.role });
 });
 
+// ── USERS CRUD (admin only) ───────────────────────────────────────────────────
+
+function requireAdmin(req, res, next) {
+  if (req.user.role !== 'admin') return res.status(403).json({ error: 'Acesso restrito a administradores.' });
+  next();
+}
+
+app.get('/api/users', requireAuth, requireAdmin, (req, res) => {
+  if (!db) return res.json([]);
+  try {
+    res.json(db.prepare('SELECT id, email, nome, role, created_at FROM users ORDER BY created_at DESC').all());
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/users/:id', requireAuth, requireAdmin, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { nome = '', email = '', role = 'user', password = '' } = req.body;
+  if (!email) return res.status(400).json({ error: 'Email obrigatório.' });
+  try {
+    if (password) {
+      if (password.length < 8) return res.status(400).json({ error: 'Senha deve ter no mínimo 8 caracteres.' });
+      db.prepare('UPDATE users SET nome=?, email=?, role=?, password_hash=? WHERE id=?').run(
+        nome.trim(), email.trim().toLowerCase(), role, bcrypt.hashSync(password, 10), req.params.id
+      );
+    } else {
+      db.prepare('UPDATE users SET nome=?, email=?, role=? WHERE id=?').run(
+        nome.trim(), email.trim().toLowerCase(), role, req.params.id
+      );
+    }
+    res.json({ ok: true });
+  } catch (e) {
+    if (e.message.includes('UNIQUE')) return res.status(409).json({ error: 'Email já cadastrado.' });
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.delete('/api/users/:id', requireAuth, requireAdmin, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  if (String(req.params.id) === String(req.user.userId))
+    return res.status(400).json({ error: 'Não é possível excluir o próprio usuário.' });
+  try {
+    db.prepare('DELETE FROM users WHERE id=?').run(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 // ── LAWYERS ───────────────────────────────────────────────────────────────────
 
 app.get('/api/lawyers', requireAuth, (req, res) => {

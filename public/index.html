@@ -321,6 +321,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* lawyers list */
 .lawyers-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
 .law-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:16px;display:flex;align-items:center;gap:14px;}
+.role-badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600;}
+.role-admin{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-bd);}
+.role-user{background:var(--card);color:var(--t3);border:1px solid var(--bd-md);}
 .law-av{width:40px;height:40px;border-radius:50%;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#FFF;flex-shrink:0;}
 .law-info{flex:1;min-width:0;}
 .law-name{font-size:13.5px;font-weight:600;color:var(--t1);margin-bottom:2px;}
@@ -536,7 +539,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 5-4s5 1.5 5 4"/>
           </svg>
-          <input id="inp-user" type="text" placeholder="seu.usuario" autocomplete="username">
+          <input id="inp-user" type="email" placeholder="seu@email.com" autocomplete="email">
         </div>
       </div>
 
@@ -581,7 +584,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
             <div class="dd-item" onclick="go('equipe')">👥 Equipe</div>
             <div class="dd-sep"></div>
-            <div class="dd-item" onclick="go('login')">🔒 Sair</div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
           </div>
         </div>
       </div>
@@ -663,7 +666,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
             <div class="dd-item" onclick="go('equipe')">👥 Equipe</div>
             <div class="dd-sep"></div>
-            <div class="dd-item" onclick="go('login')">🔒 Sair</div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
           </div>
         </div>
       </div>
@@ -707,7 +710,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="main-area">
       <div class="topbar">
         <div class="tb-left"><span class="tb-crumb" onclick="go('home')">Início</span><span class="tb-sep">/</span><span class="tb-page">Histórico</span></div>
-        <div class="tb-right"><div class="tb-user" onclick="toggleDD('dd-hist')"><div class="tb-av" id="av-hist">A</div><div><div class="tb-uname" id="nm-hist">–</div><div class="tb-usess">Sessão atual</div></div></div><div class="tb-dropdown" id="dd-hist"><div class="dd-item" onclick="go('config')">⚙️ Configurações</div><div class="dd-item" onclick="go('equipe')">👥 Equipe</div><div class="dd-sep"></div><div class="dd-item" onclick="go('login')">🔒 Sair</div></div></div>
+        <div class="tb-right"><div class="tb-user" onclick="toggleDD('dd-hist')"><div class="tb-av" id="av-hist">A</div><div><div class="tb-uname" id="nm-hist">–</div><div class="tb-usess">Sessão atual</div></div></div><div class="tb-dropdown" id="dd-hist"><div class="dd-item" onclick="go('config')">⚙️ Configurações</div><div class="dd-item" onclick="go('equipe')">👥 Equipe</div><div class="dd-sep"></div><div class="dd-item" onclick="fazerLogout()">🔒 Sair</div></div></div>
       </div>
       <!-- Lista -->
       <div class="page-body" id="hist-list-body">
@@ -763,7 +766,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
             <div class="dd-item" onclick="go('equipe')">👥 Equipe</div>
             <div class="dd-sep"></div>
-            <div class="dd-item" onclick="go('login')">🔒 Sair</div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
           </div>
         </div>
       </div>
@@ -866,7 +869,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="tb-dropdown" id="dd-cfg">
             <div class="dd-item" onclick="go('equipe')">👥 Equipe</div>
             <div class="dd-sep"></div>
-            <div class="dd-item" onclick="go('login')">🔒 Sair</div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
           </div>
         </div>
       </div>
@@ -983,7 +986,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="tb-dropdown" id="dd-sup">
             <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
             <div class="dd-sep"></div>
-            <div class="dd-item" onclick="go('login')">🔒 Sair</div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
           </div>
         </div>
       </div>
@@ -1109,7 +1112,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="tb-dropdown" id="dd-eq">
             <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
             <div class="dd-sep"></div>
-            <div class="dd-item" onclick="go('login')">🔒 Sair</div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
           </div>
         </div>
       </div>
@@ -1205,6 +1208,7 @@ if(typeof pdfjsLib!=='undefined') pdfjsLib.GlobalWorkerOptions.workerSrc='https:
 
 let authToken=localStorage.getItem('pandecta_token')||null;
 let usuario=localStorage.getItem('pandecta_user')||null;
+let userRole=localStorage.getItem('pandecta_role')||'user';
 let tipoSel='Todos', textoGerado='';
 let sessionFiles=[];
 let sessionHistory=[], officeData={}, lawyers=[], editingLawId=null;
@@ -1241,6 +1245,7 @@ function mkSidebar(active){
     {id:'',         label:'Modelos',       icon:'<rect x="3" y="2" width="12" height="16" rx="2"/><path d="M6 7h6M6 10h6M6 13h4"/>',              dim:true},
     {id:'equipe',   label:'Equipe',        icon:'<circle cx="7" cy="6" r="3"/><path d="M2 17c0-3 2.5-5 5-5s5 2 5 5"/><circle cx="14" cy="6" r="2.5"/><path d="M15.5 17c0-2 1.5-3.5 3-3.5"/>',action:"go('equipe')"},
     {id:'config',   label:'Configurações', icon:'<circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1.1 1.1M12.8 12.8l1.1 1.1M4.1 13.9l1.1-1.1M12.8 5.2l1.1-1.1"/>',action:"go('config')"},
+    ...(userRole==='admin'?[{id:'admin', label:'Admin', icon:'<circle cx="9" cy="6" r="3"/><path d="M2 17c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><path d="M13 3l1.5 1.5L17 2"/>',action:"go('admin')"}]:[]),
   ];
   return `<nav class="sidebar">
     <div class="sb-top">
@@ -1275,7 +1280,7 @@ function mkSidebar(active){
 function go(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
-  ['home','gen','hist','ac','config','equipe','sup'].forEach(sfx=>{
+  ['home','gen','hist','ac','config','equipe','sup','admin'].forEach(sfx=>{
     const el=document.getElementById('sb-'+sfx);
     if(el) el.innerHTML=mkSidebar(s);
   });
@@ -1285,6 +1290,7 @@ function go(s){
   if(s==='config') carregarConfig();
   if(s==='equipe') renderLawyers();
   if(s==='suporte') initSuporte();
+  if(s==='admin') loadUsers();
 }
 function updateAvatars(){
   const init=usuario?usuario[0].toUpperCase():'A';
@@ -1314,8 +1320,10 @@ async function fazerLogin(){
     if(!r.ok){err.textContent=data.error||'Email ou senha incorretos.';err.style.display='block';return;}
     authToken=data.token;
     usuario=data.nome||data.email;
+    userRole=data.role||'user';
     localStorage.setItem('pandecta_token',authToken);
     localStorage.setItem('pandecta_user',usuario);
+    localStorage.setItem('pandecta_role',userRole);
     await loadData();
     go('home');
   }catch(e){err.textContent='Erro ao conectar. Tente novamente.';err.style.display='block';}
@@ -1323,9 +1331,10 @@ async function fazerLogin(){
 }
 
 function fazerLogout(){
-  authToken=null;usuario=null;
+  authToken=null;usuario=null;userRole='user';
   localStorage.removeItem('pandecta_token');
   localStorage.removeItem('pandecta_user');
+  localStorage.removeItem('pandecta_role');
   location.reload();
 }
 document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin();});
@@ -2054,7 +2063,169 @@ function scrB(){const el=document.getElementById('chat-msgs');setTimeout(()=>{el
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(msg,tipo='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+tipo;setTimeout(()=>{el.className='toast';},2600);}
 
-['home','gen','hist','ac','config','equipe','sup'].forEach(sfx=>{const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');});
+['home','gen','hist','ac','config','equipe','sup','admin'].forEach(sfx=>{const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');});
+
+// ════ ADMIN — USERS ════
+let adminEditId=null;
+
+async function loadUsers(){
+  try{
+    const users=await api('GET','/api/users');
+    const grid=document.getElementById('users-grid');
+    const empty=document.getElementById('users-empty');
+    if(!users||!users.length){grid.innerHTML='';empty.style.display='block';return;}
+    empty.style.display='none';
+    grid.innerHTML=users.map(u=>`
+      <div class="law-card">
+        <div class="law-av">${(u.nome||u.email)[0].toUpperCase()}</div>
+        <div class="law-info">
+          <div class="law-name">${esc(u.nome||'–')}</div>
+          <div class="law-meta">${esc(u.email)} · <span class="role-badge role-${u.role}">${u.role}</span></div>
+          <div class="law-meta" style="margin-top:2px;font-size:11px;opacity:.5">desde ${new Date(u.created_at).toLocaleDateString('pt-BR')}</div>
+        </div>
+        <div class="law-actions">
+          <button class="law-btn" onclick="openUserModal(${u.id},'${esc(u.nome)}','${esc(u.email)}','${u.role}')">Editar</button>
+          <button class="law-btn del" onclick="deleteUser(${u.id},'${esc(u.nome||u.email)}')">Excluir</button>
+        </div>
+      </div>`).join('');
+  }catch(e){toast('Erro ao carregar usuários','err');}
+}
+
+function openUserModal(id=null,nome='',email='',role='user'){
+  adminEditId=id;
+  document.getElementById('user-form-title').textContent=id?'Editar usuário':'Novo usuário';
+  document.getElementById('user-nome').value=nome;
+  document.getElementById('user-email').value=email;
+  document.getElementById('user-role').value=role;
+  document.getElementById('user-pass').value='';
+  document.getElementById('user-pass-hint').style.display=id?'block':'none';
+  document.getElementById('user-form-panel').style.display='flex';
+}
+
+function closeUserModal(){
+  adminEditId=null;
+  document.getElementById('user-form-panel').style.display='none';
+}
+
+async function saveUser(){
+  const nome=document.getElementById('user-nome').value.trim();
+  const email=document.getElementById('user-email').value.trim();
+  const role=document.getElementById('user-role').value;
+  const password=document.getElementById('user-pass').value;
+  if(!email){toast('Email obrigatório','err');return;}
+  if(!adminEditId&&!password){toast('Senha obrigatória para novo usuário','err');return;}
+  try{
+    if(adminEditId){
+      await api('PUT','/api/users/'+adminEditId,{nome,email,role,password});
+      toast('Usuário atualizado');
+    }else{
+      await api('POST','/api/auth/register',{nome,email,role,password});
+      toast('Usuário criado');
+    }
+    closeUserModal();
+    loadUsers();
+  }catch(e){toast(e.message,'err');}
+}
+
+async function deleteUser(id,nome){
+  if(!confirm('Excluir usuário "'+nome+'"? Esta ação não pode ser desfeita.'))return;
+  try{
+    await api('DELETE','/api/users/'+id);
+    toast('Usuário excluído');
+    loadUsers();
+  }catch(e){toast(e.message,'err');}
+}
 </script>
+
+<!-- ════ ADMIN ════ -->
+<div id="screen-admin" class="screen">
+  <div class="app-shell">
+    <div id="sb-admin"></div>
+    <div class="main-area">
+      <div class="topbar">
+        <div class="tb-left">
+          <span class="tb-crumb" onclick="go('home')">Início</span>
+          <span class="tb-sep">/</span>
+          <span class="tb-page">Administração</span>
+        </div>
+        <div class="tb-right">
+          <div class="tb-user" onclick="toggleDD('dd-adm')">
+            <div class="tb-av" id="av-adm">A</div>
+            <div><div class="tb-uname" id="nm-adm">–</div><div class="tb-usess">Admin</div></div>
+          </div>
+          <div class="tb-dropdown" id="dd-adm">
+            <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <div class="page-h">Usuários do sistema</div>
+        <div class="page-s">Gerencie os usuários com acesso ao Pandecta. Apenas administradores podem criar, editar ou excluir usuários.</div>
+
+        <div class="equipe-layout">
+          <div class="equipe-main">
+            <button class="add-law-btn" onclick="openUserModal()">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="7" y1="12" x2="7" y2="2"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+              Novo usuário
+            </button>
+            <div class="lawyers-grid" id="users-grid"></div>
+            <div class="law-empty" id="users-empty" style="display:none">Nenhum usuário cadastrado.</div>
+          </div>
+
+          <div class="equipe-form-panel" id="user-form-panel" style="display:none">
+            <div class="law-form-card">
+              <div class="law-form-title" id="user-form-title">Novo usuário</div>
+
+              <div class="lf">
+                <label>Nome</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 5-4s5 1.5 5 4"/></svg>
+                  <input id="user-nome" type="text" placeholder="Nome completo">
+                </div>
+              </div>
+
+              <div class="lf">
+                <label>Email</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="3.5" width="11" height="7" rx="1.5"/><path d="M1.5 5l5.5 3.5L12.5 5"/></svg>
+                  <input id="user-email" type="email" placeholder="usuario@email.com">
+                </div>
+              </div>
+
+              <div class="lf">
+                <label>Perfil</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 5-4s5 1.5 5 4"/></svg>
+                  <select id="user-role" style="width:100%;border:none;background:transparent;font-size:13px;outline:none;padding-left:4px">
+                    <option value="user">Usuário</option>
+                    <option value="admin">Administrador</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="lf">
+                <label>Senha</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2.5" y="6" width="9" height="6" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 015 0V6"/></svg>
+                  <input id="user-pass" type="password" placeholder="Mínimo 8 caracteres">
+                </div>
+                <div id="user-pass-hint" style="display:none;font-size:11px;color:var(--t3);margin-top:4px">Deixe em branco para manter a senha atual.</div>
+              </div>
+
+              <div class="law-form-actions">
+                <button class="law-cancel-btn" onclick="closeUserModal()">Cancelar</button>
+                <button class="law-save-btn" onclick="saveUser()">Salvar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
