@@ -1203,17 +1203,21 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <script>
 if(typeof pdfjsLib!=='undefined') pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-const USERS={fabiano:'Pandecta2026',admin:'Pandecta2026'};
-let usuario=null, tipoSel='Todos', textoGerado='';
+let authToken=localStorage.getItem('pandecta_token')||null;
+let usuario=localStorage.getItem('pandecta_user')||null;
+let tipoSel='Todos', textoGerado='';
 let sessionFiles=[];
 let sessionHistory=[], officeData={}, lawyers=[], editingLawId=null;
 let histItemAtual=null;
 
 // ════ API HELPER ════
 async function api(method,path,body){
-  const opts={method,headers:{'Content-Type':'application/json'}};
+  const headers={'Content-Type':'application/json'};
+  if(authToken) headers['Authorization']='Bearer '+authToken;
+  const opts={method,headers};
   if(body) opts.body=JSON.stringify(body);
   const r=await fetch(path,opts);
+  if(r.status===401){fazerLogout();return;}
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error||'Erro '+r.status);}
   return r.json();
 }
@@ -1301,14 +1305,28 @@ async function fazerLogin(){
   const u=document.getElementById('inp-user').value.trim().toLowerCase();
   const p=document.getElementById('inp-pass').value;
   const err=document.getElementById('login-err');
-  if(USERS[u]&&USERS[u]===p){
-    usuario=u;err.style.display='none';
+  const btn=document.querySelector('.login-btn');
+  err.style.display='none';
+  btn.textContent='Entrando...';btn.disabled=true;
+  try{
+    const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:u,password:p})});
+    const data=await r.json();
+    if(!r.ok){err.textContent=data.error||'Email ou senha incorretos.';err.style.display='block';return;}
+    authToken=data.token;
+    usuario=data.nome||data.email;
+    localStorage.setItem('pandecta_token',authToken);
+    localStorage.setItem('pandecta_user',usuario);
     await loadData();
-    ['home','gen','hist','ac','config','equipe'].forEach(sfx=>{
-      const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');
-    });
     go('home');
-  }else{err.style.display='block';}
+  }catch(e){err.textContent='Erro ao conectar. Tente novamente.';err.style.display='block';}
+  finally{btn.textContent='Entrar';btn.disabled=false;}
+}
+
+function fazerLogout(){
+  authToken=null;usuario=null;
+  localStorage.removeItem('pandecta_token');
+  localStorage.removeItem('pandecta_user');
+  location.reload();
 }
 document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin();});
 
@@ -1336,7 +1354,7 @@ async function perguntarAssistente(){
   wrap.style.display='block';
   textEl.innerHTML='<span class="cur"></span>';
   try{
-    const resp=await fetch('/api/assistente',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pergunta:txt})});
+    const resp=await fetch('/api/assistente',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({pergunta:txt})});
     if(!resp.ok||!resp.headers.get('content-type')?.includes('event-stream')){
       const e=await resp.json().catch(()=>({}));textEl.textContent=e.error||'Erro ao conectar.';return;
     }
@@ -1418,7 +1436,7 @@ async function enviarSuporte(){
   const tid=_supTyping();
   try{
     const resp=await fetch('/api/assistente',{
-      method:'POST',headers:{'Content-Type':'application/json'},
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
       body:JSON.stringify({pergunta:txt,historico:supHistory})
     });
     document.getElementById(tid)?.remove();
@@ -1607,7 +1625,7 @@ class ConversationEngine{
     textoGerado='';
     try{
       const _area=this.data.area||(['contrato','parecer'].includes(this.data.tipo)?'civil':'consumidor');
-      const resp=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({area:_area,tipo:this.data.tipo,subtipo:this.data.subtipo||'',autor:this.data.autor,reu:this.data.reu,fatos:this.data.fatos,pedido:this.data.pedido||'',estilo:'',chunks_acervo:ca})});
+      const resp=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({area:_area,tipo:this.data.tipo,subtipo:this.data.subtipo||'',autor:this.data.autor,reu:this.data.reu,fatos:this.data.fatos,pedido:this.data.pedido||'',estilo:'',chunks_acervo:ca})});
       if(!resp.ok||!resp.headers.get('content-type')?.includes('event-stream')){const t=await resp.text();let m='Erro '+resp.status;try{m=JSON.parse(t).error||m;}catch(e){}throw new Error(m);}
       const reader=resp.body.getReader(),dec=new TextDecoder();
       while(true){const{done,value}=await reader.read();if(done)break;for(const ln of dec.decode(value).split('\n')){if(!ln.startsWith('data: '))continue;const p=ln.slice(6);if(p==='[DONE]')break;try{const d=JSON.parse(p);if(d.type==='content_block_delta'&&d.delta?.type==='text_delta'){textoGerado+=d.delta.text;renderDoc(textoGerado,true);}}catch(e){}}}

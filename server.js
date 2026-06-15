@@ -12,6 +12,10 @@ const express   = require('express');
 const Anthropic  = require('@anthropic-ai/sdk');
 const path      = require('path');
 const fs        = require('fs');
+const bcrypt    = require('bcryptjs');
+const jwt       = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'pandecta-dev-secret-trocar-em-producao';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -76,12 +80,33 @@ try {
       enviado_por TEXT DEFAULT '',
       created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS users (
+      id            INTEGER PRIMARY KEY AUTOINCREMENT,
+      email         TEXT UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL,
+      nome          TEXT DEFAULT '',
+      role          TEXT DEFAULT 'user',
+      created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 
   // migrations — adiciona colunas sem quebrar banco existente
   try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN enviado_por TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE office ADD COLUMN logo TEXT DEFAULT ''`); } catch(e) {}
+
+  // seed — cria usuário admin padrão se não existir
+  const adminExists = db.prepare('SELECT id FROM users WHERE email=?').get('admin@pandecta.ai');
+  if (!adminExists) {
+    db.prepare('INSERT INTO users (email, password_hash, nome, role) VALUES (?,?,?,?)').run(
+      'admin@pandecta.ai',
+      bcrypt.hashSync('Pandecta@2026', 10),
+      'Administrador',
+      'admin'
+    );
+    console.log('✅  Usuário admin criado: admin@pandecta.ai / Pandecta@2026');
+  }
 
   console.log('✅  Database:', dbPath);
 } catch (err) {
@@ -104,16 +129,68 @@ app.use(express.static(path.join(__dirname, 'public'), {
 // Servir logos da pasta brand/ com cache longo
 app.use('/brand', express.static(path.join(__dirname, 'brand'), { maxAge: '30d', etag: true }));
 
+// ── AUTH MIDDLEWARE ───────────────────────────────────────────────────────────
+
+function requireAuth(req, res, next) {
+  const auth = req.headers.authorization;
+  if (!auth || !auth.startsWith('Bearer '))
+    return res.status(401).json({ error: 'Não autenticado.' });
+  try {
+    req.user = jwt.verify(auth.slice(7), JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ error: 'Token inválido ou expirado.' });
+  }
+}
+
+// ── AUTH ROUTES ───────────────────────────────────────────────────────────────
+
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email e senha obrigatórios.' });
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const user = db.prepare('SELECT * FROM users WHERE email=?').get(email.trim().toLowerCase());
+    if (!user || !bcrypt.compareSync(password, user.password_hash))
+      return res.status(401).json({ error: 'Email ou senha incorretos.' });
+    const token = jwt.sign({ userId: user.id, email: user.email, nome: user.nome, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, nome: user.nome, email: user.email, role: user.role });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/auth/register', requireAuth, (req, res) => {
+  // Só admin pode criar usuários
+  if (req.user.role !== 'admin') return res.status(403).json({ error: 'Sem permissão.' });
+  const { email, password, nome = '', role = 'user' } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email e senha obrigatórios.' });
+  if (password.length < 8) return res.status(400).json({ error: 'Senha deve ter no mínimo 8 caracteres.' });
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const hash = bcrypt.hashSync(password, 10);
+    const r = db.prepare('INSERT INTO users (email,password_hash,nome,role) VALUES (?,?,?,?)').run(
+      email.trim().toLowerCase(), hash, nome.trim(), role
+    );
+    res.json({ id: r.lastInsertRowid, email, nome, role });
+  } catch (e) {
+    if (e.message.includes('UNIQUE')) return res.status(409).json({ error: 'Email já cadastrado.' });
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/auth/me', requireAuth, (req, res) => {
+  res.json({ userId: req.user.userId, email: req.user.email, nome: req.user.nome, role: req.user.role });
+});
+
 // ── LAWYERS ───────────────────────────────────────────────────────────────────
 
-app.get('/api/lawyers', (req, res) => {
+app.get('/api/lawyers', requireAuth, (req, res) => {
   if (!db) return res.json([]);
   try {
     res.json(db.prepare('SELECT id, nome, oab, uf, email, cargo FROM lawyers ORDER BY nome ASC').all());
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/lawyers', (req, res) => {
+app.post('/api/lawyers', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   const { nome, oab = '', uf = '', email = '', cargo = '' } = req.body;
   if (!nome) return res.status(400).json({ error: 'Nome obrigatório.' });
@@ -125,7 +202,7 @@ app.post('/api/lawyers', (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.put('/api/lawyers/:id', (req, res) => {
+app.put('/api/lawyers/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   const { nome, oab = '', uf = '', email = '', cargo = '' } = req.body;
   try {
@@ -136,7 +213,7 @@ app.put('/api/lawyers/:id', (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.delete('/api/lawyers/:id', (req, res) => {
+app.delete('/api/lawyers/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   try {
     db.prepare('DELETE FROM lawyers WHERE id=?').run(req.params.id);
@@ -146,14 +223,14 @@ app.delete('/api/lawyers/:id', (req, res) => {
 
 // ── OFFICE ────────────────────────────────────────────────────────────────────
 
-app.get('/api/office', (req, res) => {
+app.get('/api/office', requireAuth, (req, res) => {
   if (!db) return res.json({});
   try {
     res.json(db.prepare('SELECT nome,endereco,cidade,cep,telefone,email,logo FROM office WHERE id=1').get() || {});
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.put('/api/office', (req, res) => {
+app.put('/api/office', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   const { nome = '', endereco = '', cidade = '', cep = '', telefone = '', email = '', logo = '' } = req.body;
   try {
@@ -166,7 +243,7 @@ app.put('/api/office', (req, res) => {
 
 // ── HISTORY ───────────────────────────────────────────────────────────────────
 
-app.get('/api/history', (req, res) => {
+app.get('/api/history', requireAuth, (req, res) => {
   if (!db) return res.json([]);
   try {
     res.json(db.prepare(
@@ -175,7 +252,7 @@ app.get('/api/history', (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/history', (req, res) => {
+app.post('/api/history', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   const { usuario='',tipo='',tipo_label='',area_label='',autor='',responsavel_id=null,texto='' } = req.body;
   try {
@@ -186,7 +263,7 @@ app.post('/api/history', (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.put('/api/history/:id', (req, res) => {
+app.put('/api/history/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   const { texto = '' } = req.body;
   try {
@@ -195,7 +272,7 @@ app.put('/api/history/:id', (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.delete('/api/history/:id', (req, res) => {
+app.delete('/api/history/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   try {
     db.prepare('DELETE FROM history WHERE id=?').run(req.params.id);
@@ -205,14 +282,14 @@ app.delete('/api/history/:id', (req, res) => {
 
 // ── ACERVO ────────────────────────────────────────────────────────────────────
 
-app.get('/api/acervo', (req, res) => {
+app.get('/api/acervo', requireAuth, (req, res) => {
   if (!db) return res.json([]);
   try {
     res.json(db.prepare('SELECT id,nome,tipo,chunk_count,tamanho,enviado_por,created_at FROM acervo ORDER BY created_at DESC').all());
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/acervo', (req, res) => {
+app.post('/api/acervo', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   const { nome, tipo = 'Outro', chunks = [], tamanho = 0, enviado_por = '' } = req.body;
   if (!nome) return res.status(400).json({ error: 'Nome obrigatório.' });
@@ -224,7 +301,7 @@ app.post('/api/acervo', (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.delete('/api/acervo/:id', (req, res) => {
+app.delete('/api/acervo/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   try {
     db.prepare('DELETE FROM acervo WHERE id=?').run(req.params.id);
@@ -232,7 +309,7 @@ app.delete('/api/acervo/:id', (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/acervo/buscar', (req, res) => {
+app.post('/api/acervo/buscar', requireAuth, (req, res) => {
   if (!db) return res.json([]);
   const { query = '', top = 5 } = req.body;
   const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
@@ -275,7 +352,7 @@ REGRAS:
 - Para dúvidas técnicas de uso, dê passos práticos
 - Máximo 3–4 parágrafos por resposta`;
 
-app.post('/api/assistente', async (req, res) => {
+app.post('/api/assistente', requireAuth, async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const { pergunta, historico = [] } = req.body || {};
   if (!pergunta) return res.status(400).json({ error: 'Pergunta obrigatória.' });
@@ -469,7 +546,7 @@ const AREA_LABELS = {
 
 // ── ROTA PRINCIPAL — GERAR ────────────────────────────────────────────────────
 
-app.post('/api/gerar', async (req, res) => {
+app.post('/api/gerar', requireAuth, async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin',  '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
