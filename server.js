@@ -617,7 +617,7 @@ app.post('/api/gerar', requireAuth, async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const { area='consumidor', tipo='peticao_inicial', subtipo='', autor, reu, fatos, pedido, estilo='', chunks_acervo=[] } = req.body || {};
+  const { area='consumidor', tipo='peticao_inicial', subtipo='', autor, reu, fatos, pedido, estilo='', chunks_acervo=[], chunks_memoria=[] } = req.body || {};
 
   if (!autor || !fatos)
     return res.status(400).json({ error: 'Campos obrigatórios: autor, fatos.' });

@@ -1651,15 +1651,14 @@ class ConversationEngine{
     document.getElementById('doc-paper').innerHTML='';
     document.getElementById('doc-dot').className='doc-dot live';
     document.getElementById('doc-lbl').textContent=`${this._tL(this.data.tipo)} — ${(this.data.autor||'').split(',')[0]}`;
-    let ca=[];
-    try{
-      const q=`${this.data.area} ${this.data.tipo} ${(this.data.fatos||'').slice(0,300)}`;
-      ca=await api('POST','/api/acervo/buscar',{query:q,top:5});
-    }catch(e){}
+    let ca=[], memoria=[];
+    const q=`${this.data.area} ${this.data.tipo} ${(this.data.fatos||'').slice(0,300)}`;
+    try{ ca=await api('POST','/api/acervo/buscar',{query:q,top:5}); }catch(e){}
+    try{ memoria=await api('POST','/api/memoria/consultar',{query:q,area:this.data.area||'',top:3}); }catch(e){}
     textoGerado='';
     try{
       const _area=this.data.area||(['contrato','parecer'].includes(this.data.tipo)?'civil':'consumidor');
-      const resp=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({area:_area,tipo:this.data.tipo,subtipo:this.data.subtipo||'',autor:this.data.autor,reu:this.data.reu,fatos:this.data.fatos,pedido:this.data.pedido||'',estilo:'',chunks_acervo:ca})});
+      const resp=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({area:_area,tipo:this.data.tipo,subtipo:this.data.subtipo||'',autor:this.data.autor,reu:this.data.reu,fatos:this.data.fatos,pedido:this.data.pedido||'',estilo:'',chunks_acervo:ca,chunks_memoria:memoria})});
       if(!resp.ok||!resp.headers.get('content-type')?.includes('event-stream')){const t=await resp.text();let m='Erro '+resp.status;try{m=JSON.parse(t).error||m;}catch(e){}throw new Error(m);}
       const reader=resp.body.getReader(),dec=new TextDecoder();
       while(true){const{done,value}=await reader.read();if(done)break;for(const ln of dec.decode(value).split('\n')){if(!ln.startsWith('data: '))continue;const p=ln.slice(6);if(p==='[DONE]')break;try{const d=JSON.parse(p);if(d.type==='content_block_delta'&&d.delta?.type==='text_delta'){textoGerado+=d.delta.text;renderDoc(textoGerado,true);}}catch(e){}}}
