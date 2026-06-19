@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pandecta AI — Inteligência Jurídica para Advogados</title>
+  <meta name="description" content="Gere petições, contratos e recursos com precisão técnica. O assistente jurídico com IA que aprende com o seu escritório.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #0D1B2A;
+      --navy2:    #122033;
+      --navy3:    #1a2d44;
+      --gold:     #C9A84C;
+      --gold-lt:  #d4b668;
+      --gold-bg:  rgba(201,168,76,.08);
+      --gold-bd:  rgba(201,168,76,.25);
+      --white:    #ffffff;
+      --off:      #f7f5f0;
+      --t1:       #0D1B2A;
+      --t2:       #3a4a5c;
+      --t3:       #7a8a9a;
+      --bdr:      #e8e4dc;
+      --r:        12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--t1);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ──────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px;
+      background: rgba(13,27,42,.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,76,.15);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo img { height: 30px; }
+    .nav-logo-text {
+      font-size: 17px; font-weight: 700; color: var(--white);
+      letter-spacing: -.3px;
+    }
+    .nav-logo-text span { color: var(--gold); }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link {
+      font-size: 13.5px; color: rgba(255,255,255,.65);
+      text-decoration: none; transition: color .15s;
+    }
+    .nav-link:hover { color: var(--white); }
+    .btn-nav {
+      padding: 8px 20px;
+      background: var(--gold); color: var(--navy);
+      border: none; border-radius: 8px;
+      font-size: 13.5px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: opacity .15s;
+    }
+    .btn-nav:hover { opacity: .88; }
+
+    /* ── HERO ─────────────────────────────────────────────────────────── */
+    .hero {
+      background: var(--navy);
+      padding: 140px 40px 100px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(201,168,76,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px;
+      background: var(--gold-bg); border: 1px solid var(--gold-bd);
+      border-radius: 20px;
+      font-size: 12px; font-weight: 500; color: var(--gold);
+      margin-bottom: 28px;
+    }
+    .hero-badge::before { content: '●'; font-size: 8px; }
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800; line-height: 1.1;
+      color: var(--white);
+      letter-spacing: -1.5px;
+      max-width: 820px; margin: 0 auto 24px;
+    }
+    .hero h1 em {
+      font-style: normal; color: var(--gold);
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 19px);
+      color: rgba(255,255,255,.6);
+      max-width: 600px; margin: 0 auto 44px;
+      line-height: 1.65;
+    }
+    .hero-ctas {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px;
+      background: var(--gold); color: var(--navy);
+      border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: all .15s;
+      box-shadow: 0 4px 24px rgba(201,168,76,.3);
+    }
+    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px;
+      background: transparent; color: rgba(255,255,255,.8);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 10px;
+      font-size: 15px; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      transition: all .15s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,.5); color: var(--white); }
+    .hero-note {
+      margin-top: 20px;
+      font-size: 12px; color: rgba(255,255,255,.35);
+    }
+
+    /* ── MOCKUP ───────────────────────────────────────────────────────── */
+    .mockup-wrap {
+      background: var(--navy);
+      padding: 0 40px 80px;
+      display: flex; justify-content: center;
+    }
+    .mockup {
+      width: 100%; max-width: 900px;
+      background: var(--navy2);
+      border: 1px solid rgba(201,168,76,.15);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,.5);
+    }
+    .mockup-bar {
+      padding: 12px 18px;
+      background: rgba(0,0,0,.3);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .mockup-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .mockup-dot:nth-child(1) { background: #ff5f57; }
+    .mockup-dot:nth-child(2) { background: #febc2e; }
+    .mockup-dot:nth-child(3) { background: #28c840; }
+    .mockup-url {
+      flex: 1; text-align: center;
+      font-size: 11px; color: rgba(255,255,255,.3);
+    }
+    .mockup-body {
+      display: flex; min-height: 340px;
+    }
+    .mockup-sidebar {
+      width: 200px; padding: 20px 14px;
+      background: rgba(0,0,0,.2);
+      border-right: 1px solid rgba(255,255,255,.06);
+      display: flex; flex-direction: column; gap: 4px;
+      flex-shrink: 0;
+    }
+    .mockup-logo-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 4px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      margin-bottom: 8px;
+    }
+    .mockup-logo-ico {
+      width: 24px; height: 24px;
+      background: var(--gold); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mockup-logo-ico svg { width: 14px; height: 14px; }
+    .mockup-brand-text { font-size: 12px; font-weight: 700; color: var(--white); }
+    .mockup-nav-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 10px; border-radius: 7px;
+      font-size: 12px; color: rgba(255,255,255,.5);
+    }
+    .mockup-nav-item.active {
+      background: rgba(201,168,76,.1);
+      color: var(--gold);
+    }
+    .mockup-nav-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor; flex-shrink: 0;
+    }
+    .mockup-main { flex: 1; padding: 24px; }
+    .mockup-tag {
+      display: inline-block;
+      padding: 3px 10px; border-radius: 20px;
+      background: var(--gold-bg); border: 1px solid var(--gold-bd);
+      font-size: 10px; font-weight: 600; color: var(--gold);
+      text-transform: uppercase; letter-spacing: .5px;
+      margin-bottom: 14px;
+    }
+    .mockup-h { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 12px; }
+    .mockup-lines { display: flex; flex-direction: column; gap: 6px; }
+    .mockup-line {
+      height: 8px; border-radius: 4px;
+      background: rgba(255,255,255,.08);
+    }
+    .mockup-line.w100 { width: 100%; }
+    .mockup-line.w85  { width: 85%; }
+    .mockup-line.w70  { width: 70%; }
+    .mockup-line.w90  { width: 90%; }
+    .mockup-line.w60  { width: 60%; }
+    .mockup-cursor {
+      display: inline-block; width: 2px; height: 14px;
+      background: var(--gold); margin-left: 4px;
+      animation: blink 1s step-end infinite; vertical-align: middle;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ── LOGOS / TRUST ─────────────────────────────────────────────────── */
+    .trust {
+      background: var(--off);
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid var(--bdr);
+    }
+    .trust-text {
+      font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: var(--t3); margin-bottom: 24px;
+    }
+    .trust-items {
+      display: flex; align-items: center; justify-content: center;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; color: var(--t2);
+    }
+    .trust-icon { font-size: 18px; }
+
+    /* ── FEATURES ─────────────────────────────────────────────────────── */
+    .section {
+      padding: 96px 40px;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .section-label {
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .section-h {
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 800; line-height: 1.15;
+      letter-spacing: -.8px; color: var(--t1);
+      max-width: 600px; margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 17px; color: var(--t2);
+      max-width: 520px; margin-bottom: 56px; line-height: 1.65;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      padding: 28px;
+      background: var(--white);
+      border: 1px solid var(--bdr);
+      border-radius: var(--r);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .feature-card:hover {
+      border-color: var(--gold-bd);
+      box-shadow: 0 4px 24px rgba(201,168,76,.08);
+    }
+    .feature-icon {
+      width: 44px; height: 44px;
+      background: var(--gold-bg); border: 1px solid var(--gold-bd);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 16px;
+    }
+    .feature-h {
+      font-size: 15px; font-weight: 700; color: var(--t1);
+      margin-bottom: 8px;
+    }
+    .feature-p {
+      font-size: 13.5px; color: var(--t2); line-height: 1.6;
+    }
+
+    /* ── HOW IT WORKS ─────────────────────────────────────────────────── */
+    .how-wrap {
+      background: var(--navy);
+      padding: 96px 40px;
+    }
+    .how-inner {
+      max-width: 1100px; margin: 0 auto;
+    }
+    .how-wrap .section-label { color: var(--gold); }
+    .how-wrap .section-h { color: var(--white); }
+    .how-wrap .section-sub { color: rgba(255,255,255,.55); }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 28px; margin-top: 48px;
+    }
+    .step {
+      display: flex; gap: 16px;
+    }
+    .step-num {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: var(--gold-bg); border: 1px solid var(--gold-bd);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: var(--gold);
+    }
+    .step-h { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
+    .step-p { font-size: 13.5px; color: rgba(255,255,255,.5); line-height: 1.6; }
+
+    /* ── AREAS ────────────────────────────────────────────────────────── */
+    .areas-wrap {
+      background: var(--off);
+      padding: 80px 40px;
+      text-align: center;
+    }
+    .areas-inner { max-width: 900px; margin: 0 auto; }
+    .areas-inner .section-h { margin: 0 auto 40px; }
+    .areas-grid {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      justify-content: center;
+    }
+    .area-pill {
+      padding: 10px 22px;
+      background: var(--white); border: 1px solid var(--bdr);
+      border-radius: 30px;
+      font-size: 14px; font-weight: 500; color: var(--t1);
+    }
+    .area-pill.gold {
+      background: var(--gold-bg); border-color: var(--gold-bd);
+      color: var(--gold);
+    }
+
+    /* ── PRICING ──────────────────────────────────────────────────────── */
+    .pricing-wrap {
+      padding: 96px 40px;
+      max-width: 900px; margin: 0 auto;
+      text-align: center;
+    }
+    .pricing-wrap .section-h { margin: 0 auto 16px; }
+    .pricing-wrap .section-sub { margin: 0 auto 56px; }
+    .pricing-card {
+      background: var(--navy);
+      border: 1px solid rgba(201,168,76,.2);
+      border-radius: 20px;
+      padding: 48px;
+      position: relative; overflow: hidden;
+    }
+    .pricing-card::before {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(201,168,76,.1) 0%, transparent 70%);
+    }
+    .pricing-badge {
+      display: inline-block;
+      padding: 4px 14px; border-radius: 20px;
+      background: var(--gold-bg); border: 1px solid var(--gold-bd);
+      font-size: 11px; font-weight: 600; color: var(--gold);
+      text-transform: uppercase; letter-spacing: .8px;
+      margin-bottom: 24px;
+    }
+    .pricing-price {
+      font-size: 56px; font-weight: 800;
+      color: var(--white); line-height: 1;
+      margin-bottom: 8px;
+    }
+    .pricing-price span {
+      font-size: 22px; font-weight: 500;
+      color: rgba(255,255,255,.5); vertical-align: top; margin-top: 10px; display: inline-block;
+    }
+    .pricing-period {
+      font-size: 14px; color: rgba(255,255,255,.4);
+      margin-bottom: 36px;
+    }
+    .pricing-items {
+      list-style: none; text-align: left;
+      display: inline-grid; grid-template-columns: 1fr 1fr;
+      gap: 12px 40px; margin-bottom: 40px;
+    }
+    .pricing-items li {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: rgba(255,255,255,.75);
+    }
+    .pricing-items li::before {
+      content: '✓';
+      color: var(--gold); font-weight: 700; flex-shrink: 0;
+    }
+    .btn-pricing {
+      display: inline-block;
+      padding: 16px 48px;
+      background: var(--gold); color: var(--navy);
+      border-radius: 10px; border: none;
+      font-size: 16px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: all .15s;
+      box-shadow: 0 4px 24px rgba(201,168,76,.35);
+    }
+    .btn-pricing:hover { opacity: .9; transform: translateY(-1px); }
+    .pricing-note {
+      margin-top: 14px;
+      font-size: 12px; color: rgba(255,255,255,.3);
+    }
+
+    /* ── QUOTE ────────────────────────────────────────────────────────── */
+    .quote-wrap {
+      background: var(--off);
+      padding: 80px 40px;
+      text-align: center;
+      border-top: 1px solid var(--bdr);
+    }
+    .quote {
+      max-width: 700px; margin: 0 auto;
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 500; line-height: 1.5;
+      color: var(--t1);
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+    .quote-by {
+      font-size: 13px; font-weight: 500;
+      color: var(--t3);
+    }
+    .quote-by strong { color: var(--t1); }
+
+    /* ── CTA FINAL ─────────────────────────────────────────────────────── */
+    .cta-final {
+      background: var(--navy);
+      padding: 96px 40px;
+      text-align: center;
+    }
+    .cta-final h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 800; line-height: 1.15;
+      color: var(--white); letter-spacing: -1px;
+      max-width: 680px; margin: 0 auto 20px;
+    }
+    .cta-final h2 em { font-style: normal; color: var(--gold); }
+    .cta-final p {
+      font-size: 17px; color: rgba(255,255,255,.55);
+      margin-bottom: 40px;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding: 36px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-logo {
+      font-size: 15px; font-weight: 700; color: var(--white);
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-link {
+      font-size: 13px; color: rgba(255,255,255,.35);
+      text-decoration: none; transition: color .15s;
+    }
+    .footer-link:hover { color: rgba(255,255,255,.7); }
+    .footer-copy {
+      font-size: 12px; color: rgba(255,255,255,.25);
+      width: 100%; text-align: center; margin-top: 8px;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      nav { padding: 0 20px; }
+      .hero { padding: 120px 20px 80px; }
+      .mockup-wrap { padding: 0 20px 60px; }
+      .mockup-sidebar { display: none; }
+      .section { padding: 64px 20px; }
+      .how-wrap { padding: 64px 20px; }
+      .areas-wrap { padding: 64px 20px; }
+      .pricing-wrap { padding: 64px 20px; }
+      .pricing-card { padding: 32px 20px; }
+      .pricing-items { grid-template-columns: 1fr; }
+      .cta-final { padding: 64px 20px; }
+      footer { padding: 28px 20px; flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+      .trust-items { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="/brand/pandecta-logo-horizontal.png" alt="Pandecta AI" onerror="this.style.display='none'">
+    <span class="nav-logo-text">Pandecta <span>AI</span></span>
+  </a>
+  <div class="nav-right">
+    <a class="nav-link" href="#funcionalidades">Funcionalidades</a>
+    <a class="nav-link" href="#precos">Preços</a>
+    <a class="btn-nav" href="/app">Entrar</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Novo · Inteligência Jurídica com IA</div>
+  <h1>A IA jurídica que <em>aprende com o seu escritório</em></h1>
+  <p class="hero-sub">
+    Gere petições, contestações, recursos e contratos com fundamentação técnica precisa.
+    Especializado em direito brasileiro, com memória do seu histórico de peças.
+  </p>
+  <div class="hero-ctas">
+    <a class="btn-primary" href="/app">
+      Começar agora
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+    <a class="btn-secondary" href="#funcionalidades">Ver funcionalidades</a>
+  </div>
+  <p class="hero-note">R$97/mês por advogado · Cancele quando quiser</p>
+</section>
+
+<!-- MOCKUP -->
+<div class="mockup-wrap">
+  <div class="mockup">
+    <div class="mockup-bar">
+      <div class="mockup-dot"></div>
+      <div class="mockup-dot"></div>
+      <div class="mockup-dot"></div>
+      <span class="mockup-url">pandecta.com.br/app</span>
+    </div>
+    <div class="mockup-body">
+      <div class="mockup-sidebar">
+        <div class="mockup-logo-row">
+          <div class="mockup-logo-ico">
+            <svg viewBox="0 0 14 14" fill="none" stroke="#0D1B2A" stroke-width="2" stroke-linecap="round"><path d="M7 2L2 5v7h10V5L7 2z"/></svg>
+          </div>
+          <span class="mockup-brand-text">Pandecta AI</span>
+        </div>
+        <div class="mockup-nav-item active"><div class="mockup-nav-dot"></div> Nova peça</div>
+        <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Histórico</div>
+        <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Acervo</div>
+        <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Equipe</div>
+        <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Configurações</div>
+      </div>
+      <div class="mockup-main">
+        <div class="mockup-tag">Petição Inicial · Consumidor</div>
+        <div class="mockup-h">Gerando peça para Maria da Silva vs. Operadora XYZ...<span class="mockup-cursor"></span></div>
+        <div class="mockup-lines">
+          <div class="mockup-line w100"></div>
+          <div class="mockup-line w85"></div>
+          <div class="mockup-line w90"></div>
+          <div class="mockup-line w70"></div>
+          <div class="mockup-line w100"></div>
+          <div class="mockup-line w60"></div>
+          <div class="mockup-line w85"></div>
+          <div class="mockup-line w90"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST -->
+<div class="trust">
+  <p class="trust-text">Validado por advogados · Fundamentação real · Atualizado com a jurisprudência vigente</p>
+  <div class="trust-items">
+    <div class="trust-item"><span class="trust-icon">⚖️</span> CDC completo (Arts. 12, 14, 18)</div>
+    <div class="trust-item"><span class="trust-icon">📋</span> Súmulas STJ (54, 362, 479)</div>
+    <div class="trust-item"><span class="trust-icon">🏛️</span> Regras JEC (Lei 9.099/95)</div>
+    <div class="trust-item"><span class="trust-icon">🔒</span> LGPD — seus dados não treinam a IA</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div id="funcionalidades">
+  <div class="section">
+    <div class="section-label">Funcionalidades</div>
+    <h2 class="section-h">Tudo que o advogado precisa em um só lugar</h2>
+    <p class="section-sub">Do caso à peça assinada, em minutos. Sem abrir o Word, sem copiar e colar.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-h">Gerador de peças jurídicas</div>
+        <p class="feature-p">Petições, contestações, recursos, contratos e notificações gerados com IA. Fundamentação automática com artigos e jurisprudência do caso.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-h">Memória do escritório</div>
+        <p class="feature-p">O Pandecta aprende com suas peças anteriores. Quando você gera algo novo, ele consulta o histórico do escritório para argumentos similares.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📁</div>
+        <div class="feature-h">Acervo inteligente</div>
+        <p class="feature-p">Suba seus contratos, modelos e pareceres. A IA usa esses documentos como referência na hora de gerar novas peças — RAG com o acervo do escritório.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <div class="feature-h">Exportação Word profissional</div>
+        <p class="feature-p">Gera arquivo .doc com cabeçalho do escritório, logo, assinatura do advogado responsável e formatação jurídica real. Pronto para protocolar.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-h">Histórico com busca</div>
+        <p class="feature-p">Todas as peças geradas ficam salvas e indexadas. Busca por autor, área, tipo ou palavras do texto. Edição inline e reexportação.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <div class="feature-h">Multiusuário por escritório</div>
+        <p class="feature-p">Cada advogado tem seu próprio acesso e histórico. Gestão de equipe, perfis e permissões pelo painel admin. Dados isolados por usuário.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-wrap">
+  <div class="how-inner">
+    <div class="section-label">Como funciona</div>
+    <h2 class="section-h" style="color:var(--white)">Do caso à peça em 3 passos</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.55)">Sem templates genéricos. Sem copiar e colar. Cada peça gerada com os fatos do seu caso.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-h">Descreva o caso</div>
+          <p class="step-p">Área jurídica, tipo de peça, dados das partes e fatos relevantes. O assistente guia você passo a passo.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-h">A IA fundamenta e redige</div>
+          <p class="step-p">Claude busca artigos, súmulas e jurisprudência aplicáveis, consulta seu acervo e histórico, e gera a peça completa.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-h">Edite e exporte</div>
+          <p class="step-p">Revise o texto no editor, faça ajustes finos e exporte em Word com cabeçalho e assinatura do escritório.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AREAS -->
+<div class="areas-wrap">
+  <div class="areas-inner">
+    <div class="section-label" style="text-align:center">Especialidades</div>
+    <h2 class="section-h" style="max-width:100%;text-align:center">Áreas e tipos de peça suportados</h2>
+    <div class="areas-grid">
+      <div class="area-pill gold">Direito do Consumidor (CDC/JEC)</div>
+      <div class="area-pill">Direito Civil</div>
+      <div class="area-pill">Direito Trabalhista</div>
+      <div class="area-pill">Direito de Família</div>
+      <div class="area-pill">Petição Inicial</div>
+      <div class="area-pill">Contestação</div>
+      <div class="area-pill">Recurso / Apelação</div>
+      <div class="area-pill">Contrato</div>
+      <div class="area-pill">Notificação Extrajudicial</div>
+      <div class="area-pill">Parecer Jurídico</div>
+      <div class="area-pill">Manifestação / Memorial</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div id="precos" class="pricing-wrap">
+  <div class="section-label">Preços</div>
+  <h2 class="section-h" style="margin:0 auto 16px">Simples e transparente</h2>
+  <p class="section-sub" style="margin:0 auto 56px">Um único plano com tudo incluído. Sem surpresas, sem limites artificiais.</p>
+
+  <div class="pricing-card">
+    <div class="pricing-badge">Plano Escritório</div>
+    <div class="pricing-price"><span>R$</span>97</div>
+    <div class="pricing-period">por advogado / mês</div>
+    <ul class="pricing-items">
+      <li>Peças ilimitadas</li>
+      <li>Acervo de documentos</li>
+      <li>Memória do escritório</li>
+      <li>Exportação Word</li>
+      <li>Histórico completo</li>
+      <li>Multiusuário</li>
+      <li>Busca e filtros</li>
+      <li>Suporte por WhatsApp</li>
+    </ul>
+    <a class="btn-pricing" href="/app">Começar agora</a>
+    <p class="pricing-note">Acesso imediato · Cancele quando quiser</p>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-wrap">
+  <p class="quote">"Finalmente uma ferramenta que entende direito brasileiro de verdade. Não é um ChatGPT com prompt — é um sistema treinado para o nosso contexto jurídico."</p>
+  <p class="quote-by"><strong>Fabiano</strong> — Advogado, 30+ anos de prática, 3 escritórios</p>
+</div>
+
+<!-- CTA FINAL -->
+<div class="cta-final">
+  <h2>Comece hoje.<br>Primeira peça em <em>menos de 5 minutos.</em></h2>
+  <p>Sem treinamento necessário. Sem configuração complexa. Só descrever o caso.</p>
+  <a class="btn-primary" href="/app" style="font-size:16px;padding:16px 40px">
+    Criar minha conta
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Pandecta <span>AI</span></div>
+  <div class="footer-links">
+    <a class="footer-link" href="#">Termos de uso</a>
+    <a class="footer-link" href="#">Privacidade</a>
+    <a class="footer-link" href="mailto:contato@pandecta.com.br">Contato</a>
+  </div>
+  <div class="footer-copy">© 2026 Pandecta AI · Todos os direitos reservados</div>
+</footer>
+
+</body>
+</html>

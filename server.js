@@ -118,6 +118,11 @@ try {
 // ── MIDDLEWARE ────────────────────────────────────────────────────────────────
 
 app.use(express.json({ limit: '10mb' }));
+
+// Landing page na raiz, SPA em /app
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'landing.html')));
+app.get('/app', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+
 app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: '30d',
   etag: true,
