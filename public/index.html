@@ -362,6 +362,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .modal-save:hover{opacity:.85;}
 
 /* ════ HISTORY ════ */
+.hist-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.hist-search-wrap{position:relative;flex:1;min-width:200px;max-width:360px;}
+.hist-search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none;}
+.hist-search{width:100%;padding:7px 10px 7px 32px;background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;font-size:13px;color:var(--t1);outline:none;}
+.hist-search:focus{border-color:var(--gold-bd);}
+.hist-area-pills{display:flex;gap:6px;flex-wrap:wrap;}
+.hist-pill{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bdr);background:var(--bg2);color:var(--t2);transition:all .15s;}
+.hist-pill.active{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-bd);}
+.hist-count{font-size:12px;color:var(--t3);margin-left:auto;white-space:nowrap;}
 .hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:11px;max-width:900px;}
 .hist-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:15px 17px;cursor:pointer;transition:all .15s;}
 .hist-card:hover{border-color:var(--bd-md);box-shadow:0 2px 10px rgba(0,0,0,.05);}
@@ -369,6 +378,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .hist-autor{font-size:13.5px;font-weight:500;color:var(--t1);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hist-meta{font-size:11px;color:var(--t3);}
 .hist-empty{text-align:center;padding:56px 40px;color:var(--t3);font-size:13px;line-height:1.7;}
+.hist-preview{font-size:11.5px;color:var(--t3);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* Viewer / Editor — layout correto */
 .hist-viewer{display:none;flex-direction:column;flex:1;overflow:hidden;}
@@ -715,7 +725,22 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <!-- Lista -->
       <div class="page-body" id="hist-list-body">
         <div class="page-h">Histórico de peças</div>
-        <div class="page-s" style="margin-bottom:22px">Peças geradas e salvas no banco de dados.</div>
+
+        <div class="hist-toolbar">
+          <div class="hist-search-wrap">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><path d="M10 10l2.5 2.5"/></svg>
+            <input id="hist-search" class="hist-search" type="text" placeholder="Buscar por autor, tipo, área ou conteúdo..." oninput="renderHistorico()">
+          </div>
+          <div class="hist-area-pills">
+            <div class="hist-pill active" data-area="" onclick="selHistArea(this)">Todas</div>
+            <div class="hist-pill" data-area="consumidor" onclick="selHistArea(this)">Consumidor</div>
+            <div class="hist-pill" data-area="trabalhista" onclick="selHistArea(this)">Trabalhista</div>
+            <div class="hist-pill" data-area="civil" onclick="selHistArea(this)">Civil</div>
+            <div class="hist-pill" data-area="familia" onclick="selHistArea(this)">Família</div>
+          </div>
+          <span class="hist-count" id="hist-count"></span>
+        </div>
+
         <div class="hist-grid" id="hist-grid"></div>
         <div class="hist-empty" id="hist-empty">Nenhuma peça gerada ainda.<br>Clique em <strong>Nova peça</strong> para começar.</div>
       </div>
@@ -1290,7 +1315,7 @@ function go(s){
   if(s==='config') carregarConfig();
   if(s==='equipe') renderLawyers();
   if(s==='suporte') initSuporte();
-  if(s==='admin') loadUsers();
+  if(s==='admin'){loadUsers();loadBackups();loadAdminStats();}
 }
 function updateAvatars(){
   const init=usuario?usuario[0].toUpperCase():'A';
@@ -1752,6 +1777,14 @@ async function exportarWord(){
 }
 
 // ════ HISTORY ════
+let histAreaFiltro='';
+function selHistArea(el){
+  document.querySelectorAll('.hist-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  histAreaFiltro=el.dataset.area||'';
+  renderHistorico();
+}
+
 async function salvarHistorico(data,texto,tipoL,areaL){
   try{
     const item=await api('POST','/api/history',{
@@ -1769,13 +1802,25 @@ async function loadHistorico(){
 function renderHistorico(){
   const grid=document.getElementById('hist-grid'),empty=document.getElementById('hist-empty');
   if(!grid)return;
-  empty.style.display=sessionHistory.length?'none':'block';
-  grid.innerHTML=sessionHistory.map(item=>`
-    <div class="hist-card" onclick="abrirViewer(${item.id})">
+  const q=(document.getElementById('hist-search')?.value||'').toLowerCase().trim();
+  const area=histAreaFiltro;
+  let items=sessionHistory;
+  if(area) items=items.filter(h=>(h.area_label||'').toLowerCase().includes(area)||(h.tipo||'').toLowerCase().includes(area));
+  if(q) items=items.filter(h=>[h.tipo_label,h.area_label,h.autor,h.usuario,(h.texto||'').slice(0,200)].join(' ').toLowerCase().includes(q));
+  const countEl=document.getElementById('hist-count');
+  if(countEl) countEl.textContent=items.length===sessionHistory.length?`${items.length} peça${items.length!==1?'s':''}`:`${items.length} de ${sessionHistory.length}`;
+  empty.style.display=items.length?'none':'block';
+  if(!items.length&&sessionHistory.length) empty.textContent='Nenhuma peça encontrada para essa busca.';
+  else if(!items.length) empty.innerHTML='Nenhuma peça gerada ainda.<br>Clique em <strong>Nova peça</strong> para começar.';
+  grid.innerHTML=items.map(item=>{
+    const preview=(item.texto||'').replace(/\n+/g,' ').slice(0,90);
+    return`<div class="hist-card" onclick="abrirViewer(${item.id})">
       <div class="hist-tipo">${esc(item.tipo_label||'')} · ${esc(item.area_label||'')}</div>
       <div class="hist-autor">${esc(item.autor||'Sem autor')}</div>
       <div class="hist-meta">${esc(fmtDate(item.created_at))}</div>
-    </div>`).join('');
+      ${preview?`<div class="hist-preview">${esc(preview)}…</div>`:''}
+    </div>`;
+  }).join('');
 }
 function fmtDate(s){if(!s)return'';try{return new Date(s).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});}catch(e){return s;}}
 
@@ -2135,6 +2180,50 @@ async function deleteUser(id,nome){
     loadUsers();
   }catch(e){toast(e.message,'err');}
 }
+
+// ════ ADMIN — STATS ════
+async function loadAdminStats(){
+  try{
+    const s=await api('GET','/api/admin/stats');
+    const el=document.getElementById('admin-stats');
+    if(!el)return;
+    const card=(val,label,icon)=>`<div style="background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px">
+      <div style="font-size:22px;font-weight:700;color:var(--t1)">${val}</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:2px">${icon} ${label}</div>
+    </div>`;
+    el.innerHTML=
+      card(s.pecas,'Peças geradas','📄')+
+      card(s.users,'Usuários','👥')+
+      card(s.lawyers,'Advogados','⚖️')+
+      card(s.docs,'Docs no acervo','📁')+
+      card((s.chunks||0).toLocaleString('pt-BR'),'Chunks indexados','🔍');
+  }catch(e){}
+}
+
+// ════ ADMIN — BACKUP ════
+async function fazerBackup(){
+  const btn=document.getElementById('backup-btn');
+  btn.disabled=true;btn.textContent='Fazendo backup...';
+  try{
+    const r=await api('POST','/api/admin/backup');
+    toast('Backup criado: '+r.arquivo);
+    loadBackups();
+  }catch(e){toast(e.message,'err');}
+  finally{btn.disabled=false;btn.textContent='Fazer backup agora';}
+}
+
+async function loadBackups(){
+  try{
+    const list=await api('GET','/api/admin/backups');
+    const el=document.getElementById('backup-list');
+    if(!list||!list.length){el.innerHTML='<div style="color:var(--t3);font-size:13px">Nenhum backup encontrado.</div>';return;}
+    el.innerHTML=list.map(b=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px">
+        <span style="color:var(--t1)">${esc(b.nome)}</span>
+        <span style="color:var(--t3)">${(b.tamanho/1024).toFixed(0)} KB · ${new Date(b.created_at).toLocaleString('pt-BR')}</span>
+      </div>`).join('');
+  }catch(e){}
+}
 </script>
 
 <!-- ════ ADMIN ════ -->
@@ -2164,6 +2253,20 @@ async function deleteUser(id,nome){
       <div class="page-body">
         <div class="page-h">Usuários do sistema</div>
         <div class="page-s">Gerencie os usuários com acesso ao Pandecta. Apenas administradores podem criar, editar ou excluir usuários.</div>
+
+        <!-- Stats -->
+        <div id="admin-stats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:24px"></div>
+
+        <div style="margin-bottom:24px;padding:16px 20px;background:var(--bg2);border:1px solid var(--bdr);border-radius:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--t1)">Backup do banco de dados</div>
+              <div style="font-size:12px;color:var(--t3);margin-top:2px">Mantém os 5 backups mais recentes no volume Railway.</div>
+            </div>
+            <button id="backup-btn" class="law-save-btn" onclick="fazerBackup()" style="min-width:160px">Fazer backup agora</button>
+          </div>
+          <div id="backup-list" style="margin-top:8px"></div>
+        </div>
 
         <div class="equipe-layout">
           <div class="equipe-main">

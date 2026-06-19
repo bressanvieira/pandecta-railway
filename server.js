@@ -95,6 +95,8 @@ try {
   try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN enviado_por TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE office ADD COLUMN logo TEXT DEFAULT ''`); } catch(e) {}
+  try { db.exec(`ALTER TABLE history ADD COLUMN user_id INTEGER`); } catch(e) {}
+  try { db.exec(`ALTER TABLE acervo ADD COLUMN user_id INTEGER`); } catch(e) {}
 
   // seed — cria usuário admin padrão se não existir
   const adminExists = db.prepare('SELECT id FROM users WHERE email=?').get('admin@pandecta.ai');
@@ -292,9 +294,11 @@ app.put('/api/office', requireAuth, (req, res) => {
 app.get('/api/history', requireAuth, (req, res) => {
   if (!db) return res.json([]);
   try {
-    res.json(db.prepare(
-      'SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto,created_at FROM history ORDER BY created_at DESC LIMIT 100'
-    ).all());
+    const isAdmin = req.user.role === 'admin';
+    const rows = isAdmin
+      ? db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto,created_at FROM history ORDER BY created_at DESC LIMIT 100').all()
+      : db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto,created_at FROM history WHERE user_id=? ORDER BY created_at DESC LIMIT 100').all(req.user.userId);
+    res.json(rows);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -303,8 +307,8 @@ app.post('/api/history', requireAuth, (req, res) => {
   const { usuario='',tipo='',tipo_label='',area_label='',autor='',responsavel_id=null,texto='' } = req.body;
   try {
     const r = db.prepare(
-      'INSERT INTO history (usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto) VALUES (?,?,?,?,?,?,?)'
-    ).run(usuario, tipo, tipo_label, area_label, autor, responsavel_id || null, texto);
+      'INSERT INTO history (usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto,user_id) VALUES (?,?,?,?,?,?,?,?)'
+    ).run(usuario, tipo, tipo_label, area_label, autor, responsavel_id || null, texto, req.user.userId);
     res.json(db.prepare('SELECT * FROM history WHERE id=?').get(r.lastInsertRowid));
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -313,6 +317,10 @@ app.put('/api/history/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   const { texto = '' } = req.body;
   try {
+    const row = db.prepare('SELECT user_id FROM history WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
     db.prepare('UPDATE history SET texto=? WHERE id=?').run(texto, req.params.id);
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -321,6 +329,10 @@ app.put('/api/history/:id', requireAuth, (req, res) => {
 app.delete('/api/history/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   try {
+    const row = db.prepare('SELECT user_id FROM history WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
     db.prepare('DELETE FROM history WHERE id=?').run(req.params.id);
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -331,7 +343,11 @@ app.delete('/api/history/:id', requireAuth, (req, res) => {
 app.get('/api/acervo', requireAuth, (req, res) => {
   if (!db) return res.json([]);
   try {
-    res.json(db.prepare('SELECT id,nome,tipo,chunk_count,tamanho,enviado_por,created_at FROM acervo ORDER BY created_at DESC').all());
+    const isAdmin = req.user.role === 'admin';
+    const rows = isAdmin
+      ? db.prepare('SELECT id,nome,tipo,chunk_count,tamanho,enviado_por,created_at FROM acervo ORDER BY created_at DESC').all()
+      : db.prepare('SELECT id,nome,tipo,chunk_count,tamanho,enviado_por,created_at FROM acervo WHERE user_id=? ORDER BY created_at DESC').all(req.user.userId);
+    res.json(rows);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -340,8 +356,8 @@ app.post('/api/acervo', requireAuth, (req, res) => {
   const { nome, tipo = 'Outro', chunks = [], tamanho = 0, enviado_por = '' } = req.body;
   if (!nome) return res.status(400).json({ error: 'Nome obrigatório.' });
   try {
-    const r = db.prepare('INSERT INTO acervo (nome,tipo,chunks,chunk_count,tamanho,enviado_por) VALUES (?,?,?,?,?,?)').run(
-      nome, tipo, JSON.stringify(chunks), chunks.length, tamanho, enviado_por
+    const r = db.prepare('INSERT INTO acervo (nome,tipo,chunks,chunk_count,tamanho,enviado_por,user_id) VALUES (?,?,?,?,?,?,?)').run(
+      nome, tipo, JSON.stringify(chunks), chunks.length, tamanho, enviado_por, req.user.userId
     );
     res.json({ id: r.lastInsertRowid, nome, tipo, chunk_count: chunks.length, tamanho, enviado_por });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -350,6 +366,10 @@ app.post('/api/acervo', requireAuth, (req, res) => {
 app.delete('/api/acervo/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   try {
+    const row = db.prepare('SELECT user_id FROM acervo WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
     db.prepare('DELETE FROM acervo WHERE id=?').run(req.params.id);
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -696,6 +716,68 @@ app.options('/api/gerar', (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', version: '3.0.0', db: !!db, timestamp: new Date().toISOString() });
+});
+
+// ── BACKUP (admin only) ───────────────────────────────────────────────────────
+// Faz backup online do SQLite usando a API nativa do better-sqlite3.
+// O arquivo é salvo em <dbDir>/backups/pandecta-<timestamp>.db
+// e os 5 mais recentes são mantidos (os demais são apagados).
+
+app.get('/api/admin/stats', requireAuth, requireAdmin, (req, res) => {
+  if (!db) return res.json({});
+  try {
+    const users      = db.prepare('SELECT COUNT(*) as n FROM users').get().n;
+    const pecas      = db.prepare('SELECT COUNT(*) as n FROM history').get().n;
+    const docs       = db.prepare('SELECT COUNT(*) as n FROM acervo').get().n;
+    const chunks     = db.prepare('SELECT SUM(chunk_count) as n FROM acervo').get().n || 0;
+    const lawyers    = db.prepare('SELECT COUNT(*) as n FROM lawyers').get().n;
+    const ultimas    = db.prepare("SELECT tipo_label, area_label, autor, created_at FROM history ORDER BY created_at DESC LIMIT 5").all();
+    res.json({ users, pecas, docs, chunks, lawyers, ultimas });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/admin/backup', requireAuth, requireAdmin, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const dbDir = process.env.DB_PATH
+      ? path.dirname(process.env.DB_PATH)
+      : path.join(__dirname, 'data');
+    const backupDir = path.join(dbDir, 'backups');
+    if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir, { recursive: true });
+
+    const ts = new Date().toISOString().replace(/[:.]/g, '-');
+    const dest = path.join(backupDir, `pandecta-${ts}.db`);
+
+    // backup() é síncrono e seguro mesmo com escritas concorrentes
+    db.backup(dest);
+
+    // Mantém apenas os 5 backups mais recentes
+    const files = fs.readdirSync(backupDir)
+      .filter(f => f.endsWith('.db'))
+      .map(f => ({ name: f, time: fs.statSync(path.join(backupDir, f)).mtimeMs }))
+      .sort((a, b) => b.time - a.time);
+    files.slice(5).forEach(f => fs.unlinkSync(path.join(backupDir, f.name)));
+
+    res.json({ ok: true, arquivo: path.basename(dest), total_backups: Math.min(files.length, 5) });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/admin/backups', requireAuth, requireAdmin, (req, res) => {
+  try {
+    const dbDir = process.env.DB_PATH
+      ? path.dirname(process.env.DB_PATH)
+      : path.join(__dirname, 'data');
+    const backupDir = path.join(dbDir, 'backups');
+    if (!fs.existsSync(backupDir)) return res.json([]);
+    const files = fs.readdirSync(backupDir)
+      .filter(f => f.endsWith('.db'))
+      .map(f => {
+        const stat = fs.statSync(path.join(backupDir, f));
+        return { nome: f, tamanho: stat.size, created_at: stat.mtime.toISOString() };
+      })
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    res.json(files);
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 // ── START ─────────────────────────────────────────────────────────────────────
