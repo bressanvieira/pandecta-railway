@@ -629,22 +629,64 @@
         <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Configurações</div>
       </div>
       <div class="mockup-main">
-        <div class="mockup-tag">Petição Inicial · Consumidor</div>
-        <div class="mockup-h">Gerando peça para Maria da Silva vs. Operadora XYZ...<span class="mockup-cursor"></span></div>
-        <div class="mockup-lines">
-          <div class="mockup-line w100"></div>
-          <div class="mockup-line w85"></div>
-          <div class="mockup-line w90"></div>
-          <div class="mockup-line w70"></div>
-          <div class="mockup-line w100"></div>
-          <div class="mockup-line w60"></div>
-          <div class="mockup-line w85"></div>
-          <div class="mockup-line w90"></div>
+        <div class="mockup-tag" id="gen-tag">Petição Inicial · Consumidor</div>
+        <div class="mockup-h" id="gen-title">Redigindo peça<span class="mockup-cursor"></span></div>
+        <div class="gen-status" id="gen-status-row">
+          <div class="gen-status-dot"></div>
+          <span id="gen-status-txt">Fundamentando com CDC e jurisprudência...</span>
         </div>
+        <div class="gen-progress"><div class="gen-progress-bar" id="gen-bar"></div></div>
+        <div class="gen-stream" id="gen-stream"></div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+(function(){
+  var statuses=['Fundamentando com CDC e jurisprudência...','Consultando acervo do escritório...','Redigindo fatos e fundamentos...','Aplicando Súmula 54 do STJ...','Formulando pedidos e requerimentos...','Revisando estrutura processual...'];
+  var widths=[98,82,91,74,100,86,93,68,100,79,88,95,72,100,83,90,76,100,88,65];
+  var labels={3:'DOS FATOS',7:'DO DIREITO',12:'DOS PEDIDOS'};
+  var stream=document.getElementById('gen-stream');
+  var statusEl=document.getElementById('gen-status-txt');
+  var bar=document.getElementById('gen-bar');
+  if(!stream)return;
+  var idx=0,sIdx=0;
+  var prog=0;
+  function addLine(){
+    if(idx>=widths.length){idx=0;stream.innerHTML='';prog=0;bar.style.transition='none';bar.style.width='0%';}
+    if(labels[idx]){
+      var lbl=document.createElement('div');
+      lbl.className='gen-section-label';
+      lbl.textContent=labels[idx];
+      stream.appendChild(lbl);
+    }
+    var line=document.createElement('div');
+    line.className='gen-line'+(idx%4===0?'':' dim');
+    line.style.width=widths[idx]+'%';
+    line.style.animationDelay='0s';
+    stream.appendChild(line);
+    stream.scrollTop=stream.scrollHeight;
+    prog=Math.min(92,Math.round((idx/widths.length)*92));
+    bar.style.transition='width 0.3s ease';
+    bar.style.width=prog+'%';
+    idx++;
+  }
+  function rotateStatus(){
+    statusEl.style.opacity='0';
+    setTimeout(function(){
+      sIdx=(sIdx+1)%statuses.length;
+      statusEl.textContent=statuses[sIdx];
+      statusEl.style.opacity='1';
+    },300);
+  }
+  statusEl.style.transition='opacity 0.3s';
+  bar.style.animation='none';
+  bar.style.width='0%';
+  setInterval(addLine,350);
+  setInterval(rotateStatus,1900);
+})();
+</script>
 
 <!-- TRUST -->
 <div class="trust">
