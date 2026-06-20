@@ -48,6 +48,10 @@
   --err:  #DC2626;
   --blue: #2563EB;
 
+  /* Aliases (compatibilidade) */
+  --bg2:  #FAF8F4;
+  --bdr:  #E5DED2;
+
   --r:    9px;
   --r-sm: 6px;
   --r-lg: 14px;
@@ -683,7 +687,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="gen-layout">
         <div class="chat-pane">
           <div class="cp-hd">
-            <div><div class="cp-t">Construtor de peça</div><div class="cp-s" id="chat-st">Iniciando...</div></div>
+            <div><div class="cp-t">Construtor</div><div class="cp-s" id="chat-st">Iniciando...</div></div>
             <button class="cp-new" onclick="novaConversa()">↺ Recomeçar</button>
           </div>
           <div class="chat-msgs" id="chat-msgs"></div>
@@ -699,13 +703,20 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="doc-hd">
             <div class="doc-st"><div class="doc-dot" id="doc-dot"></div><div class="doc-lbl" id="doc-lbl">Aguardando dados</div></div>
             <div class="doc-acts" id="doc-acts" style="display:none">
+              <div id="doc-fmt-bar" style="display:flex;gap:2px;margin-right:6px;padding-right:8px;border-right:1px solid var(--bd);">
+                <button class="dbtn" title="Negrito (Ctrl+B)" onclick="document.execCommand('bold');document.getElementById('doc-paper').focus()"><strong>B</strong></button>
+                <button class="dbtn" title="Itálico (Ctrl+I)" onclick="document.execCommand('italic');document.getElementById('doc-paper').focus()"><em>I</em></button>
+                <button class="dbtn" title="Sublinhado (Ctrl+U)" onclick="document.execCommand('underline');document.getElementById('doc-paper').focus()"><u>U</u></button>
+                <button class="dbtn" title="Alinhar à esquerda" onclick="document.execCommand('justifyLeft');document.getElementById('doc-paper').focus()">⟵</button>
+                <button class="dbtn" title="Centralizar" onclick="document.execCommand('justifyCenter');document.getElementById('doc-paper').focus()">⊟</button>
+              </div>
               <button class="dbtn" onclick="copiarDoc()">Copiar</button>
               <button class="dbtn dbtn-p" onclick="exportarWord()">↓ Word</button>
             </div>
           </div>
           <div class="doc-scroll" id="doc-scroll">
             <div class="doc-empty" id="doc-empty"><div class="doc-empty-ico">⊡</div><div class="doc-empty-txt">Sua peça aparecerá aqui<br>enquanto a IA coleta as informações</div></div>
-            <div class="doc-paper" id="doc-paper" style="display:none"></div>
+            <div class="doc-paper" id="doc-paper" style="display:none" contenteditable="false" oninput="textoGerado=this.innerText"></div>
           </div>
         </div>
       </div>
@@ -995,7 +1006,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="tb-left">
           <span class="tb-crumb" onclick="go('home')">Início</span>
           <span class="tb-sep">/</span>
-          <span class="tb-page">Suporte</span>
+          <span class="tb-page">Assistente</span>
         </div>
         <div class="tb-right">
           <button class="tb-icon-btn" title="Buscar">
@@ -1018,8 +1029,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <div class="suporte-body">
         <div>
-          <div class="page-h">Central de Suporte</div>
-          <div class="page-s">Converse com o assistente ou entre em contato com nossa equipe.</div>
+          <div class="page-h">Assistente Jurídico</div>
+          <div class="page-s">Pesquise no acervo, tire dúvidas e inicie novas peças conversando com o assistente.</div>
         </div>
 
         <div class="suporte-layout">
@@ -1295,7 +1306,7 @@ function mkSidebar(active){
         <div class="sb-support-ico">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M5.5 8a2.5 2.5 0 005 0 2.5 2.5 0 00-5 0"/><path d="M3 5.5c0-2 1.5-3.5 5-3.5s5 1.5 5 3.5"/><path d="M5.5 8H3M10.5 8H13"/></svg>
         </div>
-        <div><div class="sb-s-t">Suporte</div><div class="sb-s-s">Fale com o suporte</div></div>
+        <div><div class="sb-s-t">Assistente</div><div class="sb-s-s">Fale com nosso assistente</div></div>
       </button>
     </div>
   </nav>`;
@@ -1455,7 +1466,9 @@ function initSuporte(){
   const msgs=document.getElementById('sup-msgs');
   if(!msgs||msgs.children.length>0)return;
   supHistory=[];supLocked=false;
-  _supAddMsg('ai','Olá! Sou o assistente do Pandecta. 😊\n\nPosso te ajudar com dúvidas sobre como usar o sistema, funcionalidades, exportação de documentos e muito mais.\n\nComo posso ajudar você hoje?');
+  const nome=(usuario||'').split(/[\s@]/)[0];
+  const n=nome?nome.charAt(0).toUpperCase()+nome.slice(1):'';
+  _supAddMsg('ai',(n?`Olá, ${n}! `:'Olá! ')+'Sou seu assistente jurídico.\n\nPosso pesquisar no acervo do escritório, responder dúvidas sobre o sistema e te ajudar a iniciar uma nova peça. Me diga: o que você precisa?');
   document.getElementById('sup-ta')?.focus();
 }
 
@@ -1468,10 +1481,51 @@ async function enviarSuporte(){
   ta.value='';ta.style.height='auto';
   _supAddMsg('user',txt);
   const tid=_supTyping();
+
+  // ── Busca no acervo e na memória antes de responder ──
+  let acervoCtx='';
+  try{
+    const [chunks,memoria]=await Promise.all([
+      api('POST','/api/acervo/buscar',{query:txt,top:4}).catch(()=>[]),
+      api('POST','/api/memoria/consultar',{query:txt,top:3}).catch(()=>[])
+    ]);
+    const fontes=[...new Set([
+      ...(chunks||[]).map(c=>c.fonte||c.nome||'Documento').filter(Boolean),
+      ...(memoria||[]).map(c=>c.fonte||'Histórico').filter(Boolean)
+    ])];
+    if(fontes.length){
+      const qtd=fontes.length;
+      const listaFontes=fontes.slice(0,4).map(f=>`• ${f}`).join('\n');
+      document.getElementById(tid)?.remove();
+      _supAddMsg('ai',`Encontrei informações relevantes em ${qtd} fonte${qtd>1?'s':''}:\n\n${listaFontes}\n\nDeseja iniciar uma nova peça com base nesses dados?`);
+      // botão de ação
+      const btnWrap=document.createElement('div');
+      btnWrap.style.cssText='display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;';
+      const btnSim=document.createElement('button');
+      btnSim.textContent='Sim, iniciar nova peça';
+      btnSim.className='hist-pill';
+      btnSim.onclick=()=>{go('gen');novaConversa();};
+      const btnNao=document.createElement('button');
+      btnNao.textContent='Continuar pesquisando';
+      btnNao.className='hist-pill';
+      btnNao.onclick=()=>{btnWrap.remove();};
+      btnWrap.append(btnSim,btnNao);
+      const lastMsg=document.getElementById('sup-msgs').lastElementChild;
+      if(lastMsg) lastMsg.querySelector('.sup-msg-text')?.appendChild(btnWrap);
+      acervoCtx='\n\nContexto do acervo:\n'+(chunks||[]).map(c=>`[${c.fonte||c.nome}]\n${c.texto||''}`).join('\n\n')+(memoria||[]).map(c=>`[${c.fonte}]\n${c.texto||''}`).join('\n\n');
+      supHistory.push({role:'user',content:txt});
+      supHistory.push({role:'assistant',content:`Encontrei ${qtd} fonte(s): ${fontes.join(', ')}`});
+      supLocked=false;
+      document.getElementById('sup-send').disabled=false;
+      ta.focus();
+      return;
+    }
+  }catch(e){}
+
   try{
     const resp=await fetch('/api/assistente',{
       method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({pergunta:txt,historico:supHistory})
+      body:JSON.stringify({pergunta:txt+acervoCtx,historico:supHistory})
     });
     document.getElementById(tid)?.remove();
     if(!resp.ok||!resp.headers.get('content-type')?.includes('event-stream')){
@@ -1599,9 +1653,11 @@ class ConversationEngine{
     document.getElementById('chat-st').textContent='Iniciando...';
     document.getElementById('gen-title').textContent='Nova peça';
     document.getElementById('tb-status').textContent='Aguardando...';
-    textoGerado='';this._showRow(true);
+    textoGerado='';this._showRow(true);document.getElementById('doc-paper').contentEditable='false';
     if(ctx)this._parse(ctx);
-    this._ai({type:'text',content:'Olá. Vou ajudá-lo a construir sua peça jurídica. Responda as perguntas abaixo.'});
+    const primeiroNome=(usuario||'').split(/[\s@]/)[0];
+    const saudacao=primeiroNome?`Olá, ${primeiroNome.charAt(0).toUpperCase()+primeiroNome.slice(1)}! `:'Olá! ';
+    this._ai({type:'text',content:saudacao+'Vou te guiar para sua construção agora, então, basta responder as próximas perguntas.'});
     setTimeout(()=>this._next(),650);
   }
   _pending(){return this._steps().find(s=>!this.data[s.key]);}
@@ -1665,6 +1721,8 @@ class ConversationEngine{
       renderDoc(textoGerado,false);
       document.getElementById('doc-dot').className='doc-dot';
       document.getElementById('doc-acts').style.display='flex';
+      document.getElementById('doc-paper').contentEditable='true';
+      document.getElementById('doc-lbl').textContent='Concluído · Clique para editar';
       document.getElementById('chat-st').textContent='Concluído';
       document.getElementById('tb-status').textContent='Concluído';
       document.getElementById(gid)?.remove();
@@ -2132,7 +2190,7 @@ async function loadUsers(){
           <button class="law-btn del" onclick="deleteUser(${u.id},'${esc(u.nome||u.email)}')">Excluir</button>
         </div>
       </div>`).join('');
-  }catch(e){toast('Erro ao carregar usuários','err');}
+  }catch(e){toast('Usuários: '+e.message,'err');}
 }
 
 function openUserModal(id=null,nome='',email='',role='user'){
@@ -2196,7 +2254,7 @@ async function loadAdminStats(){
       card(s.lawyers,'Advogados','⚖️')+
       card(s.docs,'Docs no acervo','📁')+
       card((s.chunks||0).toLocaleString('pt-BR'),'Chunks indexados','🔍');
-  }catch(e){}
+  }catch(e){toast('Stats: '+e.message,'err');}
 }
 
 // ════ ADMIN — BACKUP ════
@@ -2251,4 +2309,83 @@ async function loadBackups(){
 
       <div class="page-body">
         <div class="page-h">Usuários do sistema</div>
-        <div class="page-s">Gerencie os usuários com acesso ao Pandecta
+        <div class="page-s">Gerencie os usuários com acesso ao Pandecta. Apenas administradores podem criar, editar ou excluir usuários.</div>
+
+        <!-- Stats -->
+        <div id="admin-stats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:24px"></div>
+
+        <div style="margin-bottom:24px;padding:16px 20px;background:var(--bg2);border:1px solid var(--bdr);border-radius:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--t1)">Backup do banco de dados</div>
+              <div style="font-size:12px;color:var(--t3);margin-top:2px">Mantém os 5 backups mais recentes no volume Railway.</div>
+            </div>
+            <button id="backup-btn" class="law-save-btn" onclick="fazerBackup()" style="min-width:160px">Fazer backup agora</button>
+          </div>
+          <div id="backup-list" style="margin-top:8px"></div>
+        </div>
+
+        <div class="equipe-layout">
+          <div class="equipe-main">
+            <button class="add-law-btn" onclick="openUserModal()">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="7" y1="12" x2="7" y2="2"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+              Novo usuário
+            </button>
+            <div class="lawyers-grid" id="users-grid"></div>
+            <div class="law-empty" id="users-empty" style="display:none">Nenhum usuário cadastrado.</div>
+          </div>
+
+          <div class="equipe-form-panel" id="user-form-panel" style="display:none">
+            <div class="law-form-card">
+              <div class="law-form-title" id="user-form-title">Novo usuário</div>
+
+              <div class="lf">
+                <label>Nome</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 5-4s5 1.5 5 4"/></svg>
+                  <input id="user-nome" type="text" placeholder="Nome completo">
+                </div>
+              </div>
+
+              <div class="lf">
+                <label>Email</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="3.5" width="11" height="7" rx="1.5"/><path d="M1.5 5l5.5 3.5L12.5 5"/></svg>
+                  <input id="user-email" type="email" placeholder="usuario@email.com">
+                </div>
+              </div>
+
+              <div class="lf">
+                <label>Perfil</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 5-4s5 1.5 5 4"/></svg>
+                  <select id="user-role" style="width:100%;border:none;background:transparent;font-size:13px;outline:none;padding-left:4px">
+                    <option value="user">Usuário</option>
+                    <option value="admin">Administrador</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="lf">
+                <label>Senha</label>
+                <div class="inp-icn">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2.5" y="6" width="9" height="6" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 015 0V6"/></svg>
+                  <input id="user-pass" type="password" placeholder="Mínimo 8 caracteres">
+                </div>
+                <div id="user-pass-hint" style="display:none;font-size:11px;color:var(--t3);margin-top:4px">Deixe em branco para manter a senha atual.</div>
+              </div>
+
+              <div class="law-form-actions">
+                <button class="law-cancel-btn" onclick="closeUserModal()">Cancelar</button>
+                <button class="law-save-btn" onclick="saveUser()">Salvar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

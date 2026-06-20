@@ -94,6 +94,8 @@ try {
   // migrations — adiciona colunas sem quebrar banco existente
   try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN enviado_por TEXT DEFAULT ''`); } catch(e) {}
+  try { db.exec(`ALTER TABLE acervo ADD COLUMN chunk_count INTEGER DEFAULT 0`); } catch(e) {}
+  try { db.exec(`ALTER TABLE acervo ADD COLUMN chunks TEXT DEFAULT '[]'`); } catch(e) {}
   try { db.exec(`ALTER TABLE office ADD COLUMN logo TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE history ADD COLUMN user_id INTEGER`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN user_id INTEGER`); } catch(e) {}

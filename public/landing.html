@@ -236,6 +236,54 @@
     }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
+    /* ── GERAÇÃO ANIMADA ─────────────────────────────────────────────── */
+    .gen-stream { display: flex; flex-direction: column; gap: 5px; }
+    .gen-line {
+      height: 9px; border-radius: 5px;
+      background: linear-gradient(90deg, rgba(201,168,76,.5) 0%, rgba(201,168,76,.15) 100%);
+      transform-origin: left;
+      animation: growLine 0.4s ease forwards;
+      opacity: 0;
+    }
+    .gen-line.dim {
+      background: linear-gradient(90deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,.04) 100%);
+    }
+    @keyframes growLine {
+      from { opacity: 0; transform: scaleX(0); }
+      to   { opacity: 1; transform: scaleX(1); }
+    }
+    .gen-progress {
+      height: 2px; border-radius: 1px;
+      background: rgba(255,255,255,.06); margin: 16px 0 12px;
+      overflow: hidden;
+    }
+    .gen-progress-bar {
+      height: 100%; border-radius: 1px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+      animation: progressAnim 4.5s ease-in-out infinite;
+    }
+    @keyframes progressAnim {
+      0%   { width: 0%; }
+      60%  { width: 85%; }
+      100% { width: 92%; }
+    }
+    .gen-status {
+      font-size: 11px; color: var(--gold);
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 14px; font-weight: 500;
+    }
+    .gen-status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+    .gen-section-label {
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: rgba(255,255,255,.3); margin: 12px 0 8px;
+    }
+
     /* ── LOGOS / TRUST ─────────────────────────────────────────────────── */
     .trust {
       background: var(--off);
@@ -352,13 +400,24 @@
     }
     .area-pill {
       padding: 10px 22px;
-      background: var(--white); border: 1px solid var(--bdr);
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 30px;
       font-size: 14px; font-weight: 500; color: var(--t1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .area-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
     }
     .area-pill.gold {
-      background: var(--gold-bg); border-color: var(--gold-bd);
-      color: var(--gold);
+      background: rgba(201,168,76,0.12);
+      border-color: rgba(201,168,76,0.4);
+      color: #9a7520;
+      box-shadow: 0 2px 12px rgba(201,168,76,0.15), inset 0 1px 0 rgba(255,255,255,0.7);
     }
 
     /* ── PRICING ──────────────────────────────────────────────────────── */
@@ -594,7 +653,7 @@
     <div class="trust-item"><span class="trust-icon">⚖️</span> CDC completo (Arts. 12, 14, 18)</div>
     <div class="trust-item"><span class="trust-icon">📋</span> Súmulas STJ (54, 362, 479)</div>
     <div class="trust-item"><span class="trust-icon">🏛️</span> Regras JEC (Lei 9.099/95)</div>
-    <div class="trust-item"><span class="trust-icon">🔒</span> LGPD — seus dados não treinam a IA</div>
+    <div class="trust-item"><span class="trust-icon">🔒</span> LGPD — seus dados são criptografados e seguros</div>
   </div>
 </div>
 
@@ -694,27 +753,68 @@
 </div>
 
 <!-- PRICING -->
-<div id="precos" class="pricing-wrap">
-  <div class="section-label">Preços</div>
-  <h2 class="section-h" style="margin:0 auto 16px">Simples e transparente</h2>
-  <p class="section-sub" style="margin:0 auto 56px">Um único plano com tudo incluído. Sem surpresas, sem limites artificiais.</p>
+<div id="precos" style="padding:96px 40px;background:var(--off);border-top:1px solid var(--bdr);">
+  <div style="max-width:1100px;margin:0 auto;text-align:center;">
+    <div class="section-label">Preços</div>
+    <h2 class="section-h" style="margin:0 auto 16px">Escolha o plano ideal para o seu escritório</h2>
+    <p class="section-sub" style="margin:0 auto 56px">Todos os planos incluem acesso completo às funcionalidades. Cancele quando quiser.</p>
 
-  <div class="pricing-card">
-    <div class="pricing-badge">Plano Escritório</div>
-    <div class="pricing-price"><span>R$</span>97</div>
-    <div class="pricing-period">por advogado / mês</div>
-    <ul class="pricing-items">
-      <li>Peças ilimitadas</li>
-      <li>Acervo de documentos</li>
-      <li>Memória do escritório</li>
-      <li>Exportação Word</li>
-      <li>Histórico completo</li>
-      <li>Multiusuário</li>
-      <li>Busca e filtros</li>
-      <li>Suporte por WhatsApp</li>
-    </ul>
-    <a class="btn-pricing" href="/app">Começar agora</a>
-    <p class="pricing-note">Acesso imediato · Cancele quando quiser</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start;margin-bottom:32px;">
+
+      <!-- SOLO -->
+      <div style="background:var(--white);border:1px solid var(--bdr);border-radius:20px;padding:36px 32px;text-align:left;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:16px;">Solo</div>
+        <div style="font-size:48px;font-weight:800;color:var(--t1);line-height:1;margin-bottom:6px;"><span style="font-size:20px;font-weight:500;color:var(--t2);vertical-align:top;margin-top:8px;display:inline-block;">R$</span>79</div>
+        <div style="font-size:13px;color:var(--t3);margin-bottom:28px;">por mês · 1 advogado</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> 30 peças por mês</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Todos os tipos de peça</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Histórico completo</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Export Word</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Suporte por e-mail</li>
+        </ul>
+        <a href="/app" style="display:block;text-align:center;padding:13px 0;background:transparent;border:1.5px solid var(--t1);border-radius:10px;font-size:14px;font-weight:600;color:var(--t1);text-decoration:none;transition:all .15s;" onmouseover="this.style.background='var(--t1)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--t1)'">Começar agora</a>
+        <p style="text-align:center;font-size:11px;color:var(--t3);margin-top:12px;">Anual: R$59/mês</p>
+      </div>
+
+      <!-- PROFISSIONAL (destaque) -->
+      <div style="background:var(--navy);border:2px solid rgba(201,168,76,.3);border-radius:20px;padding:36px 32px;text-align:left;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(13,27,42,.25);">
+        <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%);pointer-events:none;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);">Profissional</div>
+          <div style="font-size:10px;font-weight:600;padding:3px 10px;background:var(--gold-bg);border:1px solid var(--gold-bd);border-radius:20px;color:var(--gold);">Mais popular</div>
+        </div>
+        <div style="font-size:48px;font-weight:800;color:var(--white);line-height:1;margin-bottom:6px;"><span style="font-size:20px;font-weight:500;color:rgba(255,255,255,.5);vertical-align:top;margin-top:8px;display:inline-block;">R$</span>179</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:28px;">por mês · até 3 usuários</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> <strong style="color:var(--white);">Peças ilimitadas</strong></li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> Memória de argumentos</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> Acervo de modelos</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> Histórico com busca</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> Suporte prioritário</li>
+        </ul>
+        <a href="/app" style="display:block;text-align:center;padding:14px 0;background:var(--gold);border-radius:10px;font-size:14px;font-weight:700;color:var(--navy);text-decoration:none;box-shadow:0 4px 20px rgba(201,168,76,.35);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">Começar agora</a>
+        <p style="text-align:center;font-size:11px;color:rgba(255,255,255,.3);margin-top:12px;">Anual: R$139/mês</p>
+      </div>
+
+      <!-- ESCRITÓRIO -->
+      <div style="background:var(--white);border:1px solid var(--bdr);border-radius:20px;padding:36px 32px;text-align:left;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:16px;">Escritório</div>
+        <div style="font-size:48px;font-weight:800;color:var(--t1);line-height:1;margin-bottom:6px;"><span style="font-size:20px;font-weight:500;color:var(--t2);vertical-align:top;margin-top:8px;display:inline-block;">R$</span>379</div>
+        <div style="font-size:13px;color:var(--t3);margin-bottom:28px;">por mês · até 10 usuários</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> <strong>Peças ilimitadas</strong></li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Tudo do Profissional</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Acervo compartilhado</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Dashboard de produção</li>
+          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> SLA 4h · Onboarding guiado</li>
+        </ul>
+        <a href="mailto:contato@pandecta.com.br" style="display:block;text-align:center;padding:13px 0;background:transparent;border:1.5px solid var(--t1);border-radius:10px;font-size:14px;font-weight:600;color:var(--t1);text-decoration:none;transition:all .15s;" onmouseover="this.style.background='var(--t1)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--t1)'">Falar com a equipe</a>
+        <p style="text-align:center;font-size:11px;color:var(--t3);margin-top:12px;">Anual: R$299/mês</p>
+      </div>
+
+    </div>
+    <p style="font-size:12px;color:var(--t3);text-align:center;">Todos os planos com 7 dias de teste grátis, sem cartão de crédito.</p>
   </div>
 </div>
 
@@ -735,14 +835,53 @@
 </div>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Pandecta <span>AI</span></div>
-  <div class="footer-links">
-    <a class="footer-link" href="#">Termos de uso</a>
-    <a class="footer-link" href="#">Privacidade</a>
-    <a class="footer-link" href="mailto:contato@pandecta.com.br">Contato</a>
+<footer style="background:var(--navy);border-top:1px solid rgba(255,255,255,.06);padding:56px 40px 36px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:40px;margin-bottom:48px;flex-wrap:wrap;">
+
+      <!-- Marca -->
+      <div>
+        <div style="font-size:18px;font-weight:800;color:var(--white);margin-bottom:12px;">Pandecta <span style="color:var(--gold);">AI</span></div>
+        <p style="font-size:13px;color:rgba(255,255,255,.4);line-height:1.7;max-width:260px;">Inteligência jurídica para advogados brasileiros. Gere peças com precisão técnica e aprenda com o seu escritório.</p>
+      </div>
+
+      <!-- Produto -->
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:16px;">Produto</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="#funcionalidades" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Funcionalidades</a>
+          <a href="#precos" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Planos e preços</a>
+          <a href="/app" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Entrar na plataforma</a>
+        </div>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:16px;">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Termos de uso</a>
+          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Política de privacidade</a>
+          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">LGPD</a>
+        </div>
+      </div>
+
+      <!-- Contato -->
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:16px;">Contato</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="https://wa.me/5551999999999" target="_blank" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">📱 WhatsApp: (51) 9 9999-9999</a>
+          <a href="mailto:contato@pandecta.com.br" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">✉️ contato@pandecta.com.br</a>
+          <div style="font-size:13px;color:rgba(255,255,255,.35);">📍 Porto Alegre – RS, Brasil</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.25);">CNPJ: XX.XXX.XXX/0001-XX</div>
+        </div>
+      </div>
+
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div style="font-size:12px;color:rgba(255,255,255,.25);">© 2026 Pandecta AI · Todos os direitos reservados</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.2);">Desenvolvido no Brasil 🇧🇷</div>
+    </div>
   </div>
-  <div class="footer-copy">© 2026 Pandecta AI · Todos os direitos reservados</div>
 </footer>
 
 </body>
