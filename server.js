@@ -17,6 +17,25 @@ const jwt       = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'pandecta-dev-secret-trocar-em-producao';
 
+// ── TELEGRAM ─────────────────────────────────────────────────────────────────
+const TG_TOKEN   = process.env.TELEGRAM_TOKEN   || '8712437845:AAGgpo5_4r7IER46zCoFtE_2EKFmXNqOTRQ';
+const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '8507810191';
+
+function sendTelegram(text) {
+  const https = require('https');
+  const body  = JSON.stringify({ chat_id: TG_CHAT_ID, text, parse_mode: 'HTML' });
+  const opts  = {
+    hostname: 'api.telegram.org',
+    path: `/bot${TG_TOKEN}/sendMessage`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
+  };
+  const req = https.request(opts, () => {});
+  req.on('error', () => {}); // silencia erros — notificação não pode derrubar o servidor
+  req.write(body);
+  req.end();
+}
+
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
@@ -223,6 +242,21 @@ app.post('/api/cadastro', (req, res) => {
     const token = jwt.sign(
       { userId: r.lastInsertRowid, email: email.trim().toLowerCase(), nome: nomeCompleto, role: 'user', plan, account_status: 'trial' },
       JWT_SECRET, { expiresIn: '7d' }
+    );
+
+    // Notificação Telegram
+    const planLabels = { solo: 'Solo R$79', profissional: 'Profissional R$179', escritorio: 'Escritório R$379' };
+    const perfilInfo = profile_type === 'advogado'
+      ? `OAB ${oab_number}/${oab_uf}`
+      : `Estudante — ${institution} (${semester}º sem.)`;
+    sendTelegram(
+      `🆕 <b>Novo cadastro Pandecta</b>\n\n` +
+      `👤 <b>${nomeCompleto}</b>\n` +
+      `📧 ${email.trim().toLowerCase()}\n` +
+      `📱 ${phone.trim()}\n` +
+      `⚖️ ${perfilInfo}\n` +
+      `📦 Plano: ${planLabels[plan] || plan}\n` +
+      `⏱ Trial: 7 dias`
     );
 
     res.json({ token, nome: nomeCompleto, email: email.trim().toLowerCase(),
