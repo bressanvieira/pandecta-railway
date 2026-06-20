@@ -2415,4 +2415,29 @@ async function saveUser(){
   const email=document.getElementById('user-email').value.trim();
   const role=document.getElementById('user-role').value;
   const password=document.getElementById('user-pass').value;
-  if(!email){toast('Email obrigatório','err');retur
+  if(!email){toast('Email obrigatório','err');return;}
+  if(!adminEditId&&!password){toast('Senha obrigatória para novo usuário','err');return;}
+  try{
+    if(adminEditId){
+      await api('PUT','/api/users/'+adminEditId,{nome,email,role,password});
+      toast('Usuário atualizado','ok');
+    }else{
+      await api('POST','/api/auth/register',{nome,email,role,password});
+      toast('Usuário criado','ok');
+    }
+    closeUserModal();
+    loadUsers();
+  }catch(e){toast(e.message,'err');}
+}
+
+async function deleteUser(id,nome){
+  if(!confirm('Excluir usuário "'+nome+'"? Esta ação não pode ser desfeita.'))return;
+  try{
+    await api('DELETE','/api/users/'+id);
+    toast('Usuário excluído','ok');
+    loadUsers();
+  }catch(e){toast(e.message,'err');}
+}
+</script>
+</body>
+</html>
