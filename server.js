@@ -854,3 +854,4 @@ app.get('/api/admin/backups', requireAuth, requireAdmin, (req, res) => {
 });
 
 // ââ START ââââââââââââââââââââââââââââââââ
+app.listen(PORT, () => console.log(`✅  Pandecta v3 na porta ${PORT}`));
