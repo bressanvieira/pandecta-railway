@@ -237,7 +237,7 @@
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
     /* ── GERAÇÃO ANIMADA ─────────────────────────────────────────────── */
-    .gen-stream { display: flex; flex-direction: column; gap: 5px; }
+    .gen-stream { display: flex; flex-direction: column; gap: 5px; overflow: hidden; max-height: 120px; }
     .gen-line {
       height: 9px; border-radius: 5px;
       background: linear-gradient(90deg, rgba(201,168,76,.5) 0%, rgba(201,168,76,.15) 100%);
@@ -388,36 +388,56 @@
 
     /* ── AREAS ────────────────────────────────────────────────────────── */
     .areas-wrap {
-      background: var(--off);
+      background: var(--navy);
       padding: 80px 40px;
       text-align: center;
     }
-    .areas-inner { max-width: 900px; margin: 0 auto; }
-    .areas-inner .section-h { margin: 0 auto 40px; }
-    .areas-grid {
-      display: flex; flex-wrap: wrap; gap: 12px;
+    .areas-wrap .section-label { color: var(--gold); }
+    .areas-wrap .section-h { color: var(--white); margin: 0 auto 12px; }
+    .areas-wrap .section-sub { color: rgba(255,255,255,.5); margin: 0 auto 48px; }
+    .areas-inner { max-width: 1000px; margin: 0 auto; }
+    .area-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .area-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px;
+      padding: 24px 20px 20px;
+      text-align: left;
+      transition: background .2s, border-color .2s, transform .15s;
+      cursor: default;
+    }
+    .area-card:hover {
+      background: rgba(255,255,255,.09);
+      border-color: rgba(201,168,76,.35);
+      transform: translateY(-2px);
+    }
+    .area-card.featured {
+      background: rgba(201,168,76,.08);
+      border-color: rgba(201,168,76,.3);
+    }
+    .area-card-icon { font-size: 22px; margin-bottom: 12px; }
+    .area-card-name {
+      font-size: 14px; font-weight: 600;
+      color: var(--white); margin-bottom: 6px; line-height: 1.3;
+    }
+    .area-card-types {
+      font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.5;
+    }
+    .area-docs {
+      display: flex; flex-wrap: wrap; gap: 8px;
       justify-content: center;
     }
-    .area-pill {
-      padding: 10px 22px;
-      background: rgba(255,255,255,0.6);
-      border: 1px solid rgba(255,255,255,0.8);
-      border-radius: 30px;
-      font-size: 14px; font-weight: 500; color: var(--t1);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
-      transition: transform .15s, box-shadow .15s;
-    }
-    .area-pill:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
-    }
-    .area-pill.gold {
-      background: rgba(201,168,76,0.12);
-      border-color: rgba(201,168,76,0.4);
-      color: #9a7520;
-      box-shadow: 0 2px 12px rgba(201,168,76,0.15), inset 0 1px 0 rgba(255,255,255,0.7);
+    .area-doc-pill {
+      padding: 6px 16px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      font-size: 13px; color: rgba(255,255,255,.6);
     }
 
     /* ── PRICING ──────────────────────────────────────────────────────── */
@@ -590,10 +610,10 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-badge">Novo · Inteligência Jurídica com IA</div>
-  <h1>A IA jurídica que <em>aprende com o seu escritório</em></h1>
+  <h1>O conhecimento jurídico do seu escritório, <em>amplificado por IA</em></h1>
   <p class="hero-sub">
-    Gere petições, contestações, recursos e contratos com fundamentação técnica precisa.
-    Especializado em direito brasileiro, com memória do seu histórico de peças.
+    Gere petições, contestações, recursos e contratos com rapidez e precisão.
+    A Pandecta respeita os padrões do seu escritório e ajuda sua equipe a produzir mais em menos tempo.
   </p>
   <div class="hero-ctas">
     <a class="btn-primary" href="/app">
@@ -777,19 +797,43 @@
 <div class="areas-wrap">
   <div class="areas-inner">
     <div class="section-label" style="text-align:center">Especialidades</div>
-    <h2 class="section-h" style="max-width:100%;text-align:center">Áreas e tipos de peça suportados</h2>
-    <div class="areas-grid">
-      <div class="area-pill gold">Direito do Consumidor (CDC/JEC)</div>
-      <div class="area-pill">Direito Civil</div>
-      <div class="area-pill">Direito Trabalhista</div>
-      <div class="area-pill">Direito de Família</div>
-      <div class="area-pill">Petição Inicial</div>
-      <div class="area-pill">Contestação</div>
-      <div class="area-pill">Recurso / Apelação</div>
-      <div class="area-pill">Contrato</div>
-      <div class="area-pill">Notificação Extrajudicial</div>
-      <div class="area-pill">Parecer Jurídico</div>
-      <div class="area-pill">Manifestação / Memorial</div>
+    <h2 class="section-h">Áreas do direito suportadas</h2>
+    <p class="section-sub">Cobertura completa das principais demandas do escritório brasileiro.</p>
+    <div class="area-cards">
+      <div class="area-card featured">
+        <div class="area-card-icon">🛒</div>
+        <div class="area-card-name">Direito do Consumidor</div>
+        <div class="area-card-types">CDC · JEC · Indenização · Vício do produto · Cobrança indevida</div>
+      </div>
+      <div class="area-card">
+        <div class="area-card-icon">⚖️</div>
+        <div class="area-card-name">Direito Civil</div>
+        <div class="area-card-types">Contratos · Danos morais · Responsabilidade civil · Posse e propriedade</div>
+      </div>
+      <div class="area-card">
+        <div class="area-card-icon">👷</div>
+        <div class="area-card-name">Direito Trabalhista</div>
+        <div class="area-card-types">Reclamação · Verbas rescisórias · Horas extras · Assédio</div>
+      </div>
+      <div class="area-card">
+        <div class="area-card-icon">👨‍👩‍👧</div>
+        <div class="area-card-name">Direito de Família</div>
+        <div class="area-card-types">Divórcio · Guarda · Alimentos · Inventário · Adoção</div>
+      </div>
+      <div class="area-card">
+        <div class="area-card-icon">🏛️</div>
+        <div class="area-card-name">Direito Administrativo</div>
+        <div class="area-card-types">Mandado de segurança · Improbidade · Licitações · Concursos</div>
+      </div>
+    </div>
+    <div class="area-docs">
+      <div class="area-doc-pill">Petição Inicial</div>
+      <div class="area-doc-pill">Contestação</div>
+      <div class="area-doc-pill">Recurso / Apelação</div>
+      <div class="area-doc-pill">Contrato</div>
+      <div class="area-doc-pill">Notificação Extrajudicial</div>
+      <div class="area-doc-pill">Parecer Jurídico</div>
+      <div class="area-doc-pill">Manifestação / Memorial</div>
     </div>
   </div>
 </div>
