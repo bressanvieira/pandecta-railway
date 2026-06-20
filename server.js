@@ -192,16 +192,19 @@ app.post('/api/auth/login', (req, res) => {
     const user = db.prepare('SELECT * FROM users WHERE email=?').get(email.trim().toLowerCase());
     if (!user || !bcrypt.compareSync(password, user.password_hash))
       return res.status(401).json({ error: 'Email ou senha incorretos.' });
-    // verifica trial expirado
-    if (user.account_status === 'trial' && user.trial_expires_at) {
-      const expires = new Date(user.trial_expires_at);
-      if (expires < new Date()) {
-        db.prepare("UPDATE users SET account_status='trial_expired' WHERE id=?").run(user.id);
-        return res.status(402).json({ error: 'trial_expired', message: 'Seu per\u00edodo de teste de 7 dias encerrou. Escolha um plano para continuar.' });
+    // admin nunca bloqueado por trial
+    const acctStatus = user.account_status || 'active';
+    if (user.role !== 'admin') {
+      if (acctStatus === 'trial' && user.trial_expires_at) {
+        const expires = new Date(user.trial_expires_at);
+        if (expires < new Date()) {
+          db.prepare("UPDATE users SET account_status='trial_expired' WHERE id=?").run(user.id);
+          return res.status(402).json({ error: 'trial_expired', message: 'Seu periodo de teste de 7 dias encerrou. Escolha um plano para continuar.' });
+        }
       }
-    }
-    if (user.account_status === 'trial_expired' || user.account_status === 'blocked') {
-      return res.status(402).json({ error: 'trial_expired', message: 'Seu per\u00edodo de teste de 7 dias encerrou. Escolha um plano para continuar.' });
+      if (acctStatus === 'trial_expired' || acctStatus === 'blocked') {
+        return res.status(402).json({ error: 'trial_expired', message: 'Seu periodo de teste de 7 dias encerrou. Escolha um plano para continuar.' });
+      }
     }
     const token = jwt.sign({ userId: user.id, email: user.email, nome: user.nome, role: user.role, plan: user.plan, account_status: user.account_status }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, nome: user.nome, email: user.email, role: user.role, plan: user.plan, account_status: user.account_status });
