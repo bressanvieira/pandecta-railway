@@ -211,6 +211,16 @@ app.post('/api/auth/login', (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// DEBUG TEMPORÁRIO — remover após resolver
+app.get('/api/debug/ping', (req, res) => {
+  if (!db) return res.json({ ok: false, db: false });
+  try {
+    const admin = db.prepare("SELECT id, email, nome, role, account_status, trial_expires_at FROM users WHERE email='admin@pandecta.ai'").get();
+    const total = db.prepare("SELECT COUNT(*) as n FROM users").get();
+    res.json({ ok: true, db: true, admin, total_users: total.n, server_time: new Date().toISOString() });
+  } catch(e) { res.json({ ok: false, error: e.message }); }
+});
+
 app.post('/api/cadastro', (req, res) => {
   const { email, password, nome, sobrenome, phone, plan = 'solo',
           profile_type = 'advogado', oab_number = '', oab_uf = '',
