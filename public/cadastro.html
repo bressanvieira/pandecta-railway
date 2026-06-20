@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar conta — Pandecta AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:    #0D1B2A;
+      --navy2:   #122033;
+      --gold:    #C9A84C;
+      --gold-lt: #d4b668;
+      --gold-bg: rgba(201,168,76,.08);
+      --gold-bd: rgba(201,168,76,.25);
+      --white:   #ffffff;
+      --off:     #f7f5f0;
+      --t1:      #0D1B2A;
+      --t2:      #3a4a5c;
+      --t3:      #7a8a9a;
+      --bdr:     #e8e4dc;
+      --err:     #e05252;
+      --ok:      #3dba7e;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 60px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      flex-shrink: 0;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img { height: 36px; mix-blend-mode: screen; }
+    .nav-back {
+      font-size: 13px; color: rgba(255,255,255,.4);
+      text-decoration: none; display: flex; align-items: center; gap: 6px;
+      transition: color .15s;
+    }
+    .nav-back:hover { color: rgba(255,255,255,.8); }
+
+    /* ── LAYOUT ── */
+    .page {
+      flex: 1; display: flex; align-items: stretch;
+    }
+
+    /* ── LEFT PANEL ── */
+    .left {
+      width: 380px; flex-shrink: 0;
+      background: var(--navy2);
+      border-right: 1px solid rgba(255,255,255,.06);
+      padding: 56px 48px;
+      display: flex; flex-direction: column;
+    }
+    .left-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 20px;
+      background: var(--gold-bg); border: 1px solid var(--gold-bd);
+      font-size: 11px; font-weight: 500; color: var(--gold);
+      margin-bottom: 32px; align-self: flex-start;
+    }
+    .left-badge::before { content: '●'; font-size: 7px; }
+    .left h2 {
+      font-size: 22px; font-weight: 700; line-height: 1.3;
+      color: var(--white); margin-bottom: 12px;
+    }
+    .left-sub {
+      font-size: 14px; color: rgba(255,255,255,.45);
+      line-height: 1.65; margin-bottom: 40px;
+    }
+    .left-items { display: flex; flex-direction: column; gap: 20px; }
+    .left-item { display: flex; align-items: flex-start; gap: 14px; }
+    .left-item-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      background: var(--gold-bg); border: 1px solid var(--gold-bd);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .left-item-text {}
+    .left-item-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+    .left-item-desc { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.5; }
+    .left-trial-box {
+      margin-top: auto; padding: 20px;
+      background: rgba(201,168,76,.07); border: 1px solid rgba(201,168,76,.2);
+      border-radius: 12px;
+    }
+    .left-trial-title { font-size: 13px; font-weight: 600; color: var(--gold); margin-bottom: 6px; }
+    .left-trial-desc { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.5; }
+
+    /* ── FORM PANEL ── */
+    .right {
+      flex: 1; padding: 48px 56px;
+      overflow-y: auto;
+    }
+    .form-title { font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .form-sub { font-size: 14px; color: rgba(255,255,255,.4); margin-bottom: 36px; }
+    .form-sub a { color: var(--gold); text-decoration: none; }
+    .form-sub a:hover { text-decoration: underline; }
+
+    /* ── PLAN SELECTOR ── */
+    .plan-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; margin-bottom: 32px;
+    }
+    .plan-card {
+      border: 1.5px solid rgba(255,255,255,.1);
+      border-radius: 12px; padding: 16px;
+      cursor: pointer; transition: all .15s;
+      position: relative;
+    }
+    .plan-card:hover { border-color: rgba(201,168,76,.4); background: rgba(201,168,76,.04); }
+    .plan-card.selected {
+      border-color: var(--gold);
+      background: rgba(201,168,76,.08);
+    }
+    .plan-card.featured { border-color: rgba(201,168,76,.3); }
+    .plan-check {
+      position: absolute; top: 10px; right: 10px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--gold); display: none;
+      align-items: center; justify-content: center;
+    }
+    .plan-card.selected .plan-check { display: flex; }
+    .plan-check svg { width: 10px; height: 10px; }
+    .plan-name { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,.4); margin-bottom: 8px; }
+    .plan-price { font-size: 22px; font-weight: 800; color: var(--white); line-height: 1; }
+    .plan-price span { font-size: 12px; font-weight: 400; color: rgba(255,255,255,.4); }
+    .plan-desc { font-size: 11px; color: rgba(255,255,255,.3); margin-top: 4px; }
+
+    /* ── FORM FIELDS ── */
+    .form-section-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: rgba(255,255,255,.3);
+      margin-bottom: 14px; padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 0; }
+    label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,.55); }
+    label span.req { color: var(--gold); }
+    input, select {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 14px; color: var(--white);
+      font-family: 'Inter', sans-serif;
+      transition: border-color .15s, background .15s;
+      width: 100%;
+    }
+    input::placeholder { color: rgba(255,255,255,.2); }
+    input:focus, select:focus {
+      outline: none;
+      border-color: rgba(201,168,76,.5);
+      background: rgba(255,255,255,.08);
+    }
+    select option { background: var(--navy2); color: var(--white); }
+
+    /* ── PERFIL TOGGLE ── */
+    .perfil-toggle {
+      display: flex; gap: 8px; margin-bottom: 20px;
+    }
+    .perfil-btn {
+      flex: 1; padding: 10px; border-radius: 8px; cursor: pointer;
+      border: 1.5px solid rgba(255,255,255,.1);
+      background: transparent; color: rgba(255,255,255,.5);
+      font-size: 13px; font-weight: 500; font-family: 'Inter', sans-serif;
+      transition: all .15s; text-align: center;
+    }
+    .perfil-btn.active {
+      border-color: var(--gold);
+      background: rgba(201,168,76,.08);
+      color: var(--white);
+    }
+
+    /* ── OAB UF ROW ── */
+    .oab-row { display: grid; grid-template-columns: 1fr 100px; gap: 10px; margin-bottom: 14px; }
+
+    /* ── SEMESTRE ── */
+    .semestre-row { display: grid; grid-template-columns: 1fr 140px; gap: 10px; margin-bottom: 14px; }
+
+    /* ── DIVIDER ── */
+    .form-divider { height: 1px; background: rgba(255,255,255,.06); margin: 24px 0; }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: var(--gold); color: var(--navy);
+      border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; margin-top: 24px;
+      transition: opacity .15s, transform .1s;
+    }
+    .btn-submit:hover { opacity: .9; }
+    .btn-submit:active { transform: scale(.99); }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-note {
+      text-align: center; font-size: 12px;
+      color: rgba(255,255,255,.25); margin-top: 12px;
+    }
+
+    /* ── TOAST / ERROR ── */
+    .form-error {
+      background: rgba(224,82,82,.12); border: 1px solid rgba(224,82,82,.3);
+      border-radius: 8px; padding: 12px 16px;
+      font-size: 13px; color: #f28a8a;
+      margin-bottom: 20px; display: none;
+    }
+    .form-error.show { display: block; }
+
+    /* ── SUCCESS OVERLAY ── */
+    #success-screen {
+      display: none;
+      position: fixed; inset: 0;
+      background: var(--navy);
+      flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 40px; z-index: 100;
+    }
+    #success-screen.show { display: flex; }
+    .success-icon { font-size: 56px; margin-bottom: 24px; }
+    .success-title { font-size: 26px; font-weight: 800; color: var(--white); margin-bottom: 12px; }
+    .success-sub { font-size: 16px; color: rgba(255,255,255,.5); max-width: 420px; line-height: 1.6; margin-bottom: 36px; }
+    .success-trial-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 20px; border-radius: 20px;
+      background: var(--gold-bg); border: 1px solid var(--gold-bd);
+      font-size: 13px; font-weight: 500; color: var(--gold);
+      margin-bottom: 36px;
+    }
+    .btn-enter {
+      padding: 14px 48px;
+      background: var(--gold); color: var(--navy);
+      border: none; border-radius: 10px;
+      font-size: 16px; font-weight: 700; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .btn-enter:hover { opacity: .9; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .left { display: none; }
+      .right { padding: 32px 24px; }
+      .plan-row { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .oab-row { grid-template-columns: 1fr 90px; }
+      nav { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI">
+  </a>
+  <a class="nav-back" href="/">&#8592; Voltar ao site</a>
+</nav>
+
+<!-- SUCCESS OVERLAY -->
+<div id="success-screen">
+  <div class="success-icon">🎉</div>
+  <div class="success-title">Conta criada com sucesso!</div>
+  <div class="success-sub">Bem-vindo(a) à Pandecta. Seu período de teste de 7 dias começa agora.</div>
+  <div class="success-trial-badge">⏱ 7 dias grátis · Sem cobrança agora</div>
+  <button class="btn-enter" onclick="entrar()">Acessar a plataforma →</button>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div class="left-badge">Exclusivo para juristas</div>
+    <h2>Inteligência jurídica que aprende com o seu escritório</h2>
+    <p class="left-sub">Gere peças com fundamentação real, acesse o histórico do escritório e produza mais em menos tempo.</p>
+    <div class="left-items">
+      <div class="left-item">
+        <div class="left-item-icon">⚖️</div>
+        <div class="left-item-text">
+          <div class="left-item-title">Exclusivo para advogados e estudantes</div>
+          <div class="left-item-desc">Validamos seu número OAB ou instituição de ensino.</div>
+        </div>
+      </div>
+      <div class="left-item">
+        <div class="left-item-icon">🧠</div>
+        <div class="left-item-text">
+          <div class="left-item-title">Memória do seu escritório</div>
+          <div class="left-item-desc">A IA aprende com suas peças anteriores e usa seu acervo como referência.</div>
+        </div>
+      </div>
+      <div class="left-item">
+        <div class="left-item-icon">📄</div>
+        <div class="left-item-text">
+          <div class="left-item-title">Exportação Word profissional</div>
+          <div class="left-item-desc">Pronto para protocolar, com logo e formatação do escritório.</div>
+        </div>
+      </div>
+    </div>
+    <div class="left-trial-box">
+      <div class="left-trial-title">⏱ 7 dias grátis</div>
+      <div class="left-trial-desc">Explore tudo sem compromisso. Não pedimos cartão de crédito agora.</div>
+    </div>
+  </div>
+
+  <!-- RIGHT / FORM -->
+  <div class="right">
+    <div class="form-title">Criar sua conta</div>
+    <p class="form-sub">Já tem conta? <a href="/app">Entrar</a></p>
+
+    <div class="form-error" id="form-error"></div>
+
+    <!-- PLAN SELECTOR -->
+    <div class="form-section-label">Escolha seu plano</div>
+    <div class="plan-row" id="plan-row">
+      <div class="plan-card" data-plan="solo" onclick="selectPlan('solo')">
+        <div class="plan-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke="#0D1B2A" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="plan-name">Solo</div>
+        <div class="plan-price">R$79<span>/mês</span></div>
+        <div class="plan-desc">30 peças · 1 usuário</div>
+      </div>
+      <div class="plan-card featured" data-plan="profissional" onclick="selectPlan('profissional')">
+        <div class="plan-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke="#0D1B2A" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="plan-name">Profissional</div>
+        <div class="plan-price">R$179<span>/mês</span></div>
+        <div class="plan-desc">Ilimitado · 3 usuários</div>
+      </div>
+      <div class="plan-card" data-plan="escritorio" onclick="selectPlan('escritorio')">
+        <div class="plan-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke="#0D1B2A" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="plan-name">Escritório</div>
+        <div class="plan-price">R$379<span>/mês</span></div>
+        <div class="plan-desc">Ilimitado · 10 usuários</div>
+      </div>
+    </div>
+
+    <form id="cadastro-form" onsubmit="submitForm(event)">
+      <!-- DADOS PESSOAIS -->
+      <div class="form-section-label" style="margin-top:8px">Dados pessoais</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nome <span class="req">*</span></label>
+          <input type="text" id="nome" placeholder="Seu nome" autocomplete="given-name" required>
+        </div>
+        <div class="form-group">
+          <label>Sobrenome <span class="req">*</span></label>
+          <input type="text" id="sobrenome" placeholder="Seu sobrenome" autocomplete="family-name" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>E-mail <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="seu@email.com.br" autocomplete="email" required>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp / Celular <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="(51) 9 9999-9999" autocomplete="tel" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Senha <span class="req">*</span></label>
+          <input type="password" id="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" required>
+        </div>
+        <div class="form-group">
+          <label>Confirmar senha <span class="req">*</span></label>
+          <input type="password" id="password2" placeholder="Repita a senha" autocomplete="new-password" required>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- PERFIL PROFISSIONAL -->
+      <div class="form-section-label">Perfil profissional</div>
+
+      <div class="perfil-toggle">
+        <button type="button" class="perfil-btn active" id="btn-advogado" onclick="setPerfil('advogado')">
+          ⚖️ Sou advogado(a)
+        </button>
+        <button type="button" class="perfil-btn" id="btn-estudante" onclick="setPerfil('estudante')">
+          🎓 Sou estudante de Direito
+        </button>
+      </div>
+
+      <!-- ADVOGADO -->
+      <div id="section-advogado">
+        <div class="oab-row">
+          <div class="form-group">
+            <label>Número OAB <span class="req">*</span></label>
+            <input type="text" id="oab_number" placeholder="Ex: 123456" maxlength="10">
+          </div>
+          <div class="form-group">
+            <label>Estado <span class="req">*</span></label>
+            <select id="oab_uf">
+              <option value="">UF</option>
+              <option>AC</option><option>AL</option><option>AM</option><option>AP</option>
+              <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+              <option>GO</option><option>MA</option><option>MG</option><option>MS</option>
+              <option>MT</option><option>PA</option><option>PB</option><option>PE</option>
+              <option>PI</option><option>PR</option><option>RJ</option><option>RN</option>
+              <option>RO</option><option>RR</option><option>RS</option><option>SC</option>
+              <option>SE</option><option>SP</option><option>TO</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESTUDANTE -->
+      <div id="section-estudante" style="display:none">
+        <div class="form-row single">
+          <div class="form-group">
+            <label>Instituição de ensino <span class="req">*</span></label>
+            <input type="text" id="institution" placeholder="Ex: PUC-RS, UFRGS, Unisinos...">
+          </div>
+        </div>
+        <div class="semestre-row">
+          <div class="form-group" style="visibility:hidden"></div>
+          <div class="form-group">
+            <label>Semestre <span class="req">*</span></label>
+            <select id="semester">
+              <option value="">Semestre</option>
+              <option value="1">1º</option>
+              <option value="2">2º</option>
+              <option value="3">3º</option>
+              <option value="4">4º</option>
+              <option value="5">5º</option>
+              <option value="6">6º</option>
+              <option value="7">7º</option>
+              <option value="8">8º</option>
+              <option value="9">9º</option>
+              <option value="10">10º</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btn-submit">
+        Criar conta e começar grátis →
+      </button>
+      <p class="btn-note">7 dias grátis · Sem cartão de crédito · Cancele quando quiser</p>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ── PLANO INICIAL via ?plano= ──────────────────────────────────────────
+  const params = new URLSearchParams(location.search);
+  const planParam = params.get('plano') || 'profissional';
+  let currentPlan = 'profissional';
+  let currentPerfil = 'advogado';
+
+  function selectPlan(plan) {
+    currentPlan = plan;
+    document.querySelectorAll('.plan-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.plan === plan);
+    });
+  }
+
+  function setPerfil(perfil) {
+    currentPerfil = perfil;
+    document.getElementById('btn-advogado').classList.toggle('active', perfil === 'advogado');
+    document.getElementById('btn-estudante').classList.toggle('active', perfil === 'estudante');
+    document.getElementById('section-advogado').style.display = perfil === 'advogado' ? 'block' : 'none';
+    document.getElementById('section-estudante').style.display = perfil === 'estudante' ? 'block' : 'none';
+  }
+
+  // Inicializa plano
+  const validPlans = ['solo', 'profissional', 'escritorio'];
+  selectPlan(validPlans.includes(planParam) ? planParam : 'profissional');
+
+  // ── SUBMIT ────────────────────────────────────────────────────────────
+  function showError(msg) {
+    const el = document.getElementById('form-error');
+    el.textContent = msg;
+    el.classList.add('show');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function hideError() {
+    document.getElementById('form-error').classList.remove('show');
+  }
+
+  async function submitForm(e) {
+    e.preventDefault();
+    hideError();
+
+    const nome     = document.getElementById('nome').value.trim();
+    const sobrenome= document.getElementById('sobrenome').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const phone    = document.getElementById('phone').value.trim();
+    const password = document.getElementById('password').value;
+    const password2= document.getElementById('password2').value;
+
+    if (password !== password2) return showError('As senhas não conferem.');
+    if (password.length < 8)    return showError('A senha deve ter no mínimo 8 caracteres.');
+
+    const body = { nome, sobrenome, email, phone, password, plan: currentPlan, profile_type: currentPerfil };
+
+    if (currentPerfil === 'advogado') {
+      const oab_number = document.getElementById('oab_number').value.trim();
+      const oab_uf     = document.getElementById('oab_uf').value;
+      if (!oab_number || !oab_uf) return showError('Informe seu número OAB e estado.');
+      body.oab_number = oab_number;
+      body.oab_uf     = oab_uf;
+    } else {
+      const institution = document.getElementById('institution').value.trim();
+      const semester    = document.getElementById('semester').value;
+      if (!institution || !semester) return showError('Informe sua instituição e semestre.');
+      body.institution = institution;
+      body.semester    = semester;
+    }
+
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = 'Criando conta...';
+
+    try {
+      const resp = await fetch('/api/cadastro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await resp.json();
+
+      if (!resp.ok) {
+        showError(data.error || 'Erro ao criar conta. Tente novamente.');
+        btn.disabled = false;
+        btn.textContent = 'Criar conta e começar grátis →';
+        return;
+      }
+
+      // Salva token igual ao login normal
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('usuario', data.email);
+      localStorage.setItem('userNome', data.nome);
+      localStorage.setItem('userRole', data.role);
+      localStorage.setItem('userPlan', data.plan);
+
+      // Mostra tela de sucesso
+      document.getElementById('success-screen').classList.add('show');
+
+    } catch (err) {
+      showError('Erro de conexão. Verifique sua internet e tente novamente.');
+      btn.disabled = false;
+      btn.textContent = 'Criar conta e começar grátis →';
+    }
+  }
+
+  function entrar() {
+    window.location.href = '/app';
+  }
+</script>
+</body>
+</html>
