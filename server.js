@@ -300,7 +300,25 @@ function requireAdmin(req, res, next) {
 app.get('/api/users', requireAuth, requireAdmin, (req, res) => {
   if (!db) return res.json([]);
   try {
-    res.json(db.prepare('SELECT id, email, nome, role, created_at FROM users ORDER BY created_at DESC').all());
+    res.json(db.prepare(`
+      SELECT id, email, nome, role, phone, plan, profile_type,
+             oab_number, oab_uf, institution, semester,
+             trial_expires_at, account_status, created_at
+      FROM users ORDER BY created_at DESC
+    `).all());
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.patch('/api/users/:id/status', requireAuth, requireAdmin, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponivel.' });
+  const { status } = req.body;
+  const allowed = ['active', 'trial', 'blocked'];
+  if (!allowed.includes(status)) return res.status(400).json({ error: 'Status invalido.' });
+  if (String(req.params.id) === String(req.user.userId))
+    return res.status(400).json({ error: 'Nao e possivel alterar o proprio status.' });
+  try {
+    db.prepare('UPDATE users SET account_status=? WHERE id=?').run(status, req.params.id);
+    res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -833,13 +851,14 @@ app.get('/api/health', (req, res) => {
 app.get('/api/admin/stats', requireAuth, requireAdmin, (req, res) => {
   if (!db) return res.json({});
   try {
-    const users      = db.prepare('SELECT COUNT(*) as n FROM users').get().n;
-    const pecas      = db.prepare('SELECT COUNT(*) as n FROM history').get().n;
-    const docs       = db.prepare('SELECT COUNT(*) as n FROM acervo').get().n;
-    const chunks     = db.prepare('SELECT SUM(chunk_count) as n FROM acervo').get().n || 0;
-    const lawyers    = db.prepare('SELECT COUNT(*) as n FROM lawyers').get().n;
-    const ultimas    = db.prepare("SELECT tipo_label, area_label, autor, created_at FROM history ORDER BY created_at DESC LIMIT 5").all();
-    res.json({ users, pecas, docs, chunks, lawyers, ultimas });
+    const users   = db.prepare('SELECT COUNT(*) as n FROM users WHERE role!=\'admin\'').get().n;
+    const trial   = db.prepare("SELECT COUNT(*) as n FROM users WHERE account_status='trial'").get().n;
+    const pecas   = db.prepare('SELECT COUNT(*) as n FROM history').get().n;
+    const docs    = db.prepare('SELECT COUNT(*) as n FROM acervo').get().n;
+    const chunks  = db.prepare('SELECT SUM(chunk_count) as n FROM acervo').get().n || 0;
+    const lawyers = db.prepare('SELECT COUNT(*) as n FROM lawyers').get().n;
+    const ultimas = db.prepare("SELECT tipo_label, area_label, autor, created_at FROM history ORDER BY created_at DESC LIMIT 5").all();
+    res.json({ users, trial, pecas, docs, chunks, lawyers, ultimas });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 

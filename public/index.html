@@ -327,6 +327,32 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .law-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:16px;display:flex;align-items:center;gap:14px;}
 .role-badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600;}
 .role-admin{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-bd);}
+.role-user{background:rgba(255,255,255,.06);color:var(--t2);border:1px solid var(--bd);}
+.usr-table{width:100%;border-collapse:collapse;font-size:13px;}
+.usr-table th{padding:9px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);border-bottom:1px solid var(--bd);white-space:nowrap;}
+.usr-table td{padding:11px 14px;border-bottom:1px solid var(--bd);vertical-align:middle;color:var(--t1);}
+.usr-table tr:hover td{background:var(--surface);}
+.usr-table tr:last-child td{border-bottom:none;}
+.usr-av{width:32px;height:32px;border-radius:50%;background:var(--t1);display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#FFF;flex-shrink:0;}
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;}
+.status-active{background:rgba(61,186,126,.12);color:#2ea36a;border:1px solid rgba(61,186,126,.25);}
+.status-trial{background:rgba(201,168,76,.12);color:var(--gold);border:1px solid rgba(201,168,76,.25);}
+.status-trial_expired{background:rgba(224,82,82,.12);color:#e05252;border:1px solid rgba(224,82,82,.25);}
+.status-blocked{background:rgba(120,120,120,.1);color:var(--t3);border:1px solid var(--bd);}
+.plan-badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;background:var(--surface);color:var(--t2);border:1px solid var(--bd);}
+.usr-action-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--bd);background:transparent;cursor:pointer;color:var(--t2);transition:all .15s;}
+.usr-action-btn:hover{background:var(--t1);color:#fff;border-color:var(--t1);}
+.usr-action-btn.danger{color:#e05252;border-color:rgba(224,82,82,.3);}
+.usr-action-btn.danger:hover{background:#e05252;color:#fff;border-color:#e05252;}
+.usr-action-btn.activate{color:#2ea36a;border-color:rgba(61,186,126,.3);}
+.usr-action-btn.activate:hover{background:#2ea36a;color:#fff;border-color:#2ea36a;}
+.admin-section{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);overflow:hidden;margin-bottom:24px;}
+.admin-section-hdr{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+.admin-section-title{font-size:14px;font-weight:700;color:var(--t1);}
+.admin-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:24px;}
+.admin-stat-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:18px 20px;}
+.admin-stat-val{font-size:28px;font-weight:800;color:var(--t1);line-height:1;}
+.admin-stat-lbl{font-size:11px;color:var(--t3);margin-top:4px;text-transform:uppercase;letter-spacing:.7px;}
 .role-user{background:var(--card);color:var(--t3);border:1px solid var(--bd-md);}
 .law-av{width:40px;height:40px;border-radius:50%;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#FFF;flex-shrink:0;}
 .law-info{flex:1;min-width:0;}
@@ -1237,6 +1263,102 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
+<!-- ════ ADMIN ════ -->
+<div id="screen-admin" class="screen">
+  <div class="app-shell">
+    <div id="sb-admin"></div>
+    <div class="main-area">
+      <div class="topbar">
+        <div class="tb-left">
+          <span class="tb-crumb" onclick="go('home')">Início</span>
+          <span class="tb-sep">/</span>
+          <span class="tb-page">Admin</span>
+        </div>
+        <div class="tb-right">
+          <div class="tb-user" onclick="toggleDD('dd-admin')">
+            <div class="tb-av" id="av-admin">A</div>
+            <div><div class="tb-uname" id="nm-admin">–</div><div class="tb-usess">Sessão atual</div></div>
+          </div>
+          <div class="tb-dropdown" id="dd-admin">
+            <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-area" style="padding:28px 32px;overflow-y:auto;">
+        <div class="page-title">Painel Admin</div>
+        <div class="page-s">Gerencie usuários, licenças e monitore o uso da plataforma.</div>
+
+        <!-- STATS -->
+        <div class="admin-stat-grid" id="admin-stat-grid">
+          <div class="admin-stat-card"><div class="admin-stat-val" id="stat-users">–</div><div class="admin-stat-lbl">Usuários</div></div>
+          <div class="admin-stat-card"><div class="admin-stat-val" id="stat-trial">–</div><div class="admin-stat-lbl">Em Trial</div></div>
+          <div class="admin-stat-card"><div class="admin-stat-val" id="stat-pecas">–</div><div class="admin-stat-lbl">Peças geradas</div></div>
+          <div class="admin-stat-card"><div class="admin-stat-val" id="stat-docs">–</div><div class="admin-stat-lbl">Docs no acervo</div></div>
+        </div>
+
+        <!-- USERS TABLE -->
+        <div class="admin-section">
+          <div class="admin-section-hdr">
+            <div class="admin-section-title">Usuários cadastrados</div>
+            <button class="law-save-btn" onclick="openUserModal()" style="padding:7px 16px;font-size:12px;">+ Novo usuário</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="usr-table">
+              <thead>
+                <tr>
+                  <th>Usuário</th>
+                  <th>Contato</th>
+                  <th>Perfil</th>
+                  <th>Plano</th>
+                  <th>Status</th>
+                  <th>Cadastro</th>
+                  <th>Trial até</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody">
+                <tr><td colspan="8" style="text-align:center;padding:32px;color:var(--t3);">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- BACKUPS -->
+        <div class="admin-section">
+          <div class="admin-section-hdr">
+            <div class="admin-section-title">Backups do banco</div>
+            <button class="law-save-btn" onclick="fazerBackup()" id="btn-backup" style="padding:7px 16px;font-size:12px;">Fazer backup agora</button>
+          </div>
+          <div id="backups-list" style="padding:16px 20px;font-size:13px;color:var(--t3);">Carregando...</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL usuário (mantido para criar/editar) -->
+<div id="user-form-panel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;">
+  <div style="background:var(--card);border-radius:var(--r-lg);padding:28px 32px;width:420px;max-width:95vw;border:1px solid var(--bd);">
+    <div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:20px;" id="user-form-title">Novo usuário</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div><label style="font-size:12px;color:var(--t3);display:block;margin-bottom:5px;">Nome</label><input id="user-nome" type="text" class="cfg-inp" placeholder="Nome completo"></div>
+      <div><label style="font-size:12px;color:var(--t3);display:block;margin-bottom:5px;">Email</label><input id="user-email" type="email" class="cfg-inp" placeholder="email@dominio.com"></div>
+      <div><label style="font-size:12px;color:var(--t3);display:block;margin-bottom:5px;">Função</label>
+        <select id="user-role" class="cfg-inp"><option value="user">Usuário</option><option value="admin">Admin</option></select></div>
+      <div><label style="font-size:12px;color:var(--t3);display:block;margin-bottom:5px;">Senha <span id="user-pass-hint" style="display:none;opacity:.5">(deixe em branco para manter)</span></label>
+        <input id="user-pass" type="password" class="cfg-inp" placeholder="Mínimo 8 caracteres"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:24px;justify-content:flex-end;">
+      <button class="law-cancel-btn" onclick="closeUserModal()">Cancelar</button>
+      <button class="law-save-btn" onclick="saveUser()">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1326,12 +1448,18 @@ function go(s){
   if(s==='config') carregarConfig();
   if(s==='equipe') renderLawyers();
   if(s==='suporte') initSuporte();
-  if(s==='admin'){loadUsers();loadBackups();loadAdminStats();}
+  if(s==='admin'){
+    loadUsers();loadBackups();loadAdminStats();
+    const init=usuario?usuario[0].toUpperCase():'A';
+    const name=usuario?usuario[0].toUpperCase()+usuario.slice(1):'Admin';
+    const av=document.getElementById('av-admin'),nm=document.getElementById('nm-admin');
+    if(av)av.textContent=init;if(nm)nm.textContent=name;
+  }
 }
 function updateAvatars(){
   const init=usuario?usuario[0].toUpperCase():'A';
   const name=usuario?usuario[0].toUpperCase()+usuario.slice(1):'Admin';
-  [['av-home','nm-home'],['av-gen','nm-gen'],['av-hist','nm-hist'],['av-ac','nm-ac'],['av-cfg','nm-cfg'],['av-eq','nm-eq'],['av-sup','nm-sup']].forEach(([a,n])=>{
+  [['av-home','nm-home'],['av-gen','nm-gen'],['av-hist','nm-hist'],['av-ac','nm-ac'],['av-cfg','nm-cfg'],['av-eq','nm-eq'],['av-sup','nm-sup'],['av-admin','nm-admin']].forEach(([a,n])=>{
     const av=document.getElementById(a),nm=document.getElementById(n);
     if(av)av.textContent=init; if(nm)nm.textContent=name;
   });
@@ -2167,30 +2295,103 @@ function toast(msg,tipo='ok'){const el=document.getElementById('toast');el.textC
 
 ['home','gen','hist','ac','config','equipe','sup','admin'].forEach(sfx=>{const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');});
 
+// ════ ADMIN — STATS + BACKUPS ════
+async function loadAdminStats(){
+  try{
+    const d=await api('GET','/api/admin/stats');
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v??'–';};
+    set('stat-users',d.users);
+    set('stat-trial',d.trial);
+    set('stat-pecas',d.pecas);
+    set('stat-docs',d.docs);
+  }catch(e){console.warn('stats:',e.message);}
+}
+
+async function loadBackups(){
+  try{
+    const list=await api('GET','/api/admin/backups');
+    const el=document.getElementById('backups-list');
+    if(!el)return;
+    if(!list||!list.length){el.innerHTML='<span style="color:var(--t3)">Nenhum backup encontrado.</span>';return;}
+    el.innerHTML=list.slice(0,5).map(b=>`
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px;">
+        <span style="color:var(--t1)">📦 ${esc(b.nome)}</span>
+        <span style="color:var(--t3)">${(b.tamanho/1024).toFixed(0)} KB · ${new Date(b.created_at).toLocaleString('pt-BR')}</span>
+      </div>`).join('');
+  }catch(e){const el=document.getElementById('backups-list');if(el)el.innerHTML='<span style="color:var(--t3)">–</span>';}
+}
+
+async function fazerBackup(){
+  const btn=document.getElementById('btn-backup');
+  if(btn){btn.disabled=true;btn.textContent='Fazendo backup...';}
+  try{
+    await api('POST','/api/admin/backup');
+    toast('Backup realizado com sucesso','ok');
+    loadBackups();
+  }catch(e){toast(e.message,'err');}
+  finally{if(btn){btn.disabled=false;btn.textContent='Fazer backup agora';}}
+}
+
 // ════ ADMIN — USERS ════
 let adminEditId=null;
 
 async function loadUsers(){
   try{
     const users=await api('GET','/api/users');
-    const grid=document.getElementById('users-grid');
-    const empty=document.getElementById('users-empty');
-    if(!users||!users.length){grid.innerHTML='';empty.style.display='block';return;}
-    empty.style.display='none';
-    grid.innerHTML=users.map(u=>`
-      <div class="law-card">
-        <div class="law-av">${(u.nome||u.email)[0].toUpperCase()}</div>
-        <div class="law-info">
-          <div class="law-name">${esc(u.nome||'–')}</div>
-          <div class="law-meta">${esc(u.email)} · <span class="role-badge role-${u.role}">${u.role}</span></div>
-          <div class="law-meta" style="margin-top:2px;font-size:11px;opacity:.5">desde ${new Date(u.created_at).toLocaleDateString('pt-BR')}</div>
-        </div>
-        <div class="law-actions">
-          <button class="law-btn" onclick="openUserModal(${u.id},'${esc(u.nome)}','${esc(u.email)}','${u.role}')">Editar</button>
-          <button class="law-btn del" onclick="deleteUser(${u.id},'${esc(u.nome||u.email)}')">Excluir</button>
-        </div>
-      </div>`).join('');
+    const tbody=document.getElementById('users-tbody');
+    if(!tbody)return;
+    if(!users||!users.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--t3);">Nenhum usuário cadastrado.</td></tr>';return;}
+    const planLabel={solo:'Solo R$79',profissional:'Profissional R$179',escritorio:'Escritório R$379'};
+    const statusLabel={active:'Ativo',trial:'Trial',trial_expired:'Trial expirado',blocked:'Bloqueado'};
+    tbody.innerHTML=users.map(u=>{
+      const ini=(u.nome||u.email||'?')[0].toUpperCase();
+      const perfilInfo=u.profile_type==='estudante'
+        ?`🎓 ${esc(u.institution||'–')} ${u.semester?'('+u.semester+'º sem.)':''}`
+        :`⚖️ OAB ${esc(u.oab_number||'–')}/${esc(u.oab_uf||'–')}`;
+      const st=u.account_status||'active';
+      const trialDate=u.trial_expires_at?new Date(u.trial_expires_at).toLocaleDateString('pt-BR'):'–';
+      const cadDate=u.created_at?new Date(u.created_at).toLocaleDateString('pt-BR'):'–';
+      const isActive=st==='active'||st==='trial';
+      return `<tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="usr-av">${ini}</div>
+            <div>
+              <div style="font-weight:600;">${esc(u.nome||'–')}</div>
+              <div style="font-size:11px;color:var(--t3);">${esc(u.email)}</div>
+            </div>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--t2);">${esc(u.phone||'–')}</td>
+        <td style="font-size:12px;">${perfilInfo}</td>
+        <td><span class="plan-badge">${planLabel[u.plan]||esc(u.plan||'–')}</span></td>
+        <td><span class="status-badge status-${st}">${statusLabel[st]||st}</span></td>
+        <td style="font-size:12px;color:var(--t3);">${cadDate}</td>
+        <td style="font-size:12px;color:var(--t3);">${trialDate}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            ${u.role!=='admin'?`
+              ${isActive
+                ?`<button class="usr-action-btn danger" onclick="setUserStatus(${u.id},'blocked','${esc(u.nome||u.email)}')">Inativar</button>`
+                :`<button class="usr-action-btn activate" onclick="setUserStatus(${u.id},'active','${esc(u.nome||u.email)}')">Ativar</button>`
+              }
+              <button class="usr-action-btn" onclick="openUserModal(${u.id},'${esc(u.nome)}','${esc(u.email)}','${u.role}')">Editar</button>
+              <button class="usr-action-btn danger" onclick="deleteUser(${u.id},'${esc(u.nome||u.email)}')">Excluir</button>
+            `:'<span style="font-size:11px;color:var(--t3);">admin</span>'}
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
   }catch(e){toast('Usuários: '+e.message,'err');}
+}
+
+async function setUserStatus(id, status, nome){
+  if(!confirm(`${status==='blocked'?'Inativar':'Ativar'} licença de "${nome}"?`))return;
+  try{
+    await api('PATCH','/api/users/'+id+'/status',{status});
+    toast(status==='blocked'?'Licença inativada':'Licença ativada','ok');
+    loadUsers();
+  }catch(e){toast(e.message,'err');}
 }
 
 function openUserModal(id=null,nome='',email='',role='user'){
