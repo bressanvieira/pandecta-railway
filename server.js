@@ -129,16 +129,16 @@ try {
   try { db.exec(`ALTER TABLE users ADD COLUMN trial_expires_at DATETIME`); } catch(e) {}
   try { db.exec(`ALTER TABLE users ADD COLUMN account_status TEXT DEFAULT 'active'`); } catch(e) {}
 
-  // seed â cria usuÃ¡rio admin padrÃ£o se nÃ£o existir
-  const adminExists = db.prepare('SELECT id FROM users WHERE email=?').get('admin@pandecta.ai');
-  if (!adminExists) {
-    db.prepare('INSERT INTO users (email, password_hash, nome, role) VALUES (?,?,?,?)').run(
-      'admin@pandecta.ai',
-      bcrypt.hashSync('Pandecta@2026', 10),
-      'Administrador',
-      'admin'
+    // seed — garante admin sempre acessível
+  const adminRow = db.prepare('SELECT id FROM users WHERE email=?').get('admin@pandecta.ai');
+  if (!adminRow) {
+    db.prepare('INSERT INTO users (email, password_hash, nome, role, account_status) VALUES (?,?,?,?,?)').run(
+      'admin@pandecta.ai', bcrypt.hashSync('Pandecta@2026', 10), 'Administrador', 'admin', 'active'
     );
-    console.log('â  UsuÃ¡rio admin criado: admin@pandecta.ai / Pandecta@2026');
+    console.log('Admin criado: admin@pandecta.ai / Pandecta@2026');
+  } else {
+    // garante que admin nunca fique bloqueado
+    db.prepare("UPDATE users SET account_status='active', role='admin' WHERE email='admin@pandecta.ai'").run();
   }
 
   console.log('â  Database:', dbPath);
