@@ -539,9 +539,127 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .toast.err{background:#B91C1C;}
 ::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-thumb{background:var(--bd-md);border-radius:4px;}
+
+/* ════ MOBILE HAMBURGER ════ */
+#mob-ham{
+  display:none;
+  position:fixed;top:10px;left:12px;z-index:400;
+  width:36px;height:36px;
+  background:var(--sb);border:none;border-radius:8px;
+  color:rgba(190,210,235,.8);cursor:pointer;
+  align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+/* overlay quando sidebar aberta no mobile */
+#sb-overlay{
+  display:none;
+  position:fixed;inset:0;z-index:299;
+  background:rgba(0,0,0,.5);
+}
+#sb-overlay.open{display:block;}
+
+/* ════ RESPONSIVE ════ */
+@media(max-width:768px){
+
+  /* ── Exibe hamburger ── */
+  #mob-ham{display:flex;}
+
+  /* ── LOGIN: esconde painel esquerdo ── */
+  .login-left{display:none;}
+  .login-right{width:100%;padding:48px 28px;border-left:none;}
+
+  /* ── SIDEBAR: off-canvas ── */
+  .sidebar{
+    position:fixed!important;left:0;top:0;bottom:0;z-index:300;
+    transform:translateX(-100%);
+    transition:transform .25s ease;
+    min-height:100%;
+  }
+  .sidebar.mob-open{transform:translateX(0);}
+
+  /* ── APP SHELL: main preenche tudo ── */
+  .app-shell{overflow:hidden;}
+  .main-area{width:100%!important;min-width:0;}
+
+  /* ── TOPBAR: espaço para hamburger ── */
+  .topbar{padding:0 12px 0 56px;}
+  .tb-uname,.tb-usess{display:none;}
+  .tb-av{margin-left:4px;}
+
+  /* ── HOME HERO: stack vertical ── */
+  .home-hero{flex-direction:column;padding:24px 16px 16px;min-height:auto;gap:16px;align-items:flex-start;}
+  .home-mockup{display:none;}
+  .home-hero-content{max-width:100%;}
+  .home-h1{font-size:26px;}
+  .home-sub{font-size:13px;}
+  .home-cards-sect{padding:0 16px 24px;}
+
+  /* ── QUICK CARDS: 2 colunas ── */
+  .quick-cards{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .qcard{padding:16px 14px;}
+
+  /* ── HOME CHIPS ── */
+  .home-chips{flex-wrap:wrap;}
+
+  /* ── GEN: chat/doc empilhados ── */
+  .gen-layout{flex-direction:column;}
+  .chat-pane{width:100%;height:50vh;border-right:none;border-bottom:1px solid var(--bd);flex-shrink:0;}
+  .doc-pane{height:50vh;}
+
+  /* ── HISTÓRICO ── */
+  .hist-toolbar{flex-direction:column;gap:8px;}
+  .hist-area-pills{flex-wrap:wrap;}
+  .hist-viewer-hd{flex-wrap:wrap;gap:8px;}
+
+  /* ── ACERVO: table com scroll horizontal ── */
+  .ac-table-wrap{overflow-x:auto;}
+  .ac-table{min-width:560px;}
+
+  /* ── ADMIN ── */
+  .admin-stat-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .admin-section{overflow-x:auto;}
+
+  /* ── CONFIG: stack top row ── */
+  .cfg-top-row{flex-direction:column!important;}
+  .cfg-logo-zone{width:100%!important;}
+
+  /* ── EQUIPE: stack layout ── */
+  .equipe-layout{flex-direction:column!important;}
+  .equipe-main{flex:none!important;width:100%!important;}
+
+  /* ── SUPORTE: stack layout ── */
+  .suporte-layout{flex-direction:column!important;}
+
+  /* ── PAGE BODY: padding reduzido ── */
+  .page-body{padding:20px 16px!important;}
+  .suporte-body{padding:20px 16px 16px!important;}
+
+  /* ── MODAIS ── */
+  .modal{width:94vw!important;max-width:none!important;padding:20px 16px!important;}
+
+  /* ── PRICING landing (se abrir no mobile) ── */
+  .home-inp{padding:12px 10px 12px 14px;}
+}
+
+/* Telas muito pequenas */
+@media(max-width:400px){
+  .quick-cards{grid-template-columns:1fr;}
+  .login-right{padding:40px 20px;}
+  .home-h1{font-size:22px;}
+}
 </style>
 </head>
 <body>
+<!-- hamburger fixo – só visível no mobile -->
+<button id="mob-ham" onclick="toggleSidebar()" aria-label="Menu">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <line x1="2" y1="4" x2="14" y2="4"/>
+    <line x1="2" y1="8" x2="14" y2="8"/>
+    <line x1="2" y1="12" x2="14" y2="12"/>
+  </svg>
+</button>
+<!-- overlay sidebar mobile -->
+<div id="sb-overlay" onclick="closeSidebar()"></div>
 
 <!-- ════ LOGIN ════ -->
 <div id="screen-login" class="screen active">
@@ -1434,6 +1552,21 @@ function mkSidebar(active){
   </nav>`;
 }
 
+// ════ SIDEBAR MOBILE ════
+function openSidebar(){
+  document.querySelector('.sidebar')?.classList.add('mob-open');
+  document.getElementById('sb-overlay')?.classList.add('open');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar')?.classList.remove('mob-open');
+  document.getElementById('sb-overlay')?.classList.remove('open');
+}
+function toggleSidebar(){
+  const sb=document.querySelector('.sidebar');
+  if(sb?.classList.contains('mob-open')) closeSidebar();
+  else openSidebar();
+}
+
 // ════ NAV ════
 function go(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
@@ -1442,6 +1575,8 @@ function go(s){
     const el=document.getElementById('sb-'+sfx);
     if(el) el.innerHTML=mkSidebar(s);
   });
+  // fecha sidebar no mobile ao navegar
+  if(window.innerWidth<=768) closeSidebar();
   updateAvatars();
   if(s==='acervo') loadAcervo();
   if(s==='historico'){fecharViewer();loadHistorico();}
