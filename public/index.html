@@ -1176,33 +1176,109 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             </div>
           </div>
 
-          <!-- ── Template de documento ── -->
-          <div class="form-card" style="margin-top:24px;">
-            <div class="form-card-t">Template de documento</div>
-            <div class="page-s" style="margin-bottom:16px;">Faça upload do seu modelo <strong>.docx</strong> com o marcador <code style="background:var(--surface);padding:2px 6px;border-radius:4px;font-size:12px;">{{CONTEUDO}}</code> no lugar onde o texto jurídico deve aparecer. Todos os documentos exportados usarão o seu modelo — mantendo seu cabeçalho, rodapé, logo e formatação.</div>
-            <div id="tpl-zone" class="cfg-logo-zone" onclick="document.getElementById('tpl-file-in').click()" style="max-width:420px;padding:20px;">
-              <div class="cfg-logo-zone-ico">
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 4h11l5 5v15a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z"/><polyline points="17 4 17 9 22 9"/><line x1="14" y1="14" x2="14" y2="20"/><line x1="11" y1="17" x2="17" y2="17"/>
-                </svg>
-              </div>
-              <div id="tpl-label" class="cfg-logo-zone-t">Adicionar template .docx</div>
-              <div class="cfg-logo-zone-s">Arquivo .docx com {{CONTEUDO}} como marcador</div>
-              <input type="file" id="tpl-file-in" accept=".docx" style="display:none" onchange="onTemplateUpload(this)">
-            </div>
-            <div id="tpl-status" style="display:none;margin-top:10px;padding:10px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--bd);display:flex;align-items:center;gap:10px;">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#15803D" stroke-width="1.8" stroke-linecap="round"><path d="M6 9l2.5 2.5 4-4"/><circle cx="9" cy="9" r="7.5"/></svg>
-              <span id="tpl-nome" style="font-size:13px;color:var(--t1);flex:1;"></span>
-              <button onclick="removerTemplate()" style="background:none;border:none;cursor:pointer;color:var(--err);font-size:12px;padding:2px 6px;">✕ Remover</button>
-            </div>
-          </div>
 
-          <button class="cfg-save-btn" onclick="salvarConfig()">Salvar configurações</button>
+                    <button class="cfg-save-btn" onclick="salvarConfig()">Salvar configurações</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- ════ MODELOS ════ -->
+<div id="screen-modelos" class="screen">
+  <div class="app-shell">
+    <div id="sb-modelos"></div>
+    <div class="main-area">
+      <div class="topbar">
+        <div class="tb-left">
+          <span class="tb-crumb" onclick="go('home')">Início</span>
+          <span class="tb-sep">/</span>
+          <span class="tb-page">Modelos</span>
+        </div>
+        <div class="tb-right">
+          <button class="tb-icon-btn" title="Novo modelo" onclick="abrirModalModelo()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg>
+          </button>
+          <div class="tb-user" onclick="toggleDD('dd-mod')">
+            <div class="tb-av" id="av-mod">A</div>
+            <div><div class="tb-uname" id="nm-mod">–</div><div class="tb-usess">Sessão atual</div></div>
+          </div>
+          <div class="tb-dropdown" id="dd-mod">
+            <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <div class="page-h">Modelos de documento</div>
+        <div class="page-s">Faça upload dos seus modelos <strong>.docx</strong> com o marcador <code style="background:var(--surface);padding:2px 6px;border-radius:4px;font-size:12px;">{{CONTEUDO}}</code> onde o texto gerado deve aparecer. O modelo correto é aplicado automaticamente ao exportar cada tipo de peça.</div>
+
+        <div style="margin-bottom:20px;">
+          <button class="btn-primary" onclick="abrirModalModelo()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;font-size:13px;">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>
+            Novo modelo
+          </button>
+        </div>
+
+        <div id="modelos-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+        <div id="modelos-empty" style="display:none;text-align:center;padding:60px 20px;color:var(--t2);">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" style="margin:0 auto 16px;display:block;opacity:.35"><rect x="8" y="4" width="32" height="40" rx="4"/><path d="M16 16h16M16 22h16M16 28h10"/></svg>
+          <div style="font-size:15px;font-weight:500;margin-bottom:8px;">Nenhum modelo cadastrado</div>
+          <div style="font-size:13px;">Adicione um modelo .docx para personalizar seus documentos exportados.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal novo modelo -->
+<div id="modal-modelo" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:900;align-items:center;justify-content:center;">
+  <div style="background:var(--card);border-radius:14px;padding:28px;width:min(480px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <div style="font-size:16px;font-weight:600;color:var(--t1);">Novo modelo</div>
+      <button onclick="fecharModalModelo()" style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:20px;line-height:1;">×</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="lf">
+        <label>Nome do modelo</label>
+        <input id="mod-nome" type="text" class="cfg-inp" placeholder="Ex: Petição Consumidor — Modelo Escritório">
+      </div>
+      <div class="lf">
+        <label>Tipo de documento</label>
+        <select id="mod-tipo" class="cfg-inp" style="cursor:pointer;">
+          <option value="peticao_inicial">Petição Inicial</option>
+          <option value="defesa">Contestação / Defesa</option>
+          <option value="recurso">Recurso / Apelação</option>
+          <option value="notificacao">Notificação Extrajudicial</option>
+          <option value="contrato">Contrato</option>
+          <option value="parecer">Parecer Jurídico</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="lf">
+        <label>Descrição (opcional)</label>
+        <input id="mod-desc" type="text" class="cfg-inp" placeholder="Ex: Modelo padrão para JEC Consumidor">
+      </div>
+      <div class="lf">
+        <label>Arquivo .docx</label>
+        <div id="mod-upload-zone" onclick="document.getElementById('mod-file-in').click()"
+          style="border:2px dashed var(--bd-md);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color .2s;"
+          onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--bd-md)'">
+          <div id="mod-upload-label" style="font-size:13px;color:var(--t2);">Clique para selecionar o arquivo .docx</div>
+          <div style="font-size:11px;color:var(--t3);margin-top:4px;">Use {{CONTEUDO}} como marcador no documento</div>
+          <input type="file" id="mod-file-in" accept=".docx" style="display:none" onchange="onModeloFileSelect(this)">
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+      <button onclick="fecharModalModelo()" style="padding:9px 18px;border:1px solid var(--bd-md);border-radius:8px;background:transparent;color:var(--t2);cursor:pointer;font-size:13px;">Cancelar</button>
+      <button onclick="salvarModelo()" class="btn-primary" style="padding:9px 18px;font-size:13px;">Salvar modelo</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ════ SUPORTE ════ -->
 <div id="screen-suporte" class="screen">
@@ -1582,7 +1658,7 @@ function mkSidebar(active){
     {id:'home',     label:'Início',        icon:'<path d="M2 8.5L9 2l7 6.5V16a1 1 0 01-1 1H3a1 1 0 01-1-1z"/><path d="M6.5 17v-6h5v6"/>',       action:"go('home')"},
     {id:'historico',label:'Histórico',     icon:'<circle cx="9" cy="9" r="6.5"/><path d="M9 6v3.5l2 1.5"/>',                                      action:"go('historico')"},
     {id:'acervo',   label:'Acervo',        icon:'<path d="M2 6a2 2 0 012-2h3.5l2 2H14a2 2 0 012 2v5a2 2 0 01-2 2H4a2 2 0 01-2-2z"/>',            action:"go('acervo')"},
-    {id:'',         label:'Modelos',       icon:'<rect x="3" y="2" width="12" height="16" rx="2"/><path d="M6 7h6M6 10h6M6 13h4"/>',              dim:true},
+    {id:'modelos',  label:'Modelos',       icon:'<rect x="3" y="2" width="12" height="16" rx="2"/><path d="M6 7h6M6 10h6M6 13h4"/>',              action:"go('modelos')"},
     {id:'equipe',   label:'Equipe',        icon:'<circle cx="7" cy="6" r="3"/><path d="M2 17c0-3 2.5-5 5-5s5 2 5 5"/><circle cx="14" cy="6" r="2.5"/><path d="M15.5 17c0-2 1.5-3.5 3-3.5"/>',action:"go('equipe')"},
     {id:'config',   label:'Configurações', icon:'<circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1.1 1.1M12.8 12.8l1.1 1.1M4.1 13.9l1.1-1.1M12.8 5.2l1.1-1.1"/>',action:"go('config')"},
     ...(userRole==='admin'?[{id:'admin', label:'Admin', icon:'<circle cx="9" cy="6" r="3"/><path d="M2 17c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><path d="M13 3l1.5 1.5L17 2"/>',action:"go('admin')"}]:[]),
@@ -1639,7 +1715,7 @@ function toggleSidebar(){
 function go(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
-  ['home','gen','hist','ac','config','equipe','sup','admin'].forEach(sfx=>{
+  ['home','gen','hist','ac','config','equipe','sup','admin','modelos'].forEach(sfx=>{
     const el=document.getElementById('sb-'+sfx);
     if(el) el.innerHTML=mkSidebar(s);
   });
@@ -1651,6 +1727,7 @@ function go(s){
   if(s==='config') carregarConfig();
   if(s==='equipe') renderLawyers();
   if(s==='suporte') initSuporte();
+  if(s==='modelos') loadModelos();
   if(s==='admin'){
     loadUsers();loadBackups();loadAdminStats();
     const init=usuario?usuario[0].toUpperCase():'A';
@@ -2156,22 +2233,25 @@ async function exportarWord(){
   if(!textoGerado)return;
   toast('Gerando Word...','ok');
   const autor=(engine.data.autor||'Autor').split(',')[0].trim();
-  const tipoMap={peticao_inicial:'Peticao-Inicial',defesa:'Contestacao',recurso:'Recurso',notificacao:'Notificacao',contrato:'Contrato'};
+  const tipoMap={peticao_inicial:'Peticao-Inicial',defesa:'Contestacao',recurso:'Recurso',notificacao:'Notificacao',contrato:'Contrato',parecer:'Parecer'};
   const tipo=tipoMap[engine.data.tipo]||'Documento';
   const baseNome='Pandecta_'+tipo+'_'+autor.replace(/\s+/g,'-');
 
-  // Tenta exportar usando template do escritório
-  const blobTpl=await exportarWordComTemplate(textoGerado,engine.data);
-  if(blobTpl){
-    const url=URL.createObjectURL(blobTpl);
-    const a=document.createElement('a');a.href=url;a.download=baseNome+'.docx';a.click();URL.revokeObjectURL(url);
-    toast('Word exportado com seu template!','ok');
-    return;
+  // Tenta usar modelo do escritório correspondente ao tipo da peça
+  const b64Tpl = await getTemplatePorTipo(engine.data.tipo);
+  if(b64Tpl){
+    const blobTpl = await exportarWordComTemplate(textoGerado, engine.data, b64Tpl);
+    if(blobTpl){
+      const url=URL.createObjectURL(blobTpl);
+      const a=document.createElement('a');a.href=url;a.download=baseNome+'.docx';a.click();URL.revokeObjectURL(url);
+      toast('Word exportado com seu modelo!','ok');
+      return;
+    }
   }
 
   // Fallback: export HTML padrão (.doc)
   const html=await buildWordDoc(textoGerado,engine.data);
-  const blob=new Blob(['\ufeff',html],{type:'application/msword;charset=utf-8'});
+  const blob=new Blob(['﻿',html],{type:'application/msword;charset=utf-8'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download=baseNome+'.doc';a.click();URL.revokeObjectURL(url);
   toast('Word exportado!','ok');
@@ -2297,6 +2377,128 @@ function handleLogoChange(input){
   reader.readAsDataURL(f);
 }
 
+// ════ MODELOS ════════════════════════════════════════════════════════════════
+let modelosList = [];
+let _modeloArquivoB64 = '';
+
+const TIPO_LABELS_MOD = {
+  peticao_inicial: 'Petição Inicial',
+  defesa:          'Contestação',
+  recurso:         'Recurso',
+  notificacao:     'Notificação',
+  contrato:        'Contrato',
+  parecer:         'Parecer',
+  outro:           'Outro'
+};
+
+const TIPO_CORES = {
+  peticao_inicial: '#2563EB',
+  defesa:          '#7C3AED',
+  recurso:         '#D97706',
+  notificacao:     '#0891B2',
+  contrato:        '#15803D',
+  parecer:         '#DC2626',
+  outro:           '#6B7280'
+};
+
+async function loadModelos() {
+  try { modelosList = await api('GET', '/api/templates'); } catch(e) { modelosList = []; }
+  renderModelos();
+}
+
+function renderModelos() {
+  const grid  = document.getElementById('modelos-grid');
+  const empty = document.getElementById('modelos-empty');
+  if (!grid) return;
+  if (!modelosList.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = modelosList.map(m => {
+    const label = TIPO_LABELS_MOD[m.tipo] || m.tipo;
+    const cor   = TIPO_CORES[m.tipo]      || '#6B7280';
+    const data  = m.created_at ? new Date(m.created_at).toLocaleDateString('pt-BR') : '';
+    return '<div style="background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px;">'
+         + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">'
+         + '<div style="flex:1;">'
+         + '<div style="font-size:14px;font-weight:600;color:var(--t1);margin-bottom:6px;">' + esc(m.nome) + '</div>'
+         + '<span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;color:#fff;background:' + cor + ';">' + label + '</span>'
+         + '</div>'
+         + '<button onclick="deletarModelo(' + m.id + ')" title="Excluir" style="background:none;border:none;cursor:pointer;color:var(--t3);padding:4px;border-radius:6px;transition:color .15s;" onmouseover="this.style.color=\'var(--err)\'" onmouseout="this.style.color=\'var(--t3)\'">'
+         + '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2 4 12 4"/><path d="M5 4V2.5h4V4M5.5 6.5v4M8.5 6.5v4M3 4l.8 7.5a1 1 0 001 .9h4.4a1 1 0 001-.9L11 4"/></svg>'
+         + '</button>'
+         + '</div>'
+         + (m.descricao ? '<div style="font-size:12px;color:var(--t2);">' + esc(m.descricao) + '</div>' : '')
+         + '<div style="font-size:11px;color:var(--t3);margin-top:2px;">Adicionado em ' + data + '</div>'
+         + '</div>';
+  }).join('');
+}
+
+function abrirModalModelo() {
+  _modeloArquivoB64 = '';
+  document.getElementById('mod-nome').value = '';
+  document.getElementById('mod-tipo').value = 'peticao_inicial';
+  document.getElementById('mod-desc').value = '';
+  document.getElementById('mod-upload-label').textContent = 'Clique para selecionar o arquivo .docx';
+  document.getElementById('modal-modelo').style.display = 'flex';
+}
+
+function fecharModalModelo() {
+  document.getElementById('modal-modelo').style.display = 'none';
+}
+
+function onModeloFileSelect(input) {
+  const f = input.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const arr = new Uint8Array(ev.target.result);
+    let bin = '';
+    arr.forEach(b => bin += String.fromCharCode(b));
+    _modeloArquivoB64 = btoa(bin);
+    document.getElementById('mod-upload-label').textContent = f.name + ' ✓';
+    document.getElementById('mod-upload-zone').style.borderColor = 'var(--gold)';
+  };
+  reader.readAsArrayBuffer(f);
+}
+
+async function salvarModelo() {
+  const nome = document.getElementById('mod-nome').value.trim();
+  const tipo = document.getElementById('mod-tipo').value;
+  const desc = document.getElementById('mod-desc').value.trim();
+  if (!nome) { toast('Informe um nome para o modelo.', 'err'); return; }
+  if (!_modeloArquivoB64) { toast('Selecione o arquivo .docx.', 'err'); return; }
+  try {
+    await api('POST', '/api/templates', { nome, tipo, descricao: desc, arquivo_b64: _modeloArquivoB64 });
+    fecharModalModelo();
+    await loadModelos();
+    toast('Modelo salvo!', 'ok');
+  } catch(e) { toast('Erro: ' + e.message, 'err'); }
+}
+
+async function deletarModelo(id) {
+  if (!confirm('Excluir este modelo?')) return;
+  try {
+    await api('DELETE', '/api/templates/' + id);
+    await loadModelos();
+    toast('Modelo excluído.', 'ok');
+  } catch(e) { toast('Erro: ' + e.message, 'err'); }
+}
+
+// Retorna o arquivo_b64 do template que corresponde ao tipo da peça atual
+async function getTemplatePorTipo(tipo) {
+  try {
+    // Busca no array em memória primeiro
+    const match = modelosList.find(m => m.tipo === tipo);
+    if (!match) return null;
+    // Busca o arquivo (não vem no listing para economizar memória)
+    const data = await api('GET', '/api/templates/' + match.id + '/arquivo');
+    return data?.arquivo_b64 || null;
+  } catch(e) { return null; }
+}
+
 // ── Template helpers ──────────────────────────────────────────────────────────
 let _docTemplateB64 = '';
 
@@ -2334,9 +2536,8 @@ function removerTemplate() {
 }
 
 // Exporta usando template .docx se disponível, senão usa o HTML padrão
-async function exportarWordComTemplate(texto, data) {
-  const tpl = officeData?.doc_template;
-  if (!tpl || typeof JSZip === 'undefined') return null; // fallback para export padrão
+async function exportarWordComTemplate(texto, data, tpl) {
+  if (!tpl || typeof JSZip === 'undefined') return null;
 
   try {
     // Decodifica o template base64 para ArrayBuffer

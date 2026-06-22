@@ -108,6 +108,16 @@ try {
       role          TEXT DEFAULT 'user',
       created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS templates (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome        TEXT NOT NULL,
+      tipo        TEXT DEFAULT 'outro',
+      descricao   TEXT DEFAULT '',
+      arquivo_b64 TEXT DEFAULT '',
+      user_id     INTEGER,
+      created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 
   // migrations â adiciona colunas sem quebrar banco existente
@@ -952,6 +962,44 @@ app.options('/api/gerar', (req, res) => {
 });
 
 // Health check
+// ── TEMPLATES ────────────────────────────────────────────────────────────────
+app.get('/api/templates', requireAuth, (req, res) => {
+  if (!db) return res.json([]);
+  try {
+    const rows = db.prepare('SELECT id,nome,tipo,descricao,created_at FROM templates WHERE user_id=? ORDER BY created_at DESC').all(req.user.id);
+    res.json(rows);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/templates', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { nome='', tipo='outro', descricao='', arquivo_b64='' } = req.body;
+  if (!nome) return res.status(400).json({ error: 'Nome obrigatório.' });
+  try {
+    const r = db.prepare('INSERT INTO templates (nome,tipo,descricao,arquivo_b64,user_id) VALUES (?,?,?,?,?)').run(nome, tipo, descricao, arquivo_b64, req.user.id);
+    res.json(db.prepare('SELECT id,nome,tipo,descricao,created_at FROM templates WHERE id=?').get(r.lastInsertRowid));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/templates/:id/arquivo', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const row = db.prepare('SELECT arquivo_b64, user_id FROM templates WHERE id=?').get(req.params.id);
+    if (!row || row.user_id !== req.user.id) return res.status(404).json({ error: 'Não encontrado.' });
+    res.json({ arquivo_b64: row.arquivo_b64 });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/templates/:id', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const row = db.prepare('SELECT user_id FROM templates WHERE id=?').get(req.params.id);
+    if (!row || row.user_id !== req.user.id) return res.status(404).json({ error: 'Não encontrado.' });
+    db.prepare('DELETE FROM templates WHERE id=?').run(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', version: '3.0.0', db: !!db, timestamp: new Date().toISOString() });
 });
