@@ -2352,8 +2352,7 @@ async function exportarWordComTemplate(texto, data) {
 
     // Converte o texto gerado em parágrafos Word XML
     function textoParaWXML(t) {
-      const lines = t.split('
-');
+      const lines = t.split('\n');
       let out = '';
       for (const line of lines) {
         const safe = line
