@@ -1653,9 +1653,10 @@ async function api(method,path,body){
 // ════ LOAD DATA ════
 async function loadData(){
   try{
-    [lawyers,officeData]=await Promise.all([
+    [lawyers,officeData,modelosList]=await Promise.all([
       api('GET','/api/lawyers').catch(()=>[]),
       api('GET','/api/office').catch(()=>({})),
+      api('GET','/api/templates').catch(()=>[]),
     ]);
   }catch(e){console.error('loadData:',e);}
 }
