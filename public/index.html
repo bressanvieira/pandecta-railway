@@ -995,8 +995,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       </div>
 
       <div class="page-body">
-        <div class="page-h">Acervo do escritório</div>
-        <div class="page-s">Documentos de referência — persistidos no banco de dados.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div>
+            <div class="page-h">Acervo do escritório</div>
+            <div class="page-s">Documentos de referência — persistidos no banco de dados.</div>
+          </div>
+          <button onclick="reindexarAcervo()" id="btn-reindexar" style="display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--accent,#7c5cfc);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+            Reindexar acervo
+          </button>
+        </div>
         <div class="ac-notice">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1.5" y="5.5" width="10" height="6" rx="1"/><path d="M4 5.5V3.5a2.5 2.5 0 015 0v2"/></svg>
           Extração local · chunks salvos no servidor
@@ -2661,6 +2669,19 @@ function selTipo(el){document.querySelectorAll('.t-pill').forEach(p=>p.classList
 async function loadAcervo(){
   try{sessionFiles=await api('GET','/api/acervo');}catch(e){sessionFiles=[];}
   renderCards();updateSb();
+}
+async function reindexarAcervo(){
+  const btn=document.getElementById('btn-reindexar');
+  if(btn){btn.disabled=true;btn.textContent='Reindexando...';}
+  try{
+    const r=await api('POST','/api/acervo/reindexar');
+    toast(r.updated>0?`${r.updated} documento(s) reindexado(s) com sucesso!`:'Nenhum documento precisava ser reindexado.','ok');
+    await loadAcervo();
+  }catch(e){
+    toast('Erro ao reindexar: '+e.message,'err');
+  }finally{
+    if(btn){btn.disabled=false;btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg> Reindexar acervo';}
+  }
 }
 // ── helpers acervo ────────────────────────────────────────────────────────────
 function fmtTamanho(b){if(!b)return'—';if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(0)+' KB';return(b/1048576).toFixed(1)+' MB';}
