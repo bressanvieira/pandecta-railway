@@ -1739,7 +1739,7 @@ function go(s){
 function updateAvatars(){
   const init=usuario?usuario[0].toUpperCase():'A';
   const name=usuario?usuario[0].toUpperCase()+usuario.slice(1):'Admin';
-  [['av-home','nm-home'],['av-gen','nm-gen'],['av-hist','nm-hist'],['av-ac','nm-ac'],['av-cfg','nm-cfg'],['av-eq','nm-eq'],['av-sup','nm-sup'],['av-admin','nm-admin']].forEach(([a,n])=>{
+  [['av-home','nm-home'],['av-gen','nm-gen'],['av-hist','nm-hist'],['av-ac','nm-ac'],['av-cfg','nm-cfg'],['av-eq','nm-eq'],['av-sup','nm-sup'],['av-admin','nm-admin'],['av-mod','nm-mod']].forEach(([a,n])=>{
     const av=document.getElementById(a),nm=document.getElementById(n);
     if(av)av.textContent=init; if(nm)nm.textContent=name;
   });
