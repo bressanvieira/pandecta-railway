@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 /* ════════════════════════════════════
    PANDECTA — Design System v4
@@ -1175,6 +1176,27 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             </div>
           </div>
 
+          <!-- ── Template de documento ── -->
+          <div class="form-card" style="margin-top:24px;">
+            <div class="form-card-t">Template de documento</div>
+            <div class="page-s" style="margin-bottom:16px;">Faça upload do seu modelo <strong>.docx</strong> com o marcador <code style="background:var(--surface);padding:2px 6px;border-radius:4px;font-size:12px;">{{CONTEUDO}}</code> no lugar onde o texto jurídico deve aparecer. Todos os documentos exportados usarão o seu modelo — mantendo seu cabeçalho, rodapé, logo e formatação.</div>
+            <div id="tpl-zone" class="cfg-logo-zone" onclick="document.getElementById('tpl-file-in').click()" style="max-width:420px;padding:20px;">
+              <div class="cfg-logo-zone-ico">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 4h11l5 5v15a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z"/><polyline points="17 4 17 9 22 9"/><line x1="14" y1="14" x2="14" y2="20"/><line x1="11" y1="17" x2="17" y2="17"/>
+                </svg>
+              </div>
+              <div id="tpl-label" class="cfg-logo-zone-t">Adicionar template .docx</div>
+              <div class="cfg-logo-zone-s">Arquivo .docx com {{CONTEUDO}} como marcador</div>
+              <input type="file" id="tpl-file-in" accept=".docx" style="display:none" onchange="onTemplateUpload(this)">
+            </div>
+            <div id="tpl-status" style="display:none;margin-top:10px;padding:10px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--bd);display:flex;align-items:center;gap:10px;">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#15803D" stroke-width="1.8" stroke-linecap="round"><path d="M6 9l2.5 2.5 4-4"/><circle cx="9" cy="9" r="7.5"/></svg>
+              <span id="tpl-nome" style="font-size:13px;color:var(--t1);flex:1;"></span>
+              <button onclick="removerTemplate()" style="background:none;border:none;cursor:pointer;color:var(--err);font-size:12px;padding:2px 6px;">✕ Remover</button>
+            </div>
+          </div>
+
           <button class="cfg-save-btn" onclick="salvarConfig()">Salvar configurações</button>
         </div>
       </div>
@@ -1595,16 +1617,20 @@ function mkSidebar(active){
 }
 
 // ════ SIDEBAR MOBILE ════
+function _activeSidebar(){
+  const active=document.querySelector('.screen.active');
+  return active?.querySelector('.sidebar')||document.querySelector('.sidebar');
+}
 function openSidebar(){
-  document.querySelector('.sidebar')?.classList.add('mob-open');
+  _activeSidebar()?.classList.add('mob-open');
   document.getElementById('sb-overlay')?.classList.add('open');
 }
 function closeSidebar(){
-  document.querySelector('.sidebar')?.classList.remove('mob-open');
+  document.querySelectorAll('.sidebar').forEach(sb=>sb.classList.remove('mob-open'));
   document.getElementById('sb-overlay')?.classList.remove('open');
 }
 function toggleSidebar(){
-  const sb=document.querySelector('.sidebar');
+  const sb=_activeSidebar();
   if(sb?.classList.contains('mob-open')) closeSidebar();
   else openSidebar();
 }
@@ -2130,11 +2156,24 @@ async function exportarWord(){
   if(!textoGerado)return;
   toast('Gerando Word...','ok');
   const autor=(engine.data.autor||'Autor').split(',')[0].trim();
-  const tipo={peticao_inicial:'Petição-Inicial',defesa:'Contestação',recurso:'Recurso',notificacao:'Notificação',contrato:'Contrato'}[engine.data.tipo]||'Documento';
-  const nome=`Pandecta_${tipo}_${autor.replace(/\s+/g,'-')}.doc`;
+  const tipoMap={peticao_inicial:'Peticao-Inicial',defesa:'Contestacao',recurso:'Recurso',notificacao:'Notificacao',contrato:'Contrato'};
+  const tipo=tipoMap[engine.data.tipo]||'Documento';
+  const baseNome='Pandecta_'+tipo+'_'+autor.replace(/\s+/g,'-');
+
+  // Tenta exportar usando template do escritório
+  const blobTpl=await exportarWordComTemplate(textoGerado,engine.data);
+  if(blobTpl){
+    const url=URL.createObjectURL(blobTpl);
+    const a=document.createElement('a');a.href=url;a.download=baseNome+'.docx';a.click();URL.revokeObjectURL(url);
+    toast('Word exportado com seu template!','ok');
+    return;
+  }
+
+  // Fallback: export HTML padrão (.doc)
   const html=await buildWordDoc(textoGerado,engine.data);
-  const blob=new Blob(['﻿',html],{type:'application/msword;charset=utf-8'});
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=nome;a.click();URL.revokeObjectURL(url);
+  const blob=new Blob(['\ufeff',html],{type:'application/msword;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=baseNome+'.doc';a.click();URL.revokeObjectURL(url);
   toast('Word exportado!','ok');
 }
 
@@ -2258,11 +2297,128 @@ function handleLogoChange(input){
   reader.readAsDataURL(f);
 }
 
+// ── Template helpers ──────────────────────────────────────────────────────────
+let _docTemplateB64 = '';
+
+function _renderTemplateZone(b64) {
+  _docTemplateB64 = b64 || '';
+  const status = document.getElementById('tpl-status');
+  const label  = document.getElementById('tpl-label');
+  const nome   = document.getElementById('tpl-nome');
+  if (!status) return;
+  if (b64) {
+    status.style.display = 'flex';
+    if (nome) nome.textContent = 'Template carregado ✓';
+    if (label) label.textContent = 'Substituir template';
+  } else {
+    status.style.display = 'none';
+    if (label) label.textContent = 'Adicionar template .docx';
+  }
+}
+
+function onTemplateUpload(input) {
+  const f = input.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const b64 = btoa(String.fromCharCode(...new Uint8Array(ev.target.result)));
+    _renderTemplateZone(b64);
+    const nome = document.getElementById('tpl-nome');
+    if (nome) nome.textContent = f.name + ' ✓';
+  };
+  reader.readAsArrayBuffer(f);
+}
+
+function removerTemplate() {
+  _renderTemplateZone('');
+}
+
+// Exporta usando template .docx se disponível, senão usa o HTML padrão
+async function exportarWordComTemplate(texto, data) {
+  const tpl = officeData?.doc_template;
+  if (!tpl || typeof JSZip === 'undefined') return null; // fallback para export padrão
+
+  try {
+    // Decodifica o template base64 para ArrayBuffer
+    const bin   = atob(tpl);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+
+    const zip  = await JSZip.loadAsync(bytes.buffer);
+    const xmlFile = zip.file('word/document.xml');
+    if (!xmlFile) return null;
+
+    let xml = await xmlFile.async('string');
+
+    // Converte o texto gerado em parágrafos Word XML
+    function textoParaWXML(t) {
+      const lines = t.split('
+');
+      let out = '';
+      for (const line of lines) {
+        const safe = line
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+
+        let style = '';
+        let txt   = safe;
+
+        if (/^\s*#{1,2}\s/.test(line)) {
+          txt   = safe.replace(/^#+\s*/, '');
+          style = '<w:pStyle w:val="Heading1"/>';
+        }
+
+        if (!txt.trim()) {
+          out += '<w:p><w:pPr><w:spacing w:after="120"/></w:pPr></w:p>';
+        } else {
+          out += '<w:p>'
+               + '<w:pPr>' + style + '<w:spacing w:line="360" w:lineRule="auto" w:after="120"/>'
+               + '<w:jc w:val="both"/></w:pPr>'
+               + '<w:r><w:t xml:space="preserve">' + txt + '</w:t></w:r>'
+               + '</w:p>';
+        }
+      }
+      return out;
+    }
+
+    const wxmlConteudo = textoParaWXML(texto);
+
+    // Tenta substituir {{CONTEUDO}} — pode estar fragmentado nos runs do XML
+    // Normaliza primeiro: une runs adjacentes que formam o marcador
+    // Estratégia: replace direto no XML (funciona se o usuário digitou {{CONTEUDO}} sem formatação)
+    if (xml.includes('{{CONTEUDO}}')) {
+      // Encontra o parágrafo inteiro que contém o marcador e substitui tudo
+      xml = xml.replace(/<w:p[^>]*>(?:(?!<w:p[ >])[\s\S])*?\{\{CONTEUDO\}\}[\s\S]*?<\/w:p>/,
+        wxmlConteudo);
+    } else if (xml.includes('CONTEUDO')) {
+      // Fallback: marcador simples sem chaves
+      xml = xml.replace(/<w:p[^>]*>(?:(?!<w:p[ >])[\s\S])*?CONTEUDO[\s\S]*?<\/w:p>/,
+        wxmlConteudo);
+    } else {
+      // Marcador não encontrado: injeta antes do último parágrafo
+      const lastP = xml.lastIndexOf('<w:p>');
+      if (lastP > 0) xml = xml.slice(0, lastP) + wxmlConteudo + xml.slice(lastP);
+      else return null;
+    }
+
+    zip.file('word/document.xml', xml);
+    const blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    return blob;
+  } catch (e) {
+    console.error('Erro no template:', e);
+    return null;
+  }
+}
+
+
 async function carregarConfig(){
   try{officeData=await api('GET','/api/office');}catch(e){}
   const m={nome:'cfg-nome',endereco:'cfg-end',cidade:'cfg-cidade',cep:'cfg-cep',telefone:'cfg-tel',email:'cfg-email'};
   Object.entries(m).forEach(([k,id])=>{const el=document.getElementById(id);if(el)el.value=officeData[k]||'';});
   _renderLogoZone(officeData.logo||'');
+  _renderTemplateZone(officeData.doc_template||'');
 }
 
 async function salvarConfig(){
@@ -2273,7 +2429,8 @@ async function salvarConfig(){
     cep:document.getElementById('cfg-cep').value.trim(),
     telefone:document.getElementById('cfg-tel').value.trim(),
     email:document.getElementById('cfg-email').value.trim(),
-    logo:_logoBase64||''
+    logo:_logoBase64||'',
+    doc_template:_docTemplateB64||''
   };
   try{await api('PUT','/api/office',data);officeData=data;toast('Configurações salvas!','ok');}
   catch(e){toast('Erro: '+e.message,'err');}

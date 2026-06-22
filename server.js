@@ -116,6 +116,7 @@ try {
   try { db.exec(`ALTER TABLE acervo ADD COLUMN chunk_count INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN chunks TEXT DEFAULT '[]'`); } catch(e) {}
   try { db.exec(`ALTER TABLE office ADD COLUMN logo TEXT DEFAULT ''`); } catch(e) {}
+  try { db.exec(`ALTER TABLE office ADD COLUMN doc_template TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE history ADD COLUMN user_id INTEGER`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN user_id INTEGER`); } catch(e) {}
   // migrations cadastro v2
@@ -412,16 +413,16 @@ app.delete('/api/lawyers/:id', requireAuth, (req, res) => {
 app.get('/api/office', requireAuth, (req, res) => {
   if (!db) return res.json({});
   try {
-    res.json(db.prepare('SELECT nome,endereco,cidade,cep,telefone,email,logo FROM office WHERE id=1').get() || {});
+    res.json(db.prepare('SELECT nome,endereco,cidade,cep,telefone,email,logo,doc_template FROM office WHERE id=1').get() || {});
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.put('/api/office', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponÃ­vel.' });
-  const { nome = '', endereco = '', cidade = '', cep = '', telefone = '', email = '', logo = '' } = req.body;
+  const { nome = '', endereco = '', cidade = '', cep = '', telefone = '', email = '', logo = '', doc_template = '' } = req.body;
   try {
-    db.prepare('UPDATE office SET nome=?,endereco=?,cidade=?,cep=?,telefone=?,email=?,logo=? WHERE id=1').run(
-      nome, endereco, cidade, cep, telefone, email, logo
+    db.prepare('UPDATE office SET nome=?,endereco=?,cidade=?,cep=?,telefone=?,email=?,logo=?,doc_template=? WHERE id=1').run(
+      nome, endereco, cidade, cep, telefone, email, logo, doc_template
     );
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
