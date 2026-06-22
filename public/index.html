@@ -2003,6 +2003,16 @@ class ConversationEngine{
       opts:lawyers.map(l=>({l:l.nome,v:String(l.id),s:`OAB/${l.uf} nº ${l.oab}`})),
     });
 
+    // ── 7. Modelo de documento ────────────────────────────────────────
+    const modelosDoTipo=(modelosList||[]).filter(m=>m.tipo===d.tipo);
+    if(modelosDoTipo.length>0) steps.push({key:'modelo_id',type:'chips',
+      ask:()=>'Qual modelo deseja usar para formatar o documento?',
+      opts:[
+        ...modelosDoTipo.map(m=>({l:m.nome,v:String(m.id),s:'Modelo salvo'})),
+        {l:'Sem modelo',v:'none',s:'Usar formato padrão'},
+      ]
+    });
+
     return steps;
   }
   _aL(a){return{consumidor:'Consumidor',civil:'Civil',trabalhista:'Trabalhista',familia:'Família'}[a]||'Jurídico';}
@@ -2207,8 +2217,15 @@ async function exportarWord(){
   const tipo=tipoMap[engine.data.tipo]||'Documento';
   const baseNome='Pandecta_'+tipo+'_'+autor.replace(/\s+/g,'-');
 
-  // Tenta usar modelo do escritório correspondente ao tipo da peça
-  const b64Tpl = await getTemplatePorTipo(engine.data.tipo);
+  // Usa modelo escolhido pelo usuário no fluxo, ou busca por tipo como fallback
+  let b64Tpl = null;
+  const midSel = engine.data.modelo_id;
+  if(midSel && midSel !== 'none'){
+    try{ const d=await api('GET','/api/templates/'+midSel+'/arquivo'); b64Tpl=d?.arquivo_b64||null; }catch(e){}
+  } else if(!midSel){
+    // Fluxo antigo: se o campo não existe (peças antigas), busca por tipo
+    b64Tpl = await getTemplatePorTipo(engine.data.tipo);
+  }
   if(b64Tpl){
     const blobTpl = await exportarWordComTemplate(textoGerado, engine.data, b64Tpl);
     if(blobTpl){
