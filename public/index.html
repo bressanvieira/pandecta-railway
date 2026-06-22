@@ -1890,50 +1890,12 @@ async function enviarSuporte(){
   _supAddMsg('user',txt);
   const tid=_supTyping();
 
-  // ── Busca no acervo e na memória antes de responder ──
-  let acervoCtx='';
-  try{
-    const [chunks,memoria]=await Promise.all([
-      api('POST','/api/acervo/buscar',{query:txt,top:4}).catch(()=>[]),
-      api('POST','/api/memoria/consultar',{query:txt,top:3}).catch(()=>[])
-    ]);
-    const fontes=[...new Set([
-      ...(chunks||[]).map(c=>c.fonte||c.nome||'Documento').filter(Boolean),
-      ...(memoria||[]).map(c=>c.fonte||'Histórico').filter(Boolean)
-    ])];
-    if(fontes.length){
-      const qtd=fontes.length;
-      const listaFontes=fontes.slice(0,4).map(f=>`• ${f}`).join('\n');
-      document.getElementById(tid)?.remove();
-      _supAddMsg('ai',`Encontrei informações relevantes em ${qtd} fonte${qtd>1?'s':''}:\n\n${listaFontes}\n\nDeseja iniciar uma nova peça com base nesses dados?`);
-      // botão de ação
-      const btnWrap=document.createElement('div');
-      btnWrap.style.cssText='display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;';
-      const btnSim=document.createElement('button');
-      btnSim.textContent='Sim, iniciar nova peça';
-      btnSim.className='hist-pill';
-      btnSim.onclick=()=>{go('gen');novaConversa();};
-      const btnNao=document.createElement('button');
-      btnNao.textContent='Continuar pesquisando';
-      btnNao.className='hist-pill';
-      btnNao.onclick=()=>{btnWrap.remove();};
-      btnWrap.append(btnSim,btnNao);
-      const lastMsg=document.getElementById('sup-msgs').lastElementChild;
-      if(lastMsg) lastMsg.querySelector('.sup-msg-text')?.appendChild(btnWrap);
-      acervoCtx='\n\nContexto do acervo:\n'+(chunks||[]).map(c=>`[${c.fonte||c.nome}]\n${c.texto||''}`).join('\n\n')+(memoria||[]).map(c=>`[${c.fonte}]\n${c.texto||''}`).join('\n\n');
-      supHistory.push({role:'user',content:txt});
-      supHistory.push({role:'assistant',content:`Encontrei ${qtd} fonte(s): ${fontes.join(', ')}`});
-      supLocked=false;
-      document.getElementById('sup-send').disabled=false;
-      ta.focus();
-      return;
-    }
-  }catch(e){}
+  // O servidor já injeta o contexto do acervo via buscarContextoUsuario — não bloqueamos aqui.
 
   try{
     const resp=await fetch('/api/assistente',{
       method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},
-      body:JSON.stringify({pergunta:txt+acervoCtx,historico:supHistory})
+      body:JSON.stringify({pergunta:txt,historico:supHistory})
     });
     document.getElementById(tid)?.remove();
     if(!resp.ok||!resp.headers.get('content-type')?.includes('event-stream')){
@@ -2950,6 +2912,4 @@ async function deleteUser(id,nome){
   catch(e){toast(e.message,'err');}
 }
 function fmtDate(s){if(!s)return'–';try{return new Date(s).toLocaleDateString('pt-BR');}catch(e){return s;}}
-</script>
-</body>
-</html>
+</scri
