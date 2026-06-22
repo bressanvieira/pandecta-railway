@@ -519,7 +519,7 @@ app.post('/api/acervo/buscar', requireAuth, (req, res) => {
   const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
   if (!words.length) return res.json([]);
   try {
-    const rows = db.prepare('SELECT nome, chunks FROM acervo').all();
+    const rows = db.prepare('SELECT nome, chunks FROM acervo WHERE user_id = ?').all(req.user.id);
     const scored = [];
     rows.forEach(row => {
       let chunks;
@@ -535,40 +535,140 @@ app.post('/api/acervo/buscar', requireAuth, (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// ── HELPER: busca contexto do usuário (acervo + histórico) ───────────────────
+function buscarContextoUsuario(userId, pergunta, topN) {
+  if (!db) return { acervo: [], historico: [] };
+  topN = topN || 4;
+
+  // stopwords PT-BR básicas para não poluir a busca
+  const STOP = new Set(['para','com','que','uma','por','mais','como','mas','seu','sua',
+    'nos','nas','num','numa','esse','essa','este','esta','isso','aqui','quando',
+    'onde','porque','pois','então','muito','pelo','pela','sobre','entre','todo',
+    'toda','pode','deve','sido','pelo','pelas','pelos','nesse','nessa','nesse']);
+
+  const words = pergunta.toLowerCase()
+    .replace(/[^\w\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length > 3 && !STOP.has(w));
+
+  if (!words.length) return { acervo: [], historico: [] };
+
+  // Busca no acervo
+  const acervoRows = db.prepare('SELECT nome, chunks FROM acervo WHERE user_id = ?').all(userId);
+  const acervoScored = [];
+  acervoRows.forEach(row => {
+    let chunks;
+    try { chunks = JSON.parse(row.chunks || '[]'); } catch (e) { chunks = []; }
+    chunks.forEach(c => {
+      const lo = (c.texto || '').toLowerCase();
+      const score = words.filter(w => lo.includes(w)).length / words.length;
+      if (score > 0) acervoScored.push({ texto: c.texto, fonte: row.nome, score });
+    });
+  });
+  acervoScored.sort((a, b) => b.score - a.score);
+
+  // Busca no histórico de peças geradas
+  const histRows = db.prepare(
+    'SELECT id, tipo, tipo_label, area_label, autor, texto, created_at FROM history WHERE user_id = ? ORDER BY created_at DESC LIMIT 200'
+  ).all(userId);
+  const histScored = [];
+  histRows.forEach(row => {
+    const haystack = ((row.autor || '') + ' ' + (row.reu || '') + ' ' + (row.texto || '')).toLowerCase();
+    const score = words.filter(w => haystack.includes(w)).length / words.length;
+    if (score > 0) {
+      // Resumo da peça: primeiros 400 chars do texto
+      const resumo = (row.texto || '').substring(0, 400).replace(/\s+/g, ' ').trim();
+      const data = row.created_at ? new Date(row.created_at).toLocaleDateString('pt-BR') : '';
+      histScored.push({
+        score,
+        fonte: 'Historico',
+        tipo: row.tipo || '',
+        area: row.area || '',
+        autor: row.autor || '',
+        reu: row.reu || '',
+        data,
+        resumo,
+        id: row.id
+      });
+    }
+  });
+  histScored.sort((a, b) => b.score - a.score);
+
+  return {
+    acervo:    acervoScored.slice(0, topN),
+    historico: histScored.slice(0, topN)
+  };
+}
+
 // ââ ASSISTENTE PANDECTA âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
-const ASSISTENTE_PROMPT = `VocÃª Ã© o assistente do Pandecta AI â plataforma de inteligÃªncia jurÃ­dica para advogados brasileiros.
-Responda dÃºvidas sobre as funcionalidades do sistema de forma clara, direta e amigÃ¡vel.
+const ASSISTENTE_PROMPT_BASE = `Você é a Pandecta — assistente jurídica inteligente para advogados brasileiros.
+Você tem acesso ao acervo de documentos e ao histórico de peças geradas pelo escritório do usuário.
+Seu papel vai além do suporte ao sistema: você é um parceiro estratégico do advogado.
 
-FUNCIONALIDADES DO PANDECTA:
-â¢ Nova PeÃ§a (botÃ£o "+ Novo"): Gera petiÃ§Ãµes iniciais, contestaÃ§Ãµes, recursos, notificaÃ§Ãµes e contratos via IA. O fluxo coleta Ã¡rea jurÃ­dica, tipo de peÃ§a, dados do autor/rÃ©u, fatos e pedido.
-â¢ HistÃ³rico: Lista todas as peÃ§as geradas. Ã possÃ­vel editar, copiar ou exportar para Word (.doc) com cabeÃ§alho do escritÃ³rio.
-â¢ Acervo: Base de documentos do escritÃ³rio (PDF, DOCX, TXT). Os arquivos sÃ£o lidos, divididos em trechos (chunks) e indexados. Esses trechos sÃ£o usados como contexto na geraÃ§Ã£o de peÃ§as â funciona como RAG (Retrieval-Augmented Generation).
-â¢ Equipe: Cadastro de advogados (nome, OAB, e-mail, cargo). O advogado responsÃ¡vel Ã© selecionado ao gerar cada peÃ§a e aparece na assinatura do Word exportado.
-â¢ ConfiguraÃ§Ãµes: Dados do escritÃ³rio (nome, endereÃ§o, logo, cidade, CEP, telefone, e-mail) para o cabeÃ§alho dos documentos exportados.
-â¢ ExportaÃ§Ã£o Word: Gera arquivo .doc com cabeÃ§alho do escritÃ³rio (logo + dados), corpo da peÃ§a em formato jurÃ­dico e assinatura do advogado responsÃ¡vel.
-â¢ Sistema jurÃ­dico: Especializado em Direito do Consumidor (CDC/JEC), Civil, Trabalhista e de FamÃ­lia. Aplica regras automÃ¡ticas como triage CDC, regras do JEC e estrutura em 7 seÃ§Ãµes para petiÃ§Ãµes.
+CAPACIDADES:
+• Responder perguntas sobre casos anteriores ("qual foi o caso em que a autora X ganhou?")
+• Localizar documentos e peças relevantes do acervo e histórico do escritório
+• Analisar teses jurídicas usadas em peças anteriores e sugerir atualizações quando necessário
+• Auxiliar em pesquisa jurídica com base no material do próprio escritório
+• Orientar sobre funcionalidades do sistema Pandecta
+
+FUNCIONALIDADES DO SISTEMA:
+• Construtor (+ Novo): Gera petições, contestações, recursos, notificações e contratos via IA
+• Histórico: Lista peças geradas — editar, copiar, exportar Word (.doc)
+• Acervo: Base de documentos do escritório (PDF, DOCX, TXT) indexados para busca
+• Equipe: Cadastro de advogados com OAB
+• Configurações: Dados do escritório para cabeçalho dos documentos
 
 REGRAS:
-- Seja objetivo, amigÃ¡vel e claro
-- Responda sempre em portuguÃªs brasileiro
-- Se a dÃºvida nÃ£o for sobre o Pandecta, redirecione gentilmente
-- Para dÃºvidas tÃ©cnicas de uso, dÃª passos prÃ¡ticos
-- MÃ¡ximo 3â4 parÃ¡grafos por resposta`;
+- Responda sempre em português brasileiro
+- Seja objetivo, direto e estratégico — fale como um colega experiente
+- Quando encontrar conteúdo relevante no acervo ou histórico, SEMPRE cite a fonte
+- Se sugerir atualização de tese jurídica, explique o porquê e qual seria a alternativa mais sólida
+- Se não encontrar registros específicos, responda com base no seu conhecimento e informe isso
+- Limite: 4 parágrafos por resposta, salvo análises que exijam mais`;
 
 app.post('/api/assistente', requireAuth, async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const { pergunta, historico = [] } = req.body || {};
-  if (!pergunta) return res.status(400).json({ error: 'Pergunta obrigatÃ³ria.' });
-  if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'API key nÃ£o configurada.' });
+  if (!pergunta) return res.status(400).json({ error: 'Pergunta obrigatória.' });
+  if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'API key não configurada.' });
 
-  res.setHeader('Content-Type',               'text/event-stream');
-  res.setHeader('Cache-Control',              'no-cache, no-transform');
-  res.setHeader('Connection',                 'keep-alive');
-  res.setHeader('X-Accel-Buffering',          'no');
+  res.setHeader('Content-Type',      'text/event-stream');
+  res.setHeader('Cache-Control',     'no-cache, no-transform');
+  res.setHeader('Connection',        'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
   res.flushHeaders();
 
-  // monta historico multi-turn + pergunta atual
+  // ── Busca contexto do escritório ──────────────────────────────────────────
+  let contextoBloco = '';
+  try {
+    const ctx = buscarContextoUsuario(req.user.id, pergunta, 4);
+
+    if (ctx.acervo.length > 0) {
+      contextoBloco += '\n\n── TRECHOS DO ACERVO DO ESCRITÓRIO (use como contexto) ──\n';
+      ctx.acervo.forEach((c, i) => {
+        contextoBloco += '\n[Fonte: ' + c.fonte + ']\n' + c.texto + '\n';
+      });
+    }
+
+    if (ctx.historico.length > 0) {
+      contextoBloco += '\n\n── PEÇAS DO HISTÓRICO DO ESCRITÓRIO (use como contexto) ──\n';
+      ctx.historico.forEach((h, i) => {
+        const tipo = h.tipo_label || h.tipo || 'peça';
+        const area = h.area_label ? ' (' + h.area_label + ')' : '';
+        const partes = h.autor ? ' — ' + h.autor : '';
+        const ref = (h.tipo_label || tipo) + area + partes + (h.data ? ' — ' + h.data : '');
+        contextoBloco += '\n[Histórico: ' + ref + ']\n' + h.resumo + '...\n';
+      });
+    }
+  } catch (e) {
+    // erro na busca não deve derrubar o assistente
+  }
+
+  const systemPrompt = ASSISTENTE_PROMPT_BASE + (contextoBloco || '\n\n(Nenhum documento ou peça relevante encontrado no acervo/histórico para esta pergunta.)');
+
+  // ── Multi-turn + pergunta atual ───────────────────────────────────────────
   const messages = [
     ...historico.slice(-16).map(m => ({ role: m.role, content: m.content })),
     { role: 'user', content: pergunta },
@@ -578,9 +678,9 @@ app.post('/api/assistente', requireAuth, async (req, res) => {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
     const stream = await client.messages.stream({
       model:       'claude-haiku-4-5-20251001',
-      max_tokens:  1024,
-      temperature: 0.4,
-      system:      ASSISTENTE_PROMPT,
+      max_tokens:  2048,
+      temperature: 0.3,
+      system:      systemPrompt,
       messages,
     });
     for await (const event of stream) {
@@ -601,7 +701,6 @@ app.options('/api/assistente', (req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.status(200).end();
 });
-
 // ââ SYSTEM PROMPT V4 ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 const SYSTEM_PROMPT_V4 = `VocÃª Ã© o Pandecta â assistente jurÃ­dico de precisÃ£o especializado em direito brasileiro.
@@ -859,8 +958,6 @@ app.get('/api/health', (req, res) => {
 // ââ BACKUP (admin only) âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Faz backup online do SQLite usando a API nativa do better-sqlite3.
 // O arquivo Ã© salvo em <dbDir>/backups/pandecta-<timestamp>.db
-// e os 5 mais recentes sÃ£o mantidos (os demais sÃ£o apagados).
-
 app.get('/api/admin/stats', requireAuth, requireAdmin, (req, res) => {
   if (!db) return res.json({});
   try {
@@ -876,7 +973,7 @@ app.get('/api/admin/stats', requireAuth, requireAdmin, (req, res) => {
 });
 
 app.post('/api/admin/backup', requireAuth, requireAdmin, (req, res) => {
-  if (!db) return res.status(503).json({ error: 'DB indisponÃ­vel.' });
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   try {
     const dbDir = process.env.DB_PATH
       ? path.dirname(process.env.DB_PATH)
@@ -885,12 +982,10 @@ app.post('/api/admin/backup', requireAuth, requireAdmin, (req, res) => {
     if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir, { recursive: true });
 
     const ts = new Date().toISOString().replace(/[:.]/g, '-');
-    const dest = path.join(backupDir, `pandecta-${ts}.db`);
+    const dest = path.join(backupDir, 'pandecta-' + ts + '.db');
 
-    // backup() Ã© sÃ­ncrono e seguro mesmo com escritas concorrentes
     db.backup(dest);
 
-    // MantÃ©m apenas os 5 backups mais recentes
     const files = fs.readdirSync(backupDir)
       .filter(f => f.endsWith('.db'))
       .map(f => ({ name: f, time: fs.statSync(path.join(backupDir, f)).mtimeMs }))
@@ -919,5 +1014,5 @@ app.get('/api/admin/backups', requireAuth, requireAdmin, (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ââ START ââââââââââââââââââââââââââââââââ
-app.listen(PORT, () => console.log(`✅  Pandecta v3 na porta ${PORT}`));
+// ── START ─────────────────────────────────────────────────────────────────────
+app.listen(PORT, () => console.log('✅  Pandecta v3 na porta ' + PORT));
