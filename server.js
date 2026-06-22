@@ -1059,4 +1059,4 @@ app.get('/api/admin/backups', requireAuth, requireAdmin, (req, res) => {
 });
 
 // ── START ─────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => console.log('✅  Pandecta 
+app.listen(PORT, () => console.log('✅  Pandecta v3 na porta ' + PORT));
