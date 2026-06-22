@@ -530,7 +530,7 @@ app.post('/api/acervo/buscar', requireAuth, (req, res) => {
   const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
   if (!words.length) return res.json([]);
   try {
-    const rows = db.prepare('SELECT nome, chunks FROM acervo WHERE user_id = ?').all(req.user.id);
+    const rows = db.prepare('SELECT nome, chunks FROM acervo WHERE user_id = ?').all(req.user.userId);
     const scored = [];
     rows.forEach(row => {
       let chunks;
@@ -654,7 +654,7 @@ app.post('/api/assistente', requireAuth, async (req, res) => {
   // ── Busca contexto do escritório ──────────────────────────────────────────
   let contextoBloco = '';
   try {
-    const ctx = buscarContextoUsuario(req.user.id, pergunta, 4);
+    const ctx = buscarContextoUsuario(req.user.userId, pergunta, 4);
 
     if (ctx.acervo.length > 0) {
       contextoBloco += '\n\n── TRECHOS DO ACERVO DO ESCRITÓRIO (use como contexto) ──\n';
