@@ -547,63 +547,81 @@ app.post('/api/acervo/buscar', requireAuth, (req, res) => {
 });
 
 // ── HELPER: busca contexto do usuário (acervo + histórico) ───────────────────
+
+// ── REINDEXAR acervo — corrige user_id NULL ──────────────────────────────────
+app.post('/api/acervo/reindexar', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const r = db.prepare('UPDATE acervo SET user_id=? WHERE user_id IS NULL').run(req.user.userId);
+    res.json({ ok: true, updated: r.changes });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 function buscarContextoUsuario(userId, pergunta, topN) {
   if (!db) return { acervo: [], historico: [] };
-  topN = topN || 4;
+  topN = topN || 8;
 
-  // stopwords PT-BR básicas para não poluir a busca
   const STOP = new Set(['para','com','que','uma','por','mais','como','mas','seu','sua',
     'nos','nas','num','numa','esse','essa','este','esta','isso','aqui','quando',
     'onde','porque','pois','então','muito','pelo','pela','sobre','entre','todo',
-    'toda','pode','deve','sido','pelo','pelas','pelos','nesse','nessa','nesse']);
+    'toda','pode','deve','sido','pelas','pelos','nesse','nessa','eles','elas',
+    'tudo','nada','cada','qual','quem','cujo']);
 
-  const words = pergunta.toLowerCase()
-    .replace(/[^\w\s]/g, ' ')
+  // Aceita palavras >= 2 chars (captura "RÉ", "JEC", etc.) e normaliza acentos
+  const normalize = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const words = normalize(pergunta)
+    .replace(/[^\w\s]/g,' ')
     .split(/\s+/)
-    .filter(w => w.length > 3 && !STOP.has(w));
+    .filter(w => w.length >= 2 && !STOP.has(w));
 
   if (!words.length) return { acervo: [], historico: [] };
 
-  // Busca no acervo
-  const acervoRows = db.prepare('SELECT nome, chunks FROM acervo WHERE user_id = ?').all(userId);
+  // Busca no acervo — inclui documentos com user_id NULL (legados)
+  const acervoRows = db.prepare(
+    'SELECT nome, chunks FROM acervo WHERE user_id = ? OR user_id IS NULL'
+  ).all(userId);
+
   const acervoScored = [];
   acervoRows.forEach(row => {
     let chunks;
-    try { chunks = JSON.parse(row.chunks || '[]'); } catch (e) { chunks = []; }
-    chunks.forEach(c => {
-      const lo = (c.texto || '').toLowerCase();
-      const score = words.filter(w => lo.includes(w)).length / words.length;
-      if (score > 0) acervoScored.push({ texto: c.texto, fonte: row.nome, score });
-    });
-  });
-  acervoScored.sort((a, b) => b.score - a.score);
+    try { chunks = JSON.parse(row.chunks || '[]'); } catch(e) { chunks = []; }
+    if (!chunks.length) return;
 
-  // Busca no histórico de peças geradas
-  const histRows = db.prepare(
-    'SELECT id, tipo, tipo_label, area_label, autor, texto, created_at FROM history WHERE user_id = ? ORDER BY created_at DESC LIMIT 200'
-  ).all(userId);
-  const histScored = [];
-  histRows.forEach(row => {
-    const haystack = ((row.autor || '') + ' ' + (row.reu || '') + ' ' + (row.texto || '')).toLowerCase();
-    const score = words.filter(w => haystack.includes(w)).length / words.length;
-    if (score > 0) {
-      // Resumo da peça: primeiros 400 chars do texto
-      const resumo = (row.texto || '').substring(0, 400).replace(/\s+/g, ' ').trim();
-      const data = row.created_at ? new Date(row.created_at).toLocaleDateString('pt-BR') : '';
-      histScored.push({
-        score,
-        fonte: 'Historico',
-        tipo: row.tipo || '',
-        area: row.area || '',
-        autor: row.autor || '',
-        reu: row.reu || '',
-        data,
-        resumo,
-        id: row.id
-      });
+    const nomeNorm = normalize(row.nome);
+    const nomeScore = words.filter(w => nomeNorm.includes(w)).length / words.length;
+
+    chunks.forEach(c => {
+      const texto = String(c.texto || c || '');
+      const lo = normalize(texto);
+      const score = words.filter(w => lo.includes(w)).length / words.length;
+      if (score > 0) acervoScored.push({ texto: texto.substring(0,1200), fonte: row.nome, score });
+    });
+
+    // Bônus pelo nome do arquivo
+    if (nomeScore > 0) {
+      const texto0 = String((chunks[0] && chunks[0].texto) || chunks[0] || '').substring(0,1200);
+      acervoScored.push({ texto: texto0, fonte: row.nome, score: Math.min(1, nomeScore + 0.3) });
     }
   });
-  histScored.sort((a, b) => b.score - a.score);
+  acervoScored.sort((a,b) => b.score - a.score);
+
+  // Busca no histórico — inclui user_id NULL também
+  const histRows = db.prepare(
+    'SELECT id, tipo, tipo_label, area_label, autor, texto, created_at FROM history WHERE user_id = ? OR user_id IS NULL ORDER BY created_at DESC LIMIT 200'
+  ).all(userId);
+
+  const histScored = [];
+  histRows.forEach(row => {
+    const haystack = normalize((row.tipo_label||'') +' '+ (row.area_label||'') +' '+ (row.autor||'') +' '+ (row.texto||''));
+    const score = words.filter(w => haystack.includes(w)).length / words.length;
+    if (score > 0) {
+      const resumo = (row.texto||'').substring(0,800).replace(/\s+/g,' ').trim();
+      const data = row.created_at ? new Date(row.created_at).toLocaleDateString('pt-BR') : '';
+      histScored.push({ score, fonte:'Histórico', tipo: row.tipo_label||row.tipo||'',
+        area: row.area_label||'', autor: row.autor||'', data, resumo, id: row.id });
+    }
+  });
+  histScored.sort((a,b) => b.score - a.score);
 
   return {
     acervo:    acervoScored.slice(0, topN),
