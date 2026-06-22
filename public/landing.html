@@ -87,6 +87,15 @@
       background: radial-gradient(circle, rgba(201,168,76,.08) 0%, transparent 70%);
       pointer-events: none;
     }
+    /* marca d'água decorativa do ícone P */
+    .brand-watermark {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .035;
+      user-select: none;
+      mix-blend-mode: screen;
+    }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 5px 14px;
@@ -329,6 +338,8 @@
     .features-wrap {
       background: var(--navy);
       padding: 96px 40px;
+      position: relative;
+      overflow: hidden;
     }
     .features-wrap .section-label { color: var(--gold); }
     .features-wrap .section-h { color: var(--white); }
@@ -370,6 +381,8 @@
     .how-wrap {
       background: var(--navy);
       padding: 96px 40px;
+      position: relative;
+      overflow: hidden;
     }
     .how-inner {
       max-width: 1100px; margin: 0 auto;
@@ -606,7 +619,8 @@
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="/">
-    <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI" style="height:38px;">
+    <img src="/pandecta-icone.png" alt="P" style="height:44px;width:44px;object-fit:contain;mix-blend-mode:screen;flex-shrink:0;">
+    <span class="nav-logo-text">PANDECTA <span style="color:var(--gold)">AI</span></span>
   </a>
   <div class="nav-right">
     <a class="nav-link" href="#funcionalidades">Funcionalidades</a>
@@ -617,6 +631,8 @@
 
 <!-- HERO -->
 <section class="hero">
+  <!-- marca d'água decorativa -->
+  <img src="/pandecta-icone.png" class="brand-watermark" style="width:600px;height:600px;object-fit:contain;top:-80px;right:-80px;opacity:.04;" alt="">
   <div class="hero-badge">Novo · Inteligência Jurídica com IA</div>
   <h1>O conhecimento jurídico do seu escritório, <em>amplificado por IA</em></h1>
   <p class="hero-sub">
@@ -729,6 +745,7 @@
 
 <!-- FEATURES -->
 <div id="funcionalidades" class="features-wrap">
+  <img src="/pandecta-icone.png" class="brand-watermark" style="width:500px;height:500px;object-fit:contain;bottom:-80px;left:-60px;" alt="">
   <div class="features-inner">
     <div class="section-label">Funcionalidades</div>
     <h2 class="section-h">Tudo que o advogado precisa em um só lugar</h2>
@@ -771,6 +788,7 @@
 
 <!-- HOW IT WORKS -->
 <div class="how-wrap">
+  <img src="/pandecta-icone.png" class="brand-watermark" style="width:480px;height:480px;object-fit:contain;top:-60px;right:-60px;" alt="">
   <div class="how-inner">
     <div class="section-label">Como funciona</div>
     <h2 class="section-h" style="color:var(--white)">Do caso à peça em 3 passos</h2>
@@ -935,7 +953,10 @@
 
       <!-- Marca -->
       <div>
-        <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI" style="height:48px;margin-bottom:4px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <img src="/pandecta-icone.png" alt="P" style="height:44px;width:44px;object-fit:contain;mix-blend-mode:screen;flex-shrink:0;">
+          <span style="font-size:16px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.9);">PANDECTA <span style="color:var(--gold)">AI</span></span>
+        </div>
         <p style="font-size:13px;color:rgba(255,255,255,.4);line-height:1.7;max-width:260px;">Inteligência jurídica para advogados brasileiros. Gere peças com precisão técnica e aprenda com o seu escritório.</p>
       </div>
 
@@ -1032,7 +1053,8 @@
     entries.forEach(function(e){
       if(e.isIntersecting){
         e.target.classList.add('visible');
-        io.unobserve(e.target);
+      } else {
+        e.target.classList.remove('visible');
       }
     });
   },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
