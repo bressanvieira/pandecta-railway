@@ -76,9 +76,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* reflexo no canto inferior */
 .login-left::after{content:'';position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(200,164,106,.06) 0%,transparent 65%);pointer-events:none;}
 /* watermark P no login */
-.ll-watermark{position:absolute;width:520px;height:520px;object-fit:contain;bottom:-100px;right:-100px;opacity:.05;mix-blend-mode:screen;pointer-events:none;z-index:0;}
-/* brand mark no login */
-.ll-brand{position:relative;z-index:1;display:flex;align-items:center;gap:13px;}
+.ll-watermark{position:absolute;width:560px;height:560px;object-fit:contain;bottom:-120px;right:-100px;opacity:.055;mix-blend-mode:screen;pointer-events:none;z-index:0;}
+/* logo block centralizado */
+.ll-logo-block{position:relative;z-index:1;text-align:center;margin-bottom:36px;}
+.ll-divider{width:40px;height:1px;background:rgba(200,164,106,.4);margin:14px auto 0;}
+/* ajusta textos do login */
+.ll-h1{font-family:'Georgia','Times New Roman',serif;font-size:22px;font-weight:700;line-height:1.45;color:rgba(255,255,255,.92);margin-bottom:16px;max-width:360px;margin-left:auto;margin-right:auto;}
+.ll-sub{font-size:13.5px;color:rgba(190,210,235,.5);line-height:1.8;max-width:340px;margin:0 auto;}
 .ll-body{text-align:center;margin-top:40px;position:relative;z-index:1;}
 .ll-h1{font-family:'Georgia','Times New Roman',serif;font-size:24px;font-weight:700;line-height:1.38;color:rgba(255,255,255,.92);margin-bottom:14px;max-width:340px;margin-left:auto;margin-right:auto;}
 .ll-sub{font-size:13px;color:rgba(190,210,235,.45);line-height:1.75;max-width:320px;margin:0 auto;}
@@ -184,7 +188,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .mock-scene{perspective:1000px;}
 .mock-card{width:248px;height:178px;background:#0C1020;border-radius:20px;transform:rotateY(-18deg) rotateX(7deg);box-shadow:28px 32px 64px rgba(0,0,0,.25),4px 4px 20px rgba(0,0,0,.14);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
 .mock-card::before{content:'';position:absolute;inset:0;background:linear-gradient(140deg,rgba(255,255,255,.055) 0%,transparent 55%);border-radius:20px;}
-.mock-card img{width:104px;height:104px;object-fit:contain;position:relative;z-index:1;}
+.mock-card img{width:104px;height:104px;object-fit:contain;position:relative;z-index:1;mix-blend-mode:screen;}
 .mock-shadow{width:196px;height:18px;background:radial-gradient(ellipse,rgba(0,0,0,.15) 0%,transparent 70%);margin:18px auto 0;border-radius:50%;}
 /* quick cards */
 .home-cards-sect{padding:0 56px 36px;}
@@ -335,9 +339,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .role-admin{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-bd);}
 .role-user{background:rgba(255,255,255,.06);color:var(--t2);border:1px solid var(--bd);}
 .usr-table{width:100%;border-collapse:collapse;font-size:13px;}
-.usr-table th{padding:9px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);border-bottom:1px solid var(--bd);white-space:nowrap;}
-.usr-table td{padding:11px 14px;border-bottom:1px solid var(--bd);vertical-align:middle;color:var(--t1);}
-.usr-table tr:hover td{background:var(--surface);}
+.usr-table th{padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);border-bottom:2px solid var(--bd);white-space:nowrap;background:var(--surface);}
+.usr-table td{padding:13px 14px;border-bottom:1px solid var(--bd);vertical-align:middle;color:var(--t1);}
+.usr-table tr.row-alt td{background:rgba(0,0,0,.018);}
+.usr-table tbody tr:hover td{background:var(--gold-bg)!important;}
 .usr-table tr:last-child td{border-bottom:none;}
 .usr-av{width:32px;height:32px;border-radius:50%;background:var(--t1);display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#FFF;flex-shrink:0;}
 .status-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;}
@@ -355,10 +360,30 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .admin-section{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);overflow:hidden;margin-bottom:24px;}
 .admin-section-hdr{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
 .admin-section-title{font-size:14px;font-weight:700;color:var(--t1);}
-.admin-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:24px;}
-.admin-stat-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:18px 20px;}
-.admin-stat-val{font-size:28px;font-weight:800;color:var(--t1);line-height:1;}
-.admin-stat-lbl{font-size:11px;color:var(--t3);margin-top:4px;text-transform:uppercase;letter-spacing:.7px;}
+.admin-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px;}
+.admin-stat-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:20px 22px;border-top:3px solid var(--bd-md);transition:box-shadow .15s;}
+.admin-stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07);}
+.admin-stat-card:nth-child(1){border-top-color:#2563EB;}
+.admin-stat-card:nth-child(2){border-top-color:var(--gold);}
+.admin-stat-card:nth-child(3){border-top-color:#15803D;}
+.admin-stat-card:nth-child(4){border-top-color:#7C3AED;}
+.admin-stat-val{font-size:32px;font-weight:800;color:var(--t1);line-height:1;}
+.admin-stat-lbl{font-size:10.5px;color:var(--t3);margin-top:5px;text-transform:uppercase;letter-spacing:.8px;}
+/* tabela usuários */
+.td-sub{font-size:12px;color:var(--t2)!important;}
+.usr-av{width:32px;height:32px;border-radius:50%;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;}
+/* badges de plano */
+.plan-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600;white-space:nowrap;}
+.plan-solo{background:rgba(37,99,235,.08);color:#2563EB;border:1px solid rgba(37,99,235,.2);}
+.plan-profissional{background:rgba(200,164,106,.10);color:#A0742A;border:1px solid rgba(200,164,106,.3);}
+.plan-escritorio{background:rgba(124,58,237,.08);color:#7C3AED;border:1px solid rgba(124,58,237,.2);}
+/* botões de ação */
+.act-btn{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:500;border:1px solid var(--bd-md);background:var(--card);color:var(--t1);cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
+.act-btn:hover{background:var(--surface);border-color:var(--bd-dk);}
+.act-warn{color:#92400E;border-color:rgba(217,119,6,.25);background:rgba(217,119,6,.06);}
+.act-warn:hover{background:rgba(217,119,6,.12);}
+.act-danger{color:var(--err);border-color:rgba(220,38,38,.2);background:rgba(220,38,38,.05);}
+.act-danger:hover{background:rgba(220,38,38,.1);}
 .role-user{background:var(--card);color:var(--t3);border:1px solid var(--bd-md);}
 .law-av{width:40px;height:40px;border-radius:50%;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#FFF;flex-shrink:0;}
 .law-info{flex:1;min-width:0;}
@@ -673,20 +698,21 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
     <!-- Painel esquerdo — branding dark -->
     <div class="login-left">
-      <!-- marca d'água P -->
+      <!-- marca d'água P grande no fundo -->
       <img src="/pandecta-icone.png" class="ll-watermark" alt="">
 
-      <!-- brand mark -->
-      <div class="ll-brand">
+      <!-- logo centralizada grande -->
+      <div class="ll-logo-block">
         <img src="/pandecta-icone.png"
-             style="height:48px;width:48px;object-fit:contain;mix-blend-mode:screen;flex-shrink:0;"
+             style="height:96px;width:96px;object-fit:contain;mix-blend-mode:screen;display:block;margin:0 auto 16px;"
              alt="P" onerror="this.style.display='none'">
-        <span style="font-size:14px;font-weight:700;letter-spacing:2.5px;color:rgba(255,255,255,.9);text-transform:uppercase;">PANDECTA <span style="color:var(--gold)">AI</span></span>
+        <div style="font-size:13px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.75);text-transform:uppercase;text-align:center;margin-bottom:4px;">PANDECTA <span style="color:var(--gold)">AI</span></div>
+        <div class="ll-divider"></div>
       </div>
 
       <div class="ll-body">
-        <h1 class="ll-h1">Inteligência jurídica construída para decisões melhores.</h1>
-        <p class="ll-sub">Construa petições, contratos e manifestações com assistência contextual inteligente.</p>
+        <h1 class="ll-h1">Sua experiência jurídica potencializada por inteligência artificial.</h1>
+        <p class="ll-sub">Pesquise, analise e produza conteúdo jurídico com mais agilidade, mantendo o controle técnico e estratégico de cada decisão.</p>
       </div>
 
       <div class="ll-foot">
@@ -2466,22 +2492,14 @@ async function loadBackups(){
     if(!el)return;
     if(!list||!list.length){el.innerHTML='<span style="color:var(--t3)">Nenhum backup encontrado.</span>';return;}
     el.innerHTML=list.slice(0,5).map(b=>`
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px;">
-        <span style="color:var(--t1)">📦 ${esc(b.nome)}</span>
-        <span style="color:var(--t3)">${(b.tamanho/1024).toFixed(0)} KB · ${new Date(b.created_at).toLocaleString('pt-BR')}</span>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bd);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:16px;">🗄️</span>
+          <span style="font-size:12.5px;color:var(--t1);font-weight:500;">${esc(b.filename||b.name||'backup')}</span>
+        </div>
+        <span style="font-size:11px;color:var(--t3);">${b.size?Math.round(b.size/1024)+' KB':''} · ${b.created_at?fmtDate(b.created_at):''}</span>
       </div>`).join('');
-  }catch(e){const el=document.getElementById('backups-list');if(el)el.innerHTML='<span style="color:var(--t3)">–</span>';}
-}
-
-async function fazerBackup(){
-  const btn=document.getElementById('btn-backup');
-  if(btn){btn.disabled=true;btn.textContent='Fazendo backup...';}
-  try{
-    await api('POST','/api/admin/backup');
-    toast('Backup realizado com sucesso','ok');
-    loadBackups();
-  }catch(e){toast(e.message,'err');}
-  finally{if(btn){btn.disabled=false;btn.textContent='Fazer backup agora';}}
+  }catch(e){const el=document.getElementById('backups-list');if(el)el.innerHTML='<span style="color:var(--t3)">Erro ao carregar backups.</span>';}
 }
 
 // ════ ADMIN — USERS ════
@@ -2492,76 +2510,68 @@ async function loadUsers(){
     const users=await api('GET','/api/users');
     const tbody=document.getElementById('users-tbody');
     if(!tbody)return;
-    if(!users||!users.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--t3);">Nenhum usuário cadastrado.</td></tr>';return;}
-    const planLabel={solo:'Solo R$79',profissional:'Profissional R$179',escritorio:'Escritório R$379'};
-    const statusLabel={active:'Ativo',trial:'Trial',trial_expired:'Trial expirado',blocked:'Bloqueado'};
-    tbody.innerHTML=users.map(u=>{
-      const ini=(u.nome||u.email||'?')[0].toUpperCase();
-      const perfilInfo=u.profile_type==='estudante'
-        ?`🎓 ${esc(u.institution||'–')} ${u.semester?'('+u.semester+'º sem.)':''}`
-        :`⚖️ OAB ${esc(u.oab_number||'–')}/${esc(u.oab_uf||'–')}`;
-      const st=u.account_status||'active';
-      const trialDate=u.trial_expires_at?new Date(u.trial_expires_at).toLocaleDateString('pt-BR'):'–';
-      const cadDate=u.created_at?new Date(u.created_at).toLocaleDateString('pt-BR'):'–';
-      const isActive=st==='active'||st==='trial';
-      return `<tr>
-        <td>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div class="usr-av">${ini}</div>
-            <div>
-              <div style="font-weight:600;">${esc(u.nome||'–')}</div>
-              <div style="font-size:11px;color:var(--t3);">${esc(u.email)}</div>
-            </div>
-          </div>
-        </td>
-        <td style="font-size:12px;color:var(--t2);">${esc(u.phone||'–')}</td>
-        <td style="font-size:12px;">${perfilInfo}</td>
-        <td><span class="plan-badge">${planLabel[u.plan]||esc(u.plan||'–')}</span></td>
-        <td><span class="status-badge status-${st}">${statusLabel[st]||st}</span></td>
-        <td style="font-size:12px;color:var(--t3);">${cadDate}</td>
-        <td style="font-size:12px;color:var(--t3);">${trialDate}</td>
-        <td>
-          <div style="display:flex;gap:6px;">
-            ${u.role!=='admin'?`
-              ${isActive
-                ?`<button class="usr-action-btn danger" onclick="setUserStatus(${u.id},'blocked','${esc(u.nome||u.email)}')">Inativar</button>`
-                :`<button class="usr-action-btn activate" onclick="setUserStatus(${u.id},'active','${esc(u.nome||u.email)}')">Ativar</button>`
-              }
-              <button class="usr-action-btn" onclick="openUserModal(${u.id},'${esc(u.nome)}','${esc(u.email)}','${u.role}')">Editar</button>
-              <button class="usr-action-btn danger" onclick="deleteUser(${u.id},'${esc(u.nome||u.email)}')">Excluir</button>
-            `:'<span style="font-size:11px;color:var(--t3);">admin</span>'}
-          </div>
-        </td>
-      </tr>`;
+    if(!users||!users.length){
+      tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--t3);">Nenhum usuário cadastrado.</td></tr>';
+      return;
+    }
+    const planLabel=p=>({solo:'Solo R$79',profissional:'Profissional R$179',escritorio:'Escritório R$299'}[p]||p||'–');
+    const statusLabel={active:'Ativo',trial:'Trial',trial_expired:'Expirado',blocked:'Bloqueado'};
+    tbody.innerHTML=users.map((u,i)=>{
+      const sClass='status-'+(u.account_status||'active');
+      const sLabel=statusLabel[u.account_status]||u.account_status||'–';
+      const profIcon=u.profile_type==='estudante'?'🎓':'⚖️';
+      const profTxt=u.profile_type==='estudante'
+        ?('Estudante · '+esc(u.institution||'–')+' · '+(u.semester||'–')+'º sem')
+        :('OAB '+esc(u.oab_number||'–')+'/'+esc(u.oab_uf||'–'));
+      const trialDate=u.trial_expires_at?fmtDate(u.trial_expires_at):'–';
+      const isAdmin=u.role==='admin';
+      const initials=(u.nome||u.email||'?').slice(0,1).toUpperCase();
+      const planCls='plan-'+(u.plan||'solo');
+      const statusBtns=isAdmin
+        ?'<span style="font-size:11px;color:var(--t3);font-style:italic;">admin</span>'
+        :'<div style="display:flex;gap:5px;flex-wrap:wrap;">'
+          +'<button class="act-btn act-warn" onclick="toggleUserStatus('+u.id+',\''+u.account_status+'\')">'+(u.account_status==='blocked'?'Ativar':'Inativar')+'</button>'
+          +'<button class="act-btn" onclick="openUserModal('+u.id+',\''+esc(u.nome||'')+'\',\''+esc(u.email)+'\',\''+(u.role||'user')+'\')">Editar</button>'
+          +'<button class="act-btn act-danger" onclick="deleteUser('+u.id+',\''+esc(u.nome||u.email)+'\')">Excluir</button>'
+          +'</div>';
+      const rowClass=i%2===1?'row-alt':'';
+      return '<tr class="'+rowClass+'">'
+        +'<td><div style="display:flex;align-items:center;gap:10px;">'
+        +'<div class="usr-av">'+initials+'</div>'
+        +'<div><div style="font-weight:500;font-size:13px;color:var(--t1);">'+esc(u.nome||'–')+'</div>'
+        +'<div style="font-size:11px;color:var(--t3);margin-top:1px;">'+esc(u.email)+'</div></div>'
+        +'</div></td>'
+        +'<td class="td-sub">'+esc(u.phone||'–')+'</td>'
+        +'<td class="td-sub">'+profIcon+' '+profTxt+'</td>'
+        +'<td><span class="plan-badge '+planCls+'">'+planLabel(u.plan)+'</span></td>'
+        +'<td><span class="status-badge '+sClass+'">'+sLabel+'</span></td>'
+        +'<td class="td-sub">'+fmtDate(u.created_at)+'</td>'
+        +'<td class="td-sub">'+trialDate+'</td>'
+        +'<td>'+statusBtns+'</td>'
+        +'</tr>';
     }).join('');
-  }catch(e){toast('Usuários: '+e.message,'err');}
+  }catch(e){console.error('loadUsers:',e);}
 }
 
-async function setUserStatus(id, status, nome){
-  if(!confirm(`${status==='blocked'?'Inativar':'Ativar'} licença de "${nome}"?`))return;
-  try{
-    await api('PATCH','/api/users/'+id+'/status',{status});
-    toast(status==='blocked'?'Licença inativada':'Licença ativada','ok');
-    loadUsers();
-  }catch(e){toast(e.message,'err');}
+async function toggleUserStatus(id,current){
+  const newStatus=current==='blocked'?'active':'blocked';
+  try{await api('PATCH','/api/users/'+id+'/status',{status:newStatus});toast('Status atualizado','ok');loadUsers();}
+  catch(e){toast(e.message,'err');}
 }
 
-function openUserModal(id=null,nome='',email='',role='user'){
-  adminEditId=id;
-  document.getElementById('user-form-title').textContent=id?'Editar usuário':'Novo usuário';
-  document.getElementById('user-nome').value=nome;
-  document.getElementById('user-email').value=email;
-  document.getElementById('user-role').value=role;
+let adminEditId=null;
+function openUserModal(id,nome,email,role){
+  adminEditId=id||null;
+  document.getElementById('user-nome').value=nome||'';
+  document.getElementById('user-email').value=email||'';
+  document.getElementById('user-role').value=role||'user';
   document.getElementById('user-pass').value='';
-  document.getElementById('user-pass-hint').style.display=id?'block':'none';
   document.getElementById('user-form-panel').style.display='flex';
 }
-
 function closeUserModal(){
-  adminEditId=null;
   document.getElementById('user-form-panel').style.display='none';
+  adminEditId=null;
 }
-
 async function saveUser(){
   const nome=document.getElementById('user-nome').value.trim();
   const email=document.getElementById('user-email').value.trim();
@@ -2577,19 +2587,15 @@ async function saveUser(){
       await api('POST','/api/auth/register',{nome,email,role,password});
       toast('Usuário criado','ok');
     }
-    closeUserModal();
-    loadUsers();
+    closeUserModal();loadUsers();
   }catch(e){toast(e.message,'err');}
 }
-
 async function deleteUser(id,nome){
   if(!confirm('Excluir usuário "'+nome+'"? Esta ação não pode ser desfeita.'))return;
-  try{
-    await api('DELETE','/api/users/'+id);
-    toast('Usuário excluído','ok');
-    loadUsers();
-  }catch(e){toast(e.message,'err');}
+  try{await api('DELETE','/api/users/'+id);toast('Usuário excluído','ok');loadUsers();}
+  catch(e){toast(e.message,'err');}
 }
+function fmtDate(s){if(!s)return'–';try{return new Date(s).toLocaleDateString('pt-BR');}catch(e){return s;}}
 </script>
 </body>
 </html>
