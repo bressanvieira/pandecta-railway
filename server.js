@@ -123,6 +123,7 @@ try {
   // migrations â adiciona colunas sem quebrar banco existente
   try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN enviado_por TEXT DEFAULT ''`); } catch(e) {}
+  try { db.exec(`ALTER TABLE templates ADD COLUMN texto_referencia TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN chunk_count INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN chunks TEXT DEFAULT '[]'`); } catch(e) {}
   try { db.exec(`ALTER TABLE office ADD COLUMN logo TEXT DEFAULT ''`); } catch(e) {}
@@ -878,7 +879,7 @@ app.post('/api/gerar', requireAuth, async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const { area='consumidor', tipo='peticao_inicial', subtipo='', autor, reu, fatos, pedido, estilo='', chunks_acervo=[], chunks_memoria=[] } = req.body || {};
+  const { area='consumidor', tipo='peticao_inicial', subtipo='', autor, reu, fatos, pedido, estilo='', chunks_acervo=[], chunks_memoria=[], modelo_id=null } = req.body || {};
 
   if (!autor || !fatos)
     return res.status(400).json({ error: 'Campos obrigatÃ³rios: autor, fatos.' });
@@ -922,7 +923,7 @@ ${fatos}
 
 PEDIDO ESPECÃFICO:
 ${pedido || 'ReparaÃ§Ã£o integral dos danos conforme os fatos narrados'}
-${estiloCtx}${acervoCtx}
+${estiloCtx}${modeloRefCtx}${acervoCtx}
 ---
 Gere o documento completo, tÃ©cnico e formal, citando os artigos fornecidos acima.
 Siga rigorosamente a estrutura e todas as regras do system prompt.`;
@@ -984,12 +985,23 @@ app.get('/api/templates', requireAuth, (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/templates', requireAuth, (req, res) => {
+app.post('/api/templates', requireAuth, async (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   const { nome='', tipo='outro', descricao='', arquivo_b64='' } = req.body;
   if (!nome) return res.status(400).json({ error: 'Nome obrigatório.' });
   try {
-    const r = db.prepare('INSERT INTO templates (nome,tipo,descricao,arquivo_b64,user_id) VALUES (?,?,?,?,?)').run(nome, tipo, descricao, arquivo_b64, req.user.userId);
+    // Extrai texto do .docx para usar como referência de estilo na geração
+    let texto_referencia = '';
+    if (arquivo_b64) {
+      try {
+        const mammoth = require('mammoth');
+        const buf = Buffer.from(arquivo_b64, 'base64');
+        const result = await mammoth.extractRawText({ buffer: buf });
+        // Salva até 3000 chars — suficiente para capturar estilo e estrutura
+        texto_referencia = (result.value || '').substring(0, 3000).trim();
+      } catch(e) { console.error('mammoth extract template:', e.message); }
+    }
+    const r = db.prepare('INSERT INTO templates (nome,tipo,descricao,arquivo_b64,texto_referencia,user_id) VALUES (?,?,?,?,?,?)').run(nome, tipo, descricao, arquivo_b64, texto_referencia, req.user.userId);
     res.json(db.prepare('SELECT id,nome,tipo,descricao,created_at FROM templates WHERE id=?').get(r.lastInsertRowid));
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -997,9 +1009,9 @@ app.post('/api/templates', requireAuth, (req, res) => {
 app.get('/api/templates/:id/arquivo', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponível.' });
   try {
-    const row = db.prepare('SELECT arquivo_b64, user_id FROM templates WHERE id=?').get(req.params.id);
+    const row = db.prepare('SELECT arquivo_b64, texto_referencia, user_id FROM templates WHERE id=?').get(req.params.id);
     if (!row || row.user_id !== req.user.userId) return res.status(404).json({ error: 'Não encontrado.' });
-    res.json({ arquivo_b64: row.arquivo_b64 });
+    res.json({ arquivo_b64: row.arquivo_b64, texto_referencia: row.texto_referencia || '' });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
