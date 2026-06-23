@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conformidade LGPD — Pandecta AI</title>
+  <meta name="description" content="Política de conformidade com a Lei Geral de Proteção de Dados (LGPD) da Pandecta AI — plataforma de inteligência jurídica para advogados.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #001B2A;
+      --navy2:      #002438;
+      --navy3:      #003049;
+      --gold:       #C8A96B;
+      --gold-dim:   rgba(200,169,107,.15);
+      --gold-bd:    rgba(200,169,107,.30);
+      --text:       #F4F4F4;
+      --text-dim:   rgba(244,244,244,.65);
+      --text-muted: rgba(244,244,244,.40);
+      --r:          10px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      background: rgba(0,27,42,.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--gold-bd);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo img { height: 36px; }
+    .nav-logo-text { font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -.3px; }
+    .nav-logo-text span { color: var(--gold); }
+    .nav-back {
+      font-size: 13px; color: var(--text-dim);
+      text-decoration: none; display: flex; align-items: center; gap: 6px;
+      transition: color .15s;
+    }
+    .nav-back:hover { color: var(--gold); }
+    .nav-back::before { content: "\2190"; font-size: 15px; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(160deg, var(--navy2) 0%, var(--navy) 60%);
+      border-bottom: 1px solid var(--gold-bd);
+      padding: 72px 48px 56px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold-dim); border: 1px solid var(--gold-bd);
+      border-radius: 20px; padding: 6px 16px;
+      font-size: 12px; font-weight: 600; color: var(--gold);
+      letter-spacing: .5px; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 4vw, 44px); font-weight: 800;
+      color: var(--text); letter-spacing: -.5px; margin-bottom: 12px;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero-sub { font-size: 16px; color: var(--text-dim); max-width: 620px; margin: 0 auto 28px; }
+    .hero-meta {
+      display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
+      font-size: 12.5px; color: var(--text-muted);
+    }
+    .hero-meta span { display: flex; align-items: center; gap: 6px; }
+    .hero-meta strong { color: var(--text-dim); }
+
+    .pilot-notice {
+      max-width: 760px; margin: 32px auto 0;
+      background: rgba(200,169,107,.08); border: 1px solid var(--gold-bd);
+      border-radius: var(--r); padding: 16px 22px;
+      font-size: 13.5px; color: var(--text-dim);
+      display: flex; gap: 12px; align-items: flex-start; text-align: left;
+    }
+
+    /* LAYOUT */
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 56px 48px 96px; }
+
+    /* ÍNDICE */
+    .toc {
+      background: var(--navy2); border: 1px solid var(--gold-bd);
+      border-radius: var(--r); padding: 28px 32px; margin-bottom: 56px;
+    }
+    .toc h2 {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--gold); margin-bottom: 16px;
+    }
+    .toc ol {
+      list-style: decimal; padding-left: 20px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px 40px;
+    }
+    .toc ol li a { color: var(--text-dim); text-decoration: none; font-size: 13.5px; transition: color .15s; }
+    .toc ol li a:hover { color: var(--gold); }
+
+    /* SEÇÕES */
+    .section { margin-bottom: 56px; scroll-margin-top: 80px; }
+    .section-header {
+      display: flex; align-items: center; gap: 14px;
+      border-bottom: 1px solid var(--gold-bd); padding-bottom: 14px; margin-bottom: 24px;
+    }
+    .section-num {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; flex-shrink: 0;
+      background: var(--gold-dim); border: 1px solid var(--gold-bd); border-radius: 50%;
+      font-size: 13px; font-weight: 700; color: var(--gold);
+    }
+    .section h2 { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -.2px; }
+
+    p { color: var(--text-dim); font-size: 15px; margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--text); font-weight: 600; }
+
+    /* CARDS */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin: 20px 0; }
+    .card { background: var(--navy2); border: 1px solid rgba(200,169,107,.18); border-radius: var(--r); padding: 20px 22px; }
+    .card-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--gold); margin-bottom: 6px; }
+    .card-title { font-size: 14.5px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .card p { font-size: 13px; margin-bottom: 0; }
+
+    /* TABELA */
+    .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--r); }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    thead { background: var(--navy3); }
+    thead th {
+      padding: 12px 16px; text-align: left;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px;
+      color: var(--gold); white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid rgba(200,169,107,.10); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 13px 16px; color: var(--text-dim); vertical-align: top; }
+    tbody td:first-child { color: var(--text); font-weight: 500; }
+    tbody tr:nth-child(even) { background: rgba(255,255,255,.02); }
+
+    /* DESTAQUE */
+    .highlight-box {
+      background: var(--gold-dim); border: 1px solid var(--gold-bd);
+      border-radius: var(--r); padding: 20px 24px; margin: 20px 0;
+    }
+    .highlight-box p { font-size: 14px; }
+
+    /* DIREITOS */
+    .rights-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
+    .right-item {
+      background: var(--navy2); border: 1px solid rgba(200,169,107,.15);
+      border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--text-dim);
+    }
+    .right-item strong {
+      display: block; color: var(--gold); font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px;
+    }
+
+    /* CONTATO */
+    .contact-box {
+      background: var(--navy2); border: 1px solid var(--gold-bd);
+      border-radius: var(--r); padding: 28px 32px; margin: 20px 0;
+    }
+    .contact-box h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+    .contact-steps { list-style: none; counter-reset: steps; }
+    .contact-steps li {
+      counter-increment: steps;
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 10px 0; border-bottom: 1px solid rgba(200,169,107,.10);
+      font-size: 13.5px; color: var(--text-dim);
+    }
+    .contact-steps li:last-child { border-bottom: none; }
+    .contact-steps li::before {
+      content: counter(steps);
+      display: flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; flex-shrink: 0;
+      background: var(--gold-dim); border: 1px solid var(--gold-bd); border-radius: 50%;
+      font-size: 11px; font-weight: 700; color: var(--gold); margin-top: 1px;
+    }
+    .email-link { color: var(--gold); font-weight: 600; text-decoration: none; font-size: 15px; }
+    .email-link:hover { text-decoration: underline; }
+    .prazo-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(34,197,94,.10); border: 1px solid rgba(34,197,94,.25);
+      border-radius: 6px; padding: 4px 12px;
+      font-size: 12px; font-weight: 600; color: #4ade80; margin-top: 12px;
+    }
+
+    /* TEMPLATE E-MAIL */
+    .form-template {
+      background: rgba(0,0,0,.25); border: 1px solid rgba(200,169,107,.15);
+      border-radius: 8px; padding: 20px 24px; margin-top: 16px;
+      font-family: 'Inter', monospace; font-size: 13px; color: var(--text-dim);
+      white-space: pre-line; line-height: 1.9;
+    }
+    .form-template strong { color: var(--gold); }
+
+    /* SUBPROCESSADORES */
+    .sub-list { list-style: none; margin: 16px 0; }
+    .sub-list li {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid rgba(200,169,107,.10);
+      font-size: 13.5px; color: var(--text-dim);
+    }
+    .sub-list li:last-child { border-bottom: none; }
+    .sub-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: var(--gold-dim); border: 1px solid var(--gold-bd);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px;
+    }
+    .sub-info strong { display: block; color: var(--text); font-size: 14px; margin-bottom: 2px; }
+
+    /* VERSÕES */
+    .version-line { margin-top: 8px; }
+    .version-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 12px 0; border-bottom: 1px solid rgba(200,169,107,.10); font-size: 13.5px;
+    }
+    .version-item:last-child { border-bottom: none; }
+    .version-tag {
+      display: inline-flex; align-items: center;
+      background: var(--gold-dim); border: 1px solid var(--gold-bd); border-radius: 6px;
+      padding: 2px 10px; font-size: 11px; font-weight: 700; color: var(--gold);
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .version-item p { margin: 0; color: var(--text-dim); font-size: 13px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--gold-bd); padding: 32px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px; font-size: 12.5px; color: var(--text-muted);
+    }
+    footer a { color: var(--text-muted); text-decoration: none; transition: color .15s; }
+    footer a:hover { color: var(--gold); }
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-logo img { height: 28px; opacity: .7; }
+
+    @media (max-width: 680px) {
+      nav { padding: 0 20px; }
+      .hero { padding: 56px 24px 40px; }
+      .page-wrap { padding: 40px 24px 72px; }
+      footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+      .toc ol { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://pandecta.com.br" class="nav-logo">
+    <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+    <span class="nav-logo-text" style="display:none;">Pandecta<span> AI</span></span>
+  </a>
+  <a href="https://pandecta.com.br" class="nav-back">Voltar ao site</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">⚖ Conformidade LGPD</div>
+  <h1>Lei Geral de <span>Proteção de Dados</span></h1>
+  <p class="hero-sub">
+    Nosso compromisso com a privacidade, transparência e segurança dos dados tratados na plataforma Pandecta AI.
+  </p>
+  <div class="hero-meta">
+    <span><strong>Lei:</strong> Lei nº 13.709/2018 (LGPD)</span>
+    <span><strong>Vigência:</strong> setembro de 2020</span>
+    <span><strong>Versão:</strong> 1.0 — junho de 2026</span>
+    <span><strong>DPO:</strong> contato@pandecta.com.br</span>
+  </div>
+  <div class="pilot-notice">
+    <span style="font-size:18px; flex-shrink:0; margin-top:1px;">ℹ</span>
+    <span>
+      <strong>Nota de fase piloto:</strong> A Pandecta AI está em fase de piloto fechado com um grupo restrito de advogados.
+      Esta política reflete os compromissos atuais da plataforma e será revisada por advogado especializado antes da abertura pública.
+      As práticas descritas aqui já estão em vigor.
+    </span>
+  </div>
+</section>
+
+<!-- CONTEÚDO -->
+<div class="page-wrap">
+
+  <!-- ÍNDICE -->
+  <nav class="toc" aria-label="Índice">
+    <h2>Nesta página</h2>
+    <ol>
+      <li><a href="#resumo">Resumo dos compromissos</a></li>
+      <li><a href="#papeis">Nosso papel: operadora</a></li>
+      <li><a href="#dados">Dados que tratamos</a></li>
+      <li><a href="#bases">Bases legais</a></li>
+      <li><a href="#direitos">Direitos dos titulares</a></li>
+      <li><a href="#canal">Canal de solicitação</a></li>
+      <li><a href="#exclusao">Como excluir seus dados</a></li>
+      <li><a href="#subprocessadores">Subprocessadores</a></li>
+      <li><a href="#internacional">Transferência internacional</a></li>
+      <li><a href="#seguranca">Segurança</a></li>
+      <li><a href="#retencao">Retenção e descarte</a></li>
+      <li><a href="#versoes">Histórico de versões</a></li>
+    </ol>
+  </nav>
+
+  <!-- 1. RESUMO -->
+  <section class="section" id="resumo">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Resumo dos compromissos</h2>
+    </div>
+    <p>
+      A Pandecta AI é uma plataforma que usa inteligência artificial para auxiliar advogados na criação de peças jurídicas.
+      Levamos privacidade a sério — não como formalidade, mas como requisito estrutural do produto que serve profissionais
+      que lidam com informações privilegiadas de seus clientes.
+    </p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">Princípio</div>
+        <div class="card-title">Finalidade específica</div>
+        <p>Tratamos dados exclusivamente para prestar o serviço contratado. Não revendemos dados, não criamos perfis para anúncios.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Princípio</div>
+        <div class="card-title">Minimização</div>
+        <p>Coletamos apenas o necessário. Não armazenamos arquivos originais — somente o texto extraído para geração dos documentos.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Princípio</div>
+        <div class="card-title">Transparência</div>
+        <p>Esta página descreve, em linguagem clara, todos os dados que tratamos, por qual razão e com quais salvaguardas.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Princípio</div>
+        <div class="card-title">Exercício de direitos</div>
+        <p>Respondemos a pedidos de titulares em até 15 dias, conforme o art. 19 da LGPD.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Princípio</div>
+        <div class="card-title">Segurança</div>
+        <p>Dados em trânsito protegidos por TLS 1.2+. Acesso por credenciais individuais com hashing de senhas (bcrypt).</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Princípio</div>
+        <div class="card-title">Responsabilização</div>
+        <p>Mantemos registros das operações de tratamento e indicamos Encarregado (DPO) acessível por e-mail.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. PAPÉIS -->
+  <section class="section" id="papeis">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Nosso papel: a Pandecta como operadora</h2>
+    </div>
+    <p>
+      A LGPD distingue <strong>controlador</strong> (quem decide sobre o tratamento dos dados) de <strong>operador</strong>
+      (quem trata dados por conta e instrução do controlador). Esta distinção é especialmente relevante na relação entre advogados e seus clientes:
+    </p>
+    <div class="highlight-box">
+      <p>
+        <strong>O advogado é o controlador</strong> dos dados pessoais dos seus clientes. Ao usar a Pandecta AI para elaborar
+        documentos que contenham dados desses clientes (nome, CPF, fatos do caso, etc.), o advogado instrui a plataforma a
+        processar essas informações.<br><br>
+        <strong>A Pandecta AI é a operadora</strong>: tratamos esses dados estritamente conforme as instruções do advogado,
+        para executar o serviço contratado, sem autonomia para usá-los para qualquer outra finalidade.
+      </p>
+    </div>
+    <p>
+      Essa cadeia de responsabilidade está alinhada com o art. 39 da LGPD, que determina que o operador deve seguir as instruções
+      do controlador e assegurar a proteção dos dados. O advogado, por sua vez, deve garantir a seus clientes que os serviços por
+      ele utilizados — incluindo ferramentas de IA — cumprem a LGPD.
+    </p>
+    <p>
+      A Pandecta AI contrata subprocessadores (infraestrutura de nuvem e IA) que também operam sob nossas instruções e estão sujeitos
+      a acordos de proteção de dados. Veja a lista completa na seção <a href="#subprocessadores" style="color:var(--gold);">Subprocessadores</a>.
+    </p>
+  </section>
+
+  <!-- 3. DADOS -->
+  <section class="section" id="dados">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Dados que tratamos</h2>
+    </div>
+    <p>Categorizamos os dados em dois grupos: dados do advogado (usuário da plataforma) e dados dos clientes do advogado (terceiros presentes nos documentos).</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dado</th><th>Categoria</th><th>Finalidade</th><th>Armazenado?</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Nome, e-mail, senha (hash)</td>
+            <td>Cadastro do advogado</td>
+            <td>Autenticação e comunicação com o usuário</td>
+            <td>Sim — banco de dados interno</td>
+          </tr>
+          <tr>
+            <td>Número OAB / perfil profissional</td>
+            <td>Perfil do advogado</td>
+            <td>Personalização de documentos gerados</td>
+            <td>Sim — banco de dados interno</td>
+          </tr>
+          <tr>
+            <td>Texto dos documentos enviados</td>
+            <td>Conteúdo jurídico (clientes do advogado)</td>
+            <td>Geração de peças e memória de argumentos</td>
+            <td>Sim — somente texto extraído (chunks)</td>
+          </tr>
+          <tr>
+            <td>Peças e documentos gerados</td>
+            <td>Histórico do escritório</td>
+            <td>Consulta posterior, reaproveitamento</td>
+            <td>Sim — associado ao usuário</td>
+          </tr>
+          <tr>
+            <td>Logs de acesso e uso</td>
+            <td>Segurança e operação</td>
+            <td>Diagnóstico de erros, segurança da plataforma</td>
+            <td>Sim — por prazo limitado</td>
+          </tr>
+          <tr>
+            <td>Arquivos originais (.pdf, .docx)</td>
+            <td>Upload temporário</td>
+            <td>Extração de texto — descartado após processamento</td>
+            <td><strong>Não</strong> — apenas texto extraído é retido</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:13px; margin-top:8px;">
+      <strong>Dados sensíveis:</strong> peças jurídicas podem conter dados pessoais sensíveis dos clientes do advogado
+      (saúde, filiação partidária, vida sexual, dado biométrico, etc.), conforme o art. 5º, II da LGPD. Tratamos esses dados
+      exclusivamente para executar o serviço contratado, sob instrução do advogado controlador, com base legal no
+      art. 11, II, "a" (consentimento do titular) ou "f" (exercício regular de direitos em processo judicial).
+    </p>
+  </section>
+
+  <!-- 4. BASES LEGAIS -->
+  <section class="section" id="bases">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Bases legais para o tratamento</h2>
+    </div>
+    <p>
+      Todo tratamento de dados realizado pela Pandecta AI está fundamentado em uma das hipóteses do art. 7º (dados comuns)
+      ou art. 11 (dados sensíveis) da LGPD:
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Operação de tratamento</th><th>Base legal (LGPD)</th><th>Fundamento</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cadastro e autenticação do advogado</td>
+            <td>Art. 7º, V — Execução de contrato</td>
+            <td>Necessário para cumprir os Termos de Uso aceitos pelo advogado ao criar a conta</td>
+          </tr>
+          <tr>
+            <td>Geração de documentos jurídicos com IA</td>
+            <td>Art. 7º, V — Execução de contrato</td>
+            <td>Serviço principal contratado; o tratamento é inseparável da prestação</td>
+          </tr>
+          <tr>
+            <td>Dados pessoais de clientes nos documentos</td>
+            <td>Art. 7º, II — Exercício regular de direitos</td>
+            <td>Utilizados pelo advogado no exercício de sua atividade profissional regulamentada</td>
+          </tr>
+          <tr>
+            <td>Dados sensíveis de clientes nos documentos</td>
+            <td>Art. 11, II, "f" — Exercício regular de direitos em processo judicial/administrativo</td>
+            <td>Conteúdo de peças jurídicas é intrínseco à atuação processual do advogado</td>
+          </tr>
+          <tr>
+            <td>Histórico e memória de argumentos</td>
+            <td>Art. 7º, V — Execução de contrato</td>
+            <td>Funcionalidade contratada que depende de retenção para operar</td>
+          </tr>
+          <tr>
+            <td>Logs de segurança e diagnóstico</td>
+            <td>Art. 7º, IX — Legítimo interesse</td>
+            <td>Prevenção de fraudes, segurança da plataforma e integridade dos dados dos usuários</td>
+          </tr>
+          <tr>
+            <td>Comunicações e notificações ao usuário</td>
+            <td>Art. 7º, V — Execução de contrato</td>
+            <td>Atualizações de plano, avisos de segurança e comunicações de serviço</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      A Pandecta AI <strong>não utiliza dados para marketing para terceiros, treinamento de modelos de IA próprios ou qualquer
+      finalidade além das listadas acima</strong>. O modelo de IA utilizado (Claude, da Anthropic) possui política própria que
+      proíbe o uso de dados de clientes para treinar seus modelos.
+    </p>
+  </section>
+
+  <!-- 5. DIREITOS -->
+  <section class="section" id="direitos">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>Direitos dos titulares</h2>
+    </div>
+    <p>A LGPD garante aos titulares de dados pessoais (art. 18) os seguintes direitos, todos exercíveis junto à Pandecta AI:</p>
+    <div class="rights-grid">
+      <div class="right-item"><strong>Confirmação</strong>Saber se tratamos seus dados pessoais</div>
+      <div class="right-item"><strong>Acesso</strong>Receber cópia dos dados que mantemos sobre você</div>
+      <div class="right-item"><strong>Correção</strong>Corrigir dados incompletos, inexatos ou desatualizados</div>
+      <div class="right-item"><strong>Anonimização</strong>Solicitar que dados desnecessários sejam anonimizados</div>
+      <div class="right-item"><strong>Portabilidade</strong>Receber seus dados em formato estruturado e interoperável</div>
+      <div class="right-item"><strong>Eliminação</strong>Solicitar a exclusão de dados tratados com base em consentimento ou legítimo interesse</div>
+      <div class="right-item"><strong>Revogação</strong>Revogar consentimento a qualquer momento, sem prejuízo de tratamentos anteriores</div>
+      <div class="right-item"><strong>Oposição</strong>Opor-se a tratamento realizado em descumprimento da LGPD</div>
+    </div>
+    <p>
+      <strong>Sobre dados de clientes do advogado:</strong> se você é cliente de um advogado que usa a Pandecta AI, o controlador
+      dos seus dados é o próprio advogado. Para exercer seus direitos, entre em contato diretamente com ele. A Pandecta AI,
+      como operadora, auxiliará o advogado a atender sua solicitação dentro do prazo legal.
+    </p>
+  </section>
+
+  <!-- 6. CANAL -->
+  <section class="section" id="canal">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Canal para exercício de direitos</h2>
+    </div>
+    <p>
+      Para exercer qualquer dos direitos listados acima, envie uma mensagem para nosso Encarregado de Proteção de Dados (DPO)
+      pelo e-mail abaixo. Você não precisa de advogado ou formulário especial — uma mensagem simples é suficiente.
+    </p>
+    <div class="contact-box">
+      <h3>✉ Contato com o DPO — Pandecta AI</h3>
+      <p style="margin-bottom:16px; font-size:14px;">
+        E-mail: <a href="mailto:contato@pandecta.com.br" class="email-link">contato@pandecta.com.br</a>
+      </p>
+      <ol class="contact-steps">
+        <li>Identifique-se: nome completo e, se for usuário cadastrado, o e-mail da sua conta Pandecta.</li>
+        <li>Descreva o direito que deseja exercer (exemplos: "quero saber quais dados vocês têm sobre mim" / "quero excluir minha conta e todos os dados").</li>
+        <li>Se for cliente de um advogado que usa a Pandecta, informe o nome do escritório e do profissional, se souber.</li>
+        <li>Aguarde nossa confirmação de recebimento — geralmente em 1 dia útil.</li>
+      </ol>
+      <div class="prazo-badge">⏱ Prazo de resposta: até 15 dias corridos (art. 19, LGPD)</div>
+    </div>
+    <p style="font-size:13px;">
+      Caso a resposta não seja satisfatória, o titular pode recorrer à Autoridade Nacional de Proteção de Dados (ANPD)
+      pelo portal <a href="https://www.gov.br/anpd" target="_blank" rel="noopener" style="color:var(--gold);">gov.br/anpd</a>.
+    </p>
+  </section>
+
+  <!-- 7. EXCLUSÃO -->
+  <section class="section" id="exclusao">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Como solicitar a exclusão dos seus dados</h2>
+    </div>
+    <p>Você pode solicitar a exclusão dos seus dados a qualquer momento. Veja o que acontece em cada situação:</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">Advogado usuário</div>
+        <div class="card-title">Encerramento de conta</div>
+        <p>Ao solicitar o cancelamento, excluímos seu cadastro, histórico de documentos e memória de argumentos em até 30 dias.
+        Dados de faturamento podem ser retidos por obrigação legal (5 anos, Código Civil).</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Conteúdo específico</div>
+        <div class="card-title">Remoção parcial</div>
+        <p>É possível solicitar a exclusão de documentos ou chunks específicos do acervo sem encerrar a conta.
+        Processamos em até 15 dias.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Cliente do advogado</div>
+        <div class="card-title">Via controlador</div>
+        <p>O titular deve solicitar ao advogado (controlador). O advogado pode, via nossa plataforma ou pelo canal DPO,
+        remover conteúdo que contenha os dados do seu cliente.</p>
+      </div>
+    </div>
+    <div class="form-template"><strong>Modelo de e-mail para exclusão de dados:</strong>
+
+Para: contato@pandecta.com.br
+Assunto: Solicitação de exclusão de dados — [seu nome]
+
+Olá,
+
+Solicito a exclusão dos meus dados pessoais mantidos pela Pandecta AI.
+
+Nome completo: [nome]
+E-mail de cadastro: [e-mail]
+Tipo de solicitação: [exclusão total da conta / exclusão de conteúdo específico]
+Especificação (se parcial): [descreva quais documentos ou informações]
+
+Aguardo confirmação.</div>
+  </section>
+
+  <!-- 8. SUBPROCESSADORES -->
+  <section class="section" id="subprocessadores">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>Subprocessadores</h2>
+    </div>
+    <p>
+      Para operar a plataforma, a Pandecta AI contrata os seguintes subprocessadores, todos vinculados a acordos de
+      proteção de dados e certificações reconhecidas internacionalmente:
+    </p>
+    <ul class="sub-list">
+      <li>
+        <div class="sub-icon">☁</div>
+        <div class="sub-info">
+          <strong>Railway (Railway Corp.) — EUA</strong>
+          Infraestrutura de hospedagem do servidor e banco de dados. Dados armazenados em servidores nos Estados Unidos.
+          Railway opera sob o framework SOC 2 Type II. Transferência internacional mediante cláusulas contratuais padrão.
+        </div>
+      </li>
+      <li>
+        <div class="sub-icon">🤖</div>
+        <div class="sub-info">
+          <strong>Anthropic PBC — EUA (modelo Claude)</strong>
+          Processamento de linguagem natural para geração de documentos. O texto enviado ao modelo é processado em tempo real
+          e não é utilizado para treinamento de modelos pela Anthropic, conforme os Termos de Uso da API.
+          Política de privacidade da Anthropic:
+          <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener" style="color:var(--gold);">anthropic.com/privacy</a>.
+        </div>
+      </li>
+    </ul>
+    <p style="font-size:13px;">
+      Esta lista será atualizada em caso de adição ou substituição de subprocessadores. Usuários serão notificados por e-mail
+      com antecedência mínima de 30 dias antes de qualquer mudança que afete o nível de proteção dos dados.
+    </p>
+  </section>
+
+  <!-- 9. TRANSFERÊNCIA INTERNACIONAL -->
+  <section class="section" id="internacional">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <h2>Transferência internacional de dados</h2>
+    </div>
+    <p>
+      Os dados tratados pela Pandecta AI são armazenados e processados em servidores nos <strong>Estados Unidos</strong>
+      (Railway e Anthropic). A LGPD, em seu art. 33, permite a transferência internacional de dados pessoais quando amparada
+      por salvaguardas adequadas.
+    </p>
+    <div class="highlight-box">
+      <p>
+        <strong>Salvaguardas aplicadas:</strong><br><br>
+        (i) <strong>Cláusulas contratuais específicas</strong> com Railway e Anthropic, que obrigam os parceiros a tratar os
+        dados conforme padrões compatíveis com a LGPD e o GDPR europeu;<br><br>
+        (ii) <strong>Políticas de não uso para treinamento</strong> — a Anthropic se compromete contratualmente a não usar
+        dados enviados via API para treinar modelos;<br><br>
+        (iii) <strong>Minimização na transmissão</strong> — enviamos ao modelo apenas o texto estritamente necessário para
+        gerar o documento solicitado, sem identificadores desnecessários quando possível.
+      </p>
+    </div>
+    <p>
+      A Pandecta AI está atenta às discussões regulatórias da ANPD sobre transferências internacionais e adaptará suas
+      práticas a eventuais novas diretrizes.
+    </p>
+  </section>
+
+  <!-- 10. SEGURANÇA -->
+  <section class="section" id="seguranca">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <h2>Segurança dos dados</h2>
+    </div>
+    <p>
+      Implementamos medidas técnicas e administrativas para proteger os dados contra acesso não autorizado, perda, alteração
+      ou destruição:
+    </p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">Técnica</div>
+        <div class="card-title">Criptografia em trânsito</div>
+        <p>Toda comunicação entre o navegador e nossos servidores usa TLS 1.2 ou superior (HTTPS).</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Técnica</div>
+        <div class="card-title">Hashing de senhas</div>
+        <p>Senhas são armazenadas com bcrypt (fator de custo elevado). Nunca armazenamos senhas em texto plano.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Técnica</div>
+        <div class="card-title">Autenticação por token</div>
+        <p>Sessões gerenciadas por JWT com expiração definida. Cada usuário acessa somente seus próprios dados (multitenancy).</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Técnica</div>
+        <div class="card-title">Backup automático</div>
+        <p>Backups automatizados do banco de dados com retenção em local seguro, para garantir disponibilidade e recuperação.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Administrativa</div>
+        <div class="card-title">Acesso mínimo</div>
+        <p>Apenas a equipe técnica essencial tem acesso ao ambiente de produção, com credenciais individuais e auditáveis.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Administrativa</div>
+        <div class="card-title">Notificação de incidentes</div>
+        <p>Em caso de incidente que afete dados pessoais, notificaremos a ANPD e os titulares afetados em prazo compatível com o art. 48 da LGPD.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. RETENÇÃO -->
+  <section class="section" id="retencao">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <h2>Retenção e descarte de dados</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Tipo de dado</th><th>Prazo de retenção</th><th>Justificativa</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cadastro do advogado (conta ativa)</td>
+            <td>Enquanto a conta estiver ativa</td>
+            <td>Necessário para prestação do serviço</td>
+          </tr>
+          <tr>
+            <td>Histórico de documentos</td>
+            <td>Enquanto a conta estiver ativa</td>
+            <td>Funcionalidade de consulta retroativa contratada</td>
+          </tr>
+          <tr>
+            <td>Dados após cancelamento da conta</td>
+            <td>Até 30 dias após a solicitação</td>
+            <td>Prazo para eventual reversão; após isso, exclusão definitiva</td>
+          </tr>
+          <tr>
+            <td>Dados de faturamento e transações</td>
+            <td>5 anos</td>
+            <td>Obrigação legal — Código Civil e legislação fiscal</td>
+          </tr>
+          <tr>
+            <td>Logs de segurança</td>
+            <td>90 dias</td>
+            <td>Diagnóstico de incidentes e segurança da plataforma</td>
+          </tr>
+          <tr>
+            <td>Arquivos originais enviados</td>
+            <td>Descartados imediatamente após extração</td>
+            <td>Não armazenamos — somente o texto extraído (chunks) é retido</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Após o término dos prazos acima, os dados são excluídos permanentemente ou anonimizados, de forma que não seja mais
+      possível identificar o titular.
+    </p>
+  </section>
+
+  <!-- 12. VERSÕES -->
+  <section class="section" id="versoes">
+    <div class="section-header">
+      <div class="section-num">12</div>
+      <h2>Histórico de versões</h2>
+    </div>
+    <p>
+      Esta política será atualizada sempre que houver mudanças relevantes nas práticas de tratamento de dados. Alterações
+      materiais serão comunicadas aos usuários por e-mail com antecedência mínima de 15 dias.
+    </p>
+    <div class="version-line">
+      <div class="version-item">
+        <span class="version-tag">v1.0</span>
+        <div>
+          <strong style="color:var(--text); font-size:14px; display:block; margin-bottom:3px;">Junho de 2026 — Versão inicial</strong>
+          <p>Primeira versão pública da política de conformidade LGPD, publicada durante a fase de piloto fechado da plataforma.
+          Cobre: bases legais, papéis (operadora/controlador), subprocessadores (Railway + Anthropic), transferência internacional,
+          direitos dos titulares e canais de contato. Revisão jurídica especializada prevista antes da abertura pública.</p>
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:24px;">
+      <p>
+        <strong>Encarregado de Proteção de Dados (DPO):</strong><br>
+        Pandecta AI — contato@pandecta.com.br<br>
+        Atibaia – SP, Brasil<br>
+        CNPJ: em processo de abertura
+      </p>
+    </div>
+  </section>
+
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI" onerror="this.style.display='none';">
+    <span>© 2026 Pandecta AI — Todos os direitos reservados</span>
+  </div>
+  <div style="display:flex; gap:24px; flex-wrap:wrap;">
+    <a href="https://pandecta.com.br">pandecta.com.br</a>
+    <a href="mailto:contato@pandecta.com.br">contato@pandecta.com.br</a>
+    <span>Lei nº 13.709/2018 — LGPD</span>
+  </div>
+</footer>
+
+</body>
+</html>

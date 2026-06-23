@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Termos de Uso — Pandecta AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-deep:      #001B2A;
+      --bg-card:      #002438;
+      --bg-section:   #00304d;
+      --gold:         #C8A96B;
+      --gold-light:   #dfc291;
+      --text:         #F4F4F4;
+      --text-muted:   #a8bbc8;
+      --border:       rgba(200, 169, 107, 0.20);
+      --divider:      rgba(244, 244, 244, 0.08);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-deep);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header a.logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    header img.logo {
+      height: 36px;
+      width: auto;
+    }
+
+    header a.back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    header a.back-link:hover {
+      color: var(--gold-light);
+    }
+
+    /* ── Hero strip ── */
+    .hero {
+      background: linear-gradient(135deg, var(--bg-card) 0%, #003355 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 40px 48px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+
+    .hero p.subtitle {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 560px;
+      margin: 0 auto 20px;
+    }
+
+    .hero .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(200, 169, 107, 0.12);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    /* ── Layout ── */
+    .page-wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── Table of Contents ── */
+    .toc {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin-bottom: 48px;
+    }
+
+    .toc h2 {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .toc ol {
+      list-style: none;
+      counter-reset: toc-counter;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 32px;
+    }
+
+    @media (max-width: 560px) {
+      .toc ol { grid-template-columns: 1fr; }
+    }
+
+    .toc ol li {
+      counter-increment: toc-counter;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .toc ol li::before {
+      content: counter(toc-counter, decimal-leading-zero);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 600;
+      min-width: 22px;
+    }
+
+    .toc ol li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .toc ol li a:hover {
+      color: var(--gold-light);
+    }
+
+    /* ── Sections ── */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .section-number {
+      background: rgba(200, 169, 107, 0.15);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .section h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .section p {
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+
+    .section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section ul, .section ol {
+      padding-left: 20px;
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+
+    .section ul li, .section ol li {
+      margin-bottom: 8px;
+    }
+
+    .section strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 20px 0;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .callout-warning {
+      background: rgba(200, 169, 107, 0.08);
+      border-left: 3px solid var(--gold);
+      color: var(--text-muted);
+    }
+
+    .callout-warning strong {
+      display: block;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .callout-info {
+      background: rgba(0, 100, 160, 0.15);
+      border-left: 3px solid #3b9edd;
+      color: var(--text-muted);
+    }
+
+    .callout-info strong {
+      display: block;
+      color: #3b9edd;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    /* ── Plans table ── */
+    .plans-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 16px 0 20px;
+    }
+
+    .plans-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--bg-section);
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .plans-table th:first-child { border-radius: 8px 0 0 8px; }
+    .plans-table th:last-child  { border-radius: 0 8px 8px 0; }
+
+    .plans-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--divider);
+      color: var(--text-muted);
+      vertical-align: top;
+    }
+
+    .plans-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      text-align: center;
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    footer .footer-logo {
+      margin-bottom: 16px;
+    }
+
+    footer img {
+      height: 28px;
+      opacity: 0.75;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      header { padding: 16px 20px; }
+      .hero { padding: 40px 20px 32px; }
+      .hero h1 { font-size: 1.6rem; }
+      .page-wrapper { padding: 32px 16px 60px; }
+      .toc { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════════════════ -->
+<header>
+  <a href="https://pandecta.com.br" class="logo-link" title="Página inicial Pandecta">
+    <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI" class="logo" />
+  </a>
+  <a href="https://pandecta.com.br" class="back-link">
+    ← Voltar ao site
+  </a>
+</header>
+
+<!-- ══ HERO ════════════════════════════════════════════════════════════ -->
+<div class="hero">
+  <h1>Termos de Uso</h1>
+  <p class="subtitle">
+    Leia com atenção antes de utilizar a plataforma Pandecta AI.
+    O uso dos nossos serviços implica aceitação integral destas condições.
+  </p>
+  <span class="meta-badge">
+    Versão 1.0 &nbsp;·&nbsp; Vigente a partir de 23 de junho de 2026
+  </span>
+</div>
+
+<!-- ══ CONTEÚDO PRINCIPAL ══════════════════════════════════════════════ -->
+<div class="page-wrapper">
+
+  <!-- Índice -->
+  <div class="toc">
+    <h2>Índice</h2>
+    <ol>
+      <li><a href="#s1">Aceitação dos Termos</a></li>
+      <li><a href="#s2">Objeto do Serviço</a></li>
+      <li><a href="#s3">Cadastro e Conta</a></li>
+      <li><a href="#s4">Uso Aceitável</a></li>
+      <li><a href="#s5">Responsabilidade pelo Uso da IA</a></li>
+      <li><a href="#s6">Propriedade Intelectual</a></li>
+      <li><a href="#s7">Privacidade e Dados</a></li>
+      <li><a href="#s8">Planos, Pagamento e Cancelamento</a></li>
+      <li><a href="#s9">Disponibilidade e Suporte</a></li>
+      <li><a href="#s10">Limitação de Responsabilidade</a></li>
+      <li><a href="#s11">Rescisão</a></li>
+      <li><a href="#s12">Disposições Gerais</a></li>
+    </ol>
+  </div>
+
+  <!-- ── 1. Aceitação ── -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-number">01</div>
+      <h2>Aceitação dos Termos</h2>
+    </div>
+    <p>
+      Estes Termos de Uso ("<strong>Termos</strong>") regulam o acesso e a utilização da plataforma
+      <strong>Pandecta AI</strong> ("<strong>Plataforma</strong>"), disponível em <a href="https://pandecta.com.br" style="color:var(--gold);">pandecta.com.br</a>,
+      desenvolvida e operada pela empresa responsável pelo projeto Pandecta, com sede em
+      <strong>Atibaia – SP</strong> (CNPJ em processo de registro), doravante denominada "<strong>Pandecta</strong>"
+      ou "<strong>nós</strong>".
+    </p>
+    <p>
+      Ao criar uma conta, acessar ou utilizar qualquer recurso da Plataforma, o usuário
+      ("<strong>Usuário</strong>") declara ter lido, compreendido e aceito integralmente estes Termos,
+      bem como nossa <strong>Política de Privacidade</strong>, que integra este instrumento por referência.
+    </p>
+    <p>
+      Se você representa um escritório de advocacia ou pessoa jurídica, declara ter poderes para
+      vincular essa entidade a estes Termos. Se não concordar com qualquer disposição, não utilize
+      a Plataforma.
+    </p>
+    <div class="callout callout-info">
+      <strong>Menores de idade</strong>
+      A Plataforma destina-se exclusivamente a profissionais do Direito. O cadastro pressupõe
+      que o Usuário é maior de 18 anos e, quando aplicável, possui inscrição ativa na Ordem dos
+      Advogados do Brasil (OAB) ou supervisão de advogado habilitado.
+    </div>
+  </div>
+
+  <!-- ── 2. Objeto ── -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-number">02</div>
+      <h2>Objeto do Serviço</h2>
+    </div>
+    <p>
+      A Pandecta AI é uma plataforma de assistência jurídica que utiliza inteligência artificial
+      (IA) generativa para apoiar advogados e escritórios de advocacia na produção e gestão de
+      documentos jurídicos. Os serviços incluem, sem limitação:
+    </p>
+    <ul>
+      <li>Geração assistida de petições, contratos, pareceres, notificações e demais peças jurídicas;</li>
+      <li>Elaboração de minutas com base em parâmetros fornecidos pelo Usuário;</li>
+      <li>Organização de acervo documental digital, com extração e indexação de texto de documentos enviados;</li>
+      <li>Ferramentas de edição, revisão e exportação de documentos gerados.</li>
+    </ul>
+    <p>
+      A Plataforma funciona como ferramenta de <strong>suporte à atividade jurídica</strong>. Não presta
+      serviços advocatícios, não fornece aconselhamento jurídico e não substitui, em nenhuma hipótese,
+      o julgamento profissional do advogado habilitado.
+    </p>
+    <div class="callout callout-warning">
+      <strong>Natureza do Serviço</strong>
+      A Pandecta AI é uma ferramenta de produtividade. Todo conteúdo gerado deve ser revisado,
+      validado e assumido como de responsabilidade exclusiva do advogado que o utilizar. A Plataforma
+      não é um escritório de advocacia e não exerce a advocacia.
+    </div>
+    <p>
+      A Pandecta reserva-se o direito de alterar, ampliar, reduzir ou descontinuar funcionalidades
+      a qualquer tempo, comunicando os Usuários com antecedência razoável quando a mudança for relevante.
+    </p>
+  </div>
+
+  <!-- ── 3. Cadastro ── -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-number">03</div>
+      <h2>Cadastro e Conta</h2>
+    </div>
+    <p>
+      Para acessar os recursos da Plataforma, o Usuário deve criar uma conta fornecendo informações
+      verdadeiras, atuais e completas. O Usuário é responsável por manter seus dados de cadastro
+      atualizados.
+    </p>
+    <p><strong>Credenciais de acesso:</strong> O Usuário é o único responsável pelo sigilo de sua
+      senha e por todas as atividades realizadas com suas credenciais. Em caso de uso não autorizado
+      ou suspeita de violação de segurança, o Usuário deve notificar imediatamente a Pandecta pelo
+      e-mail <a href="mailto:contato@pandecta.com.br" style="color:var(--gold);">contato@pandecta.com.br</a>.
+    </p>
+    <p>
+      A Pandecta não se responsabiliza por prejuízos decorrentes do uso não autorizado da conta por
+      falha do próprio Usuário em proteger suas credenciais.
+    </p>
+    <p>
+      <strong>Contas de escritório:</strong> Um plano pode abranger múltiplos usuários sob uma
+      mesma conta de escritório (conforme o plano contratado). O responsável pelo cadastro principal
+      responde solidariamente pelos atos de todos os usuários vinculados à conta.
+    </p>
+    <p>
+      A Pandecta pode recusar, suspender ou encerrar contas que violem estes Termos, a critério
+      exclusivo da empresa.
+    </p>
+  </div>
+
+  <!-- ── 4. Uso Aceitável ── -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-number">04</div>
+      <h2>Uso Aceitável</h2>
+    </div>
+    <p>
+      O Usuário compromete-se a utilizar a Plataforma exclusivamente para fins lícitos e
+      compatíveis com a atividade jurídica profissional. São expressamente <strong>vedadas</strong>
+      as seguintes condutas:
+    </p>
+    <ul>
+      <li>Gerar, armazenar ou disseminar conteúdo ilegal, difamatório, fraudulento ou que viole direitos de terceiros;</li>
+      <li>Utilizar a Plataforma para criar documentos com fins de fraude processual, falsificação ideológica ou qualquer ilícito penal ou civil;</li>
+      <li>Tentar extrair, copiar, reverter engenharia ou reproduzir os modelos de IA, algoritmos, prompts de sistema ou qualquer propriedade intelectual da Pandecta;</li>
+      <li>Utilizar bots, scripts ou qualquer automação não autorizada para acessar a Plataforma;</li>
+      <li>Compartilhar credenciais de acesso com terceiros não vinculados ao plano contratado;</li>
+      <li>Fazer upload de conteúdo que contenha vírus, malware ou código malicioso;</li>
+      <li>Utilizar a Plataforma de forma que exceda os limites estabelecidos no plano contratado ou sobrecarregue indevidamente a infraestrutura;</li>
+      <li>Realizar qualquer ato que viole o Estatuto da Advocacia (Lei nº 8.906/1994), o Código de Ética e Disciplina da OAB ou as normas do Conselho Federal da OAB, incluindo sua Recomendação nº 001/2024 sobre uso de IA generativa;</li>
+      <li>Inserir dados pessoais sensíveis de clientes além do estritamente necessário para a tarefa em execução.</li>
+    </ul>
+    <p>
+      A violação destas regras pode resultar na suspensão imediata da conta, sem direito a reembolso,
+      além de responsabilização civil e criminal nas medidas previstas em lei.
+    </p>
+  </div>
+
+  <!-- ── 5. Responsabilidade IA ── -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-number">05</div>
+      <h2>Responsabilidade pelo Uso da Inteligência Artificial</h2>
+    </div>
+    <div class="callout callout-warning">
+      <strong>Leia com atenção — cláusula essencial</strong>
+      A IA pode gerar informações incorretas, desatualizadas, imprecisas ou juridicamente inadequadas.
+      Todo conteúdo gerado deve ser integralmente revisado por advogado habilitado antes de qualquer uso profissional.
+      A Pandecta AI <em>não substitui</em> o advogado.
+    </div>
+    <p>
+      Os documentos, textos e sugestões produzidos pela Plataforma são gerados por modelos de
+      linguagem (atualmente, o modelo Claude da Anthropic PBC) com base nas instruções e dados
+      fornecidos pelo próprio Usuário. A qualidade do resultado depende diretamente da qualidade
+      das informações fornecidas.
+    </p>
+    <p>
+      <strong>O Usuário é o único responsável por:</strong>
+    </p>
+    <ul>
+      <li>Verificar a exatidão, completude e pertinência jurídica de todo conteúdo gerado;</li>
+      <li>Adequar o documento à legislação vigente, à jurisprudência aplicável e às particularidades do caso concreto;</li>
+      <li>Certificar-se de que citações, referências jurisprudenciais e dispositivos legais gerados pela IA são reais e aplicáveis;</li>
+      <li>Assinar e assumir integralmente a autoria de toda peça jurídica submetida a qualquer autoridade, tribunal ou cliente;</li>
+      <li>Observar as regras deontológicas da OAB, especialmente a Recomendação nº 001/2024 do CFOAB, que exige supervisão humana constante no uso de IA generativa;</li>
+      <li>Obter consentimento dos clientes quando exigido pela legislação ou pelas normas éticas profissionais.</li>
+    </ul>
+    <p>
+      A Pandecta não se responsabiliza por eventuais "alucinações" da IA (geração de informações
+      falsas apresentadas como verdadeiras), inconsistências jurídicas, peças inadequadas ao caso
+      ou qualquer resultado negativo decorrente da utilização sem a devida supervisão profissional.
+    </p>
+    <p>
+      Os textos produzidos pelo modelo de IA são processados pela infraestrutura da Anthropic PBC,
+      empresa norte-americana. Ao utilizar a Plataforma, o Usuário reconhece que os dados inseridos
+      para geração de documentos são transmitidos a esse terceiro, conforme descrito na Seção 7.
+    </p>
+  </div>
+
+  <!-- ── 6. Propriedade Intelectual ── -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-number">06</div>
+      <h2>Propriedade Intelectual</h2>
+    </div>
+    <p>
+      <strong>Da Pandecta:</strong> A Plataforma, seus elementos visuais, marca, logotipo,
+      software, fluxos, prompts de sistema, metodologias e demais recursos são de propriedade
+      exclusiva da Pandecta e protegidos pela Lei de Propriedade Industrial (Lei nº 9.279/1996),
+      Lei de Direitos Autorais (Lei nº 9.610/1998) e demais normas aplicáveis. É vedada qualquer
+      reprodução, adaptação ou uso não autorizado.
+    </p>
+    <p>
+      <strong>Dos Usuários:</strong> O Usuário mantém todos os direitos sobre os dados, documentos
+      e conteúdos que inserir na Plataforma. Ao utilizá-la, o Usuário concede à Pandecta uma
+      licença limitada, não exclusiva, não transferível e revogável para processar esses conteúdos
+      exclusivamente com a finalidade de prestar os serviços contratados.
+    </p>
+    <p>
+      <strong>Documentos gerados:</strong> Os textos produzidos pela IA com base nas instruções
+      do Usuário pertencem ao Usuário. A Pandecta não reivindica direitos autorais sobre o conteúdo
+      gerado a partir dos dados do próprio Usuário.
+    </p>
+    <p>
+      A Pandecta não utilizará o conteúdo dos documentos do Usuário para treinar modelos de IA
+      próprios sem consentimento expresso. O processamento dos dados pela Anthropic está sujeito
+      aos termos próprios dessa empresa.
+    </p>
+  </div>
+
+  <!-- ── 7. Privacidade ── -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-number">07</div>
+      <h2>Privacidade e Proteção de Dados</h2>
+    </div>
+    <p>
+      O tratamento de dados pessoais pela Pandecta observa a <strong>Lei Geral de Proteção de Dados
+      Pessoais (LGPD – Lei nº 13.709/2018)</strong>. As práticas detalhadas estão descritas em nossa
+      Política de Privacidade, disponível na Plataforma.
+    </p>
+    <p><strong>Dados coletados e tratados incluem:</strong></p>
+    <ul>
+      <li>Dados de cadastro: nome, e-mail, telefone, número de inscrição na OAB (quando fornecido);</li>
+      <li>Dados de uso: histórico de interações, documentos gerados, preferências de configuração;</li>
+      <li>Conteúdo do acervo: texto extraído de documentos enviados pelo Usuário (o arquivo original não é armazenado; apenas o texto extraído permanece nos nossos servidores);</li>
+      <li>Dados técnicos: endereço IP, tipo de navegador, logs de acesso.</li>
+    </ul>
+    <p>
+      <strong>Armazenamento:</strong> Os dados são armazenados em servidores da Railway
+      (plataforma de infraestrutura em nuvem), localizados nos <strong>Estados Unidos da América</strong>.
+      A transferência internacional de dados ocorre com fundamento no interesse legítimo e nas
+      salvaguardas previstas no art. 33 da LGPD.
+    </p>
+    <p>
+      <strong>Processamento por terceiros:</strong> Os textos enviados para geração de documentos
+      são processados pela <strong>Anthropic PBC</strong> por meio de sua API. O Usuário deve estar
+      ciente de que dados inseridos no prompt — incluindo informações sobre clientes — são transmitidos
+      a esse prestador. O Usuário é responsável por garantir que possui base legal adequada para
+      compartilhar tais informações. Recomendamos não inserir dados pessoais de clientes além do
+      estritamente necessário para a tarefa.
+    </p>
+    <p>
+      <strong>Direitos do titular:</strong> O Usuário pode, a qualquer tempo, solicitar acesso,
+      correção, exclusão ou portabilidade de seus dados mediante solicitação para
+      <a href="mailto:contato@pandecta.com.br" style="color:var(--gold);">contato@pandecta.com.br</a>.
+    </p>
+    <p>
+      <strong>Confidencialidade:</strong> A Pandecta trata os dados e documentos dos Usuários
+      como informação confidencial, adotando medidas técnicas e organizacionais razoáveis para
+      protegê-los contra acesso não autorizado.
+    </p>
+  </div>
+
+  <!-- ── 8. Planos e Pagamento ── -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <div class="section-number">08</div>
+      <h2>Planos, Pagamento e Cancelamento</h2>
+    </div>
+    <p>
+      A Pandecta oferece os seguintes planos de acesso, cujas condições específicas são detalhadas
+      na página de preços da Plataforma:
+    </p>
+    <table class="plans-table">
+      <thead>
+        <tr>
+          <th>Plano</th>
+          <th>Perfil</th>
+          <th>Características principais</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Solo</strong></td>
+          <td>Advogado autônomo</td>
+          <td>Acesso individual, limite mensal de gerações e acervo</td>
+        </tr>
+        <tr>
+          <td><strong>Pro</strong></td>
+          <td>Advogado com demanda elevada</td>
+          <td>Limites ampliados, funcionalidades avançadas</td>
+        </tr>
+        <tr>
+          <td><strong>Firma</strong></td>
+          <td>Escritório de advocacia</td>
+          <td>Múltiplos usuários, gestão centralizada, limites compartilhados</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <strong>Fase piloto:</strong> Durante o período de piloto, o acesso pode ser gratuito ou
+      mediante convite. Nesse período, os recursos e limites podem variar sem aviso prévio à medida
+      que a Plataforma é aprimorada.
+    </p>
+    <p>
+      <strong>Cobrança:</strong> Quando a cobrança for implementada, os valores, periodicidade e
+      forma de pagamento serão informados no momento da contratação. As assinaturas são cobradas
+      antecipadamente (pré-pago) e renovadas automaticamente até o cancelamento.
+    </p>
+    <p>
+      <strong>Reembolso:</strong> Não há reembolso proporcional por meses parcialmente utilizados,
+      salvo disposição legal em contrário ou acordo expresso da Pandecta. Cancelamentos realizados
+      antes do próximo ciclo de cobrança encerram a renovação automática; o acesso permanece ativo
+      até o fim do período já pago.
+    </p>
+    <p>
+      <strong>Cancelamento:</strong> O Usuário pode cancelar sua conta a qualquer tempo pela
+      Plataforma ou por solicitação ao suporte. Após o cancelamento, os dados serão retidos pelo
+      prazo mínimo exigido pela legislação aplicável e, após esse prazo, excluídos.
+    </p>
+    <p>
+      <strong>Inadimplência:</strong> A falta de pagamento na data de vencimento pode resultar
+      na suspensão automática do acesso, com reativação mediante regularização do débito.
+    </p>
+  </div>
+
+  <!-- ── 9. Disponibilidade ── -->
+  <div class="section" id="s9">
+    <div class="section-header">
+      <div class="section-number">09</div>
+      <h2>Disponibilidade e Suporte</h2>
+    </div>
+    <p>
+      A Pandecta empreenderá esforços razoáveis para manter a Plataforma disponível de forma
+      contínua. No entanto, <strong>não garante disponibilidade ininterrupta</strong> ou livre de
+      falhas.
+    </p>
+    <p>
+      A Plataforma pode ficar temporariamente indisponível por razões que incluem, sem limitação:
+    </p>
+    <ul>
+      <li>Manutenções programadas (anunciadas com antecedência razoável);</li>
+      <li>Falhas na infraestrutura de terceiros (Railway, Anthropic, provedores de internet);</li>
+      <li>Eventos de força maior, ataques cibernéticos ou circunstâncias fora do controle da Pandecta.</li>
+    </ul>
+    <p>
+      O suporte ao Usuário é prestado pelo canal
+      <a href="mailto:contato@pandecta.com.br" style="color:var(--gold);">contato@pandecta.com.br</a>,
+      em dias úteis, com prazo de resposta de até 2 dias úteis. Não há garantia de nível de serviço
+      (SLA) específico durante a fase piloto.
+    </p>
+  </div>
+
+  <!-- ── 10. Limitação de Responsabilidade ── -->
+  <div class="section" id="s10">
+    <div class="section-header">
+      <div class="section-number">10</div>
+      <h2>Limitação de Responsabilidade</h2>
+    </div>
+    <p>
+      Na extensão máxima permitida pela legislação brasileira aplicável, a Pandecta não será
+      responsável por:
+    </p>
+    <ul>
+      <li><strong>Conteúdo gerado pela IA:</strong> erros, imprecisões, omissões, "alucinações",
+        citações inexistentes ou inadequação jurídica dos textos produzidos;</li>
+      <li><strong>Consequências do uso profissional:</strong> resultados adversos em processos,
+        negociações ou quaisquer atos jurídicos baseados em conteúdo gerado pela Plataforma sem
+        a devida revisão do advogado responsável;</li>
+      <li><strong>Perda de dados:</strong> falhas técnicas, ataques cibernéticos ou eventos
+        de força maior que resultem em perda ou indisponibilidade de dados;</li>
+      <li><strong>Interrupções de serviço:</strong> prejuízos decorrentes de indisponibilidade
+        temporária da Plataforma ou dos serviços de terceiros utilizados;</li>
+      <li><strong>Atos de terceiros:</strong> condutas de outros usuários, provedores de
+        infraestrutura ou da Anthropic;</li>
+      <li><strong>Lucros cessantes ou danos indiretos:</strong> perdas de oportunidade,
+        danos à reputação, perda de clientes ou quaisquer danos indiretos, mesmo que a
+        Pandecta tenha sido alertada sobre a possibilidade de tais danos.</li>
+    </ul>
+    <p>
+      Em qualquer caso, a responsabilidade total da Pandecta perante o Usuário, por qualquer
+      causa, ficará limitada ao valor efetivamente pago pelo Usuário à Pandecta nos
+      <strong>três meses anteriores</strong> ao evento que originou o dano, ou a
+      <strong>R$ 500,00 (quinhentos reais)</strong>, o que for maior.
+    </p>
+    <div class="callout callout-info">
+      <strong>Nota sobre a relação advogado–cliente</strong>
+      A Pandecta é fornecedora de tecnologia, não parte da relação jurídica entre o advogado
+      e seu cliente. A responsabilidade perante o cliente final é inteiramente do advogado,
+      nos termos do Estatuto da Advocacia e do Código Civil.
+    </div>
+  </div>
+
+  <!-- ── 11. Rescisão ── -->
+  <div class="section" id="s11">
+    <div class="section-header">
+      <div class="section-number">11</div>
+      <h2>Rescisão</h2>
+    </div>
+    <p>
+      <strong>Pelo Usuário:</strong> O Usuário pode encerrar sua conta a qualquer tempo, sem
+      necessidade de justificativa, conforme descrito na Seção 8.
+    </p>
+    <p>
+      <strong>Pela Pandecta:</strong> A Pandecta pode suspender ou encerrar o acesso do Usuário,
+      imediatamente e sem aviso prévio, nas seguintes hipóteses:
+    </p>
+    <ul>
+      <li>Violação de qualquer disposição destes Termos;</li>
+      <li>Uso da Plataforma para fins ilegais ou antiéticos;</li>
+      <li>Inadimplência no pagamento (após aviso e prazo razoável de regularização);</li>
+      <li>Conduta que represente risco à segurança da Plataforma ou de outros usuários;</li>
+      <li>Determinação judicial ou de autoridade competente.</li>
+    </ul>
+    <p>
+      Em caso de encerramento por culpa do Usuário, não haverá direito a reembolso de valores
+      já pagos. Em caso de encerramento unilateral pela Pandecta sem justa causa, será assegurado
+      ao Usuário reembolso proporcional ao período não utilizado.
+    </p>
+    <p>
+      Após o encerramento da conta, o Usuário poderá solicitar a exportação de seus documentos
+      por até 30 dias. Após esse prazo, os dados poderão ser excluídos, ressalvado o prazo
+      mínimo de retenção exigido por lei.
+    </p>
+  </div>
+
+  <!-- ── 12. Disposições Gerais ── -->
+  <div class="section" id="s12">
+    <div class="section-header">
+      <div class="section-number">12</div>
+      <h2>Disposições Gerais</h2>
+    </div>
+    <p>
+      <strong>Alterações nos Termos:</strong> A Pandecta pode atualizar estes Termos a qualquer
+      tempo. Alterações relevantes serão comunicadas ao Usuário por e-mail ou notificação na
+      Plataforma com antecedência mínima de 15 dias. O uso continuado da Plataforma após a
+      vigência das alterações constitui aceitação das novas condições. Se o Usuário não
+      concordar, deverá cancelar sua conta antes da data de vigência.
+    </p>
+    <p>
+      <strong>Cessão:</strong> O Usuário não pode ceder, transferir ou sublicenciar seus direitos
+      sob estes Termos sem consentimento prévio e escrito da Pandecta. A Pandecta pode ceder
+      estes Termos no contexto de fusão, aquisição ou reorganização societária, desde que o
+      cessionário assuma todas as obrigações aqui previstas.
+    </p>
+    <p>
+      <strong>Independência das cláusulas:</strong> Se qualquer disposição destes Termos for
+      considerada inválida ou inaplicável por autoridade competente, as demais disposições
+      permanecerão em pleno vigor e efeito.
+    </p>
+    <p>
+      <strong>Renúncia:</strong> A omissão da Pandecta em exercer qualquer direito previsto
+      nestes Termos não constitui renúncia a esse direito.
+    </p>
+    <p>
+      <strong>Relação entre as partes:</strong> Estes Termos não criam qualquer vínculo de
+      sociedade, emprego, franquia ou representação entre o Usuário e a Pandecta.
+    </p>
+    <p>
+      <strong>Comunicações:</strong> Todas as comunicações formais à Pandecta devem ser
+      enviadas para <a href="mailto:contato@pandecta.com.br" style="color:var(--gold);">contato@pandecta.com.br</a>.
+      Comunicações ao Usuário serão enviadas para o e-mail cadastrado na conta.
+    </p>
+    <p>
+      <strong>Lei aplicável e foro:</strong> Estes Termos são regidos pelas leis da
+      República Federativa do Brasil. Fica eleito o foro da comarca de
+      <strong>Atibaia – SP</strong> para dirimir quaisquer controvérsias decorrentes deste
+      instrumento, com renúncia expressa a qualquer outro, por mais privilegiado que seja,
+      salvo nos casos em que a legislação de proteção ao consumidor determine foro diverso.
+    </p>
+    <p>
+      <strong>Legislação de referência:</strong> Estes Termos foram elaborados em conformidade
+      com o Marco Civil da Internet (Lei nº 12.965/2014), a LGPD (Lei nº 13.709/2018),
+      o Código de Defesa do Consumidor (Lei nº 8.078/1990) quando aplicável, o Estatuto
+      da Advocacia (Lei nº 8.906/1994), e as Recomendações do Conselho Federal da OAB
+      sobre uso de IA.
+    </p>
+    <p>
+      <strong>Contato:</strong>
+      <a href="mailto:contato@pandecta.com.br" style="color:var(--gold);">contato@pandecta.com.br</a>
+      &nbsp;|&nbsp; Atibaia – SP, Brasil
+    </p>
+  </div>
+
+</div><!-- /page-wrapper -->
+
+<!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-logo">
+    <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI" />
+  </div>
+  <p>
+    &copy; 2026 Pandecta AI &nbsp;·&nbsp;
+    <a href="https://pandecta.com.br">pandecta.com.br</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:contato@pandecta.com.br">contato@pandecta.com.br</a>
+    &nbsp;·&nbsp; Atibaia – SP, Brasil
+  </p>
+  <p style="margin-top:8px; font-size:12px; opacity:0.6;">
+    Termos de Uso — Versão 1.0 &nbsp;·&nbsp; Vigência: 23/06/2026
+    &nbsp;·&nbsp; Sujeito a revisão por advogado antes do lançamento público.
+  </p>
+</footer>
+
+</body>
+</html>

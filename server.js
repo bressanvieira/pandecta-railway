@@ -168,6 +168,9 @@ app.use(express.json({ limit: '10mb' }));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'landing.html')));
 app.get('/app', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/cadastro', (req, res) => res.sendFile(path.join(__dirname, 'public', 'cadastro.html')));
+app.get('/termos-de-uso', (req, res) => res.sendFile(path.join(__dirname, 'public', 'termos-de-uso.html')));
+app.get('/politica-de-privacidade', (req, res) => res.sendFile(path.join(__dirname, 'public', 'politica-de-privacidade.html')));
+app.get('/lgpd', (req, res) => res.sendFile(path.join(__dirname, 'public', 'lgpd.html')));
 
 app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: '30d',
