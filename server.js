@@ -124,6 +124,8 @@ try {
   try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN enviado_por TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE templates ADD COLUMN texto_referencia TEXT DEFAULT ''`); } catch(e) {}
+  try { db.exec(`ALTER TABLE lawyers ADD COLUMN user_id INTEGER`); } catch(e) {}
+  try { db.exec(`ALTER TABLE office ADD COLUMN user_id INTEGER`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN chunk_count INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN chunks TEXT DEFAULT '[]'`); } catch(e) {}
   try { db.exec(`ALTER TABLE office ADD COLUMN logo TEXT DEFAULT ''`); } catch(e) {}
@@ -384,7 +386,7 @@ app.delete('/api/users/:id', requireAuth, requireAdmin, (req, res) => {
 app.get('/api/lawyers', requireAuth, (req, res) => {
   if (!db) return res.json([]);
   try {
-    res.json(db.prepare('SELECT id, nome, oab, uf, email, cargo FROM lawyers ORDER BY nome ASC').all());
+    res.json(db.prepare('SELECT id, nome, oab, uf, email, cargo FROM lawyers WHERE user_id=? ORDER BY nome ASC').all(req.user.userId));
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -393,8 +395,8 @@ app.post('/api/lawyers', requireAuth, (req, res) => {
   const { nome, oab = '', uf = '', email = '', cargo = '' } = req.body;
   if (!nome) return res.status(400).json({ error: 'Nome obrigatÃ³rio.' });
   try {
-    const r = db.prepare('INSERT INTO lawyers (nome,oab,uf,email,cargo) VALUES (?,?,?,?,?)').run(
-      nome.trim(), oab.trim(), uf.trim().toUpperCase(), email.trim(), cargo.trim()
+    const r = db.prepare('INSERT INTO lawyers (nome,oab,uf,email,cargo,user_id) VALUES (?,?,?,?,?,?)').run(
+      nome.trim(), oab.trim(), uf.trim().toUpperCase(), email.trim(), cargo.trim(), req.user.userId
     );
     res.json({ id: r.lastInsertRowid, nome, oab, uf: uf.toUpperCase(), email, cargo });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -404,8 +406,8 @@ app.put('/api/lawyers/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponÃ­vel.' });
   const { nome, oab = '', uf = '', email = '', cargo = '' } = req.body;
   try {
-    db.prepare('UPDATE lawyers SET nome=?,oab=?,uf=?,email=?,cargo=? WHERE id=?').run(
-      nome, oab, uf.toUpperCase(), email, cargo, req.params.id
+    db.prepare('UPDATE lawyers SET nome=?,oab=?,uf=?,email=?,cargo=? WHERE id=? AND user_id=?').run(
+      nome, oab, uf.toUpperCase(), email, cargo, req.params.id, req.user.userId
     );
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -414,7 +416,7 @@ app.put('/api/lawyers/:id', requireAuth, (req, res) => {
 app.delete('/api/lawyers/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponÃ­vel.' });
   try {
-    db.prepare('DELETE FROM lawyers WHERE id=?').run(req.params.id);
+    db.prepare('DELETE FROM lawyers WHERE id=? AND user_id=?').run(req.params.id, req.user.userId);
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -424,7 +426,13 @@ app.delete('/api/lawyers/:id', requireAuth, (req, res) => {
 app.get('/api/office', requireAuth, (req, res) => {
   if (!db) return res.json({});
   try {
-    res.json(db.prepare('SELECT nome,endereco,cidade,cep,telefone,email,logo,doc_template FROM office WHERE id=1').get() || {});
+    let row = db.prepare('SELECT nome,endereco,cidade,cep,telefone,email,logo,doc_template FROM office WHERE user_id=?').get(req.user.userId);
+    if (!row) {
+      // Cria registro de office para este usuário se ainda não existe
+      db.prepare('INSERT OR IGNORE INTO office (user_id) VALUES (?)').run(req.user.userId);
+      row = db.prepare('SELECT nome,endereco,cidade,cep,telefone,email,logo,doc_template FROM office WHERE user_id=?').get(req.user.userId);
+    }
+    res.json(row || {});
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -432,8 +440,10 @@ app.put('/api/office', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponÃ­vel.' });
   const { nome = '', endereco = '', cidade = '', cep = '', telefone = '', email = '', logo = '', doc_template = '' } = req.body;
   try {
-    db.prepare('UPDATE office SET nome=?,endereco=?,cidade=?,cep=?,telefone=?,email=?,logo=?,doc_template=? WHERE id=1').run(
-      nome, endereco, cidade, cep, telefone, email, logo, doc_template
+    // Garante que existe um registro para este usuário antes de atualizar
+    db.prepare('INSERT OR IGNORE INTO office (user_id) VALUES (?)').run(req.user.userId);
+    db.prepare('UPDATE office SET nome=?,endereco=?,cidade=?,cep=?,telefone=?,email=?,logo=?,doc_template=? WHERE user_id=?').run(
+      nome, endereco, cidade, cep, telefone, email, logo, doc_template, req.user.userId
     );
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
