@@ -700,6 +700,22 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 #tour-tooltip .tt-dot.active{background:var(--gold);width:18px;border-radius:4px;}
 /* popup boas-vindas */
 #tour-welcome-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8900;display:flex;align-items:center;justify-content:center;}
+/* == PANDECTA MODAL == */
+#pdc-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+#pdc-modal{background:var(--card);border:1px solid var(--bd-md);border-radius:16px;padding:32px;max-width:420px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.32);}
+.pdc-modal-logo{display:flex;align-items:center;gap:8px;margin-bottom:20px;}
+.pdc-modal-logo img{height:26px;opacity:.85;}
+.pdc-modal-logo span{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;}
+.pdc-modal-icon{font-size:26px;margin-bottom:8px;}
+.pdc-modal-title{font-size:16px;font-weight:700;color:var(--t1);margin-bottom:8px;}
+.pdc-modal-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:24px;}
+.pdc-modal-btns{display:flex;gap:10px;justify-content:flex-end;}
+.pdc-modal-cancel{padding:10px 20px;border-radius:9px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;font-size:13.5px;font-weight:600;font-family:inherit;transition:all .12s;}
+.pdc-modal-cancel:hover{background:var(--surface);}
+.pdc-modal-confirm{padding:10px 22px;border-radius:9px;border:none;background:var(--gold);color:#001B2A;cursor:pointer;font-size:13.5px;font-weight:700;font-family:inherit;transition:all .12s;}
+.pdc-modal-confirm:hover{filter:brightness(1.08);}
+.pdc-modal-confirm.danger{background:var(--err);color:#fff;}
+
 #tour-welcome{background:var(--card);border:1px solid var(--bd-md);border-radius:16px;padding:36px 36px 28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.35);}
 #tour-welcome .tw-ico{font-size:36px;margin-bottom:14px;}
 #tour-welcome h2{font-size:20px;font-weight:700;color:var(--t1);margin:0 0 10px;}
@@ -1056,8 +1072,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="drop-z" id="drop-zone"
              ondragover="event.preventDefault();this.classList.add('drag')"
              ondragleave="this.classList.remove('drag')"
-             ondrop="handleDrop(event)"
-             onclick="document.getElementById('file-in').click()">
+             ondrop="handleDrop(event)">
           <div class="drop-ico">
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="28" x2="18" y2="10"/><polyline points="10,18 18,10 26,18"/>
@@ -1697,6 +1712,20 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 
 <!-- ══ TOUR GUIADO ══ -->
+<!-- PANDECTA MODAL -->
+<div id="pdc-modal-bg" style="display:none">
+  <div id="pdc-modal">
+    <div class="pdc-modal-logo"><img src="/pandecta-icone.png" alt="P"><span>Pandecta AI</span></div>
+    <div class="pdc-modal-icon" id="pdc-modal-icon"></div>
+    <div class="pdc-modal-title" id="pdc-modal-title">Confirmar</div>
+    <div class="pdc-modal-msg" id="pdc-modal-msg"></div>
+    <div class="pdc-modal-btns">
+      <button class="pdc-modal-cancel" id="pdc-modal-cancel">Cancelar</button>
+      <button class="pdc-modal-confirm" id="pdc-modal-confirm">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <div id="tour-welcome-bg" style="display:none">
   <div id="tour-welcome">
     <div class="tw-ico">⚖️</div>
@@ -1909,6 +1938,43 @@ function fazerLogout(){
   location.reload();
 }
 document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin();});
+
+// == PANDECTA CONFIRM MODAL ==
+function pandectaConfirm(mensagem, opts) {
+  opts = opts || {};
+  var icon = opts.icon || '&#9888;';
+  var titulo = opts.titulo || 'Confirmar';
+  var confirmar = opts.confirmar || 'Confirmar';
+  var danger = opts.danger || false;
+  return new Promise(function(resolve) {
+    var bg    = document.getElementById('pdc-modal-bg');
+    var icEl  = document.getElementById('pdc-modal-icon');
+    var ttEl  = document.getElementById('pdc-modal-title');
+    var msgEl = document.getElementById('pdc-modal-msg');
+    var okBtn = document.getElementById('pdc-modal-confirm');
+    var cnBtn = document.getElementById('pdc-modal-cancel');
+    icEl.innerHTML   = icon;
+    ttEl.textContent = titulo;
+    msgEl.innerHTML  = mensagem;
+    okBtn.textContent = confirmar;
+    okBtn.className  = 'pdc-modal-confirm' + (danger ? ' danger' : '');
+    bg.style.display = 'flex';
+    function cleanup(val) {
+      bg.style.display = 'none';
+      okBtn.removeEventListener('click', onOk);
+      cnBtn.removeEventListener('click', onCancel);
+      bg.removeEventListener('click', onBg);
+      resolve(val);
+    }
+    function onOk()     { cleanup(true);  }
+    function onCancel() { cleanup(false); }
+    function onBg(e)    { if(e.target===bg) cleanup(false); }
+    okBtn.addEventListener('click', onOk);
+    cnBtn.addEventListener('click', onCancel);
+    bg.addEventListener('click', onBg);
+  });
+}
+
 
 // ════ HOME ════
 function homeKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();perguntarAssistente();}}
@@ -2471,7 +2537,8 @@ async function salvarEdicao(){
   }catch(e){toast('Erro: '+e.message,'err');}
 }
 async function deletarHist(){
-  if(!histItemAtual||!confirm('Excluir esta peça?'))return;
+  if(!histItemAtual)return;
+  if(!await pandectaConfirm('Excluir esta peça do histórico? Esta ação não pode ser desfeita.',{icon:'🗑️',titulo:'Excluir peça',confirmar:'Excluir',danger:true}))return;
   try{
     await api('DELETE',`/api/history/${histItemAtual.id}`);
     sessionHistory=sessionHistory.filter(h=>h.id!==histItemAtual.id);
@@ -2618,7 +2685,7 @@ async function salvarModelo() {
 }
 
 async function deletarModelo(id) {
-  if (!confirm('Excluir este modelo?')) return;
+  if (!await pandectaConfirm('Excluir este modelo de estilo?',{icon:'🗑️',titulo:'Excluir modelo',confirmar:'Excluir',danger:true})) return;
   try {
     await api('DELETE', '/api/templates/' + id);
     await loadModelos();
@@ -2817,7 +2884,7 @@ function closeLawModal(){
 }
 function editLaw(id){openLawModal(id);}
 async function deleteLaw(id){
-  if(!confirm('Remover este advogado?'))return;
+  if(!await pandectaConfirm('Remover este advogado da equipe?',{icon:'👤',titulo:'Remover advogado',confirmar:'Remover',danger:true}))return;
   try{await api('DELETE',`/api/lawyers/${id}`);lawyers=lawyers.filter(l=>l.id!==id);renderLawyers();toast('Removido.','ok');}
   catch(e){toast('Erro: '+e.message,'err');}
 }
@@ -2991,8 +3058,9 @@ async function handleFiles(files, folderMode=false){
   if(!arr.length){ toast('Nenhum PDF, DOCX ou TXT encontrado.','err'); return; }
 
   if(arr.length > AC_WARN){
-    const continuar = confirm(
-      'Você selecionou '+arr.length+' arquivos. O processo pode levar alguns minutos.\n\nDeseja continuar?'
+    const continuar = await pandectaConfirm(
+      'Você selecionou <strong>'+arr.length+' arquivos</strong>. O processo rodará em segundo plano — você pode continuar usando a Pandecta normalmente.',
+      {icon:'📂',titulo:'Indexar '+arr.length+' arquivos',confirmar:'Iniciar indexação',danger:false}
     );
     if(!continuar) return;
   }
@@ -3229,7 +3297,7 @@ async function saveUser(){
   }catch(e){toast(e.message,'err');}
 }
 async function deleteUser(id,nome){
-  if(!confirm('Excluir usuário "'+nome+'"? Esta ação não pode ser desfeita.'))return;
+  if(!await pandectaConfirm('Excluir o usuário <strong>'+nome+'</strong>? Esta ação não pode ser desfeita.',{icon:'⚠️',titulo:'Excluir usuário',confirmar:'Excluir',danger:true}))return;
   try{await api('DELETE','/api/users/'+id);toast('Usuário excluído','ok');loadUsers();}
   catch(e){toast(e.message,'err');}
 }
