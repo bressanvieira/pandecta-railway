@@ -1827,7 +1827,7 @@ function go(s){
   if(s==='suporte') initSuporte();
   if(s==='modelos') loadModelos();
   if(s==='admin'){
-    loadUsers();loadBackups();loadAdminStats();
+    loadUsers();loadBackups();loadAdminStats();loadPioneiros();
     const init=usuario?usuario[0].toUpperCase():'A';
     const name=usuario?usuario[0].toUpperCase()+usuario.slice(1):'Admin';
     const av=document.getElementById('av-admin'),nm=document.getElementById('nm-admin');
@@ -3062,6 +3062,30 @@ function toast(msg,tipo='ok'){const el=document.getElementById('toast');el.textC
 ['home','gen','hist','ac','config','equipe','sup','admin'].forEach(sfx=>{const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');});
 
 // ════ ADMIN — STATS + BACKUPS ════
+async function loadPioneiros(){
+  try{
+    const rows = await api('GET','/api/fundadores');
+    const tbody = document.getElementById('pioneiros-tbody');
+    const count = document.getElementById('pioneiros-count');
+    if(!tbody) return;
+    if(!rows||!rows.length){
+      tbody.innerHTML='<tr><td colspan="6" style="padding:16px;color:var(--t3);text-align:center;">Nenhuma inscrição ainda.</td></tr>';
+      if(count) count.textContent='0 inscrições';
+      return;
+    }
+    if(count) count.textContent = rows.length+' inscrição'+(rows.length!==1?'ões':'');
+    tbody.innerHTML = rows.map(r=>`
+      <tr style="border-bottom:1px solid var(--bd);">
+        <td style="padding:10px 16px;color:var(--t1);font-weight:600;">${esc(r.nome)}</td>
+        <td style="padding:10px 16px;color:var(--t2);">${esc(r.email)}</td>
+        <td style="padding:10px 16px;color:var(--t2);">${esc(r.whatsapp)}</td>
+        <td style="padding:10px 16px;color:var(--t2);">${esc(r.area||'—')}</td>
+        <td style="padding:10px 16px;color:var(--t2);white-space:nowrap;">${esc(r.experiencia||'—')}</td>
+        <td style="padding:10px 16px;color:var(--t3);white-space:nowrap;">${fmtRelDate(r.created_at)}</td>
+      </tr>`).join('');
+  }catch(e){console.error('loadPioneiros:',e);}
+}
+
 async function loadAdminStats(){
   try{
     const d=await api('GET','/api/admin/stats');
