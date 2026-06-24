@@ -678,6 +678,45 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   .login-right{padding:40px 20px;}
   .home-h1{font-size:22px;}
 }
+
+/* ══════════════════════ TOUR ══════════════════════ */
+#tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:9000;pointer-events:all;}
+#tour-spotlight{position:fixed;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 3px var(--gold);z-index:9001;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1);}
+#tour-tooltip{position:fixed;z-index:9002;background:var(--card);border:1px solid var(--bd-md);border-radius:12px;padding:18px 20px;max-width:300px;box-shadow:0 12px 36px rgba(0,0,0,.28);transition:all .3s ease;}
+#tour-tooltip .tt-step{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;}
+#tour-tooltip .tt-title{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:8px;}
+#tour-tooltip .tt-body{font-size:13px;color:var(--t2);line-height:1.55;}
+#tour-tooltip .tt-actions{display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:10px;}
+#tour-tooltip .tt-nav{display:flex;gap:8px;}
+#tour-tooltip .tt-btn{padding:7px 16px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:all .12s;}
+#tour-tooltip .tt-skip{background:transparent;color:var(--t3);border:1px solid var(--bd);}
+#tour-tooltip .tt-skip:hover{background:var(--surface);color:var(--t2);}
+#tour-tooltip .tt-prev{background:var(--surface);color:var(--t2);border:1px solid var(--bd);}
+#tour-tooltip .tt-prev:hover{background:var(--bd);}
+#tour-tooltip .tt-next{background:var(--gold);color:#001B2A;}
+#tour-tooltip .tt-next:hover{filter:brightness(1.08);}
+#tour-tooltip .tt-dots{display:flex;gap:5px;align-items:center;}
+#tour-tooltip .tt-dot{width:6px;height:6px;border-radius:50%;background:var(--bd-md);transition:background .2s;}
+#tour-tooltip .tt-dot.active{background:var(--gold);}
+/* popup boas-vindas */
+#tour-welcome-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8900;display:flex;align-items:center;justify-content:center;}
+#tour-welcome{background:var(--card);border:1px solid var(--bd-md);border-radius:16px;padding:36px 36px 28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.35);}
+#tour-welcome .tw-ico{font-size:36px;margin-bottom:14px;}
+#tour-welcome h2{font-size:20px;font-weight:700;color:var(--t1);margin:0 0 10px;}
+#tour-welcome p{font-size:14px;color:var(--t2);line-height:1.6;margin:0 0 20px;}
+#tour-welcome .tw-check{display:flex;align-items:center;gap:9px;margin-bottom:24px;cursor:pointer;user-select:none;}
+#tour-welcome .tw-check input{width:16px;height:16px;accent-color:var(--gold);cursor:pointer;}
+#tour-welcome .tw-check span{font-size:13px;color:var(--t3);}
+#tour-welcome .tw-btns{display:flex;gap:10px;justify-content:flex-end;}
+#tour-welcome .tw-later{padding:9px 18px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;font-size:14px;font-weight:600;font-family:inherit;transition:all .12s;}
+#tour-welcome .tw-later:hover{background:var(--surface);}
+#tour-welcome .tw-start{padding:9px 22px;border-radius:8px;border:none;background:var(--gold);color:#001B2A;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;transition:all .12s;}
+#tour-welcome .tw-start:hover{filter:brightness(1.08);}
+/* botão tour no sidebar */
+.sb-tour-btn{display:flex;align-items:center;gap:8px;width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--t3);cursor:pointer;font-size:12px;font-family:inherit;transition:all .14s;margin-top:8px;}
+.sb-tour-btn:hover{background:var(--surface);color:var(--t2);border-color:var(--bd-md);}
+.sb-tour-btn svg{flex-shrink:0;}
+/* ══════════════════════ FIM TOUR ══════════════════════ */
 </style>
 </head>
 <body>
@@ -1627,6 +1666,28 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 <div class="toast" id="toast"></div>
 
+
+<!-- ══ TOUR GUIADO ══ -->
+<div id="tour-welcome-bg" style="display:none">
+  <div id="tour-welcome">
+    <div class="tw-ico">⚖️</div>
+    <h2>Bem-vindo ao Pandecta!</h2>
+    <p>Você quer fazer um tour rápido pela plataforma? Vamos te mostrar como gerar peças jurídicas, organizar seu acervo e muito mais.</p>
+    <label class="tw-check">
+      <input type="checkbox" id="tour-nao-mostrar">
+      <span>Não mostrar esta tela novamente</span>
+    </label>
+    <div class="tw-btns">
+      <button class="tw-later" onclick="fecharTourPopup()">Agora não</button>
+      <button class="tw-start" onclick="iniciarTour()">Iniciar tour →</button>
+    </div>
+  </div>
+</div>
+<div id="tour-overlay" style="display:none" onclick="endTour()"></div>
+<div id="tour-spotlight" style="display:none"></div>
+<div id="tour-tooltip" style="display:none"></div>
+<!-- ══ FIM TOUR ══ -->
+
 <script>
 if(typeof pdfjsLib!=='undefined') pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -1691,6 +1752,10 @@ function mkSidebar(active){
       }).join('')}
     </div>
     <div class="sb-bot">
+      <button class="sb-tour-btn" onclick="mostrarTourPopup()" title="Tour guiado">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="7"/><path d="M9 12v-1.5c0-.8.6-1.3 1.2-1.8C11 8 11.2 7 10.5 6.3A2.5 2.5 0 006.5 7.5"/><circle cx="9" cy="14" r=".7" fill="currentColor"/></svg>
+        Tour guiado
+      </button>
       <button class="sb-support${active==='suporte'?' active':''}" onclick="go('suporte')">
         <div class="sb-support-ico">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M5.5 8a2.5 2.5 0 005 0 2.5 2.5 0 00-5 0"/><path d="M3 5.5c0-2 1.5-3.5 5-3.5s5 1.5 5 3.5"/><path d="M5.5 8H3M10.5 8H13"/></svg>
@@ -1779,6 +1844,7 @@ async function fazerLogin(){
     localStorage.setItem('pandecta_role',userRole);
     await loadData();
     go('home');
+    checkTourPopup();
   }catch(e){err.textContent='Erro ao conectar. Tente novamente.';err.style.display='block';}
   finally{btn.textContent='Entrar';btn.disabled=false;}
 }
@@ -2951,6 +3017,169 @@ async function deleteUser(id,nome){
   catch(e){toast(e.message,'err');}
 }
 function fmtDate(s){if(!s)return'–';try{return new Date(s).toLocaleDateString('pt-BR');}catch(e){return s;}}
+
+// ════════════════════ TOUR GUIADO ════════════════════
+const TOUR_STEPS = [
+  {
+    screen: 'home',
+    selector: null, // sem spotlight — intro geral
+    title: 'Início',
+    body: 'Aqui você encontra atalhos rápidos para criar documentos e conversar com o assistente.'
+  },
+  {
+    screen: 'home',
+    selector: '.sb-novo',
+    title: 'Novo documento',
+    body: 'Clique aqui para iniciar o Construtor. Basta descrever o caso e o Pandecta redige a peça completa.'
+  },
+  {
+    screen: 'historico',
+    selector: null,
+    title: 'Histórico',
+    body: 'Todos os documentos gerados ficam salvos aqui. Você pode editar, copiar ou exportar em Word.'
+  },
+  {
+    screen: 'acervo',
+    selector: null,
+    title: 'Acervo',
+    body: 'Envie seus PDFs, DOCXs e TXTs. O assistente vai usar esses documentos como referência nas respostas.'
+  },
+  {
+    screen: 'modelos',
+    selector: null,
+    title: 'Modelos de estilo',
+    body: 'Suba qualquer peça que você já usa. A IA aprende seu estilo e aplica nas próximas gerações.'
+  },
+  {
+    screen: 'suporte',
+    selector: null,
+    title: 'Assistente',
+    body: 'Fale com o assistente sobre qualquer caso. Ele consulta seu acervo e histórico para responder melhor.'
+  }
+];
+
+let _tourIdx = 0;
+let _tourActive = false;
+
+function checkTourPopup(){
+  const skip = localStorage.getItem('pandecta_tour_skip');
+  if(!skip) mostrarTourPopup();
+}
+
+function mostrarTourPopup(){
+  document.getElementById('tour-welcome-bg').style.display='flex';
+}
+
+function fecharTourPopup(){
+  const naoMostrar = document.getElementById('tour-nao-mostrar').checked;
+  if(naoMostrar) localStorage.setItem('pandecta_tour_skip','1');
+  document.getElementById('tour-welcome-bg').style.display='none';
+}
+
+function iniciarTour(){
+  fecharTourPopup();
+  _tourIdx = 0;
+  _tourActive = true;
+  document.getElementById('tour-overlay').style.display='block';
+  _renderTourStep();
+}
+
+function _renderTourStep(){
+  const step = TOUR_STEPS[_tourIdx];
+  const total = TOUR_STEPS.length;
+
+  // navega para a tela do passo
+  go(step.screen);
+
+  const overlay = document.getElementById('tour-overlay');
+  const spotlight = document.getElementById('tour-spotlight');
+  const tooltip = document.getElementById('tour-tooltip');
+
+  // spotlight
+  const target = step.selector ? document.querySelector(step.selector) : null;
+  if(target){
+    overlay.style.display='none'; // spotlight já cria o escuro via box-shadow
+    spotlight.style.display='block';
+    const r = target.getBoundingClientRect();
+    const pad = 8;
+    spotlight.style.left   = (r.left - pad) + 'px';
+    spotlight.style.top    = (r.top  - pad) + 'px';
+    spotlight.style.width  = (r.width  + pad*2) + 'px';
+    spotlight.style.height = (r.height + pad*2) + 'px';
+  } else {
+    spotlight.style.display='none';
+    overlay.style.display='block';
+  }
+
+  // dots
+  const dots = Array.from({length:total},(_,i)=>`<div class="tt-dot${i===_tourIdx?' active':''}"></div>`).join('');
+
+  // tooltip content
+  tooltip.innerHTML = `
+    <div class="tt-step">Passo ${_tourIdx+1} de ${total}</div>
+    <div class="tt-title">${step.title}</div>
+    <div class="tt-body">${step.body}</div>
+    <div class="tt-actions">
+      <div class="tt-dots">${dots}</div>
+      <div class="tt-nav">
+        ${_tourIdx>0?'<button class="tt-btn tt-prev" onclick="tourPrev()">← Anterior</button>':''}
+        ${_tourIdx<total-1
+          ?'<button class="tt-btn tt-next" onclick="tourNext()">Próximo →</button>'
+          :'<button class="tt-btn tt-next" onclick="endTour()">Concluir ✓</button>'
+        }
+      </div>
+    </div>
+    <div style="text-align:right;margin-top:10px;">
+      <button class="tt-btn tt-skip" onclick="endTour()">Pular tour</button>
+    </div>`;
+  tooltip.style.display='block';
+
+  // posicionar tooltip
+  _posTooltip(target);
+}
+
+function _posTooltip(target){
+  const tt = document.getElementById('tour-tooltip');
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const tw = 300, th = 200;
+  let left, top;
+  if(target){
+    const r = target.getBoundingClientRect();
+    // tenta à direita, senão à esquerda, senão embaixo
+    if(r.right + tw + 20 < vw){
+      left = r.right + 14;
+      top  = Math.max(12, Math.min(r.top, vh - th - 12));
+    } else if(r.left - tw - 20 > 0){
+      left = r.left - tw - 14;
+      top  = Math.max(12, Math.min(r.top, vh - th - 12));
+    } else {
+      left = Math.max(12, (vw - tw) / 2);
+      top  = r.bottom + 14;
+    }
+  } else {
+    left = Math.max(12, (vw - tw) / 2);
+    top  = Math.max(12, (vh - th) / 2);
+  }
+  tt.style.left = Math.min(left, vw - tw - 12) + 'px';
+  tt.style.top  = Math.min(top,  vh - th - 12) + 'px';
+}
+
+function tourNext(){
+  if(_tourIdx < TOUR_STEPS.length - 1){ _tourIdx++; _renderTourStep(); }
+  else endTour();
+}
+function tourPrev(){
+  if(_tourIdx > 0){ _tourIdx--; _renderTourStep(); }
+}
+
+function endTour(){
+  _tourActive = false;
+  document.getElementById('tour-overlay').style.display='none';
+  document.getElementById('tour-spotlight').style.display='none';
+  document.getElementById('tour-tooltip').style.display='none';
+  go('home');
+}
+// ════════════════════ FIM TOUR ════════════════════
 </script>
 </body>
 </html>
