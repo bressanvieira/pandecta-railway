@@ -601,6 +601,54 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .adm-tk-ta:focus{border-color:var(--gold);}
 .adm-tk-btn{padding:8px 18px;background:var(--gold);color:#001B2A;border:none;border-radius:8px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .15s;align-self:flex-end;}
 .adm-tk-btn:hover{opacity:.88;}
+/* === TELA TICKETS (SUPORTE) === */
+.tkt-body{flex:1;display:flex;flex-direction:column;padding:36px 48px 28px;overflow-y:auto;gap:24px;}
+.tkt-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.tkt-novo-btn{display:flex;align-items:center;gap:7px;padding:9px 18px;background:var(--gold);color:#001B2A;border:none;border-radius:9px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .15s;}
+.tkt-novo-btn:hover{opacity:.88;}
+.tkt-filter-row{display:flex;gap:6px;flex-wrap:wrap;}
+.tkt-filter{padding:5px 13px;border:1px solid var(--bd);border-radius:20px;background:transparent;color:var(--t2);font-size:12px;font-family:inherit;cursor:pointer;transition:all .15s;}
+.tkt-filter.active{background:rgba(201,168,76,.15);color:var(--gold);border-color:var(--gold);font-weight:700;}
+.tkt-grid{display:flex;flex-direction:column;gap:8px;}
+.tkt-card{background:var(--surface);border:1px solid var(--bd);border-radius:12px;overflow:hidden;transition:border-color .15s,box-shadow .15s;}
+.tkt-card:hover{border-color:rgba(201,168,76,.3);}
+.tkt-card.expanded{border-color:rgba(201,168,76,.5);box-shadow:0 2px 16px rgba(0,0,0,.15);}
+.tkt-card-hd{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;}
+.tkt-card-num{font-size:12px;font-weight:700;color:var(--t3);min-width:30px;}
+.tkt-card-info{flex:1;min-width:0;}
+.tkt-card-tipo{font-size:10.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.tkt-card-preview{font-size:13.5px;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tkt-card-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.tkt-card-date{font-size:11.5px;color:var(--t3);}
+.tkt-chevron{width:16px;height:16px;color:var(--t3);transition:transform .2s;flex-shrink:0;}
+.tkt-card.expanded .tkt-chevron{transform:rotate(180deg);}
+.tkt-card-body{display:none;padding:0 18px 18px;border-top:1px solid var(--bd);}
+.tkt-card.expanded .tkt-card-body{display:block;}
+.tkt-card-msg-full{font-size:13.5px;color:var(--t2);line-height:1.65;padding:14px 0 8px;}
+.tkt-card-resp{background:var(--card);border-left:3px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin-top:4px;}
+.tkt-card-resp-lbl{font-size:10.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.tkt-card-resp-txt{font-size:13.5px;color:var(--t1);line-height:1.6;}
+.tkt-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 20px;gap:12px;}
+.tkt-empty-ico{opacity:.18;}
+.tkt-empty-t{font-size:15px;font-weight:600;color:var(--t2);margin-top:4px;}
+.tkt-empty-s{font-size:13px;color:var(--t3);text-align:center;max-width:280px;line-height:1.65;}
+#tkt-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+#tkt-modal-bg.open{display:flex;}
+.tkt-modal{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:28px;width:100%;max-width:440px;box-shadow:0 24px 64px rgba(0,0,0,.45);}
+.tkt-modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.tkt-modal-title{font-size:16px;font-weight:700;color:var(--t1);}
+.tkt-modal-close{background:none;border:none;cursor:pointer;color:var(--t3);padding:4px;line-height:0;border-radius:6px;}
+.tkt-modal-close:hover{color:var(--t1);background:var(--surface);}
+.tkt-modal-flds{display:flex;flex-direction:column;gap:14px;}
+.tkt-modal-lbl{font-size:11.5px;font-weight:600;color:var(--t2);margin-bottom:5px;display:block;}
+.tkt-modal-sel{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--surface);color:var(--t1);font-size:13.5px;font-family:inherit;outline:none;appearance:none;transition:border .15s;}
+.tkt-modal-sel:focus{border-color:var(--gold);}
+.tkt-modal-ta{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--surface);color:var(--t1);font-size:13.5px;font-family:inherit;resize:vertical;min-height:110px;outline:none;transition:border .15s;box-sizing:border-box;}
+.tkt-modal-ta:focus{border-color:var(--gold);}
+.tkt-modal-send{width:100%;padding:12px;background:var(--gold);color:#001B2A;border:none;border-radius:9px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .15s;margin-top:6px;}
+.tkt-modal-send:hover{opacity:.88;}
+.tkt-modal-send:disabled{opacity:.5;cursor:not-allowed;}
+@media(max-width:600px){.tkt-body{padding:20px 16px 16px!important;}.tkt-modal{max-width:calc(100vw - 32px);padding:20px;}}
 .adm-tk-resp-ok{font-size:12.5px;color:#065f46;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 14px;}
 
 /* ════ TOAST ════ */
@@ -1454,39 +1502,85 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             </div>
           </div>
 
-          <!-- CONTATO -->
-          <div class="sup-contact-col">
 
-            <div class="sup-card">
-              <div class="sup-card-t">Fale com a equipe</div>
-              <div class="sup-card-s">Envie sua dúvida, sugestão ou problema. Respondemos diretamente aqui na plataforma.</div>
-              <div class="tk-form">
-                <select class="tk-select" id="tk-tipo">
-                  <option value="duvida">Dúvida</option>
-                  <option value="problema">Problema técnico</option>
-                  <option value="sugestao">Sugestão</option>
-                  <option value="outro">Outro</option>
-                </select>
-                <textarea class="tk-ta" id="tk-msg" placeholder="Descreva sua mensagem..."></textarea>
-                <button class="tk-send" id="tk-send-btn" onclick="enviarTicket()">Enviar mensagem</button>
-              </div>
-            </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-            <div class="sup-card">
-              <div class="sup-card-t" style="margin-bottom:14px">Minhas mensagens</div>
-              <div id="tk-lista"><div style="font-size:12.5px;color:var(--t3);text-align:center;padding:20px 0;">Nenhuma mensagem enviada ainda.</div></div>
-            </div>
-
-            <div class="sup-card">
-              <div class="sup-citem" style="border-bottom:none;padding:0;">
-                <div class="sup-cico wp"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1.5A7.5 7.5 0 001.5 9c0 1.32.34 2.56.94 3.63L1.5 16.5l3.97-.92A7.5 7.5 0 109 1.5z"/><path d="M6.5 7.5c.17.4.5 1.2 1 1.8.5.6 1.3 1.2 2 1.5"/></svg></div>
-                <div><div class="sup-c-lbl">WhatsApp urgente</div><div class="sup-c-val"><a href="https://wa.me/5511994246862" target="_blank">(11) 99424-6862</a></div></div>
-              </div>
-            </div>
-
+<!-- ════ TICKETS (SUPORTE) ════ -->
+<div id="screen-tickets" class="screen">
+  <div class="app-shell">
+    <div id="sb-tk"></div>
+    <div class="main-area">
+      <div class="topbar">
+        <div class="tb-left">
+          <span class="tb-crumb" onclick="go('home')">Início</span>
+          <span class="tb-sep">/</span>
+          <span class="tb-page">Suporte</span>
+        </div>
+        <div class="tb-right">
+          <button class="tb-icon-btn" title="Buscar">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><line x1="9.5" y1="9.5" x2="12.5" y2="12.5"/></svg>
+          </button>
+          <div class="tb-user" onclick="toggleDD('dd-tk')">
+            <div class="tb-av" id="av-tk">A</div>
+            <div><div class="tb-uname" id="nm-tk">–</div><div class="tb-usess">Sessão atual</div></div>
+          </div>
+          <div class="tb-dropdown" id="dd-tk">
+            <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
           </div>
         </div>
       </div>
+
+      <div class="tkt-body">
+        <div class="tkt-toolbar">
+          <div>
+            <div class="page-h">Central de Suporte</div>
+            <div class="page-s">Envie dúvidas, problemas ou sugestões — respondemos aqui na plataforma.</div>
+          </div>
+          <button class="tkt-novo-btn" onclick="openTicketModal()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6.5" y1="11" x2="6.5" y2="2"/><line x1="2" y1="6.5" x2="11" y2="6.5"/></svg>
+            Novo ticket
+          </button>
+        </div>
+        <div class="tkt-filter-row">
+          <button class="tkt-filter active" onclick="filtrarTickets('todos',this)">Todos</button>
+          <button class="tkt-filter" onclick="filtrarTickets('aberto',this)">Aguardando</button>
+          <button class="tkt-filter" onclick="filtrarTickets('respondido',this)">Respondidos</button>
+        </div>
+        <div id="tkt-grid" class="tkt-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal novo ticket -->
+<div id="tkt-modal-bg" onclick="if(event.target===this)closeTicketModal()">
+  <div class="tkt-modal">
+    <div class="tkt-modal-hd">
+      <div class="tkt-modal-title">Novo ticket</div>
+      <button class="tkt-modal-close" onclick="closeTicketModal()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+      </button>
+    </div>
+    <div class="tkt-modal-flds">
+      <div>
+        <label class="tkt-modal-lbl">Assunto</label>
+        <select class="tkt-modal-sel" id="tkt-m-tipo">
+          <option value="duvida">Dúvida</option>
+          <option value="problema">Problema técnico</option>
+          <option value="sugestao">Sugestão</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div>
+        <label class="tkt-modal-lbl">Mensagem</label>
+        <textarea class="tkt-modal-ta" id="tkt-m-msg" placeholder="Descreva com detalhes..."></textarea>
+      </div>
+      <button class="tkt-modal-send" id="tkt-m-send" onclick="enviarTicket()">Enviar mensagem</button>
     </div>
   </div>
 </div>
@@ -1837,6 +1931,7 @@ function mkSidebar(active){
     {id:'acervo',   label:'Acervo',        icon:'<path d="M2 6a2 2 0 012-2h3.5l2 2H14a2 2 0 012 2v5a2 2 0 01-2 2H4a2 2 0 01-2-2z"/>',            action:"go('acervo')"},
     {id:'modelos',  label:'Modelos',       icon:'<rect x="3" y="2" width="12" height="16" rx="2"/><path d="M6 7h6M6 10h6M6 13h4"/>',              action:"go('modelos')"},
     {id:'equipe',   label:'Equipe',        icon:'<circle cx="7" cy="6" r="3"/><path d="M2 17c0-3 2.5-5 5-5s5 2 5 5"/><circle cx="14" cy="6" r="2.5"/><path d="M15.5 17c0-2 1.5-3.5 3-3.5"/>',action:"go('equipe')"},
+    {id:'tickets',  label:'Suporte',       icon:'<path d="M3 10a6 6 0 0112 0"/><rect x="1.5" y="10" width="3" height="5" rx="1.5"/><rect x="13.5" y="10" width="3" height="5" rx="1.5"/>',action:"go('tickets')"},
     {id:'config',   label:'Configurações', icon:'<circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1.1 1.1M12.8 12.8l1.1 1.1M4.1 13.9l1.1-1.1M12.8 5.2l1.1-1.1"/>',action:"go('config')"},
     ...(userRole==='admin'?[{id:'admin', label:'Admin', icon:'<circle cx="9" cy="6" r="3"/><path d="M2 17c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><path d="M13 3l1.5 1.5L17 2"/>',action:"go('admin')"}]:[]),
   ];
@@ -1907,7 +2002,8 @@ function go(s){
   if(s==='historico'){fecharViewer();loadHistorico();}
   if(s==='config') carregarConfig();
   if(s==='equipe') renderLawyers();
-  if(s==='suporte'){ initSuporte(); loadMeusTickets(); }
+  if(s==='suporte'){ initSuporte(); }
+  if(s==='tickets'){ loadMeusTickets(); }
   if(s==='modelos') loadModelos();
   if(s==='admin'){
     loadUsers();loadBackups();loadAdminStats();loadPioneiros();loadTicketsAdmin();
@@ -1920,7 +2016,7 @@ function go(s){
 function updateAvatars(){
   const init=usuario?usuario[0].toUpperCase():'A';
   const name=usuario?usuario[0].toUpperCase()+usuario.slice(1):'Admin';
-  [['av-home','nm-home'],['av-gen','nm-gen'],['av-hist','nm-hist'],['av-ac','nm-ac'],['av-cfg','nm-cfg'],['av-eq','nm-eq'],['av-sup','nm-sup'],['av-admin','nm-admin'],['av-mod','nm-mod']].forEach(([a,n])=>{
+  [['av-home','nm-home'],['av-gen','nm-gen'],['av-hist','nm-hist'],['av-ac','nm-ac'],['av-cfg','nm-cfg'],['av-eq','nm-eq'],['av-sup','nm-sup'],['av-admin','nm-admin'],['av-mod','nm-mod'],['av-tk','nm-tk']].forEach(([a,n])=>{
     const av=document.getElementById(a),nm=document.getElementById(n);
     if(av)av.textContent=init; if(nm)nm.textContent=name;
   });
@@ -3214,45 +3310,91 @@ function scrB(){const el=document.getElementById('chat-msgs');setTimeout(()=>{el
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(msg,tipo='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+tipo;setTimeout(()=>{el.className='toast';},2600);}
 
-['home','gen','hist','ac','config','equipe','sup','admin'].forEach(sfx=>{const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');});
+['home','gen','hist','ac','config','equipe','sup','admin','tk'].forEach(sfx=>{const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');});
 
 // ════ ADMIN — STATS + BACKUPS ════
-// == TICKETS ==
+// == TICKETS — CENTRAL DE SUPORTE ==
+let _tktFiltro='todos', _tktDados=[];
+
+function openTicketModal(){
+  document.getElementById('tkt-m-tipo').value='duvida';
+  document.getElementById('tkt-m-msg').value='';
+  document.getElementById('tkt-modal-bg').classList.add('open');
+  setTimeout(()=>document.getElementById('tkt-m-msg').focus(),100);
+}
+function closeTicketModal(){
+  document.getElementById('tkt-modal-bg').classList.remove('open');
+}
+
 async function enviarTicket(){
-  const tipo = document.getElementById('tk-tipo').value;
-  const msg  = document.getElementById('tk-msg').value.trim();
+  const tipo=document.getElementById('tkt-m-tipo').value;
+  const msg=document.getElementById('tkt-m-msg').value.trim();
   if(!msg){ toast('Escreva sua mensagem','err'); return; }
-  const btn = document.getElementById('tk-send-btn');
-  btn.disabled = true; btn.textContent = 'Enviando...';
+  const btn=document.getElementById('tkt-m-send');
+  btn.disabled=true; btn.textContent='Enviando...';
   try{
     await api('POST','/api/tickets',{tipo,mensagem:msg});
-    document.getElementById('tk-msg').value = '';
+    closeTicketModal();
     toast('Mensagem enviada! Respondemos em breve.','ok');
-    loadMeusTickets();
+    await loadMeusTickets();
   }catch(e){ toast('Erro: '+e.message,'err'); }
   finally{ btn.disabled=false; btn.textContent='Enviar mensagem'; }
 }
+
 async function loadMeusTickets(){
   try{
-    const lista = await api('GET','/api/tickets/meus');
-    const el = document.getElementById('tk-lista');
-    if(!el)return;
-    if(!lista.length){ el.innerHTML='<div style="font-size:12.5px;color:var(--t3);text-align:center;padding:20px 0;">Nenhuma mensagem enviada ainda.</div>'; return; }
-    const TIPO_LBL={duvida:'Dúvida',problema:'Problema técnico',sugestao:'Sugestão',outro:'Outro'};
-    el.innerHTML='<div class="tk-list">'+lista.map(t=>{
-      const dt = new Date(t.created_at).toLocaleDateString('pt-BR');
-      const resp = t.resposta ? `<div class="tk-resp"><div class="tk-resp-lbl">Resposta da equipe</div><div class="tk-resp-txt">${esc(t.resposta)}</div></div>` : '';
-      return `<div class="tk-item">
-        <div class="tk-item-hd">
-          <span class="tk-tipo-lbl">${esc(TIPO_LBL[t.tipo]||t.tipo)}</span>
-          <span class="tk-badge ${t.status}">${t.status==='respondido'?'Respondido':'Aguardando'}</span>
+    _tktDados = await api('GET','/api/tickets/meus');
+    renderTickets();
+  }catch(e){ console.error('loadMeusTickets:',e.message); }
+}
+
+function filtrarTickets(f,btn){
+  _tktFiltro=f;
+  document.querySelectorAll('.tkt-filter').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderTickets();
+}
+
+function renderTickets(){
+  const el=document.getElementById('tkt-grid');
+  if(!el) return;
+  const TIPO_LBL={duvida:'Dúvida',problema:'Problema técnico',sugestao:'Sugestão',outro:'Outro'};
+  const lista=_tktFiltro==='todos'?_tktDados:_tktDados.filter(t=>t.status===_tktFiltro);
+  if(!lista.length){
+    el.innerHTML=`<div class="tkt-empty">
+      <svg class="tkt-empty-ico" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <div class="tkt-empty-t">Nenhum ticket encontrado</div>
+      <div class="tkt-empty-s">${_tktFiltro==='todos'?'Clique em "Novo ticket" para enviar sua primeira mensagem.':'Nenhum ticket com este status.'}</div>
+    </div>`;
+    return;
+  }
+  el.innerHTML=lista.map(t=>{
+    const dt=new Date(t.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
+    const resp=t.resposta?`<div class="tkt-card-resp"><div class="tkt-card-resp-lbl">Resposta da equipe</div><div class="tkt-card-resp-txt">${esc(t.resposta)}</div></div>`:'';
+    return `<div class="tkt-card" id="tkt-card-${t.id}">
+      <div class="tkt-card-hd" onclick="toggleTicket(${t.id})">
+        <div class="tkt-card-num">#${t.id}</div>
+        <div class="tkt-card-info">
+          <div class="tkt-card-tipo">${esc(TIPO_LBL[t.tipo]||t.tipo)}</div>
+          <div class="tkt-card-preview">${esc(t.mensagem)}</div>
         </div>
-        <div class="tk-msg">${esc(t.mensagem)}</div>
-        <div style="font-size:11px;color:var(--t3);">${dt}</div>
+        <div class="tkt-card-right">
+          <span class="tk-badge ${t.status}">${t.status==='respondido'?'Respondido':'Aguardando'}</span>
+          <span class="tkt-card-date">${dt}</span>
+          <svg class="tkt-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,6 8,10 12,6"/></svg>
+        </div>
+      </div>
+      <div class="tkt-card-body">
+        <div class="tkt-card-msg-full">${esc(t.mensagem)}</div>
         ${resp}
-      </div>`;
-    }).join('')+'</div>';
-  }catch(e){console.error('loadMeusTickets:',e.message);}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleTicket(id){
+  const card=document.getElementById('tkt-card-'+id);
+  if(card) card.classList.toggle('expanded');
 }
 async function loadTicketsAdmin(){
   try{
@@ -3444,168 +3586,169 @@ function fmtDate(s){if(!s)return'–';try{return new Date(s).toLocaleDateString(
 // ════════════════════ TOUR GUIADO ════════════════════
 const TOUR_STEPS = [
   {
-    screen: 'home',
-    selector: null, // sem spotlight — intro geral
-    title: 'Início',
-    body: 'Aqui você encontra atalhos rápidos para criar documentos e conversar com o assistente.'
+    title: 'Bem-vindo à Pandecta AI',
+    body: 'Este tour rápido mostra as principais funcionalidades. Vamos começar?',
+    selector: null,
+    screen: 'home'
   },
   {
-    screen: 'home',
+    title: 'Criar nova peça',
+    body: 'Clique em "Novo" para iniciar o construtor. Em poucos passos você gera petições, contratos, recursos e muito mais com IA.',
     selector: '.sb-novo',
-    title: 'Novo documento',
-    body: 'Clique aqui para iniciar o Construtor. Basta descrever o caso e o Pandecta redige a peça completa.'
+    screen: 'home'
   },
   {
-    screen: 'historico',
-    selector: '.screen.active .sb-item.active',
     title: 'Histórico',
-    body: 'Todos os documentos gerados ficam salvos aqui. Você pode editar, copiar ou exportar em Word.'
+    body: 'Todas as peças geradas ficam salvas aqui. Edite, copie e exporte em Word a qualquer momento.',
+    selector: '.screen.active .sb-item.active',
+    screen: 'historico'
   },
   {
-    screen: 'acervo',
+    title: 'Acervo de documentos',
+    body: 'Suba PDFs, Word e TXTs do escritório. O assistente usa esses arquivos para enriquecer as peças geradas.',
     selector: '.screen.active .sb-item.active',
-    title: 'Acervo',
-    body: 'Envie seus PDFs, DOCXs e TXTs. O assistente vai usar esses documentos como referência nas respostas.'
+    screen: 'acervo'
   },
   {
-    screen: 'modelos',
-    selector: '.screen.active .sb-item.active',
     title: 'Modelos de estilo',
-    body: 'Suba qualquer peça que você já usa. A IA aprende seu estilo e aplica nas próximas gerações.'
+    body: 'Adicione peças antigas como referência para a IA escrever no seu estilo. Quanto mais modelos, melhor o resultado.',
+    selector: '.screen.active .sb-item.active',
+    screen: 'modelos'
   },
   {
-    screen: 'suporte',
+    title: 'Equipe',
+    body: 'Cadastre os advogados do escritório para que as peças sejam assinadas corretamente.',
     selector: '.screen.active .sb-item.active',
-    title: 'Assistente',
-    body: 'Fale com o assistente sobre qualquer caso. Ele consulta seu acervo e histórico para responder melhor.'
+    screen: 'equipe'
+  },
+  {
+    title: 'Assistente Jurídico',
+    body: 'Tire dúvidas, pesquise no acervo e inicie novas peças conversando com o assistente.',
+    selector: '.sb-support',
+    screen: 'suporte'
   }
 ];
 
-let _tourIdx = 0;
-let _tourActive = false;
-
-function checkTourPopup(){
-  const skip = localStorage.getItem('pandecta_tour_skip');
-  if(!skip) mostrarTourPopup();
-}
+let _tourStep = 0;
 
 function mostrarTourPopup(){
-  document.getElementById('tour-welcome-bg').style.display='flex';
+  _abrirTourPopup();
+}
+
+function _abrirTourPopup(){
+  const existing = document.getElementById('tour-popup-bg');
+  if(existing) existing.remove();
+  const bg = document.createElement('div');
+  bg.id = 'tour-popup-bg';
+  bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+  bg.innerHTML = `
+    <div style="background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:36px 32px;max-width:420px;width:90%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.5);position:relative;">
+      <div style="width:56px;height:56px;background:linear-gradient(135deg,#C9A84C,#e8c86d);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#001B2A" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      </div>
+      <div style="font-size:20px;font-weight:800;color:var(--t1);margin-bottom:10px;">Tour rápido da Pandecta</div>
+      <div style="font-size:14px;color:var(--t2);line-height:1.65;margin-bottom:28px;">Veja em 2 minutos como gerar peças jurídicas profissionais com inteligência artificial.</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button onclick="iniciarTour()" style="padding:13px;background:var(--gold);color:#001B2A;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;">Iniciar tour</button>
+        <button onclick="fecharTourPopup()" style="padding:10px;background:transparent;color:var(--t3);border:none;font-size:13px;font-family:inherit;cursor:pointer;">Pular por agora</button>
+        <label style="display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--t3);cursor:pointer;">
+          <input type="checkbox" id="tour-nao-mostrar" style="accent-color:var(--gold);">
+          Não mostrar novamente
+        </label>
+      </div>
+    </div>`;
+  document.body.appendChild(bg);
 }
 
 function fecharTourPopup(){
-  const naoMostrar = document.getElementById('tour-nao-mostrar').checked;
-  if(naoMostrar) localStorage.setItem('pandecta_tour_skip','1');
-  document.getElementById('tour-welcome-bg').style.display='none';
+  const nao = document.getElementById('tour-nao-mostrar');
+  if(nao && nao.checked) localStorage.setItem('pandecta_tour_visto','1');
+  const bg = document.getElementById('tour-popup-bg');
+  if(bg) bg.remove();
 }
 
 function iniciarTour(){
   fecharTourPopup();
-  _tourIdx = 0;
-  _tourActive = true;
-  document.getElementById('tour-overlay').style.display='block';
-  _renderTourStep();
+  _tourStep = 0;
+  _mostrarStep(_tourStep);
 }
 
-function _renderTourStep(){
-  const step = TOUR_STEPS[_tourIdx];
-  const total = TOUR_STEPS.length;
+function _mostrarStep(i){
+  _limparTour();
+  const step = TOUR_STEPS[i];
+  if(!step) return;
+  if(step.screen) go(step.screen);
+  requestAnimationFrame(()=>{
+    const overlay = document.createElement('div');
+    overlay.id = 'tour-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:8000;pointer-events:none;';
+    document.body.appendChild(overlay);
 
-  // navega para a tela do passo
-  go(step.screen);
-
-  const overlay = document.getElementById('tour-overlay');
-  const spotlight = document.getElementById('tour-spotlight');
-  const tooltip = document.getElementById('tour-tooltip');
-
-  // aguarda o DOM ser atualizado pelo go() antes de medir posicoes
-  requestAnimationFrame(() => {
-  // spotlight
-  const target = step.selector ? document.querySelector(step.selector) : null;
-  if(target){
-    overlay.style.display='none'; // spotlight já cria o escuro via box-shadow
-    spotlight.style.display='block';
-    const r = target.getBoundingClientRect();
-    const pad = 8;
-    spotlight.style.left   = (r.left - pad) + 'px';
-    spotlight.style.top    = (r.top  - pad) + 'px';
-    spotlight.style.width  = (r.width  + pad*2) + 'px';
-    spotlight.style.height = (r.height + pad*2) + 'px';
-  } else {
-    spotlight.style.display='none';
-    overlay.style.display='block';
-  }
-
-  // dots
-  const dots = Array.from({length:total},(_,i)=>`<div class="tt-dot${i===_tourIdx?' active':''}"></div>`).join('');
-
-  // tooltip content
-  tooltip.innerHTML = `
-    <div class="tt-step">Passo ${_tourIdx+1} de ${total}</div>
-    <div class="tt-title">${step.title}</div>
-    <div class="tt-body">${step.body}</div>
-    <div class="tt-actions">
-      <div class="tt-dots">${dots}</div>
-      <div class="tt-nav">
-        ${_tourIdx>0?'<button class="tt-btn tt-prev" onclick="tourPrev()">← Anterior</button>':''}
-        ${_tourIdx<total-1
-          ?'<button class="tt-btn tt-next" onclick="tourNext()">Próximo →</button>'
-          :'<button class="tt-btn tt-next" onclick="endTour()">Concluir ✓</button>'
-        }
-      </div>
-    </div>
-    <div style="text-align:right;margin-top:10px;">
-      <button class="tt-btn tt-skip" onclick="endTour()">Pular tour</button>
-    </div>`;
-  tooltip.style.display='block';
-
-  // posicionar tooltip
-  _posTooltip(target);
-  }); // end requestAnimationFrame
-}
-
-function _posTooltip(target){
-  const tt = document.getElementById('tour-tooltip');
-  const vw = window.innerWidth, vh = window.innerHeight;
-  const tw = 300, th = 200;
-  let left, top;
-  if(target){
-    const r = target.getBoundingClientRect();
-    // tenta à direita, senão à esquerda, senão embaixo
-    if(r.right + tw + 20 < vw){
-      left = r.right + 14;
-      top  = Math.max(12, Math.min(r.top, vh - th - 12));
-    } else if(r.left - tw - 20 > 0){
-      left = r.left - tw - 14;
-      top  = Math.max(12, Math.min(r.top, vh - th - 12));
-    } else {
-      left = Math.max(12, (vw - tw) / 2);
-      top  = r.bottom + 14;
+    let rect = null;
+    if(step.selector){
+      const el = document.querySelector(step.selector);
+      if(el) rect = el.getBoundingClientRect();
     }
-  } else {
-    left = Math.max(12, (vw - tw) / 2);
-    top  = Math.max(12, (vh - th) / 2);
+
+    const tip = document.createElement('div');
+    tip.id = 'tour-tip';
+    tip.style.cssText = 'position:fixed;z-index:8100;background:#ffffff;border-radius:16px;padding:28px;width:380px;max-width:calc(100vw - 32px);box-shadow:0 20px 60px rgba(0,0,0,.35);pointer-events:all;';
+
+    const dots = TOUR_STEPS.map((_,j)=>`<div style="width:${j===i?18:8}px;height:8px;border-radius:${j===i?'4px':'50%'};background:${j===i?'#C9A84C':'#d1d5db'};transition:all .2s;flex-shrink:0;"></div>`).join('');
+
+    tip.innerHTML = `
+      <button onclick="_limparTour()" style="position:absolute;top:14px;right:14px;background:none;border:none;cursor:pointer;color:#9ca3af;font-size:18px;line-height:1;padding:4px;">✕</button>
+      <div style="font-size:18px;font-weight:800;color:#0f172a;margin-bottom:10px;padding-right:24px;">${step.title}</div>
+      <div style="font-size:14.5px;color:#374151;line-height:1.65;margin-bottom:22px;">${step.body}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div style="display:flex;gap:5px;align-items:center;">${dots}</div>
+        <div style="display:flex;gap:8px;flex-shrink:0;">
+          ${i>0?`<button onclick="_tourNav(-1)" style="height:40px;padding:0 16px;background:#f1f5f9;color:#374151;border:none;border-radius:9px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">Anterior</button>`:''}
+          ${i<TOUR_STEPS.length-1
+            ?`<button onclick="_tourNav(1)" style="height:40px;padding:0 20px;background:#C9A84C;color:#001B2A;border:none;border-radius:9px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;">Próximo</button>`
+            :`<button onclick="_limparTour()" style="height:40px;padding:0 20px;background:#C9A84C;color:#001B2A;border:none;border-radius:9px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;">Concluir ✓</button>`
+          }
+        </div>
+      </div>`;
+
+    if(rect){
+      const tipTop = rect.bottom + 14;
+      const tipLeft = Math.min(Math.max(8, rect.left), window.innerWidth - 396);
+      tip.style.top = (tipTop + 380 > window.innerHeight ? rect.top - 380 - 14 : tipTop) + 'px';
+      tip.style.left = tipLeft + 'px';
+
+      const spot = document.createElement('div');
+      spot.id = 'tour-spot';
+      spot.style.cssText = `position:fixed;z-index:8050;border:2px solid #C9A84C;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.55);pointer-events:none;top:${rect.top-6}px;left:${rect.left-6}px;width:${rect.width+12}px;height:${rect.height+12}px;`;
+      document.body.appendChild(spot);
+    } else {
+      tip.style.top = '50%';
+      tip.style.left = '50%';
+      tip.style.transform = 'translate(-50%,-50%)';
+      overlay.style.cssText += 'background:rgba(0,0,0,.55);pointer-events:all;';
+    }
+    document.body.appendChild(tip);
+  });
+}
+
+function _tourNav(dir){
+  _tourStep = Math.max(0, Math.min(TOUR_STEPS.length-1, _tourStep+dir));
+  _mostrarStep(_tourStep);
+}
+
+function _limparTour(){
+  ['tour-overlay','tour-tip','tour-spot'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.remove();
+  });
+}
+
+function checkTourAutoShow(){
+  if(!localStorage.getItem('pandecta_tour_visto')){
+    setTimeout(()=>_abrirTourPopup(), 1000);
   }
-  tt.style.left = Math.min(left, vw - tw - 12) + 'px';
-  tt.style.top  = Math.min(top,  vh - th - 12) + 'px';
 }
 
-function tourNext(){
-  if(_tourIdx < TOUR_STEPS.length - 1){ _tourIdx++; _renderTourStep(); }
-  else endTour();
-}
-function tourPrev(){
-  if(_tourIdx > 0){ _tourIdx--; _renderTourStep(); }
-}
-
-function endTour(){
-  _tourActive = false;
-  document.getElementById('tour-overlay').style.display='none';
-  document.getElementById('tour-spotlight').style.display='none';
-  document.getElementById('tour-tooltip').style.display='none';
-  go('home');
-}
-// ════════════════════ FIM TOUR ══════════════ ════════════════════ */
 </script>
 </body>
 </html>
