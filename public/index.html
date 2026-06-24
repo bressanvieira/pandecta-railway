@@ -1071,7 +1071,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <button class="drop-btn" style="background:var(--surface);color:var(--t2);border:1px solid var(--bd);" onclick="event.stopPropagation();document.getElementById('folder-in').click()" title="Selecionar pasta inteira com subpastas"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M1 3.5a1 1 0 011-1h3l1.5 1.5H12a1 1 0 011 1V11a1 1 0 01-1 1H2a1 1 0 01-1-1z"/></svg>Selecionar pasta</button>
           </div>
           <input type="file" id="file-in" multiple accept=".pdf,.docx,.txt" style="display:none" onchange="handleFiles(Array.from(this.files))">
-          <input type="file" id="folder-in" multiple accept=".pdf,.docx,.txt" webkitdirectory style="display:none" onchange="handleFiles(Array.from(this.files), true)">
+          <input type="file" id="folder-in" webkitdirectory style="display:none" onchange="handleFiles(Array.from(this.files), true)">
         </div>
 
         <!-- barra inline substituída pela flutuante global #idx-float -->
