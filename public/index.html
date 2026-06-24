@@ -682,22 +682,22 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* ══════════════════════ TOUR ══════════════════════ */
 #tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:9000;pointer-events:all;}
 #tour-spotlight{position:fixed;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 3px var(--gold);z-index:9001;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1);}
-#tour-tooltip{position:fixed;z-index:9002;background:var(--card);border:1px solid var(--bd-md);border-radius:12px;padding:18px 20px;max-width:300px;box-shadow:0 12px 36px rgba(0,0,0,.28);transition:all .3s ease;}
-#tour-tooltip .tt-step{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;}
-#tour-tooltip .tt-title{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:8px;}
-#tour-tooltip .tt-body{font-size:13px;color:var(--t2);line-height:1.55;}
-#tour-tooltip .tt-actions{display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:10px;}
+#tour-tooltip{position:fixed;z-index:9002;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:28px;width:380px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.32);transition:all .3s ease;}
+#tour-tooltip .tt-step{font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+#tour-tooltip .tt-title{font-size:18px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.25;}
+#tour-tooltip .tt-body{font-size:14.5px;color:#374151;line-height:1.65;}
+#tour-tooltip .tt-actions{display:flex;align-items:center;justify-content:space-between;margin-top:22px;gap:10px;}
 #tour-tooltip .tt-nav{display:flex;gap:8px;}
-#tour-tooltip .tt-btn{padding:7px 16px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:all .12s;}
-#tour-tooltip .tt-skip{background:transparent;color:var(--t3);border:1px solid var(--bd);}
-#tour-tooltip .tt-skip:hover{background:var(--surface);color:var(--t2);}
-#tour-tooltip .tt-prev{background:var(--surface);color:var(--t2);border:1px solid var(--bd);}
-#tour-tooltip .tt-prev:hover{background:var(--bd);}
+#tour-tooltip .tt-btn{padding:0 20px;height:40px;border-radius:9px;border:none;cursor:pointer;font-size:14px;font-weight:600;font-family:inherit;transition:all .12s;}
+#tour-tooltip .tt-skip{background:transparent;color:#94a3b8;border:1px solid #e2e8f0;}
+#tour-tooltip .tt-skip:hover{background:#f8fafc;color:#64748b;}
+#tour-tooltip .tt-prev{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0;}
+#tour-tooltip .tt-prev:hover{background:#e2e8f0;}
 #tour-tooltip .tt-next{background:var(--gold);color:#001B2A;}
 #tour-tooltip .tt-next:hover{filter:brightness(1.08);}
-#tour-tooltip .tt-dots{display:flex;gap:5px;align-items:center;}
-#tour-tooltip .tt-dot{width:6px;height:6px;border-radius:50%;background:var(--bd-md);transition:background .2s;}
-#tour-tooltip .tt-dot.active{background:var(--gold);}
+#tour-tooltip .tt-dots{display:flex;gap:6px;align-items:center;}
+#tour-tooltip .tt-dot{width:7px;height:7px;border-radius:50%;background:#cbd5e1;transition:background .2s;}
+#tour-tooltip .tt-dot.active{background:var(--gold);width:18px;border-radius:4px;}
 /* popup boas-vindas */
 #tour-welcome-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8900;display:flex;align-items:center;justify-content:center;}
 #tour-welcome{background:var(--card);border:1px solid var(--bd-md);border-radius:16px;padding:36px 36px 28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.35);}
