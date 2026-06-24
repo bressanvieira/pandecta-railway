@@ -928,6 +928,15 @@ app.post('/api/gerar', requireAuth, async (req, res) => {
 
   const estiloCtx = estilo ? `\nESTILO DO ADVOGADO:\n${estilo}\n` : '';
 
+  // Modelo de referencia de estilo (template .docx do usuario)
+  let modeloRefCtx = '';
+  if (modelo_id) {
+    try {
+      const tpl = db.prepare('SELECT texto_referencia FROM templates WHERE id=? AND user_id=?').get(modelo_id, req.user.userId);
+      if (tpl?.texto_referencia) modeloRefCtx = `\nMODELO DE REFERENCIA DE ESTILO (use como guia de formatacao e linguagem):\n${tpl.texto_referencia}\n`;
+    } catch(e) { /* modelo nao encontrado, ignora */ }
+  }
+
   const userPrompt = `DATA DE HOJE (use como data da petiÃ§Ã£o e para calcular dias de privaÃ§Ã£o/prejuÃ­zo): ${today}
 
 LEGISLAÃÃO E JURISPRUDÃNCIA RELEVANTE:
@@ -1140,6 +1149,29 @@ app.get('/api/admin/backups', requireAuth, requireAdmin, (req, res) => {
       });
     res.json(files.sort((a, b) => b.created_at.localeCompare(a.created_at)));
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+
+// Memoria de argumentos — busca no historico pecas similares
+app.post('/api/memoria/consultar', requireAuth, (req, res) => {
+  try {
+    const { query = '', area = '', top = 3 } = req.body || {};
+    if (!query.trim()) return res.json([]);
+    const palavras = query.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(/\s+/).filter(w => w.length >= 3);
+    if (!palavras.length) return res.json([]);
+    const rows = db.prepare(
+      'SELECT tipo, area, fatos, resultado FROM history WHERE user_id=?' + (area ? ' AND area=?' : '') + ' ORDER BY created_at DESC LIMIT 50'
+    ).all(...(area ? [req.user.userId, area] : [req.user.userId]));
+    const scored = rows.map(r => {
+      const texto = ((r.fatos || '') + ' ' + (r.resultado || '')).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+      const hits = palavras.filter(p => texto.includes(p)).length;
+      return { ...r, hits };
+    }).filter(r => r.hits > 0).sort((a,b) => b.hits - a.hits).slice(0, top);
+    res.json(scored.map(r => ({ tipo: r.tipo, area: r.area, trecho: (r.fatos||'').slice(0,300) })));
+  } catch(e) {
+    console.error('memoria/consultar:', e.message);
+    res.json([]);
+  }
 });
 
 app.listen(PORT, () => {
