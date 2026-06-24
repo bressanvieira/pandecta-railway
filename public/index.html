@@ -680,42 +680,38 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 }
 
 /* ══════════════════════ TOUR ══════════════════════ */
-#tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9000;pointer-events:all;}
-#tour-spotlight{position:fixed;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.65),0 0 0 3px #C8A96B;z-index:9001;pointer-events:none;transition:left .35s cubic-bezier(.4,0,.2,1),top .35s cubic-bezier(.4,0,.2,1),width .35s cubic-bezier(.4,0,.2,1),height .35s cubic-bezier(.4,0,.2,1);}
-/* tooltip — fundo branco fixo para legibilidade independente do tema */
-#tour-tooltip{position:fixed;z-index:9002;background:#ffffff;border-radius:14px;padding:28px 28px 22px;width:380px;max-width:calc(100vw - 24px);box-shadow:0 20px 60px rgba(0,0,0,.22),0 4px 16px rgba(0,0,0,.12);transition:left .3s ease,top .3s ease;}
-#tour-tooltip .tt-step{font-size:11px;color:#C8A96B;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
-#tour-tooltip .tt-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:10px;line-height:1.3;}
-#tour-tooltip .tt-body{font-size:14px;color:#374151;line-height:1.65;margin-bottom:0;}
-#tour-tooltip .tt-footer{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid #f1f5f9;gap:12px;}
-#tour-tooltip .tt-dots{display:flex;gap:6px;align-items:center;}
-#tour-tooltip .tt-dot{width:7px;height:7px;border-radius:50%;background:#e2e8f0;transition:background .2s,transform .2s;}
-#tour-tooltip .tt-dot.active{background:#C8A96B;transform:scale(1.25);}
-#tour-tooltip .tt-nav{display:flex;gap:8px;align-items:center;}
-#tour-tooltip .tt-btn{height:40px;padding:0 20px;border-radius:8px;border:none;cursor:pointer;font-size:14px;font-weight:600;font-family:inherit;transition:all .14s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
-#tour-tooltip .tt-skip{height:36px;padding:0 14px;background:transparent;color:#94a3b8;border:1px solid #e2e8f0;border-radius:7px;cursor:pointer;font-size:13px;font-family:inherit;transition:all .14s;}
-#tour-tooltip .tt-skip:hover{background:#f8fafc;color:#64748b;}
-#tour-tooltip .tt-prev{background:#f1f5f9;color:#374151;border:1px solid #e2e8f0;}
-#tour-tooltip .tt-prev:hover{background:#e2e8f0;}
-#tour-tooltip .tt-next{background:#C8A96B;color:#001B2A;}
-#tour-tooltip .tt-next:hover{background:#b8935a;}
-/* popup boas-vindas — fundo branco */
-#tour-welcome-bg{position:fixed;inset:0;background:rgba(0,0,0,.60);z-index:8900;display:flex;align-items:center;justify-content:center;padding:16px;}
-#tour-welcome{background:#ffffff;border-radius:18px;padding:40px 40px 32px;max-width:460px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.30);}
-#tour-welcome .tw-badge{display:inline-flex;align-items:center;gap:7px;background:#fef9ee;border:1px solid #f0d99a;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;color:#92661a;letter-spacing:.5px;margin-bottom:20px;}
-#tour-welcome h2{font-size:22px;font-weight:700;color:#0f172a;margin:0 0 12px;line-height:1.3;}
-#tour-welcome p{font-size:15px;color:#4b5563;line-height:1.65;margin:0 0 24px;}
-#tour-welcome .tw-features{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
-#tour-welcome .tw-feat{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:#374151;}
-#tour-welcome .tw-feat-ico{font-size:16px;line-height:1;flex-shrink:0;margin-top:1px;}
-#tour-welcome .tw-check{display:flex;align-items:center;gap:9px;margin-bottom:28px;cursor:pointer;user-select:none;}
-#tour-welcome .tw-check input{width:16px;height:16px;accent-color:#C8A96B;cursor:pointer;flex-shrink:0;}
-#tour-welcome .tw-check span{font-size:13px;color:#6b7280;}
+#tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:9000;pointer-events:all;}
+#tour-spotlight{position:fixed;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 3px var(--gold);z-index:9001;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1);}
+#tour-tooltip{position:fixed;z-index:9002;background:var(--card);border:1px solid var(--bd-md);border-radius:12px;padding:18px 20px;max-width:300px;box-shadow:0 12px 36px rgba(0,0,0,.28);transition:all .3s ease;}
+#tour-tooltip .tt-step{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;}
+#tour-tooltip .tt-title{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:8px;}
+#tour-tooltip .tt-body{font-size:13px;color:var(--t2);line-height:1.55;}
+#tour-tooltip .tt-actions{display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:10px;}
+#tour-tooltip .tt-nav{display:flex;gap:8px;}
+#tour-tooltip .tt-btn{padding:7px 16px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:all .12s;}
+#tour-tooltip .tt-skip{background:transparent;color:var(--t3);border:1px solid var(--bd);}
+#tour-tooltip .tt-skip:hover{background:var(--surface);color:var(--t2);}
+#tour-tooltip .tt-prev{background:var(--surface);color:var(--t2);border:1px solid var(--bd);}
+#tour-tooltip .tt-prev:hover{background:var(--bd);}
+#tour-tooltip .tt-next{background:var(--gold);color:#001B2A;}
+#tour-tooltip .tt-next:hover{filter:brightness(1.08);}
+#tour-tooltip .tt-dots{display:flex;gap:5px;align-items:center;}
+#tour-tooltip .tt-dot{width:6px;height:6px;border-radius:50%;background:var(--bd-md);transition:background .2s;}
+#tour-tooltip .tt-dot.active{background:var(--gold);}
+/* popup boas-vindas */
+#tour-welcome-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8900;display:flex;align-items:center;justify-content:center;}
+#tour-welcome{background:var(--card);border:1px solid var(--bd-md);border-radius:16px;padding:36px 36px 28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.35);}
+#tour-welcome .tw-ico{font-size:36px;margin-bottom:14px;}
+#tour-welcome h2{font-size:20px;font-weight:700;color:var(--t1);margin:0 0 10px;}
+#tour-welcome p{font-size:14px;color:var(--t2);line-height:1.6;margin:0 0 20px;}
+#tour-welcome .tw-check{display:flex;align-items:center;gap:9px;margin-bottom:24px;cursor:pointer;user-select:none;}
+#tour-welcome .tw-check input{width:16px;height:16px;accent-color:var(--gold);cursor:pointer;}
+#tour-welcome .tw-check span{font-size:13px;color:var(--t3);}
 #tour-welcome .tw-btns{display:flex;gap:10px;justify-content:flex-end;}
-#tour-welcome .tw-later{height:44px;padding:0 20px;border-radius:9px;border:1px solid #e2e8f0;background:#f8fafc;color:#374151;cursor:pointer;font-size:14px;font-weight:600;font-family:inherit;transition:all .14s;}
-#tour-welcome .tw-later:hover{background:#e2e8f0;}
-#tour-welcome .tw-start{height:44px;padding:0 26px;border-radius:9px;border:none;background:#C8A96B;color:#001B2A;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;transition:all .14s;}
-#tour-welcome .tw-start:hover{background:#b8935a;}
+#tour-welcome .tw-later{padding:9px 18px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;font-size:14px;font-weight:600;font-family:inherit;transition:all .12s;}
+#tour-welcome .tw-later:hover{background:var(--surface);}
+#tour-welcome .tw-start{padding:9px 22px;border-radius:8px;border:none;background:var(--gold);color:#001B2A;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;transition:all .12s;}
+#tour-welcome .tw-start:hover{filter:brightness(1.08);}
 /* botão tour no sidebar */
 .sb-tour-btn{display:flex;align-items:center;gap:8px;width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--t3);cursor:pointer;font-size:12px;font-family:inherit;transition:all .14s;margin-top:8px;}
 .sb-tour-btn:hover{background:var(--surface);color:var(--t2);border-color:var(--bd-md);}
@@ -1066,8 +1062,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           </div>
           <div class="drop-t">Adicionar documentos</div>
           <div class="drop-s">PDF, DOCX ou TXT</div>
-          <button class="drop-btn" onclick="event.stopPropagation();document.getElementById('file-in').click()">Selecionar arquivos</button>
-          <input type="file" id="file-in" multiple accept=".pdf,.docx,.txt" style="display:none" onchange="handleFiles(this.files)">
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+            <button class="drop-btn" onclick="event.stopPropagation();document.getElementById('file-in').click()">Selecionar arquivos</button>
+            <button class="drop-btn" style="background:var(--surface);color:var(--t2);border:1px solid var(--bd);" onclick="event.stopPropagation();document.getElementById('folder-in').click()" title="Selecionar pasta inteira com subpastas"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M1 3.5a1 1 0 011-1h3l1.5 1.5H12a1 1 0 011 1V11a1 1 0 01-1 1H2a1 1 0 01-1-1z"/></svg>Selecionar pasta</button>
+          </div>
+          <input type="file" id="file-in" multiple accept=".pdf,.docx,.txt" style="display:none" onchange="handleFiles(Array.from(this.files))">
+          <input type="file" id="folder-in" multiple accept=".pdf,.docx,.txt" webkitdirectory style="display:none" onchange="handleFiles(Array.from(this.files), true)">
         </div>
 
         <div class="prog-w" id="prog-wrap">
@@ -1674,21 +1674,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <!-- ══ TOUR GUIADO ══ -->
 <div id="tour-welcome-bg" style="display:none">
   <div id="tour-welcome">
-    <div class="tw-badge">✦ TOUR RÁPIDO</div>
+    <div class="tw-ico">⚖️</div>
     <h2>Bem-vindo ao Pandecta!</h2>
-    <p>Conheça as principais ferramentas da plataforma em menos de 2 minutos.</p>
-    <div class="tw-features">
-      <div class="tw-feat"><span class="tw-feat-ico">📄</span><span>Gere petições, contratos e notificações com IA</span></div>
-      <div class="tw-feat"><span class="tw-feat-ico">📁</span><span>Organize seu acervo e ensine seu estilo à IA</span></div>
-      <div class="tw-feat"><span class="tw-feat-ico">💬</span><span>Converse com o assistente sobre qualquer caso</span></div>
-    </div>
+    <p>Você quer fazer um tour rápido pela plataforma? Vamos te mostrar como gerar peças jurídicas, organizar seu acervo e muito mais.</p>
     <label class="tw-check">
       <input type="checkbox" id="tour-nao-mostrar">
-      <span>Não mostrar esta mensagem novamente</span>
+      <span>Não mostrar esta tela novamente</span>
     </label>
     <div class="tw-btns">
       <button class="tw-later" onclick="fecharTourPopup()">Agora não</button>
-      <button class="tw-start" onclick="iniciarTour()">Iniciar tour</button>
+      <button class="tw-start" onclick="iniciarTour()">Iniciar tour →</button>
     </div>
   </div>
 </div>
@@ -2859,43 +2854,118 @@ function updateSb(){
   document.querySelectorAll('.sb-sess-sub').forEach(el=>el.textContent=chks+' trechos indexados');
   document.querySelectorAll('.sb-prog-f').forEach(el=>el.style.width=pct+'%');
 }
-function handleDrop(e){e.preventDefault();document.getElementById('drop-zone').classList.remove('drag');handleFiles(e.dataTransfer.files);}
-async function handleFiles(files){
-  if(!files.length)return;
-  const arr=Array.from(files);
-  const prog=document.getElementById('prog-wrap'),fill=document.getElementById('prog-fill'),txt=document.getElementById('prog-text'),pct=document.getElementById('prog-pct');
-  prog.style.display='block';let ok=0,dup=0;
-  for(let i=0;i<arr.length;i++){
-    const f=arr[i];
-    fill.style.width=Math.round(i/arr.length*100)+'%';pct.textContent=Math.round(i/arr.length*100)+'%';txt.textContent='Lendo: '+f.name;
-    if(sessionFiles.find(x=>x.nome===f.name)){dup++;continue;}
-    try{
-      const texto=await lerArq(f);if(!texto.trim())continue;
-      const chunks=chunkar(texto,f.name);
-      const lo=f.name.toLowerCase();
-      let tipo=(tipoSel&&tipoSel!=='Todos')?tipoSel:'Outro';
-      if(tipo==='Outro'){
-        if(lo.match(/contrat/))tipo='Contrato';
-        else if(lo.match(/petição|peticao|inicial/))tipo='Petição';
-        else if(lo.match(/parecer/))tipo='Parecer';
-        else if(lo.match(/modelo/))tipo='Modelo';
-      }
-      const result=await api('POST','/api/acervo',{nome:f.name,tipo,chunks,tamanho:f.size,enviado_por:usuario||''});
-      sessionFiles.push(result);ok++;
-    }catch(e){console.error(f.name,e);}
+function handleDrop(e){e.preventDefault();document.getElementById('drop-zone').classList.remove('drag');handleFiles(Array.from(e.dataTransfer.files));}
+
+// ─── ACERVO: upload de arquivos e pastas ─────────────────────────────────
+const AC_BATCH = 5;    // arquivos processados em paralelo
+const AC_WARN  = 50;   // aviso ao superar este número
+const AC_MAX   = 300;  // limite por segurança
+
+async function handleFiles(files, folderMode=false){
+  if(!files||!files.length) return;
+  const arr = Array.from(files).filter(f=>/\.(pdf|docx|txt)$/i.test(f.name)).slice(0, AC_MAX);
+  if(!arr.length){ toast('Nenhum PDF, DOCX ou TXT encontrado.','err'); return; }
+
+  if(arr.length > AC_WARN){
+    const continuar = confirm(
+      'Você selecionou '+arr.length+' arquivos. O processo pode levar alguns minutos.\n\nDeseja continuar?'
+    );
+    if(!continuar) return;
   }
-  fill.style.width='100%';pct.textContent='100%';txt.textContent=`✓ ${ok} indexado(s)${dup?', '+dup+' duplicado(s)':''}`;
-  setTimeout(()=>{prog.style.display='none';fill.style.width='0%';},2200);
-  renderCards();document.getElementById('file-in').value='';toast(ok+' documento(s) indexado(s)','ok');
+
+  const prog=document.getElementById('prog-wrap');
+  const fill=document.getElementById('prog-fill');
+  const txt =document.getElementById('prog-text');
+  const pct =document.getElementById('prog-pct');
+  prog.style.display='block';
+
+  let done=0, ok=0, dup=0, errs=0;
+  const total=arr.length;
+
+  function atualizarProg(nomeAtual){
+    const p=Math.round(done/total*100);
+    fill.style.width=p+'%'; pct.textContent=p+'%';
+    txt.textContent = done<total
+      ? 'Indexando '+(done+1)+'/'+total+': '+nomeAtual
+      : '✓ '+ok+' indexado(s)'+(dup?' · '+dup+' duplicado(s)':'')+(errs?' · '+errs+' erro(s)':'');
+  }
+
+  async function processarArquivo(f){
+    const nome = (folderMode && f.webkitRelativePath) ? f.webkitRelativePath : f.name;
+    atualizarProg(f.name);
+    if(sessionFiles.find(x=>x.nome===nome)){ dup++; done++; return; }
+    try{
+      const texto = await extrairTextoArquivo(f);
+      if(!texto.trim()){ done++; return; }
+      const chunks = chunkar(texto, nome);
+      const lo = nome.toLowerCase();
+      let tipo = (tipoSel&&tipoSel!=='Todos') ? tipoSel : 'Outro';
+      if(tipo==='Outro'){
+        if(lo.match(/contrat/))                      tipo='Contrato';
+        else if(lo.match(/peti.{0,2}o|inicial/))     tipo='Petição';
+        else if(lo.match(/parecer/))                 tipo='Parecer';
+        else if(lo.match(/modelo/))                  tipo='Modelo';
+      }
+      const result = await api('POST','/api/acervo',{nome,tipo,chunks,tamanho:f.size,enviado_por:usuario||''});
+      sessionFiles.push(result); ok++;
+    }catch(e){ console.error(nome, e); errs++; }
+    done++;
+  }
+
+  for(let i=0; i<arr.length; i+=AC_BATCH){
+    await Promise.all(arr.slice(i, i+AC_BATCH).map(processarArquivo));
+    atualizarProg('');
+    renderCards();
+  }
+
+  fill.style.width='100%'; pct.textContent='100%';
+  atualizarProg('');
+  setTimeout(()=>{ prog.style.display='none'; fill.style.width='0%'; }, 2800);
+  document.getElementById('file-in').value='';
+  const fi=document.getElementById('folder-in'); if(fi) fi.value='';
+  toast(ok+' documento(s) indexado(s)'+(errs?' ('+errs+' erro(s))':''), ok?'ok':'err');
 }
-async function lerArq(file){
-  const ext=file.name.split('.').pop().toLowerCase();
-  if(ext==='txt')return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsText(file,'UTF-8');});
-  if(ext==='docx'){const buf=await file.arrayBuffer();return(await mammoth.extractRawText({arrayBuffer:buf})).value;}
-  if(ext==='pdf'&&typeof pdfjsLib!=='undefined'){const buf=await file.arrayBuffer();const pdf=await pdfjsLib.getDocument({data:buf}).promise;let t='';for(let i=1;i<=pdf.numPages;i++){const p=await pdf.getPage(i);const c=await p.getTextContent();t+=c.items.map(s=>s.str).join(' ')+'\n';}return t;}
+
+// ── Extração de texto ─────────────────────────────────────────────────────
+// MIGRATION POINT: para migrar ao servidor, substituir o corpo desta
+// função por uma chamada a POST /api/acervo/extrair passando o arquivo.
+async function extrairTextoArquivo(file){
+  const ext = file.name.split('.').pop().toLowerCase();
+  if(ext==='txt'){
+    return new Promise((res,rej)=>{
+      const r=new FileReader();
+      r.onload=e=>res(e.target.result);
+      r.onerror=rej;
+      r.readAsText(file,'UTF-8');
+    });
+  }
+  if(ext==='docx'){
+    const buf = await file.arrayBuffer();
+    return (await mammoth.extractRawText({arrayBuffer:buf})).value;
+  }
+  if(ext==='pdf' && typeof pdfjsLib!=='undefined'){
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({data:buf}).promise;
+    let t='';
+    for(let i=1;i<=pdf.numPages;i++){
+      const p=await pdf.getPage(i);
+      const c=await p.getTextContent();
+      t+=c.items.map(s=>s.str).join(' ')+'\n';
+    }
+    return t;
+  }
   return '';
 }
-function chunkar(texto,fonte,size=500,overlap=80){const chunks=[];let i=0;while(i<texto.length){const t=texto.slice(i,i+size).trim();if(t)chunks.push({texto:t,fonte});i+=size-overlap;}return chunks;}
+
+function chunkar(texto,fonte,size=500,overlap=80){
+  const chunks=[];let i=0;
+  while(i<texto.length){
+    const t=texto.slice(i,i+size).trim();
+    if(t) chunks.push({texto:t,fonte});
+    i+=size-overlap;
+  }
+  return chunks;
+}
 
 // ════ UTILS ════
 function slp(ms){return new Promise(r=>setTimeout(r,ms));}
@@ -3031,39 +3101,39 @@ function fmtDate(s){if(!s)return'–';try{return new Date(s).toLocaleDateString(
 const TOUR_STEPS = [
   {
     screen: 'home',
-    selector: '.screen.active .sb-item.active',
+    selector: null, // sem spotlight — intro geral
     title: 'Início',
-    body: 'Ponto de partida. Atalhos rápidos para criar documentos e acesso direto ao assistente.'
+    body: 'Aqui você encontra atalhos rápidos para criar documentos e conversar com o assistente.'
   },
   {
     screen: 'home',
-    selector: '.screen.active .sb-novo',
+    selector: '.sb-novo',
     title: 'Novo documento',
-    body: 'Inicia o Construtor. Descreva o caso em linguagem simples — o Pandecta redige a peça jurídica completa.'
+    body: 'Clique aqui para iniciar o Construtor. Basta descrever o caso e o Pandecta redige a peça completa.'
   },
   {
     screen: 'historico',
-    selector: '.screen.active .sb-item.active',
+    selector: null,
     title: 'Histórico',
-    body: 'Todos os documentos gerados ficam salvos aqui. Edite, copie ou exporte em Word com um clique.'
+    body: 'Todos os documentos gerados ficam salvos aqui. Você pode editar, copiar ou exportar em Word.'
   },
   {
     screen: 'acervo',
-    selector: '.screen.active .sb-item.active',
+    selector: null,
     title: 'Acervo',
-    body: 'Envie seus PDFs e DOCXs. O assistente consulta esse material para respostas mais precisas.'
+    body: 'Envie seus PDFs, DOCXs e TXTs. O assistente vai usar esses documentos como referência nas respostas.'
   },
   {
     screen: 'modelos',
-    selector: '.screen.active .sb-item.active',
+    selector: null,
     title: 'Modelos de estilo',
-    body: 'Suba uma peça que você já usa no escritório. A IA aprende seu estilo e replica nas próximas gerações.'
+    body: 'Suba qualquer peça que você já usa. A IA aprende seu estilo e aplica nas próximas gerações.'
   },
   {
     screen: 'suporte',
-    selector: '.screen.active .sb-support',
+    selector: null,
     title: 'Assistente',
-    body: 'Converse sobre qualquer caso. Ele consulta seu acervo e histórico para responder com precisão.'
+    body: 'Fale com o assistente sobre qualquer caso. Ele consulta seu acervo e histórico para responder melhor.'
   }
 ];
 
@@ -3089,6 +3159,7 @@ function iniciarTour(){
   fecharTourPopup();
   _tourIdx = 0;
   _tourActive = true;
+  document.getElementById('tour-overlay').style.display='block';
   _renderTourStep();
 }
 
@@ -3096,87 +3167,80 @@ function _renderTourStep(){
   const step = TOUR_STEPS[_tourIdx];
   const total = TOUR_STEPS.length;
 
-  // navega para a tela do passo e aguarda DOM atualizar
+  // navega para a tela do passo
   go(step.screen);
 
-  requestAnimationFrame(()=>{
-    const overlay   = document.getElementById('tour-overlay');
-    const spotlight = document.getElementById('tour-spotlight');
-    const tooltip   = document.getElementById('tour-tooltip');
+  const overlay = document.getElementById('tour-overlay');
+  const spotlight = document.getElementById('tour-spotlight');
+  const tooltip = document.getElementById('tour-tooltip');
 
-    // spotlight no elemento alvo
-    const target = step.selector ? document.querySelector(step.selector) : null;
-    if(target){
-      overlay.style.display='none';
-      spotlight.style.display='block';
-      const r = target.getBoundingClientRect();
-      const pad = 7;
-      spotlight.style.left   = (r.left - pad) + 'px';
-      spotlight.style.top    = (r.top  - pad) + 'px';
-      spotlight.style.width  = (r.width  + pad*2) + 'px';
-      spotlight.style.height = (r.height + pad*2) + 'px';
-    } else {
-      spotlight.style.display='none';
-      overlay.style.display='block';
-    }
+  // spotlight
+  const target = step.selector ? document.querySelector(step.selector) : null;
+  if(target){
+    overlay.style.display='none'; // spotlight já cria o escuro via box-shadow
+    spotlight.style.display='block';
+    const r = target.getBoundingClientRect();
+    const pad = 8;
+    spotlight.style.left   = (r.left - pad) + 'px';
+    spotlight.style.top    = (r.top  - pad) + 'px';
+    spotlight.style.width  = (r.width  + pad*2) + 'px';
+    spotlight.style.height = (r.height + pad*2) + 'px';
+  } else {
+    spotlight.style.display='none';
+    overlay.style.display='block';
+  }
 
-    // dots de progresso
-    const dots = Array.from({length:total},(_,i)=>
-      `<div class="tt-dot${i===_tourIdx?' active':''}"></div>`).join('');
+  // dots
+  const dots = Array.from({length:total},(_,i)=>`<div class="tt-dot${i===_tourIdx?' active':''}"></div>`).join('');
 
-    // botões de navegação
-    const prevBtn = _tourIdx>0
-      ? `<button class="tt-btn tt-prev" onclick="tourPrev()">Anterior</button>` : '';
-    const nextBtn = _tourIdx<total-1
-      ? `<button class="tt-btn tt-next" onclick="tourNext()">Próximo</button>`
-      : `<button class="tt-btn tt-next" onclick="endTour()">Concluir ✓</button>`;
-
-    tooltip.innerHTML = `
-      <div class="tt-step">Passo ${_tourIdx+1} de ${total}</div>
-      <div class="tt-title">${step.title}</div>
-      <div class="tt-body">${step.body}</div>
-      <div class="tt-footer">
-        <div class="tt-dots">${dots}</div>
-        <div class="tt-nav">
-          ${prevBtn}
-          ${nextBtn}
-        </div>
+  // tooltip content
+  tooltip.innerHTML = `
+    <div class="tt-step">Passo ${_tourIdx+1} de ${total}</div>
+    <div class="tt-title">${step.title}</div>
+    <div class="tt-body">${step.body}</div>
+    <div class="tt-actions">
+      <div class="tt-dots">${dots}</div>
+      <div class="tt-nav">
+        ${_tourIdx>0?'<button class="tt-btn tt-prev" onclick="tourPrev()">← Anterior</button>':''}
+        ${_tourIdx<total-1
+          ?'<button class="tt-btn tt-next" onclick="tourNext()">Próximo →</button>'
+          :'<button class="tt-btn tt-next" onclick="endTour()">Concluir ✓</button>'
+        }
       </div>
-      <div style="text-align:right;margin-top:12px;">
-        <button class="tt-skip" onclick="endTour()">Pular tour</button>
-      </div>`;
-    tooltip.style.display='block';
+    </div>
+    <div style="text-align:right;margin-top:10px;">
+      <button class="tt-btn tt-skip" onclick="endTour()">Pular tour</button>
+    </div>`;
+  tooltip.style.display='block';
 
-    _posTooltip(target);
-  });
+  // posicionar tooltip
+  _posTooltip(target);
 }
 
 function _posTooltip(target){
-  requestAnimationFrame(()=>{
-    const tt = document.getElementById('tour-tooltip');
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const tw = tt.offsetWidth  || 380;
-    const th = tt.offsetHeight || 220;
-    let left, top;
-    if(target){
-      const r = target.getBoundingClientRect();
-      if(r.right + tw + 20 < vw){
-        left = r.right + 16;
-        top  = Math.max(12, Math.min(r.top + r.height/2 - th/2, vh - th - 12));
-      } else if(r.left - tw - 20 > 0){
-        left = r.left - tw - 16;
-        top  = Math.max(12, Math.min(r.top + r.height/2 - th/2, vh - th - 12));
-      } else {
-        left = Math.max(12, (vw - tw) / 2);
-        top  = r.bottom + 14;
-      }
+  const tt = document.getElementById('tour-tooltip');
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const tw = 300, th = 200;
+  let left, top;
+  if(target){
+    const r = target.getBoundingClientRect();
+    // tenta à direita, senão à esquerda, senão embaixo
+    if(r.right + tw + 20 < vw){
+      left = r.right + 14;
+      top  = Math.max(12, Math.min(r.top, vh - th - 12));
+    } else if(r.left - tw - 20 > 0){
+      left = r.left - tw - 14;
+      top  = Math.max(12, Math.min(r.top, vh - th - 12));
     } else {
       left = Math.max(12, (vw - tw) / 2);
-      top  = Math.max(12, (vh - th) / 2);
+      top  = r.bottom + 14;
     }
-    tt.style.left = Math.min(left, vw - tw - 12) + 'px';
-    tt.style.top  = Math.min(top,  vh - th - 12) + 'px';
-  });
+  } else {
+    left = Math.max(12, (vw - tw) / 2);
+    top  = Math.max(12, (vh - th) / 2);
+  }
+  tt.style.left = Math.min(left, vw - tw - 12) + 'px';
+  tt.style.top  = Math.min(top,  vh - th - 12) + 'px';
 }
 
 function tourNext(){
