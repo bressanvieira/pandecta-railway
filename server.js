@@ -1136,4 +1136,12 @@ app.get('/api/admin/backups', requireAuth, requireAdmin, (req, res) => {
       .filter(f => f.endsWith('.db'))
       .map(f => {
         const stat = fs.statSync(path.join(backupDir, f));
-        return { nome: f, tamanho: stat.size, created_
+        return { nome: f, tamanho: stat.size, created_at: new Date(stat.mtimeMs).toISOString() };
+      });
+    res.json(files.sort((a, b) => b.created_at.localeCompare(a.created_at)));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.listen(PORT, () => {
+  console.log(`Pandecta AI rodando na porta ${PORT}`);
+});
