@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advogados Fundadores — Pandecta AI</title>
+  <meta name="description" content="Seja um dos 20 advogados que vão moldar o futuro da advocacia brasileira. Programa exclusivo de fundadores da Pandecta AI." />
+  <meta property="og:title" content="Programa Advogados Fundadores — Pandecta AI" />
+  <meta property="og:description" content="Acesso completo gratuito por 3 meses. Canal direto com o desenvolvedor. Condições permanentes de fundador. Apenas 20 vagas." />
+  <meta property="og:image" content="https://pandecta.com.br/og-fundadores.png" />
+  <meta property="og:url" content="https://pandecta.com.br/fundadores" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #001B2A;
+      --gold:      #C8A96B;
+      --gold-dim:  rgba(200, 169, 107, 0.15);
+      --gold-mid:  rgba(200, 169, 107, 0.35);
+      --text:      #F4F4F4;
+      --text-sec:  rgba(244, 244, 244, 0.65);
+      --card:      rgba(255, 255, 255, 0.05);
+      --border:    rgba(200, 169, 107, 0.15);
+      --radius:    14px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── UTILITY ─── */
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .gold { color: var(--gold); }
+
+    /* ─── FADE-IN ANIMATION ─── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── BACKGROUND TEXTURE ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(200,169,107,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 100% 80%, rgba(0,60,100,0.25) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── HEADER ─── */
+    .site-header {
+      padding: 28px 24px 0;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-wrap img { height: 36px; }
+    .logo-fallback {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+    .logo-fallback span { color: var(--gold); }
+
+    /* ─── HERO ─── */
+    .hero {
+      text-align: center;
+      padding: 60px 24px 72px;
+      position: relative;
+      z-index: 1;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-mid);
+      color: var(--gold);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 999px;
+      margin-bottom: 32px;
+    }
+    .badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.75); }
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-sec);
+      max-width: 520px;
+      margin: 0 auto 40px;
+    }
+    .scroll-arrow {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      transition: opacity 0.2s;
+    }
+    .scroll-arrow:hover { opacity: 1; }
+    .scroll-arrow svg { animation: bounce 2s infinite; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* ─── VAGAS COUNTER ─── */
+    .vagas-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 44px;
+      flex-wrap: wrap;
+    }
+    .vagas-label { font-size: 0.82rem; color: var(--text-sec); }
+    .vagas-slots {
+      display: flex;
+      gap: 5px;
+    }
+    .slot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--gold);
+    }
+    .slot.empty {
+      background: rgba(200,169,107,0.18);
+      border: 1px solid var(--gold-mid);
+    }
+
+    /* ─── SECTION TITLES ─── */
+    .section { padding: 72px 24px; position: relative; z-index: 1; }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    /* ─── BENEFITS ─── */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .benefit-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      text-align: center;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .benefit-card:hover {
+      border-color: var(--gold-mid);
+      transform: translateY(-3px);
+    }
+    .benefit-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .benefit-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--gold);
+    }
+    .benefit-card p {
+      font-size: 0.9rem;
+      color: var(--text-sec);
+      line-height: 1.55;
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── O QUE É ─── */
+    .what-section { text-align: center; }
+    .features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      text-align: left;
+      font-size: 1rem;
+      color: var(--text-sec);
+    }
+    .features-list li .check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .features-list li .check svg { stroke: var(--gold); }
+
+    /* ─── TESTIMONIAL ─── */
+    .testimonial-wrap { max-width: 580px; margin: 0 auto; }
+    .testimonial-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      position: relative;
+    }
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 16px;
+      left: 28px;
+      font-size: 5rem;
+      line-height: 1;
+      color: var(--gold);
+      opacity: 0.25;
+      font-family: Georgia, serif;
+    }
+    .testimonial-card blockquote {
+      font-size: 1.05rem;
+      color: var(--text);
+      font-style: italic;
+      line-height: 1.65;
+      margin-bottom: 20px;
+      padding-top: 12px;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .author-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .author-info strong { font-size: 0.9rem; display: block; color: var(--text); }
+    .author-info span { font-size: 0.8rem; color: var(--text-sec); }
+
+    /* ─── FORM SECTION ─── */
+    .form-section {
+      background: linear-gradient(180deg, rgba(200,169,107,0.04) 0%, transparent 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .form-card {
+      background: rgba(0, 10, 20, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: clamp(32px, 6vw, 56px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .form-header { text-align: center; margin-bottom: 40px; }
+    .form-header h2 {
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .form-header p { font-size: 0.92rem; color: var(--text-sec); }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-sec);
+    }
+    label .req { color: var(--gold); margin-left: 2px; }
+
+    input, select, textarea {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 12px 16px;
+      width: 100%;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    input::placeholder, textarea::placeholder { color: rgba(244,244,244,0.3); }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--gold-mid);
+      background: rgba(255, 255, 255, 0.09);
+    }
+    input.error, select.error, textarea.error {
+      border-color: rgba(220, 80, 80, 0.6);
+    }
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23C8A96B' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+    select option { background: #001B2A; color: var(--text); }
+    textarea { resize: vertical; min-height: 110px; line-height: 1.55; }
+
+    .field-error {
+      font-size: 0.75rem;
+      color: rgba(220, 100, 100, 0.9);
+      margin-top: -2px;
+      display: none;
+    }
+    .field-error.show { display: block; }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #C8A96B 0%, #a8893a 100%);
+      color: #001B2A;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      padding: 16px 32px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      position: relative;
+    }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(200,169,107,0.35);
+    }
+    .submit-btn:active:not(:disabled) { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    .submit-btn .btn-text { display: inline; }
+    .submit-btn .btn-loading { display: none; }
+    .submit-btn.loading .btn-text { display: none; }
+    .submit-btn.loading .btn-loading { display: inline; }
+
+    .form-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-sec);
+      margin-top: 14px;
+    }
+
+    /* ─── ERROR MESSAGE ─── */
+    .form-error-msg {
+      background: rgba(200, 50, 50, 0.12);
+      border: 1px solid rgba(200, 50, 50, 0.3);
+      border-radius: var(--radius-sm);
+      color: rgba(255, 140, 140, 0.9);
+      font-size: 0.88rem;
+      padding: 14px 18px;
+      margin-top: 16px;
+      display: none;
+    }
+    .form-error-msg.show { display: block; }
+
+    /* ─── SUCCESS STATE ─── */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 60px 40px;
+    }
+    .success-state.show { display: block; }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(200,169,107,0.12);
+      border: 2px solid var(--gold-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 2rem;
+    }
+    .success-state h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .success-state p { color: var(--text-sec); font-size: 0.95rem; max-width: 400px; margin: 0 auto; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 40px 24px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+    }
+    footer p { font-size: 0.82rem; color: var(--text-sec); }
+    footer a {
+      color: var(--text-sec);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--gold); }
+    .footer-links {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .footer-links span { opacity: 0.3; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      .testimonial-card { padding: 28px 24px; }
+      .hero { padding: 48px 20px 60px; }
+      .section { padding: 56px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header fade-in">
+    <a href="https://pandecta.com.br" class="logo-wrap">
+      <img
+        src="/pandecta-logo-horizontal.png"
+        alt="Pandecta AI"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      />
+      <span class="logo-fallback" style="display:none;">Pandecta <span>AI</span></span>
+    </a>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge fade-in">Programa exclusivo · Apenas 20 vagas</div>
+
+    <h1 class="fade-in">
+      Seja um dos <span class="gold">20 advogados</span> que vão moldar o futuro da advocacia brasileira
+    </h1>
+
+    <p class="fade-in">
+      A Pandecta AI está selecionando advogados parceiros para co-construir a plataforma.
+      Acesso completo, gratuito — e sua voz define o produto.
+    </p>
+
+    <!-- Vagas visuais -->
+    <div class="vagas-bar fade-in">
+      <span class="vagas-label">Vagas disponíveis:</span>
+      <div class="vagas-slots" aria-label="17 de 20 vagas disponíveis">
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+        <div class="slot empty"></div>
+      </div>
+      <span class="vagas-label">3 de 20 preenchidas</span>
+    </div>
+
+    <a href="#inscricao" class="scroll-arrow fade-in">
+      Quero me inscrever
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 3v10M3 9l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label fade-in">O que você recebe</p>
+      <h2 class="section-title fade-in">Benefícios exclusivos para fundadores</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card fade-in">
+          <span class="benefit-icon">🔓</span>
+          <h3>3 meses gratuitos</h3>
+          <p>Acesso completo à plataforma sem custo algum. Gere petições, contratos e notificações ilimitados.</p>
+        </div>
+        <div class="benefit-card fade-in">
+          <span class="benefit-icon">🎯</span>
+          <h3>Sua voz constrói o produto</h3>
+          <p>Canal direto com o desenvolvedor. Você sugere, a gente prioriza. Seu escritório molda o produto.</p>
+        </div>
+        <div class="benefit-card fade-in">
+          <span class="benefit-icon">🏅</span>
+          <h3>Condições de fundador</h3>
+          <p>Ao se tornar assinante, mantém para sempre o plano especial de quem ajudou a construir a Pandecta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- O QUE É -->
+  <section class="section what-section">
+    <div class="container">
+      <p class="section-label fade-in">A Pandecta AI</p>
+      <h2 class="section-title fade-in">Inteligência jurídica que trabalha por você</h2>
+      <ul class="features-list">
+        <li class="fade-in">
+          <span class="check">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span>Gera petições, contestações, recursos, contratos e notificações completos em minutos — não em horas.</span>
+        </li>
+        <li class="fade-in">
+          <span class="check">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span>Aprende com os documentos do seu escritório — carregue contratos, precedentes e modelos como referência.</span>
+        </li>
+        <li class="fade-in">
+          <span class="check">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span>Treinada para o direito brasileiro: CDC, CLT, Código Civil, JEC, jurisprudência do STJ e STF.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TESTIMONIAL -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label fade-in">O que dizem</p>
+      <div class="testimonial-wrap fade-in">
+        <div class="testimonial-card">
+          <blockquote>
+            <!-- PLACEHOLDER — substituir pelo depoimento real do beta tester -->
+            "Eu não acreditava que uma IA conseguiria entender as nuances do direito do consumidor no Brasil. A Pandecta me surpreendeu logo na primeira petição. O que eu levava duas horas para escrever saiu em dez minutos, com a estrutura certa."
+          </blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">F</div>
+            <div class="author-info">
+              <strong>Fabiano <!-- sobrenome --></strong>
+              <span>Advogado · Direito Imobiliário e do Consumidor</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FORM -->
+  <section class="section form-section" id="inscricao">
+    <div class="container">
+      <div class="form-card fade-in">
+
+        <!-- SUCCESS STATE (hidden by default) -->
+        <div class="success-state" id="successState">
+          <div class="success-icon">✓</div>
+          <h3>Inscrição recebida!</h3>
+          <p>Entraremos em contato em até 48h para confirmar sua vaga no programa de Advogados Fundadores.</p>
+        </div>
+
+        <!-- FORM -->
+        <div id="formWrap">
+          <div class="form-header">
+            <h2>Solicitar uma vaga de <span class="gold">Fundador</span></h2>
+            <p>Preencha abaixo. Selecionamos cuidadosamente — não é automático.</p>
+          </div>
+
+          <form id="fundadoresForm" novalidate>
+            <div class="form-grid">
+
+              <div class="form-group full">
+                <label for="nome">Nome completo <span class="req">*</span></label>
+                <input
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Dr. João da Silva"
+                  autocomplete="name"
+                  required
+                />
+                <span class="field-error" id="nome-err">Informe seu nome completo.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="email">E-mail <span class="req">*</span></label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="joao@escritorio.adv.br"
+                  autocomplete="email"
+                  required
+                />
+                <span class="field-error" id="email-err">Informe um e-mail válido.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="whatsapp">WhatsApp com DDD <span class="req">*</span></label>
+                <input
+                  type="tel"
+                  id="whatsapp"
+                  name="whatsapp"
+                  placeholder="(11) 99999-9999"
+                  autocomplete="tel"
+                  required
+                />
+                <span class="field-error" id="whatsapp-err">Informe seu WhatsApp com DDD.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="area">Área principal de atuação <span class="req">*</span></label>
+                <select id="area" name="area" required>
+                  <option value="" disabled selected>Selecione…</option>
+                  <option value="consumidor">Direito do Consumidor</option>
+                  <option value="civil">Direito Civil</option>
+                  <option value="trabalhista">Direito Trabalhista</option>
+                  <option value="familia">Direito de Família</option>
+                  <option value="imobiliario">Direito Imobiliário</option>
+                  <option value="empresarial">Direito Empresarial</option>
+                  <option value="criminal">Direito Criminal</option>
+                  <option value="outra">Outra</option>
+                </select>
+                <span class="field-error" id="area-err">Selecione sua área.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="experiencia">Anos de experiência <span class="req">*</span></label>
+                <select id="experiencia" name="experiencia" required>
+                  <option value="" disabled selected>Selecione…</option>
+                  <option value="menos5">Menos de 5 anos</option>
+                  <option value="5a10">5 a 10 anos</option>
+                  <option value="10a20">10 a 20 anos</option>
+                  <option value="mais20">Mais de 20 anos</option>
+                </select>
+                <span class="field-error" id="experiencia-err">Selecione sua experiência.</span>
+              </div>
+
+              <div class="form-group full">
+                <label for="motivo">Por que você quer participar?</label>
+                <textarea
+                  id="motivo"
+                  name="motivo"
+                  placeholder="Conte brevemente como a Pandecta poderia ajudar no seu dia a dia..."
+                ></textarea>
+              </div>
+
+            </div><!-- .form-grid -->
+
+            <div class="form-error-msg" id="formErrorMsg">
+              Ocorreu um erro ao enviar. Tente novamente ou entre em contato pelo WhatsApp.
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <span class="btn-text">Quero ser Advogado Fundador →</span>
+              <span class="btn-loading">Enviando…</span>
+            </button>
+
+            <p class="form-note">
+              Sem spam. Seus dados são usados apenas para o processo de seleção,
+              conforme nossa <a href="/politica-de-privacidade" style="color:var(--gold);text-decoration:none;">Política de Privacidade</a>.
+            </p>
+
+          </form>
+        </div><!-- #formWrap -->
+
+      </div><!-- .form-card -->
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Pandecta AI · pandecta.com.br</p>
+    <div class="footer-links">
+      <a href="/termos-de-uso">Termos de Uso</a>
+      <span>·</span>
+      <a href="/politica-de-privacidade">Política de Privacidade</a>
+    </div>
+  </footer>
+
+  <script>
+    /* ── Intersection Observer para fade-in ── */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.07) + 's';
+      io.observe(el);
+    });
+
+    /* ── WhatsApp mask ── */
+    const wppInput = document.getElementById('whatsapp');
+    wppInput.addEventListener('input', function() {
+      let v = this.value.replace(/\D/g, '').slice(0, 11);
+      if (v.length <= 2)        this.value = v.length ? '(' + v : '';
+      else if (v.length <= 6)   this.value = '(' + v.slice(0,2) + ') ' + v.slice(2);
+      else if (v.length <= 10)  this.value = '(' + v.slice(0,2) + ') ' + v.slice(2,6) + '-' + v.slice(6);
+      else                      this.value = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+    });
+
+    /* ── Form submission ── */
+    const form        = document.getElementById('fundadoresForm');
+    const formWrap    = document.getElementById('formWrap');
+    const successEl   = document.getElementById('successState');
+    const submitBtn   = document.getElementById('submitBtn');
+    const errorMsg    = document.getElementById('formErrorMsg');
+
+    function setErr(id, show) {
+      const el  = document.getElementById(id + '-err');
+      const inp = document.getElementById(id);
+      if (!el || !inp) return;
+      el.classList.toggle('show', show);
+      inp.classList.toggle('error', show);
+    }
+
+    function validate() {
+      let ok = true;
+
+      const nome = document.getElementById('nome').value.trim();
+      const hasTwo = nome.split(/\s+/).filter(Boolean).length >= 2;
+      setErr('nome', !nome || !hasTwo);
+      if (!nome || !hasTwo) ok = false;
+
+      const email = document.getElementById('email').value.trim();
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      setErr('email', !emailOk);
+      if (!emailOk) ok = false;
+
+      const wpp = document.getElementById('whatsapp').value.replace(/\D/g, '');
+      setErr('whatsapp', wpp.length < 10);
+      if (wpp.length < 10) ok = false;
+
+      const area = document.getElementById('area').value;
+      setErr('area', !area);
+      if (!area) ok = false;
+
+      const exp = document.getElementById('experiencia').value;
+      setErr('experiencia', !exp);
+      if (!exp) ok = false;
+
+      return ok;
+    }
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      errorMsg.classList.remove('show');
+
+      if (!validate()) return;
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add('loading');
+
+      const payload = {
+        nome:        document.getElementById('nome').value.trim(),
+        email:       document.getElementById('email').value.trim(),
+        whatsapp:    document.getElementById('whatsapp').value.trim(),
+        area:        document.getElementById('area').value,
+        experiencia: document.getElementById('experiencia').value,
+        motivo:      document.getElementById('motivo').value.trim(),
+      };
+
+      try {
+        const res = await fetch('/api/fundadores', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error('status ' + res.status);
+
+        /* Success */
+        formWrap.style.display  = 'none';
+        successEl.classList.add('show');
+        successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      } catch (err) {
+        errorMsg.textContent = 'Ocorreu um erro ao enviar. Tente novamente ou envie um e-mail para contato@pandecta.com.br';
+        errorMsg.classList.add('show');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+      }
+    });
+
+    /* Remove error state on change */
+    ['nome','email','whatsapp','area','experiencia'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('input',  () => setErr(id, false));
+      el.addEventListener('change', () => setErr(id, false));
+    });
+  </script>
+</body>
+</html>

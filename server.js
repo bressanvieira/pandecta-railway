@@ -118,6 +118,17 @@ try {
       user_id     INTEGER,
       created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+    CREATE TABLE IF NOT EXISTS fundadores (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome        TEXT NOT NULL,
+      email       TEXT NOT NULL,
+      whatsapp    TEXT NOT NULL,
+      area        TEXT DEFAULT '',
+      experiencia TEXT DEFAULT '',
+      mensagem    TEXT DEFAULT '',
+      ip          TEXT DEFAULT '',
+      created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 
   // migrations â adiciona colunas sem quebrar banco existente
@@ -168,6 +179,7 @@ app.use(express.json({ limit: '10mb' }));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'landing.html')));
 app.get('/app', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/cadastro', (req, res) => res.sendFile(path.join(__dirname, 'public', 'cadastro.html')));
+app.get('/fundadores', (req, res) => res.sendFile(path.join(__dirname, 'public', 'fundadores.html')));
 app.get('/termos-de-uso', (req, res) => res.sendFile(path.join(__dirname, 'public', 'termos-de-uso.html')));
 app.get('/politica-de-privacidade', (req, res) => res.sendFile(path.join(__dirname, 'public', 'politica-de-privacidade.html')));
 app.get('/lgpd', (req, res) => res.sendFile(path.join(__dirname, 'public', 'lgpd.html')));
@@ -1045,6 +1057,36 @@ app.get('/api/health', (req, res) => {
 // ââ BACKUP (admin only) âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // Faz backup online do SQLite usando a API nativa do better-sqlite3.
 // O arquivo Ã© salvo em <dbDir>/backups/pandecta-<timestamp>.db
+
+// -- FUNDADORES ---------------------------------------------------------------
+app.post('/api/fundadores', (req, res) => {
+  const { nome, email, whatsapp, area, experiencia, mensagem } = req.body || {};
+  if (!nome || !email || !whatsapp) return res.status(400).json({ error: 'Nome, e-mail e WhatsApp sao obrigatorios.' });
+  if (!db) return res.status(503).json({ error: 'Banco indisponivel.' });
+  try {
+    const existing = db.prepare('SELECT id FROM fundadores WHERE email=?').get(email.toLowerCase().trim());
+    if (existing) return res.status(409).json({ error: 'E-mail ja inscrito. Entraremos em contato em breve!' });
+    const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || '';
+    db.prepare(
+      'INSERT INTO fundadores (nome, email, whatsapp, area, experiencia, mensagem, ip) VALUES (?,?,?,?,?,?,?)'
+    ).run(nome.trim(), email.toLowerCase().trim(), whatsapp.trim(), area||'', experiencia||'', mensagem||'', ip);
+    sendTelegram(
+      '<b>Novo Advogado Fundador!</b>\n\n' +
+      nome + '\n' + email + '\n' + whatsapp + '\n' + (area||'-') + ' - ' + (experiencia||'-') + '\n\n' +
+      (mensagem ? mensagem.substring(0,200) : '(sem mensagem)')
+    );
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/fundadores', requireAuth, requireAdmin, (req, res) => {
+  if (!db) return res.json([]);
+  try {
+    const rows = db.prepare('SELECT * FROM fundadores ORDER BY created_at DESC').all();
+    res.json(rows);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 app.get('/api/admin/stats', requireAuth, requireAdmin, (req, res) => {
   if (!db) return res.json({});
   try {
@@ -1094,12 +1136,4 @@ app.get('/api/admin/backups', requireAuth, requireAdmin, (req, res) => {
       .filter(f => f.endsWith('.db'))
       .map(f => {
         const stat = fs.statSync(path.join(backupDir, f));
-        return { nome: f, tamanho: stat.size, created_at: stat.mtime.toISOString() };
-      })
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    res.json(files);
-  } catch (e) { res.status(500).json({ error: e.message }); }
-});
-
-// ── START ─────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => console.log('✅  Pandecta v3 na porta ' + PORT));
+        return { nome: f, tamanho: stat.size, created_
