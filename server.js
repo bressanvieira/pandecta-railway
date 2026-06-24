@@ -131,6 +131,7 @@ try {
     );
   `);
 
+  db.exec(`
     CREATE TABLE IF NOT EXISTS tickets (
       id            INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id       INTEGER NOT NULL,
@@ -143,6 +144,7 @@ try {
       created_at    DATETIME DEFAULT CURRENT_TIMESTAMP,
       respondido_at DATETIME
     );
+  `);
 
   // migrations â adiciona colunas sem quebrar banco existente
   try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
