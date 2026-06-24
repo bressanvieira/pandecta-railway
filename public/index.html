@@ -432,14 +432,22 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .hist-pill{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bdr);background:var(--bg2);color:var(--t2);transition:all .15s;}
 .hist-pill.active{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-bd);}
 .hist-count{font-size:12px;color:var(--t3);margin-left:auto;white-space:nowrap;}
-.hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:11px;max-width:900px;}
-.hist-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:15px 17px;cursor:pointer;transition:all .15s;}
-.hist-card:hover{border-color:var(--bd-md);box-shadow:0 2px 10px rgba(0,0,0,.05);}
-.hist-tipo{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-bottom:5px;}
-.hist-autor{font-size:13.5px;font-weight:500;color:var(--t1);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.hist-meta{font-size:11px;color:var(--t3);}
+/* == HISTORICO GRID == */
+.hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.hist-card{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;position:relative;}
+.hist-card:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(0,0,0,.08);transform:translateY(-1px);}
+.hist-card-stripe{height:3px;width:100%;flex-shrink:0;}
+.hist-card-body{padding:16px 18px 12px;flex:1;}
+.hist-tipo{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;display:inline-flex;align-items:center;gap:5px;}
+.hist-autor{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.35;}
+.hist-meta{font-size:11px;color:var(--t3);margin-bottom:8px;}
+.hist-preview{font-size:12px;color:var(--t2);line-height:1.5;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;opacity:.75;}
+.hist-card-footer{padding:10px 14px;border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--surface);}
+.hist-card-acts{display:flex;gap:6px;}
+.hca-btn{padding:5px 11px;border-radius:7px;border:1px solid var(--bd);background:var(--card);color:var(--t2);cursor:pointer;font-size:11.5px;font-weight:600;font-family:inherit;transition:all .12s;white-space:nowrap;}
+.hca-btn:hover{border-color:var(--bd-md);background:var(--bd);}
+.hca-btn.danger:hover{border-color:var(--err);color:var(--err);background:rgba(220,38,38,.06);}
 .hist-empty{text-align:center;padding:56px 40px;color:var(--t3);font-size:13px;line-height:1.7;}
-.hist-preview{font-size:11.5px;color:var(--t3);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* Viewer / Editor — layout correto */
 .hist-viewer{display:none;flex-direction:column;flex:1;overflow:hidden;}
@@ -1059,7 +1067,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <div class="page-h">Acervo do escritório</div>
             <div class="page-s">Documentos de referência — persistidos no banco de dados.</div>
           </div>
-          <button onclick="reindexarAcervo()" id="btn-reindexar" style="display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--accent,#7c5cfc);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">
+          <button onclick="reindexarAcervo()" id="btn-reindexar" style="display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--gold);color:#001B2A;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
             Reindexar acervo
           </button>
@@ -2498,13 +2506,30 @@ function renderHistorico(){
   empty.style.display=items.length?'none':'block';
   if(!items.length&&sessionHistory.length) empty.textContent='Nenhuma peça encontrada para essa busca.';
   else if(!items.length) empty.innerHTML='Nenhuma peça gerada ainda.<br>Clique em <strong>Nova peça</strong> para começar.';
+  const AREA_COLOR={consumidor:'#C9A84C',civil:'#3b82f6',trabalhista:'#10b981',familia:'#8b5cf6',empresarial:'#f59e0b',tributario:'#ef4444'};
+  const AREA_ICON={consumidor:'🛒',civil:'⚖️',trabalhista:'👷',familia:'🏠',empresarial:'🏢',tributario:'💰'};
   grid.innerHTML=items.map(item=>{
-    const preview=(item.texto||'').replace(/\n+/g,' ').slice(0,90);
-    return`<div class="hist-card" onclick="abrirViewer(${item.id})">
-      <div class="hist-tipo">${esc(item.tipo_label||'')} · ${esc(item.area_label||'')}</div>
-      <div class="hist-autor">${esc(item.autor||'Sem autor')}</div>
-      <div class="hist-meta">${esc(fmtDate(item.created_at))}</div>
-      ${preview?`<div class="hist-preview">${esc(preview)}…</div>`:''}
+    const preview=(item.texto||'').replace(/#+\s*/g,'').replace(/\*+/g,'').replace(/\n+/g,' ').trim().slice(0,110);
+    const areaKey=(item.area||'').toLowerCase();
+    const cor=AREA_COLOR[areaKey]||'var(--gold)';
+    const icone=AREA_ICON[areaKey]||'📄';
+    const dataFmt=fmtDate(item.created_at).replace(/,.*$/,'').trim();
+    return`<div class="hist-card">
+      <div class="hist-card-stripe" style="background:${cor}"></div>
+      <div class="hist-card-body" onclick="abrirViewer(${item.id})">
+        <div class="hist-tipo" style="color:${cor}">${icone} ${esc(item.tipo_label||'')} &middot; ${esc(item.area_label||'')}</div>
+        <div class="hist-autor">${esc(item.autor||'Sem autor')}</div>
+        <div class="hist-meta">${esc(dataFmt)}</div>
+        ${preview?`<div class="hist-preview">${esc(preview)}…</div>`:''}
+      </div>
+      <div class="hist-card-footer">
+        <span style="font-size:10.5px;color:var(--t3);font-weight:500;">${item.usuario?esc(item.usuario):''}</span>
+        <div class="hist-card-acts">
+          <button class="hca-btn" onclick="event.stopPropagation();abrirViewer(${item.id})" title="Abrir e editar">📝 Abrir</button>
+          <button class="hca-btn" onclick="event.stopPropagation();copiarHistById(${item.id})" title="Copiar texto">📋</button>
+          <button class="hca-btn danger" onclick="event.stopPropagation();deletarHistById(${item.id})" title="Excluir peça">🗑️</button>
+        </div>
+      </div>
     </div>`;
   }).join('');
 }
@@ -2535,6 +2560,22 @@ async function salvarEdicao(){
     if(idx>-1)sessionHistory[idx]={...histItemAtual,texto};
     toast('Edição salva!','ok');
   }catch(e){toast('Erro: '+e.message,'err');}
+}
+async function deletarHistById(id){
+  const item=sessionHistory.find(h=>h.id===id);
+  if(!item)return;
+  if(!await pandectaConfirm('Excluir esta peça do histórico? Esta ação não pode ser desfeita.',{icon:'🗑️',titulo:'Excluir peça',confirmar:'Excluir',danger:true}))return;
+  try{
+    await api('DELETE',`/api/history/${id}`);
+    sessionHistory=sessionHistory.filter(h=>h.id!==id);
+    if(histItemAtual&&histItemAtual.id===id)fecharViewer();
+    renderHistorico();toast('Peça excluída.','ok');
+  }catch(e){toast('Erro: '+e.message,'err');}
+}
+function copiarHistById(id){
+  const item=sessionHistory.find(h=>h.id===id);
+  if(!item||!item.texto)return;
+  navigator.clipboard.writeText(item.texto).then(()=>toast('Texto copiado!','ok')).catch(()=>toast('Erro ao copiar','err'));
 }
 async function deletarHist(){
   if(!histItemAtual)return;
