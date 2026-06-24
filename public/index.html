@@ -1991,7 +1991,7 @@ function toggleSidebar(){
 function go(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
-  ['home','gen','hist','ac','config','equipe','sup','admin','modelos'].forEach(sfx=>{
+  ['home','gen','hist','ac','config','equipe','sup','admin','modelos','tk'].forEach(sfx=>{
     const el=document.getElementById('sb-'+sfx);
     if(el) el.innerHTML=mkSidebar(s);
   });
@@ -3310,7 +3310,7 @@ function scrB(){const el=document.getElementById('chat-msgs');setTimeout(()=>{el
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(msg,tipo='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+tipo;setTimeout(()=>{el.className='toast';},2600);}
 
-['home','gen','hist','ac','config','equipe','sup','admin','tk'].forEach(sfx=>{const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');});
+['home','gen','hist','ac','config','equipe','sup','admin','modelos','tk'].forEach(sfx=>{const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');});
 
 // ════ ADMIN — STATS + BACKUPS ════
 // == TICKETS — CENTRAL DE SUPORTE ==
@@ -3750,5 +3750,6 @@ function checkTourAutoShow(){
 }
 
 </script>
+
 </body>
 </html>
