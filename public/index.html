@@ -571,6 +571,38 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .sup-hours-row:last-child{margin-bottom:0;}
 .sup-hours-day{color:var(--t2);}
 .sup-hours-time{font-weight:500;color:var(--t1);}
+/* == TICKETS == */
+.tk-form{display:flex;flex-direction:column;gap:12px;}
+.tk-select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--surface);color:var(--t1);font-size:13.5px;font-family:inherit;outline:none;transition:border .15s;appearance:none;}
+.tk-select:focus{border-color:var(--gold);}
+.tk-ta{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--surface);color:var(--t1);font-size:13.5px;font-family:inherit;resize:vertical;min-height:90px;outline:none;transition:border .15s;box-sizing:border-box;}
+.tk-ta:focus{border-color:var(--gold);}
+.tk-send{width:100%;padding:11px;background:var(--gold);color:#001B2A;border:none;border-radius:9px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .15s;}
+.tk-send:hover{opacity:.88;}
+.tk-send:disabled{opacity:.5;cursor:not-allowed;}
+.tk-list{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+.tk-item{background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;}
+.tk-item-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.tk-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;}
+.tk-badge.aberto{background:rgba(245,158,11,.12);color:#b45309;}
+.tk-badge.respondido{background:rgba(16,185,129,.12);color:#065f46;}
+.tk-tipo-lbl{font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.tk-msg{font-size:13px;color:var(--t2);line-height:1.55;margin-bottom:6px;}
+.tk-resp{background:var(--card);border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 8px 8px 0;margin-top:8px;}
+.tk-resp-lbl{font-size:10.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.tk-resp-txt{font-size:13px;color:var(--t1);line-height:1.55;}
+/* admin tickets */
+.adm-tk-item{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 20px;margin-bottom:12px;}
+.adm-tk-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.adm-tk-meta{font-size:12px;color:var(--t3);margin-top:3px;}
+.adm-tk-msg{font-size:13.5px;color:var(--t2);line-height:1.6;padding:12px;background:var(--surface);border-radius:8px;margin-bottom:12px;}
+.adm-tk-resp-area{display:flex;flex-direction:column;gap:8px;}
+.adm-tk-ta{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--surface);color:var(--t1);font-size:13px;font-family:inherit;resize:vertical;min-height:72px;outline:none;transition:border .15s;box-sizing:border-box;}
+.adm-tk-ta:focus{border-color:var(--gold);}
+.adm-tk-btn{padding:8px 18px;background:var(--gold);color:#001B2A;border:none;border-radius:8px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .15s;align-self:flex-end;}
+.adm-tk-btn:hover{opacity:.88;}
+.adm-tk-resp-ok{font-size:12.5px;color:#065f46;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 14px;}
+
 /* ════ TOAST ════ */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--t1);color:#FFF;border-radius:7px;padding:8px 16px;font-size:12.5px;z-index:500;opacity:0;transition:opacity .22s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;}
@@ -1427,51 +1459,29 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
             <div class="sup-card">
               <div class="sup-card-t">Fale com a equipe</div>
-              <div class="sup-card-s">Para suporte humano, entre em contato pelos canais abaixo.</div>
-
-              <div class="sup-citem">
-                <div class="sup-cico wp">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 1.5A7.5 7.5 0 001.5 9c0 1.32.34 2.56.94 3.63L1.5 16.5l3.97-.92A7.5 7.5 0 109 1.5z"/>
-                    <path d="M6.5 7.5c.17.4.5 1.2 1 1.8.5.6 1.3 1.2 2 1.5"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="sup-c-lbl">WhatsApp</div>
-                  <div class="sup-c-val"><a href="https://wa.me/5511994246862" target="_blank">(11) 99424-6862</a></div>
-                </div>
-              </div>
-
-              <div class="sup-citem">
-                <div class="sup-cico mail">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="4" width="14" height="10" rx="2"/><path d="M2 6l7 5 7-5"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="sup-c-lbl">E-mail</div>
-                  <div class="sup-c-val"><a href="mailto:suporte@pandecta.com.br">suporte@pandecta.com.br</a></div>
-                </div>
-              </div>
-
-              <div class="sup-citem">
-                <div class="sup-cico tel">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 3.5A1.2 1.2 0 014.2 2.3H7l1.2 3.6L6.5 7.2a10.5 10.5 0 005.3 5.3l1.3-1.7 3.6 1.2v2.8A1.2 1.2 0 0115.5 15C8 15 3 9.5 3 3.5z"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="sup-c-lbl">Telefone</div>
-                  <div class="sup-c-val" style="color:var(--t3);font-style:italic;">Em breve</div>
-                </div>
+              <div class="sup-card-s">Envie sua dúvida, sugestão ou problema. Respondemos diretamente aqui na plataforma.</div>
+              <div class="tk-form">
+                <select class="tk-select" id="tk-tipo">
+                  <option value="duvida">Dúvida</option>
+                  <option value="problema">Problema técnico</option>
+                  <option value="sugestao">Sugestão</option>
+                  <option value="outro">Outro</option>
+                </select>
+                <textarea class="tk-ta" id="tk-msg" placeholder="Descreva sua mensagem..."></textarea>
+                <button class="tk-send" id="tk-send-btn" onclick="enviarTicket()">Enviar mensagem</button>
               </div>
             </div>
 
             <div class="sup-card">
-              <div class="sup-card-t" style="margin-bottom:14px">Horário de atendimento</div>
-              <div class="sup-hours-row"><span class="sup-hours-day">Segunda – Sexta</span><span class="sup-hours-time">9h – 18h</span></div>
-              <div class="sup-hours-row"><span class="sup-hours-day">Sábado</span><span class="sup-hours-time">9h – 13h</span></div>
-              <div class="sup-hours-row"><span class="sup-hours-day">Domingo</span><span class="sup-hours-time">Fechado</span></div>
+              <div class="sup-card-t" style="margin-bottom:14px">Minhas mensagens</div>
+              <div id="tk-lista"><div style="font-size:12.5px;color:var(--t3);text-align:center;padding:20px 0;">Nenhuma mensagem enviada ainda.</div></div>
+            </div>
+
+            <div class="sup-card">
+              <div class="sup-citem" style="border-bottom:none;padding:0;">
+                <div class="sup-cico wp"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1.5A7.5 7.5 0 001.5 9c0 1.32.34 2.56.94 3.63L1.5 16.5l3.97-.92A7.5 7.5 0 109 1.5z"/><path d="M6.5 7.5c.17.4.5 1.2 1 1.8.5.6 1.3 1.2 2 1.5"/></svg></div>
+                <div><div class="sup-c-lbl">WhatsApp urgente</div><div class="sup-c-val"><a href="https://wa.me/5511994246862" target="_blank">(11) 99424-6862</a></div></div>
+              </div>
             </div>
 
           </div>
@@ -1666,6 +1676,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <button class="law-save-btn" onclick="fazerBackup()" id="btn-backup" style="padding:7px 16px;font-size:12px;">Fazer backup agora</button>
           </div>
           <div id="backups-list" style="padding:16px 20px;font-size:13px;color:var(--t3);">Carregando...</div>
+        </div>
+
+        <div class="admin-section">
+          <div class="admin-section-hdr">
+            <div class="admin-section-title">💬 Tickets de Suporte</div>
+            <span id="tickets-count" style="font-size:12px;color:var(--gold);font-weight:600;"></span>
+          </div>
+          <div id="tickets-admin-list" style="padding:8px 0;"><div style="color:var(--t3);font-size:13px;padding:16px 20px;">Carregando...</div></div>
         </div>
 
         <div class="admin-section">
@@ -1889,10 +1907,10 @@ function go(s){
   if(s==='historico'){fecharViewer();loadHistorico();}
   if(s==='config') carregarConfig();
   if(s==='equipe') renderLawyers();
-  if(s==='suporte') initSuporte();
+  if(s==='suporte'){ initSuporte(); loadMeusTickets(); }
   if(s==='modelos') loadModelos();
   if(s==='admin'){
-    loadUsers();loadBackups();loadAdminStats();loadPioneiros();
+    loadUsers();loadBackups();loadAdminStats();loadPioneiros();loadTicketsAdmin();
     const init=usuario?usuario[0].toUpperCase():'A';
     const name=usuario?usuario[0].toUpperCase()+usuario.slice(1):'Admin';
     const av=document.getElementById('av-admin'),nm=document.getElementById('nm-admin');
@@ -3199,6 +3217,85 @@ function toast(msg,tipo='ok'){const el=document.getElementById('toast');el.textC
 ['home','gen','hist','ac','config','equipe','sup','admin'].forEach(sfx=>{const el=document.getElementById('sb-'+sfx);if(el)el.innerHTML=mkSidebar('home');});
 
 // ════ ADMIN — STATS + BACKUPS ════
+// == TICKETS ==
+async function enviarTicket(){
+  const tipo = document.getElementById('tk-tipo').value;
+  const msg  = document.getElementById('tk-msg').value.trim();
+  if(!msg){ toast('Escreva sua mensagem','err'); return; }
+  const btn = document.getElementById('tk-send-btn');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  try{
+    await api('POST','/api/tickets',{tipo,mensagem:msg});
+    document.getElementById('tk-msg').value = '';
+    toast('Mensagem enviada! Respondemos em breve.','ok');
+    loadMeusTickets();
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+  finally{ btn.disabled=false; btn.textContent='Enviar mensagem'; }
+}
+async function loadMeusTickets(){
+  try{
+    const lista = await api('GET','/api/tickets/meus');
+    const el = document.getElementById('tk-lista');
+    if(!el)return;
+    if(!lista.length){ el.innerHTML='<div style="font-size:12.5px;color:var(--t3);text-align:center;padding:20px 0;">Nenhuma mensagem enviada ainda.</div>'; return; }
+    const TIPO_LBL={duvida:'Dúvida',problema:'Problema técnico',sugestao:'Sugestão',outro:'Outro'};
+    el.innerHTML='<div class="tk-list">'+lista.map(t=>{
+      const dt = new Date(t.created_at).toLocaleDateString('pt-BR');
+      const resp = t.resposta ? `<div class="tk-resp"><div class="tk-resp-lbl">Resposta da equipe</div><div class="tk-resp-txt">${esc(t.resposta)}</div></div>` : '';
+      return `<div class="tk-item">
+        <div class="tk-item-hd">
+          <span class="tk-tipo-lbl">${esc(TIPO_LBL[t.tipo]||t.tipo)}</span>
+          <span class="tk-badge ${t.status}">${t.status==='respondido'?'Respondido':'Aguardando'}</span>
+        </div>
+        <div class="tk-msg">${esc(t.mensagem)}</div>
+        <div style="font-size:11px;color:var(--t3);">${dt}</div>
+        ${resp}
+      </div>`;
+    }).join('')+'</div>';
+  }catch(e){console.error('loadMeusTickets:',e.message);}
+}
+async function loadTicketsAdmin(){
+  try{
+    const lista = await api('GET','/api/tickets');
+    const el = document.getElementById('tickets-admin-list');
+    const cnt = document.getElementById('tickets-count');
+    if(!el)return;
+    const abertos = lista.filter(t=>t.status==='aberto').length;
+    if(cnt) cnt.textContent = abertos ? abertos+' aberto'+(abertos>1?'s':'') : 'Nenhum aberto';
+    if(!lista.length){ el.innerHTML='<div style="color:var(--t3);font-size:13px;padding:16px 20px;">Nenhum ticket ainda.</div>'; return; }
+    const TIPO_LBL={duvida:'Dúvida',problema:'Problema técnico',sugestao:'Sugestão',outro:'Outro'};
+    el.innerHTML=lista.map(t=>{
+      const dt = new Date(t.created_at).toLocaleDateString('pt-BR');
+      const respForm = t.status==='respondido'
+        ? `<div class="adm-tk-resp-ok">Respondido: ${esc(t.resposta)}</div>`
+        : `<div class="adm-tk-resp-area">
+             <textarea class="adm-tk-ta" id="resp-${t.id}" placeholder="Digite a resposta para ${esc(t.nome)}..."></textarea>
+             <button class="adm-tk-btn" onclick="responderTicket(${t.id})">Responder</button>
+           </div>`;
+      return `<div class="adm-tk-item">
+        <div class="adm-tk-hd">
+          <div>
+            <strong style="font-size:14px;color:var(--t1);">#${t.id} — ${esc(t.nome)}</strong>
+            <div class="adm-tk-meta">${esc(t.email)} · ${esc(TIPO_LBL[t.tipo]||t.tipo)} · ${dt}</div>
+          </div>
+          <span class="tk-badge ${t.status}">${t.status==='respondido'?'Respondido':'Aberto'}</span>
+        </div>
+        <div class="adm-tk-msg">${esc(t.mensagem)}</div>
+        ${respForm}
+      </div>`;
+    }).join('');
+  }catch(e){console.error('loadTicketsAdmin:',e.message);}
+}
+async function responderTicket(id){
+  const ta = document.getElementById('resp-'+id);
+  if(!ta||!ta.value.trim()){ toast('Escreva a resposta','err'); return; }
+  try{
+    await api('PUT','/api/tickets/'+id+'/responder',{resposta:ta.value.trim()});
+    toast('Resposta enviada!','ok');
+    loadTicketsAdmin();
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+}
+
 async function loadPioneiros(){
   try{
     const rows = await api('GET','/api/fundadores');
@@ -3508,7 +3605,7 @@ function endTour(){
   document.getElementById('tour-tooltip').style.display='none';
   go('home');
 }
-// ════════════════════ FIM TOUR ════════════════════
+// ════════════════════ FIM TOUR ══════════════ ════════════════════ */
 </script>
 </body>
 </html>

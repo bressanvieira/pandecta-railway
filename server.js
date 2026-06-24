@@ -131,6 +131,19 @@ try {
     );
   `);
 
+    CREATE TABLE IF NOT EXISTS tickets (
+      id            INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id       INTEGER NOT NULL,
+      nome          TEXT NOT NULL,
+      email         TEXT NOT NULL,
+      tipo          TEXT DEFAULT 'duvida',
+      mensagem      TEXT NOT NULL,
+      status        TEXT DEFAULT 'aberto',
+      resposta      TEXT DEFAULT '',
+      created_at    DATETIME DEFAULT CURRENT_TIMESTAMP,
+      respondido_at DATETIME
+    );
+
   // migrations â adiciona colunas sem quebrar banco existente
   try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN enviado_por TEXT DEFAULT ''`); } catch(e) {}
@@ -1172,6 +1185,61 @@ app.post('/api/memoria/consultar', requireAuth, (req, res) => {
     console.error('memoria/consultar:', e.message);
     res.json([]);
   }
+});
+
+
+// ── TICKETS DE SUPORTE ──────────────────────────────────────────────────────
+app.post('/api/tickets', requireAuth, (req, res) => {
+  try {
+    const { tipo = 'duvida', mensagem } = req.body || {};
+    if (!mensagem || !mensagem.trim()) return res.status(400).json({ error: 'Mensagem obrigatoria.' });
+    const user = db.prepare('SELECT nome, email FROM users WHERE id=?').get(req.user.userId);
+    const r = db.prepare(
+      'INSERT INTO tickets (user_id, nome, email, tipo, mensagem) VALUES (?,?,?,?,?)'
+    ).run(req.user.userId, user ? user.nome || 'Sem nome' : 'Sem nome', user ? user.email || '' : '', tipo, mensagem.trim());
+    const ticket = db.prepare('SELECT * FROM tickets WHERE id=?').get(r.lastInsertRowid);
+    const tipos = { duvida: 'Duvida', problema: 'Problema', sugestao: 'Sugestao', outro: 'Outro' };
+    sendTelegram(
+      '[TICKET #' + ticket.id + '] ' + (tipos[tipo] || tipo) + '\n' +
+      'De: ' + ticket.nome + ' (' + ticket.email + ')\n' +
+      'Msg: ' + mensagem.slice(0, 200)
+    );
+    res.json(ticket);
+  } catch(e) {
+    console.error('POST /api/tickets:', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/tickets/meus', requireAuth, (req, res) => {
+  try {
+    const rows = db.prepare(
+      'SELECT id,tipo,mensagem,status,resposta,created_at,respondido_at FROM tickets WHERE user_id=? ORDER BY created_at DESC'
+    ).all(req.user.userId);
+    res.json(rows);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/tickets', requireAuth, requireAdmin, (req, res) => {
+  try {
+    const rows = db.prepare(
+      "SELECT * FROM tickets ORDER BY CASE status WHEN 'aberto' THEN 0 ELSE 1 END, created_at DESC"
+    ).all();
+    res.json(rows);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/tickets/:id/responder', requireAuth, requireAdmin, (req, res) => {
+  try {
+    const { resposta } = req.body || {};
+    if (!resposta || !resposta.trim()) return res.status(400).json({ error: 'Resposta obrigatoria.' });
+    db.prepare(
+      "UPDATE tickets SET resposta=?, status='respondido', respondido_at=CURRENT_TIMESTAMP WHERE id=?"
+    ).run(resposta.trim(), req.params.id);
+    const ticket = db.prepare('SELECT * FROM tickets WHERE id=?').get(req.params.id);
+    sendTelegram('[OK] Ticket #' + req.params.id + ' respondido.');
+    res.json(ticket);
+  } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
 app.listen(PORT, () => {
