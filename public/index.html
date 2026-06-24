@@ -709,18 +709,18 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* popup boas-vindas */
 #tour-welcome-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8900;display:flex;align-items:center;justify-content:center;}
 /* == PANDECTA MODAL == */
-#pdc-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
-#pdc-modal{background:var(--card);border:1px solid var(--bd-md);border-radius:16px;padding:32px;max-width:420px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.32);}
-.pdc-modal-logo{display:flex;align-items:center;gap:8px;margin-bottom:20px;}
-.pdc-modal-logo img{height:26px;opacity:.85;}
-.pdc-modal-logo span{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;}
-.pdc-modal-icon{font-size:26px;margin-bottom:8px;}
-.pdc-modal-title{font-size:16px;font-weight:700;color:var(--t1);margin-bottom:8px;}
-.pdc-modal-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:24px;}
-.pdc-modal-btns{display:flex;gap:10px;justify-content:flex-end;}
-.pdc-modal-cancel{padding:10px 20px;border-radius:9px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;font-size:13.5px;font-weight:600;font-family:inherit;transition:all .12s;}
+#pdc-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+#pdc-modal{background:var(--card);border:1px solid var(--bd-md);border-radius:14px;padding:24px 26px 20px;max-width:360px;width:92%;box-shadow:0 16px 48px rgba(0,0,0,.22);}
+.pdc-modal-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bd);}
+.pdc-modal-header img{height:22px;opacity:.9;border-radius:4px;}
+.pdc-modal-header span{font-size:10.5px;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;}
+.pdc-modal-icon{display:none;}
+.pdc-modal-title{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:6px;}
+.pdc-modal-msg{font-size:13.5px;color:var(--t2);line-height:1.6;margin-bottom:20px;}
+.pdc-modal-btns{display:flex;gap:8px;justify-content:flex-end;}
+.pdc-modal-cancel{padding:8px 18px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--t2);cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:all .12s;}
 .pdc-modal-cancel:hover{background:var(--surface);}
-.pdc-modal-confirm{padding:10px 22px;border-radius:9px;border:none;background:var(--gold);color:#001B2A;cursor:pointer;font-size:13.5px;font-weight:700;font-family:inherit;transition:all .12s;}
+.pdc-modal-confirm{padding:8px 20px;border-radius:8px;border:none;background:var(--gold);color:#001B2A;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;transition:all .12s;}
 .pdc-modal-confirm:hover{filter:brightness(1.08);}
 .pdc-modal-confirm.danger{background:var(--err);color:#fff;}
 
@@ -814,9 +814,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <button class="login-btn" onclick="fazerLogin()">Entrar</button>
       <div class="login-err" id="login-err">Usuário ou senha incorretos.</div>
-      <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(0,0,0,.07);text-align:center;">
-        <p style="font-size:12.5px;color:var(--t3);margin-bottom:10px;">Ainda não tem uma conta?</p>
-        <a href="/cadastro" style="display:inline-block;width:100%;padding:12px;border:1.5px solid var(--gold);border-radius:var(--r-sm);font-size:13.5px;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:.2px;transition:background .15s,color .15s;" onmouseover="this.style.background='rgba(200,164,106,.1)'" onmouseout="this.style.background='transparent'">Criar conta grátis →</a>
+      <div style="margin-top:22px;padding-top:18px;border-top:1px solid rgba(0,0,0,.07);">
+        <a href="/cadastro" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:linear-gradient(135deg,rgba(200,164,106,.12),rgba(200,164,106,.06));border:1.5px solid var(--gold);border-radius:var(--r-sm);font-size:14px;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:.2px;transition:all .15s;box-shadow:0 2px 8px rgba(200,164,106,.12);" onmouseover="this.style.background='rgba(200,164,106,.18)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(200,164,106,.12),rgba(200,164,106,.06))'"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="7" r="3"/><path d="M4 19c0-3.314 2.686-6 6-6s6 2.686 6 6"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="10" y1="16" x2="10" y2="19" style="display:none"/></svg>Criar conta — 7 dias grátis</a>
+        <p style="text-align:center;font-size:11px;color:var(--t3);margin-top:8px;">Sem cartão de crédito necessário</p>
       </div>
       <p class="login-note" style="margin-top:16px;">Acesso restrito · Pandecta AI</p>
     </div>
@@ -895,10 +895,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
               <div class="qcard-t">Acervo</div>
               <div class="qcard-d">Documentos e referências da sessão.</div>
             </div>
-            <div class="qcard dim">
+            <div class="qcard" onclick="go('modelos')">
               <div class="qcard-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="4" y="2" width="12" height="16" rx="2"/><line x1="7" y1="7" x2="13" y2="7"/><line x1="7" y1="10" x2="13" y2="10"/><line x1="7" y1="13" x2="10" y2="13"/></svg></div>
               <div class="qcard-t">Modelos</div>
-              <div class="qcard-d">Modelos inteligentes prontos para você.</div>
+              <div class="qcard-d">Seus modelos de estilo e templates de peças.</div>
             </div>
           </div>
 
@@ -1723,8 +1723,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <!-- PANDECTA MODAL -->
 <div id="pdc-modal-bg" style="display:none">
   <div id="pdc-modal">
-    <div class="pdc-modal-logo"><img src="/pandecta-icone.png" alt="P"><span>Pandecta AI</span></div>
-    <div class="pdc-modal-icon" id="pdc-modal-icon"></div>
+    <div class="pdc-modal-header"><img src="/pandecta-icone.png" alt="P"><span>Pandecta AI</span></div>
+    <div class="pdc-modal-icon" id="pdc-modal-icon" style="display:none"></div>
     <div class="pdc-modal-title" id="pdc-modal-title">Confirmar</div>
     <div class="pdc-modal-msg" id="pdc-modal-msg"></div>
     <div class="pdc-modal-btns">
