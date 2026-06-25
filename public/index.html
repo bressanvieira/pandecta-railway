@@ -291,6 +291,54 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .doc-paper hr{border:none;border-top:.5pt solid #E5DDD0;margin:10pt 0;}
 .cur{display:inline-block;width:2px;height:13px;background:#222;animation:cb .8s infinite;vertical-align:text-bottom;margin-left:1px;}
 @keyframes cb{0%,50%{opacity:1}51%,100%{opacity:0}}
+/* ════ WIZARD BUILDER ════ */
+.wiz-pane{width:490px;flex-shrink:0;display:flex;flex-direction:column;background:var(--card);border-right:1px solid var(--bd);overflow:hidden;}
+.wiz-hd{height:52px;flex-shrink:0;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:var(--card);}
+.wiz-ht{font-size:13px;font-weight:600;color:var(--t1);}
+.wiz-hs{font-size:11px;color:var(--t3);}
+.wiz-body{flex:1;overflow-y:auto;padding:26px 24px 20px;display:flex;flex-direction:column;gap:18px;}
+.wiz-body::-webkit-scrollbar{width:3px;}
+.wiz-body::-webkit-scrollbar-thumb{background:var(--bd-md);border-radius:3px;}
+.wiz-prog{display:flex;gap:5px;align-items:center;}
+.wiz-pd{width:6px;height:6px;border-radius:50%;background:var(--bd-md);flex-shrink:0;transition:all .22s;}
+.wiz-pd.done{background:var(--gold);}
+.wiz-pd.active{background:var(--gold);width:22px;border-radius:3px;}
+.wiz-step-n{font-size:10.5px;color:var(--t3);letter-spacing:.05em;text-transform:uppercase;font-weight:500;}
+.wiz-q{font-size:17px;font-weight:700;color:var(--t1);line-height:1.35;letter-spacing:-.25px;}
+.wiz-cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.wiz-cards.wide{grid-template-columns:1fr;}
+.wiz-card{padding:12px 14px;border-radius:10px;border:1.5px solid var(--bd-md);background:var(--bg);cursor:pointer;transition:border-color .14s,background .14s,box-shadow .14s;text-align:left;}
+.wiz-card:hover{border-color:var(--gold);background:var(--gold-bg);}
+.wiz-card.sel{border-color:var(--gold);background:var(--gold-bg);box-shadow:0 0 0 1px var(--gold-bd);}
+.wiz-card-l{font-size:13px;font-weight:600;color:var(--t1);}
+.wiz-card-s{font-size:11px;color:var(--t3);margin-top:3px;line-height:1.4;}
+.wiz-fgrp{display:flex;flex-direction:column;gap:5px;}
+.wiz-lbl{font-size:11.5px;font-weight:500;color:var(--t2);}
+.wiz-inp{width:100%;padding:11px 13px;border-radius:8px;border:1.5px solid var(--bd-md);background:var(--bg);color:var(--t1);font-size:13.5px;font-family:inherit;outline:none;transition:border-color .14s;}
+.wiz-inp:focus{border-color:var(--gold);}
+.wiz-inp::placeholder{color:var(--t3);}
+.wiz-ta{width:100%;padding:12px 13px;border-radius:8px;border:1.5px solid var(--bd-md);background:var(--bg);color:var(--t1);font-size:13.5px;font-family:inherit;outline:none;transition:border-color .14s;resize:vertical;min-height:160px;line-height:1.65;}
+.wiz-ta:focus{border-color:var(--gold);}
+.wiz-ta::placeholder{color:var(--t3);}
+.wiz-foot{flex-shrink:0;padding:13px 22px;border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--card);gap:10px;}
+.wiz-back{padding:9px 18px;border-radius:7px;border:1px solid var(--bd-md);background:transparent;color:var(--t2);font-size:12.5px;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
+.wiz-back:hover:not(:disabled){border-color:var(--bd-dk);color:var(--t1);}
+.wiz-back:disabled{opacity:.28;cursor:default;}
+.wiz-next{padding:9px 22px;border-radius:7px;background:var(--t1);border:none;color:#FFF;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
+.wiz-next:hover:not(:disabled){opacity:.85;}
+.wiz-next:disabled{opacity:.3;cursor:not-allowed;}
+.wiz-next.gerar{background:var(--gold);}
+.wiz-status{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px 24px;text-align:center;}
+.wiz-status-ico{font-size:30px;opacity:.25;}
+.wiz-status-txt{font-size:14px;font-weight:600;color:var(--t2);}
+.wiz-status-sub{font-size:12.5px;color:var(--t3);line-height:1.7;}
+.wiz-gen-dots{display:flex;gap:5px;justify-content:center;}
+.gen-layout.generating .wiz-pane{display:none;}
+@media(max-width:860px){
+  .wiz-pane{width:100%;height:55vh;border-right:none;border-bottom:1px solid var(--bd);}
+  .gen-layout.generating .wiz-pane{display:none;}
+}
+
 
 /* ════ GENERIC CONTENT PAGE ════ */
 .page-body{flex:1;overflow-y:auto;padding:36px 48px;}
@@ -1021,19 +1069,18 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         </div>
       </div>
       <div class="gen-layout">
-        <div class="chat-pane">
-          <div class="cp-hd">
-            <div><div class="cp-t">Construtor</div><div class="cp-s" id="chat-st">Iniciando...</div></div>
+        <div class="wiz-pane" id="wiz-pane">
+          <div class="wiz-hd">
+            <div><div class="wiz-ht">Construtor</div><div class="wiz-hs" id="chat-st">Iniciando...</div></div>
             <button class="cp-new" onclick="novaConversa()">↺ Recomeçar</button>
           </div>
-          <div class="chat-msgs" id="chat-msgs"></div>
-          <div class="chat-iz">
-            <div class="chat-row" id="chat-row">
-              <textarea class="chat-fld" id="chat-fld" rows="1" placeholder="Digite sua resposta..." oninput="ar(this)" onkeydown="chatKey(event)"></textarea>
-              <button class="chat-send" id="chat-sb" onclick="submitChat()"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="10" x2="6" y2="2"/><polyline points="2,6 6,2 10,6"/></svg></button>
-            </div>
-            <div class="chat-hint" id="chat-hint">Enter para enviar · Shift+Enter para nova linha</div>
+          <div class="wiz-body" id="wiz-body"></div>
+          <div class="wiz-foot" id="wiz-foot">
+            <button class="wiz-back" id="wiz-back" onclick="wizard.prev()" disabled>← Voltar</button>
+            <button class="wiz-next" id="wiz-next" onclick="wizard.next()">Continuar →</button>
           </div>
+          <div id="chat-msgs" style="display:none"></div>
+          <span id="chat-hint" style="display:none"></span>
         </div>
         <div class="doc-pane">
           <div class="doc-hd">
@@ -2205,8 +2252,8 @@ function pandectaConfirm(mensagem, opts) {
 // ════ HOME ════
 function homeKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();perguntarAssistente();}}
 function sug(t){const ta=document.getElementById('home-txt');ta.value=t;ar(ta);perguntarAssistente();}
-function iniciarConversa(){const txt=document.getElementById('home-txt').value.trim();engine.reset(txt);document.getElementById('home-txt').value='';go('gen');}
-function novaConversa(){engine.reset();go('gen');}
+function iniciarConversa(){const txt=document.getElementById('home-txt').value.trim();wizard.reset(txt);document.getElementById('home-txt').value='';go('gen');}
+function novaConversa(){wizard.reset();go('gen');}
 function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,140)+'px';}
 
 function mdSimple(t){
@@ -2540,6 +2587,186 @@ class ConversationEngine{
 const engine=new ConversationEngine();
 function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitChat();}}
 function submitChat(){const f=document.getElementById('chat-fld');const val=f.value.trim(),key=f.getAttribute('data-key');if(!val||!key)return;f.value='';f.style.height='auto';engine.answer(key,val,val);}
+
+class WizardEngine{
+  constructor(){this.data={};this.screenIdx=0;this.locked=false;}
+  _tL(t){return{peticao_inicial:'Petição Inicial',defesa:'Contestação',recurso:'Recurso',notificacao:'Notificação',contrato:'Contrato',parecer:'Parecer',manifestacao:'Manifestação'}[t]||'Documento';}
+  _aL(a){return{consumidor:'Consumidor',civil:'Civil',trabalhista:'Trabalhista',familia:'Família'}[a]||'Jurídico';}
+  _parse(txt){if(!txt)return;const lo=txt.toLowerCase();if(lo.match(/contesta|defesa/))this.data.tipo='defesa';else if(lo.match(/recurso|apela/))this.data.tipo='recurso';else if(lo.match(/contrato/))this.data.tipo='contrato';else if(lo.match(/notifica/))this.data.tipo='notificacao';else if(lo.match(/parecer/))this.data.tipo='parecer';else if(lo.match(/manifesta/))this.data.tipo='manifestacao';else if(lo.match(/peti|inicial/))this.data.tipo='peticao_inicial';}
+  _screens(){
+    const d=this.data,sc=[];
+    sc.push({id:'tipo',title:'O que deseja construir?',type:'cards',field:'tipo',cols:2,opts:[
+      {l:'Petição Inicial',v:'peticao_inicial',s:'Ação judicial · JEC · Vara cível'},
+      {l:'Contestação',v:'defesa',s:'Resposta à ação judicial'},
+      {l:'Recurso',v:'recurso',s:'Apelação · Embargos · Agravo'},
+      {l:'Manifestação',v:'manifestacao',s:'Petição complementar · Memorial'},
+      {l:'Contrato',v:'contrato',s:'Prestação de serviços · Honorários'},
+      {l:'Parecer',v:'parecer',s:'Opinião jurídica fundamentada'},
+      {l:'Notificação',v:'notificacao',s:'Extrajudicial · Interpelação'},
+    ]});
+    if(d.tipo==='contrato')sc.push({id:'subtipo',title:'Que tipo de contrato?',type:'cards',field:'subtipo',cols:1,opts:[
+      {l:'Prestação de serviços',v:'servicos'},{l:'Honorários advocatícios',v:'honorarios'},
+      {l:'Confidencialidade (NDA)',v:'nda'},{l:'Locação',v:'locacao'},{l:'Outro',v:'outro'},
+    ]});
+    if(d.tipo&&d.tipo!=='contrato'&&d.tipo!=='parecer')sc.push({id:'area',title:'Qual é a área jurídica?',type:'cards',field:'area',cols:1,opts:[
+      {l:'⚖️ Consumidor',v:'consumidor',s:'CDC · JEC · Marketplace'},
+      {l:'📋 Civil',v:'civil',s:'CC · Contratos · Danos'},
+      {l:'👷 Trabalhista',v:'trabalhista',s:'CLT · TST · Rescisão'},
+      {l:'👨‍👩‍👧 Família',v:'familia',s:'Guarda · Alimentos'},
+    ]});
+    if(d.tipo){
+      const isCtr=d.tipo==='contrato',isNtf=d.tipo==='notificacao';
+      const flds=[
+        {field:'autor',label:isCtr?'Contratante':isNtf?'Notificante':'Autor / Requerente',ph:isCtr?'Ex: João Silva, empresário, CPF 000.000.000-00...':'Ex: João Silva, brasileiro, solteiro, engenheiro...'},
+        {field:'reu',label:isCtr?'Contratado':isNtf?'Notificado':'Réu / Requerido',ph:isCtr?'Ex: Empresa XYZ Ltda., CNPJ 00.000.000/0001-00...':'Ex: Samsung Electronics Brasil Ltda., CNPJ...'},
+      ];
+      if(!isCtr)flds.push({field:'vara',label:'Vara / Juízo',ph:'Ex: 3ª Vara Cível · JEC Central · TRT 15ª Região...',optional:true});
+      sc.push({id:'partes',title:isCtr?'Identifique as partes do contrato':isNtf?'Quem envolve a notificação?':'Identifique as partes',type:'form',fields:flds});
+    }
+    if(d.tipo){const isCtr=d.tipo==='contrato';sc.push({id:'fatos',title:isCtr?'Objeto e contexto do contrato':'Descreva os fatos',type:'textarea',field:'fatos',ph:isCtr?'Descreva o serviço, prazo, valor e detalhes relevantes...':'Inclua datas, valores, o que ocorreu e documentos relevantes. Quanto mais detalhes, melhor a qualidade da peça.'});}
+    if(d.tipo){const isCtr=d.tipo==='contrato';sc.push({id:'pedido',title:isCtr?'Objetivo e cláusulas principais':'Qual é o pedido?',type:'textarea',field:'pedido',ph:isCtr?'Ex: Prazo 12 meses, pagamento mensal, cláusula de confidencialidade e multa rescisória...':'Ex: Substituição do produto, indenização por danos morais, rescisão contratual...'});}
+    if(d.tipo&&lawyers.length>0)sc.push({id:'responsavel',title:'Qual advogado será responsável?',type:'cards',field:'responsavel',cols:1,optional:true,opts:lawyers.map(l=>({l:l.nome,v:String(l.id),s:`OAB/${l.uf} nº ${l.oab}`}))});
+    if(d.tipo){const mT=(modelosList||[]).filter(m=>m.tipo===d.tipo);if(mT.length>0)sc.push({id:'modelo',title:'Usar documento como referência de estilo?',type:'cards',field:'modelo_id',cols:1,optional:true,opts:[...mT.map(m=>({l:m.nome,v:String(m.id),s:'Usar meu estilo'})),{l:'Sem modelo',v:'none',s:'Usar formato padrão'}]});}
+    return sc;
+  }
+  _hasData(sc){
+    if(sc.type==='cards')return!!this.data[sc.field];
+    if(sc.type==='form')return sc.fields.filter(f=>!f.optional).every(f=>(this.data[f.field]||'').trim().length>0);
+    if(sc.type==='textarea')return(this.data[sc.field]||'').trim().length>0;
+    return true;
+  }
+  reset(ctx=null){
+    this.data={};this.screenIdx=0;this.locked=false;
+    const gl=document.querySelector('.gen-layout');
+    if(gl)gl.classList.remove('generating');
+    document.getElementById('doc-paper').style.display='none';
+    document.getElementById('doc-empty').style.display='flex';
+    document.getElementById('doc-acts').style.display='none';
+    document.getElementById('doc-dot').className='doc-dot';
+    document.getElementById('doc-lbl').textContent='Aguardando dados';
+    document.getElementById('gen-title').textContent='Nova peça';
+    document.getElementById('tb-status').textContent='Aguardando...';
+    document.getElementById('wiz-foot').style.display='flex';
+    textoGerado='';
+    document.getElementById('doc-paper').contentEditable='false';
+    if(ctx)this._parse(ctx);
+    this._render();
+  }
+  _render(){
+    const scs=this._screens();
+    if(this.screenIdx>=scs.length){this._generate();return;}
+    const sc=scs[this.screenIdx],total=scs.length,cur=this.screenIdx+1;
+    document.getElementById('chat-st').textContent=`Passo ${cur} de ${total}`;
+    const dots=scs.map((s,i)=>`<div class="wiz-pd ${i<this.screenIdx?'done':i===this.screenIdx?'active':''}"></div>`).join('');
+    let body='';
+    if(sc.type==='cards'){
+      const cls=sc.cols===1?'wide':'';
+      body=`<div class="wiz-cards ${cls}">${sc.opts.map(o=>{const sel=this.data[sc.field]===o.v?' sel':'';return`<div class="wiz-card${sel}" onclick="wizard._csel('${sc.field}','${(o.v+'').replace(/'/g,'\\x27')}',this,${!!sc.optional})"><div class="wiz-card-l">${esc(o.l)}</div>${o.s?`<div class="wiz-card-s">${esc(o.s)}</div>`:''}</div>`;}).join('')}</div>`;
+    }else if(sc.type==='form'){
+      body=sc.fields.map(f=>`<div class="wiz-fgrp"><label class="wiz-lbl">${esc(f.label)}${f.optional?' <span style="color:var(--t3);font-weight:400">(opcional)</span>':''}</label><input class="wiz-inp" id="wiz-f-${f.field}" value="${esc(this.data[f.field]||'')}" placeholder="${esc(f.ph||'')}" oninput="wizard._fch('${f.field}',this.value)"></div>`).join('');
+    }else if(sc.type==='textarea'){
+      body=`<textarea class="wiz-ta" id="wiz-ta-${sc.field}" rows="7" placeholder="${esc(sc.ph||'')}" oninput="wizard._fch('${sc.field}',this.value)">${esc(this.data[sc.field]||'')}</textarea>`;
+    }
+    document.getElementById('wiz-body').innerHTML=`<div class="wiz-prog">${dots}</div><div class="wiz-step-n">Passo ${cur} de ${total}</div><div class="wiz-q">${esc(sc.title)}</div>${body}`;
+    this._updFoot(sc,scs);
+    setTimeout(()=>{const el=document.querySelector('#wiz-body input.wiz-inp,#wiz-body textarea.wiz-ta');if(el)el.focus();},50);
+  }
+  _updFoot(sc,scs){
+    const back=document.getElementById('wiz-back'),next=document.getElementById('wiz-next');
+    back.disabled=this.screenIdx===0;
+    const isLast=this.screenIdx===scs.length-1;
+    if(sc.type==='cards'&&!sc.optional){
+      next.style.display='none';
+      back.style.marginLeft='auto';
+    }else{
+      next.style.display='';
+      back.style.marginLeft='';
+      if(sc.optional){next.textContent='Pular →';next.disabled=false;next.className='wiz-next';}
+      else{
+        next.textContent=isLast?'✦ Gerar peça':'Continuar →';
+        next.disabled=!this._hasData(sc);
+        next.className=isLast?'wiz-next gerar':'wiz-next';
+      }
+    }
+  }
+  _csel(field,val,el,optional){
+    el.closest('.wiz-cards').querySelectorAll('.wiz-card').forEach(c=>c.classList.remove('sel'));
+    el.classList.add('sel');this.data[field]=val;
+    if(!optional)setTimeout(()=>this.next(),270);
+    else{const scs=this._screens();this._updFoot(scs[this.screenIdx],scs);}
+  }
+  _fch(field,val){
+    this.data[field]=val;
+    const scs=this._screens();this._updFoot(scs[this.screenIdx],scs);
+  }
+  prev(){
+    if(this.screenIdx===0)return;
+    const scs=this._screens(),sc=scs[this.screenIdx];
+    if(sc.type==='form')sc.fields.forEach(f=>{delete this.data[f.field];});
+    else if(sc.field)delete this.data[sc.field];
+    this.screenIdx--;
+    const newScs=this._screens();
+    if(this.screenIdx>=newScs.length)this.screenIdx=Math.max(0,newScs.length-1);
+    this._render();
+  }
+  next(){
+    const scs=this._screens();
+    if(this.screenIdx>=scs.length)return;
+    const sc=scs[this.screenIdx];
+    if(!sc.optional&&!this._hasData(sc))return;
+    this.screenIdx++;
+    const newScs=this._screens();
+    if(this.screenIdx>=newScs.length){this._generate();return;}
+    this._render();
+  }
+  async _generate(){
+    this.locked=true;
+    document.querySelector('.gen-layout').classList.add('generating');
+    document.getElementById('wiz-body').innerHTML=`<div class="wiz-status"><div class="wiz-status-ico">✦</div><div class="wiz-gen-dots"><div class="td"></div><div class="td"></div><div class="td"></div></div><div class="wiz-status-txt">Redigindo ${esc(this._tL(this.data.tipo))}...</div><div class="wiz-status-sub">A Pandecta está elaborando<br>sua peça agora.</div></div>`;
+    document.getElementById('wiz-foot').style.display='none';
+    document.getElementById('chat-st').textContent='Redigindo...';
+    document.getElementById('gen-title').textContent=this._tL(this.data.tipo);
+    document.getElementById('tb-status').textContent='Gerando...';
+    document.getElementById('doc-empty').style.display='none';
+    document.getElementById('doc-paper').style.display='block';
+    document.getElementById('doc-paper').innerHTML='';
+    document.getElementById('doc-dot').className='doc-dot live';
+    document.getElementById('doc-lbl').textContent=`${this._tL(this.data.tipo)} — ${(this.data.autor||'').split(',')[0]}`;
+    let ca=[],memoria=[];
+    const q=`${this.data.area||''} ${this.data.tipo} ${(this.data.fatos||'').slice(0,300)}`;
+    try{ca=await api('POST','/api/acervo/buscar',{query:q,top:5});}catch(e){}
+    try{memoria=await api('POST','/api/memoria/consultar',{query:q,area:this.data.area||'',top:3});}catch(e){}
+    textoGerado='';
+    try{
+      const _area=this.data.area||(['contrato','parecer'].includes(this.data.tipo)?'civil':'consumidor');
+      const modeloId=this.data.modelo_id&&this.data.modelo_id!=='none'?this.data.modelo_id:null;
+      const resp=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({area:_area,tipo:this.data.tipo,subtipo:this.data.subtipo||'',autor:this.data.autor,reu:this.data.reu,vara:this.data.vara||'',fatos:this.data.fatos,pedido:this.data.pedido||'',estilo:'',chunks_acervo:ca,chunks_memoria:memoria,modelo_id:modeloId})});
+      if(!resp.ok||!resp.headers.get('content-type')?.includes('event-stream')){const t=await resp.text();let m='Erro '+resp.status;try{m=JSON.parse(t).error||m;}catch(e){}throw new Error(m);}
+      const reader=resp.body.getReader(),dec=new TextDecoder();
+      while(true){const{done,value}=await reader.read();if(done)break;for(const ln of dec.decode(value).split('\n')){if(!ln.startsWith('data: '))continue;const p=ln.slice(6);if(p==='[DONE]')break;try{const d=JSON.parse(p);if(d.type==='content_block_delta'&&d.delta?.type==='text_delta'){textoGerado+=d.delta.text;renderDoc(textoGerado,true);}}catch(e){}}}
+      renderDoc(textoGerado,false);
+      document.getElementById('doc-dot').className='doc-dot';
+      document.getElementById('doc-acts').style.display='flex';
+      document.getElementById('doc-paper').contentEditable='true';
+      document.getElementById('doc-lbl').textContent='Concluído · Clique para editar';
+      document.getElementById('chat-st').textContent='Concluído';
+      document.getElementById('tb-status').textContent='Concluído';
+      document.querySelector('.gen-layout').classList.remove('generating');
+      document.getElementById('wiz-body').innerHTML=`<div class="wiz-status"><div class="wiz-status-ico" style="opacity:.6">✓</div><div class="wiz-status-txt">Peça concluída!</div><div class="wiz-status-sub">Sua ${esc(this._tL(this.data.tipo))} está pronta.<br>Edite, copie ou exporte para Word.</div></div>`;
+      document.getElementById('wiz-foot').style.display='none';
+      await salvarHistorico(this.data,textoGerado,this._tL(this.data.tipo),this._aL(this.data.area));
+    }catch(err){
+      document.querySelector('.gen-layout').classList.remove('generating');
+      document.getElementById('wiz-body').innerHTML=`<div class="wiz-status"><div class="wiz-status-ico">⚠</div><div class="wiz-status-txt">Erro ao gerar</div><div class="wiz-status-sub">${esc(err.message)}</div></div>`;
+      document.getElementById('chat-st').textContent='Erro';
+      document.getElementById('tb-status').textContent='Erro';
+      document.getElementById('wiz-foot').style.display='flex';
+      this.locked=false;
+    }
+  }
+}
+const wizard=new WizardEngine();
+
 
 // ════ DOC RENDER ════
 function renderDoc(md,streaming){
