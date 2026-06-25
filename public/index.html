@@ -371,7 +371,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .gdoc-label{font-size:10.5px;font-weight:700;color:#C8A46A;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
 .gdoc-doc-title{font-size:20px;font-weight:700;color:rgba(255,255,255,.9);}
 .gdoc-status{display:flex;align-items:center;gap:7px;font-size:12.5px;color:rgba(190,210,235,.5);white-space:nowrap;}
-.gdoc-body{flex:1;overflow-y:auto;padding:48px 60px;}
+.gdoc-body{flex:1;overflow-y:auto;padding:48px 60px;background:var(--bg);}
 .gdoc-body::-webkit-scrollbar{width:4px;}
 .gdoc-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px;}
 .gdoc-foot{flex-shrink:0;padding:14px 48px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:16px;}
@@ -385,15 +385,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .gab-sec:hover{background:rgba(255,255,255,.14);color:rgba(255,255,255,.9);}
 .gab-prim{background:#C8A46A;color:#fff;}
 .gab-prim:hover{background:#D6B37A;}
-/* doc-paper — dark tela cheia */
-#screen-gen .doc-paper{background:transparent!important;box-shadow:none!important;padding:0!important;color:rgba(255,255,255,.87)!important;max-width:none!important;min-height:auto!important;border-radius:0!important;width:100%!important;margin:0!important;}
-#screen-gen .doc-paper h1{color:#C8A46A!important;}
-#screen-gen .doc-paper h2{color:#C8A46A!important;border-bottom-color:rgba(200,164,106,.2)!important;}
-#screen-gen .doc-paper h3,#screen-gen .doc-paper h4{color:rgba(200,164,106,.75)!important;}
-#screen-gen .doc-paper blockquote{border-left-color:rgba(200,164,106,.3)!important;color:rgba(190,210,235,.65)!important;}
-#screen-gen .doc-paper td,#screen-gen .doc-paper th{border-color:rgba(255,255,255,.1)!important;}
-#screen-gen .doc-paper th{background:rgba(255,255,255,.05)!important;color:rgba(255,255,255,.8)!important;}
-#screen-gen .doc-paper p{text-indent:0!important;text-align:left!important;}
+/* doc-paper — claro tela cheia */
+#screen-gen .doc-paper{background:transparent!important;box-shadow:none!important;padding:0!important;color:var(--t1)!important;max-width:none!important;min-height:auto!important;border-radius:0!important;width:100%!important;margin:0!important;}
+#screen-gen .doc-paper h1{color:#8B6B35!important;}
+#screen-gen .doc-paper h2{color:#8B6B35!important;border-bottom-color:rgba(139,107,53,.25)!important;}
+#screen-gen .doc-paper h3,#screen-gen .doc-paper h4{color:rgba(139,107,53,.8)!important;}
+#screen-gen .doc-paper blockquote{border-left-color:rgba(139,107,53,.3)!important;color:var(--t2)!important;}
 #screen-gen .cur{background:#C8A46A;}
 .gwiz-card-icon{font-size:20px;line-height:1;margin-bottom:10px;display:block;}
 .gwiz-inp-ta{resize:vertical;min-height:90px;line-height:1.65;}
