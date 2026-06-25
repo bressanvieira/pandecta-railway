@@ -291,52 +291,117 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .doc-paper hr{border:none;border-top:.5pt solid #E5DDD0;margin:10pt 0;}
 .cur{display:inline-block;width:2px;height:13px;background:#222;animation:cb .8s infinite;vertical-align:text-bottom;margin-left:1px;}
 @keyframes cb{0%,50%{opacity:1}51%,100%{opacity:0}}
-/* ════ WIZARD BUILDER ════ */
-.wiz-pane{width:490px;flex-shrink:0;display:flex;flex-direction:column;background:var(--card);border-right:1px solid var(--bd);overflow:hidden;}
-.wiz-hd{height:52px;flex-shrink:0;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:var(--card);}
-.wiz-ht{font-size:13px;font-weight:600;color:var(--t1);}
-.wiz-hs{font-size:11px;color:var(--t3);}
-.wiz-body{flex:1;overflow-y:auto;padding:26px 24px 20px;display:flex;flex-direction:column;gap:18px;}
-.wiz-body::-webkit-scrollbar{width:3px;}
-.wiz-body::-webkit-scrollbar-thumb{background:var(--bd-md);border-radius:3px;}
-.wiz-prog{display:flex;gap:5px;align-items:center;}
-.wiz-pd{width:6px;height:6px;border-radius:50%;background:var(--bd-md);flex-shrink:0;transition:all .22s;}
-.wiz-pd.done{background:var(--gold);}
-.wiz-pd.active{background:var(--gold);width:22px;border-radius:3px;}
-.wiz-step-n{font-size:10.5px;color:var(--t3);letter-spacing:.05em;text-transform:uppercase;font-weight:500;}
-.wiz-q{font-size:17px;font-weight:700;color:var(--t1);line-height:1.35;letter-spacing:-.25px;}
-.wiz-cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
-.wiz-cards.wide{grid-template-columns:1fr;}
-.wiz-card{padding:12px 14px;border-radius:10px;border:1.5px solid var(--bd-md);background:var(--bg);cursor:pointer;transition:border-color .14s,background .14s,box-shadow .14s;text-align:left;}
-.wiz-card:hover{border-color:var(--gold);background:var(--gold-bg);}
-.wiz-card.sel{border-color:var(--gold);background:var(--gold-bg);box-shadow:0 0 0 1px var(--gold-bd);}
-.wiz-card-l{font-size:13px;font-weight:600;color:var(--t1);}
-.wiz-card-s{font-size:11px;color:var(--t3);margin-top:3px;line-height:1.4;}
-.wiz-fgrp{display:flex;flex-direction:column;gap:5px;}
-.wiz-lbl{font-size:11.5px;font-weight:500;color:var(--t2);}
-.wiz-inp{width:100%;padding:11px 13px;border-radius:8px;border:1.5px solid var(--bd-md);background:var(--bg);color:var(--t1);font-size:13.5px;font-family:inherit;outline:none;transition:border-color .14s;}
-.wiz-inp:focus{border-color:var(--gold);}
-.wiz-inp::placeholder{color:var(--t3);}
-.wiz-ta{width:100%;padding:12px 13px;border-radius:8px;border:1.5px solid var(--bd-md);background:var(--bg);color:var(--t1);font-size:13.5px;font-family:inherit;outline:none;transition:border-color .14s;resize:vertical;min-height:160px;line-height:1.65;}
-.wiz-ta:focus{border-color:var(--gold);}
-.wiz-ta::placeholder{color:var(--t3);}
-.wiz-foot{flex-shrink:0;padding:13px 22px;border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--card);gap:10px;}
-.wiz-back{padding:9px 18px;border-radius:7px;border:1px solid var(--bd-md);background:transparent;color:var(--t2);font-size:12.5px;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
-.wiz-back:hover:not(:disabled){border-color:var(--bd-dk);color:var(--t1);}
-.wiz-back:disabled{opacity:.28;cursor:default;}
-.wiz-next{padding:9px 22px;border-radius:7px;background:var(--t1);border:none;color:#FFF;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
-.wiz-next:hover:not(:disabled){opacity:.85;}
-.wiz-next:disabled{opacity:.3;cursor:not-allowed;}
-.wiz-next.gerar{background:var(--gold);}
-.wiz-status{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px 24px;text-align:center;}
-.wiz-status-ico{font-size:30px;opacity:.25;}
-.wiz-status-txt{font-size:14px;font-weight:600;color:var(--t2);}
-.wiz-status-sub{font-size:12.5px;color:var(--t3);line-height:1.7;}
-.wiz-gen-dots{display:flex;gap:5px;justify-content:center;}
-.gen-layout.generating .wiz-pane{display:none;}
-@media(max-width:860px){
-  .wiz-pane{width:100%;height:55vh;border-right:none;border-bottom:1px solid var(--bd);}
-  .gen-layout.generating .wiz-pane{display:none;}
+/* ════ DARK WIZARD (screen-gen) ════ */
+#screen-gen.active .main-area{background:#0C1020;}
+#screen-gen.active .topbar{background:#111827;border-bottom-color:rgba(255,255,255,.07);}
+#screen-gen.active .tb-back{border-color:rgba(255,255,255,.12);color:rgba(190,210,235,.55);}
+#screen-gen.active .tb-crumb,#screen-gen.active .tb-sep{color:rgba(190,210,235,.35);}
+#screen-gen.active .tb-page{color:rgba(255,255,255,.88);}
+#screen-gen.active .tb-status{color:rgba(190,210,235,.45);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.07);}
+#screen-gen.active .tb-av{background:rgba(200,164,106,.25);color:#C8A46A;}
+#screen-gen.active .tb-uname{color:rgba(255,255,255,.7);}
+#screen-gen.active .tb-usess{color:rgba(190,210,235,.4);}
+#screen-gen.active .tb-dropdown{background:#1E2B40;border-color:rgba(255,255,255,.12);}
+#screen-gen.active .dd-item{color:rgba(190,210,235,.7);}
+#screen-gen.active .dd-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9);}
+#screen-gen.active .dd-sep{background:rgba(255,255,255,.08);}
+.gen-layout{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+/* wizard full-width */
+.gwiz-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.gwiz-scroll{flex:1;overflow-y:auto;padding:48px 48px 0;}
+.gwiz-scroll::-webkit-scrollbar{width:4px;}
+.gwiz-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px;}
+.gwiz-max{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:24px;padding-bottom:24px;}
+/* dots */
+.gwiz-dots-row{display:flex;align-items:center;gap:7px;}
+.gdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18);flex-shrink:0;transition:all .22s;}
+.gdot.done{background:rgba(200,164,106,.65);}
+.gdot.active{background:#C8A46A;width:26px;border-radius:3px;}
+/* heading */
+.gwiz-lbl{font-size:11px;font-weight:700;color:#C8A46A;letter-spacing:.1em;text-transform:uppercase;}
+.gwiz-heading{font-size:30px;font-weight:700;color:rgba(255,255,255,.92);line-height:1.18;letter-spacing:-.5px;}
+.gwiz-sub{font-size:14px;color:rgba(190,210,235,.5);margin-top:-6px;}
+/* card grid */
+.gwiz-cards{display:grid;gap:12px;}
+.gwiz-cards.g2{grid-template-columns:1fr 1fr;}
+.gwiz-cards.g3{grid-template-columns:1fr 1fr 1fr;}
+.gwiz-card{position:relative;padding:18px 20px;border-radius:12px;border:1.5px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);cursor:pointer;transition:border-color .14s,background .14s;text-align:left;}
+.gwiz-card:hover{border-color:rgba(200,164,106,.5);background:rgba(200,164,106,.06);}
+.gwiz-card.sel{border-color:#C8A46A;background:rgba(200,164,106,.09);box-shadow:0 0 0 1px rgba(200,164,106,.25);}
+.gwiz-card-chk{position:absolute;top:13px;right:13px;width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:transparent;font-size:10px;font-weight:700;transition:all .14s;flex-shrink:0;}
+.gwiz-card.sel .gwiz-card-chk{background:#C8A46A;border-color:#C8A46A;color:#fff;}
+.gwiz-card-l{font-size:15px;font-weight:600;color:rgba(255,255,255,.88);margin-bottom:5px;padding-right:26px;}
+.gwiz-card-s{font-size:12px;color:rgba(190,210,235,.45);line-height:1.45;}
+/* form fields */
+.gwiz-fgrp{display:flex;flex-direction:column;gap:7px;}
+.gwiz-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.gwiz-lbl-f{font-size:10.5px;font-weight:700;color:rgba(190,210,235,.45);letter-spacing:.1em;text-transform:uppercase;}
+.gwiz-lbl-opt{font-size:10px;color:rgba(190,210,235,.3);font-weight:400;text-transform:none;letter-spacing:0;margin-left:6px;}
+.gwiz-inp{width:100%;padding:14px 16px;border-radius:10px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:rgba(255,255,255,.88);font-size:15px;font-family:inherit;outline:none;transition:border-color .14s;box-sizing:border-box;}
+.gwiz-inp:focus{border-color:#C8A46A;}
+.gwiz-inp::placeholder{color:rgba(190,210,235,.28);}
+.gwiz-ta{width:100%;padding:16px;border-radius:10px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:rgba(255,255,255,.88);font-size:15px;font-family:inherit;outline:none;resize:vertical;min-height:200px;line-height:1.7;transition:border-color .14s;box-sizing:border-box;}
+.gwiz-ta:focus{border-color:#C8A46A;}
+.gwiz-ta::placeholder{color:rgba(190,210,235,.28);}
+.gwiz-ta-foot{display:flex;justify-content:space-between;font-size:11px;color:rgba(190,210,235,.35);margin-top:4px;}
+/* footer */
+.gwiz-foot{flex-shrink:0;padding:15px 48px;display:flex;align-items:center;justify-content:space-between;background:#0C1020;border-top:1px solid rgba(255,255,255,.06);}
+.gwiz-back{padding:11px 22px;border-radius:9px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(190,210,235,.5);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
+.gwiz-back:hover:not(:disabled){border-color:rgba(255,255,255,.22);color:rgba(190,210,235,.9);}
+.gwiz-back:disabled{opacity:.22;cursor:default;}
+.gwiz-next{padding:11px 30px;border-radius:9px;background:#C8A46A;border:none;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
+.gwiz-next:hover:not(:disabled){background:#D6B37A;}
+.gwiz-next:disabled{opacity:.3;cursor:not-allowed;}
+/* lawyer / model card */
+.gwiz-lcard{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:10px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);cursor:pointer;transition:border-color .14s;margin-bottom:8px;}
+.gwiz-lcard:hover{border-color:rgba(200,164,106,.45);}
+.gwiz-lcard.sel{border-color:#C8A46A;}
+.gwiz-lcard-av{width:38px;height:38px;border-radius:50%;background:#C8A46A;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.gwiz-lcard-name{font-size:14px;font-weight:600;color:rgba(255,255,255,.85);}
+.gwiz-lcard-oab{font-size:12px;color:rgba(190,210,235,.45);}
+.gwiz-lcard-chk{margin-left:auto;width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;transition:all .14s;}
+.gwiz-lcard.sel .gwiz-lcard-chk{background:#C8A46A;border-color:#C8A46A;}
+/* summary card */
+.gwiz-summary{border-radius:10px;border:1px solid rgba(200,164,106,.25);background:rgba(200,164,106,.07);padding:16px 18px;}
+.gwiz-summary-lbl{font-size:10px;font-weight:700;color:#C8A46A;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+.gwiz-summary-line{font-size:13.5px;color:rgba(190,210,235,.7);line-height:1.65;}
+/* doc generation view */
+.gdoc-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.gdoc-hd{padding:18px 48px 14px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;}
+.gdoc-label{font-size:10.5px;font-weight:700;color:#C8A46A;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.gdoc-doc-title{font-size:20px;font-weight:700;color:rgba(255,255,255,.9);}
+.gdoc-status{display:flex;align-items:center;gap:7px;font-size:12.5px;color:rgba(190,210,235,.5);white-space:nowrap;}
+.gdoc-body{flex:1;overflow-y:auto;padding:40px 48px;}
+.gdoc-body::-webkit-scrollbar{width:4px;}
+.gdoc-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px;}
+.gdoc-foot{flex-shrink:0;padding:14px 48px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:16px;}
+.gdoc-prog-wrap{flex:1;display:flex;flex-direction:column;gap:5px;}
+.gdoc-prog-bg{height:3px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;}
+.gdoc-prog-fill{height:100%;background:#C8A46A;border-radius:3px;transition:width .5s ease;width:0%;}
+.gdoc-prog-txt{font-size:11px;color:rgba(190,210,235,.38);}
+.gdoc-acts{display:flex;gap:8px;}
+.gab{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .12s;border:none;}
+.gab-sec{background:rgba(255,255,255,.08);color:rgba(190,210,235,.65);}
+.gab-sec:hover{background:rgba(255,255,255,.14);color:rgba(255,255,255,.9);}
+.gab-prim{background:#C8A46A;color:#fff;}
+.gab-prim:hover{background:#D6B37A;}
+/* doc-paper override — dark mode in screen-gen */
+#screen-gen .doc-paper{background:transparent!important;box-shadow:none!important;padding:0!important;color:rgba(255,255,255,.85)!important;max-width:800px;min-height:auto!important;border-radius:0!important;}
+#screen-gen .doc-paper h1{color:#C8A46A!important;font-size:13.5pt;}
+#screen-gen .doc-paper h2{color:#C8A46A!important;border-bottom-color:rgba(200,164,106,.2)!important;}
+#screen-gen .doc-paper h3,#screen-gen .doc-paper h4{color:rgba(200,164,106,.75)!important;}
+#screen-gen .doc-paper blockquote{border-left-color:rgba(200,164,106,.3)!important;color:rgba(190,210,235,.65)!important;}
+#screen-gen .doc-paper td,#screen-gen .doc-paper th{border-color:rgba(255,255,255,.1)!important;}
+#screen-gen .doc-paper th{background:rgba(255,255,255,.06)!important;color:rgba(255,255,255,.8)!important;}
+#screen-gen .cur{background:#C8A46A;}
+/* doc-empty dark override */
+#screen-gen .doc-empty-ico{color:rgba(200,164,106,.3);}
+#screen-gen .doc-empty-txt{color:rgba(190,210,235,.4);}
+@media(max-width:900px){
+  .gwiz-scroll{padding:32px 24px 0;}
+  .gwiz-foot{padding:14px 24px;}
+  .gwiz-cards.g3{grid-template-columns:1fr 1fr;}
+  .gdoc-hd,.gdoc-body,.gdoc-foot{padding-left:24px;padding-right:24px;}
 }
 
 
@@ -1069,43 +1134,55 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         </div>
       </div>
       <div class="gen-layout">
-        <div class="wiz-pane" id="wiz-pane">
-          <div class="wiz-hd">
-            <div><div class="wiz-ht">Construtor</div><div class="wiz-hs" id="chat-st">Iniciando...</div></div>
-            <button class="cp-new" onclick="novaConversa()">↺ Recomeçar</button>
+
+        <!-- ── WIZARD PANE: full-width, steps ── -->
+        <div class="gwiz-wrap" id="gwiz-wrap">
+          <div class="gwiz-scroll">
+            <div class="gwiz-max" id="wiz-body"><!-- rendered by WizardEngine --></div>
           </div>
-          <div class="wiz-body" id="wiz-body"></div>
-          <div class="wiz-foot" id="wiz-foot">
-            <button class="wiz-back" id="wiz-back" onclick="wizard.prev()" disabled>← Voltar</button>
-            <button class="wiz-next" id="wiz-next" onclick="wizard.next()">Continuar →</button>
+          <div class="gwiz-foot" id="wiz-foot">
+            <button class="gwiz-back" id="wiz-back" onclick="wizard.prev()" disabled>← Voltar</button>
+            <div class="gwiz-dots-row" id="wiz-dots"><!-- dots --></div>
+            <button class="gwiz-next" id="wiz-next" onclick="wizard.next()">Próximo →</button>
           </div>
-          <div id="chat-msgs" style="display:none"></div>
-          <span id="chat-hint" style="display:none"></span>
         </div>
-        <div class="doc-pane">
-          <div class="doc-hd">
-            <div class="doc-st"><div class="doc-dot" id="doc-dot"></div><div class="doc-lbl" id="doc-lbl">Aguardando dados</div></div>
-            <div class="doc-acts" id="doc-acts" style="display:none">
-              <div id="doc-fmt-bar" style="display:flex;gap:2px;margin-right:6px;padding-right:8px;border-right:1px solid var(--bd);">
-                <button class="dbtn" title="Negrito (Ctrl+B)" onclick="document.execCommand('bold');document.getElementById('doc-paper').focus()"><strong>B</strong></button>
-                <button class="dbtn" title="Itálico (Ctrl+I)" onclick="document.execCommand('italic');document.getElementById('doc-paper').focus()"><em>I</em></button>
-                <button class="dbtn" title="Sublinhado (Ctrl+U)" onclick="document.execCommand('underline');document.getElementById('doc-paper').focus()"><u>U</u></button>
-                <button class="dbtn" title="Alinhar à esquerda" onclick="document.execCommand('justifyLeft');document.getElementById('doc-paper').focus()">⟵</button>
-                <button class="dbtn" title="Centralizar" onclick="document.execCommand('justifyCenter');document.getElementById('doc-paper').focus()">⊟</button>
-              </div>
-              <button class="dbtn" onclick="copiarDoc()">Copiar</button>
-              <button class="dbtn dbtn-p" onclick="exportarWord()">↓ Word</button>
+
+        <!-- ── DOC PANE: full-width, generation ── -->
+        <div class="gdoc-wrap" id="gdoc-wrap" style="display:none">
+          <div class="gdoc-hd">
+            <div>
+              <div class="gdoc-label" id="gdoc-label">Gerando peça</div>
+              <div class="gdoc-doc-title" id="gdoc-title">–</div>
+            </div>
+            <div class="gdoc-status">
+              <div class="doc-dot" id="doc-dot"></div>
+              <span id="doc-lbl">Aguardando dados</span>
             </div>
           </div>
-          <div class="doc-scroll" id="doc-scroll">
-            <div class="doc-empty" id="doc-empty">
-              <img src="/pandecta-icone.png" class="doc-empty-wm" alt="">
-              <div class="doc-empty-ico">⊡</div>
-              <div class="doc-empty-txt">Sua peça aparecerá aqui<br>enquanto a IA coleta as informações</div>
+          <div class="gdoc-body" id="doc-scroll">
+            <div class="doc-empty" id="doc-empty" style="display:none">
+              <div class="doc-empty-ico">✦</div>
+              <div class="doc-empty-txt">Aguardando dados</div>
             </div>
             <div class="doc-paper" id="doc-paper" style="display:none" contenteditable="false" oninput="textoGerado=this.innerText"></div>
           </div>
+          <div class="gdoc-foot">
+            <div class="gdoc-prog-wrap">
+              <div class="gdoc-prog-bg"><div class="gdoc-prog-fill" id="gen-prog-bar"></div></div>
+              <span class="gdoc-prog-txt" id="gen-prog-txt">Aguardando...</span>
+            </div>
+            <div class="gdoc-acts" id="doc-acts" style="display:none">
+              <button class="gab gab-sec" onclick="wizard.voltarWizard()">← Editar</button>
+              <button class="gab gab-sec" onclick="copiarDoc()">Copiar</button>
+              <button class="gab gab-prim" onclick="exportarWord()">↓ Word</button>
+            </div>
+          </div>
         </div>
+
+        <!-- compat stubs -->
+        <div id="chat-msgs" style="display:none"></div>
+        <span id="chat-hint" style="display:none"></span>
+        <span id="chat-st" style="display:none"></span>
       </div>
     </div>
   </div>
@@ -2595,58 +2672,68 @@ class WizardEngine{
   _parse(txt){if(!txt)return;const lo=txt.toLowerCase();if(lo.match(/contesta|defesa/))this.data.tipo='defesa';else if(lo.match(/recurso|apela/))this.data.tipo='recurso';else if(lo.match(/contrato/))this.data.tipo='contrato';else if(lo.match(/notifica/))this.data.tipo='notificacao';else if(lo.match(/parecer/))this.data.tipo='parecer';else if(lo.match(/manifesta/))this.data.tipo='manifestacao';else if(lo.match(/peti|inicial/))this.data.tipo='peticao_inicial';}
   _screens(){
     const d=this.data,sc=[];
-    sc.push({id:'tipo',title:'O que deseja construir?',type:'cards',field:'tipo',cols:2,opts:[
+    sc.push({id:'tipo',lbl:'O que deseja construir?',sub:'Selecione o tipo de documento jurídico.',type:'cards',field:'tipo',cols:3,opts:[
       {l:'Petição Inicial',v:'peticao_inicial',s:'Ação judicial · JEC · Vara cível'},
       {l:'Contestação',v:'defesa',s:'Resposta à ação judicial'},
       {l:'Recurso',v:'recurso',s:'Apelação · Embargos · Agravo'},
-      {l:'Manifestação',v:'manifestacao',s:'Petição complementar · Memorial'},
+      {l:'Manifestação',v:'manifestacao',s:'Petição complementar'},
       {l:'Contrato',v:'contrato',s:'Prestação de serviços · Honorários'},
       {l:'Parecer',v:'parecer',s:'Opinião jurídica fundamentada'},
       {l:'Notificação',v:'notificacao',s:'Extrajudicial · Interpelação'},
     ]});
-    if(d.tipo==='contrato')sc.push({id:'subtipo',title:'Que tipo de contrato?',type:'cards',field:'subtipo',cols:1,opts:[
-      {l:'Prestação de serviços',v:'servicos'},{l:'Honorários advocatícios',v:'honorarios'},
-      {l:'Confidencialidade (NDA)',v:'nda'},{l:'Locação',v:'locacao'},{l:'Outro',v:'outro'},
+    if(d.tipo==='contrato')sc.push({id:'subtipo',lbl:'Que tipo de contrato?',sub:'Selecione a categoria do contrato.',type:'cards',field:'subtipo',cols:2,opts:[
+      {l:'Prestação de serviços',v:'servicos',s:'Trabalho autônomo / freelance'},
+      {l:'Honorários advocatícios',v:'honorarios',s:'Contrato com cliente'},
+      {l:'Confidencialidade (NDA)',v:'nda',s:'Sigilo de informações'},
+      {l:'Locação',v:'locacao',s:'Imóvel residencial ou comercial'},
+      {l:'Outro',v:'outro',s:'Outras modalidades'},
     ]});
-    if(d.tipo&&d.tipo!=='contrato'&&d.tipo!=='parecer')sc.push({id:'area',title:'Qual é a área jurídica?',type:'cards',field:'area',cols:1,opts:[
-      {l:'⚖️ Consumidor',v:'consumidor',s:'CDC · JEC · Marketplace'},
-      {l:'📋 Civil',v:'civil',s:'CC · Contratos · Danos'},
-      {l:'👷 Trabalhista',v:'trabalhista',s:'CLT · TST · Rescisão'},
-      {l:'👨‍👩‍👧 Família',v:'familia',s:'Guarda · Alimentos'},
+    if(d.tipo&&d.tipo!=='contrato'&&d.tipo!=='parecer')sc.push({id:'area',lbl:'Qual é a área do direito?',sub:'Selecione a área que melhor descreve o caso.',type:'cards',field:'area',cols:2,opts:[
+      {l:'Consumidor',v:'consumidor',s:'CDC · PROCON · E-commerce'},
+      {l:'Civil',v:'civil',s:'Contratos · Responsabilidade civil'},
+      {l:'Trabalhista',v:'trabalhista',s:'CLT · TST · Rescisão'},
+      {l:'Família',v:'familia',s:'Divórcio · Guarda · Alimentos'},
     ]});
     if(d.tipo){
       const isCtr=d.tipo==='contrato',isNtf=d.tipo==='notificacao';
-      const flds=[
-        {field:'autor',label:isCtr?'Contratante':isNtf?'Notificante':'Autor / Requerente',ph:isCtr?'Ex: João Silva, empresário, CPF 000.000.000-00...':'Ex: João Silva, brasileiro, solteiro, engenheiro...'},
-        {field:'reu',label:isCtr?'Contratado':isNtf?'Notificado':'Réu / Requerido',ph:isCtr?'Ex: Empresa XYZ Ltda., CNPJ 00.000.000/0001-00...':'Ex: Samsung Electronics Brasil Ltda., CNPJ...'},
-      ];
-      if(!isCtr)flds.push({field:'vara',label:'Vara / Juízo',ph:'Ex: 3ª Vara Cível · JEC Central · TRT 15ª Região...',optional:true});
-      sc.push({id:'partes',title:isCtr?'Identifique as partes do contrato':isNtf?'Quem envolve a notificação?':'Identifique as partes',type:'form',fields:flds});
+      sc.push({id:'partes',lbl:isCtr?'Identifique as partes do contrato':isNtf?'Quem envolve a notificação?':'Quem são as partes envolvidas?',sub:isCtr?'Preencha os dados das partes contratantes.':'Preencha os dados das partes do processo.',type:'form',fields:[
+        {field:'autor',label:isCtr?'CONTRATANTE':isNtf?'NOTIFICANTE':'AUTOR / REQUERENTE',ph:isCtr?'Nome completo, CPF/CNPJ, qualificação...':'Nome completo, qualificação e documentos...'},
+        {field:'reu',label:isCtr?'CONTRATADO':isNtf?'NOTIFICADO':'RÉU / REQUERIDO',ph:isCtr?'Nome da empresa ou pessoa, CNPJ/CPF...':'Nome da empresa ou pessoa requerida...'},
+        ...(isCtr?[]:[{field:'vara',label:'VARA / JUÍZO',ph:'Ex: 3ª Vara Cível · JEC Central · TRT 15ª Região...',optional:true}]),
+      ]});
     }
-    if(d.tipo){const isCtr=d.tipo==='contrato';sc.push({id:'fatos',title:isCtr?'Objeto e contexto do contrato':'Descreva os fatos',type:'textarea',field:'fatos',ph:isCtr?'Descreva o serviço, prazo, valor e detalhes relevantes...':'Inclua datas, valores, o que ocorreu e documentos relevantes. Quanto mais detalhes, melhor a qualidade da peça.'});}
-    if(d.tipo){const isCtr=d.tipo==='contrato';sc.push({id:'pedido',title:isCtr?'Objetivo e cláusulas principais':'Qual é o pedido?',type:'textarea',field:'pedido',ph:isCtr?'Ex: Prazo 12 meses, pagamento mensal, cláusula de confidencialidade e multa rescisória...':'Ex: Substituição do produto, indenização por danos morais, rescisão contratual...'});}
-    if(d.tipo&&lawyers.length>0)sc.push({id:'responsavel',title:'Qual advogado será responsável?',type:'cards',field:'responsavel',cols:1,optional:true,opts:lawyers.map(l=>({l:l.nome,v:String(l.id),s:`OAB/${l.uf} nº ${l.oab}`}))});
-    if(d.tipo){const mT=(modelosList||[]).filter(m=>m.tipo===d.tipo);if(mT.length>0)sc.push({id:'modelo',title:'Usar documento como referência de estilo?',type:'cards',field:'modelo_id',cols:1,optional:true,opts:[...mT.map(m=>({l:m.nome,v:String(m.id),s:'Usar meu estilo'})),{l:'Sem modelo',v:'none',s:'Usar formato padrão'}]});}
+    if(d.tipo){const isCtr=d.tipo==='contrato';sc.push({id:'fatos',lbl:isCtr?'Objeto e contexto do contrato':'Descreva os fatos do caso',sub:isCtr?'Detalhe o objeto, prazo e condições.':'Quanto mais detalhes, melhor a qualidade da peça.',type:'textarea',field:'fatos',ph:isCtr?'Descreva o serviço, prazo, valor e demais condições relevantes...':'Em [data], [parte] adquiriu/contratou... Inclua datas, valores e protocolos de atendimento.',counter:true});}
+    if(d.tipo){const isCtr=d.tipo==='contrato';sc.push({id:'pedido',lbl:isCtr?'Objetivo e cláusulas principais':'Qual é o pedido?',sub:isCtr?'Descreva as cláusulas e objetivos.':'Especifique os pedidos ao juízo.',type:'textarea',field:'pedido',ph:isCtr?'Ex: Prazo 12 meses, pagamento mensal, cláusula de confidencialidade e multa rescisória...':'Ex: Substituição do produto, indenização por danos morais, rescisão contratual...',counter:false});}
+    if(d.tipo){
+      const hasLawyers=lawyers&&lawyers.length>0;
+      const mT=(modelosList||[]).filter(m=>m.tipo===d.tipo);
+      const hasModels=mT.length>0;
+      if(hasLawyers||hasModels)sc.push({id:'final',lbl:'Quem assina e qual modelo de estilo?',sub:'Configurações finais antes de gerar sua peça.',type:'final',hasLawyers,hasModels,mT});
+    }
     return sc;
   }
   _hasData(sc){
     if(sc.type==='cards')return!!this.data[sc.field];
     if(sc.type==='form')return sc.fields.filter(f=>!f.optional).every(f=>(this.data[f.field]||'').trim().length>0);
-    if(sc.type==='textarea')return(this.data[sc.field]||'').trim().length>0;
+    if(sc.type==='textarea')return(this.data[sc.field]||'').trim().length>3;
+    if(sc.type==='final')return true;
     return true;
   }
   reset(ctx=null){
     this.data={};this.screenIdx=0;this.locked=false;
-    const gl=document.querySelector('.gen-layout');
-    if(gl)gl.classList.remove('generating');
+    const gw=document.getElementById('gwiz-wrap'),gd=document.getElementById('gdoc-wrap');
+    if(gw)gw.style.display='';if(gd)gd.style.display='none';
     document.getElementById('doc-paper').style.display='none';
-    document.getElementById('doc-empty').style.display='flex';
+    document.getElementById('doc-empty').style.display='none';
     document.getElementById('doc-acts').style.display='none';
     document.getElementById('doc-dot').className='doc-dot';
+    document.getElementById('doc-dot').style.background='';
     document.getElementById('doc-lbl').textContent='Aguardando dados';
     document.getElementById('gen-title').textContent='Nova peça';
     document.getElementById('tb-status').textContent='Aguardando...';
     document.getElementById('wiz-foot').style.display='flex';
+    const pb=document.getElementById('gen-prog-bar');if(pb)pb.style.width='0%';
+    const pt=document.getElementById('gen-prog-txt');if(pt)pt.textContent='Aguardando...';
     textoGerado='';
     document.getElementById('doc-paper').contentEditable='false';
     if(ctx)this._parse(ctx);
@@ -2656,44 +2743,59 @@ class WizardEngine{
     const scs=this._screens();
     if(this.screenIdx>=scs.length){this._generate();return;}
     const sc=scs[this.screenIdx],total=scs.length,cur=this.screenIdx+1;
-    document.getElementById('chat-st').textContent=`Passo ${cur} de ${total}`;
-    const dots=scs.map((s,i)=>`<div class="wiz-pd ${i<this.screenIdx?'done':i===this.screenIdx?'active':''}"></div>`).join('');
+    document.getElementById('gen-title').textContent='Nova peça';
+    document.getElementById('tb-status').textContent=`Passo ${cur} de ${total}`;
+    // Dots in footer
+    const dotHtml=scs.map((s,i)=>`<div class="gdot ${i<this.screenIdx?'done':i===this.screenIdx?'active':''}"></div>`).join('');
+    document.getElementById('wiz-dots').innerHTML=dotHtml;
     let body='';
     if(sc.type==='cards'){
-      const cls=sc.cols===1?'wide':'';
-      body=`<div class="wiz-cards ${cls}">${sc.opts.map(o=>{const sel=this.data[sc.field]===o.v?' sel':'';return`<div class="wiz-card${sel}" onclick="wizard._csel('${sc.field}','${(o.v+'').replace(/'/g,'\\x27')}',this,${!!sc.optional})"><div class="wiz-card-l">${esc(o.l)}</div>${o.s?`<div class="wiz-card-s">${esc(o.s)}</div>`:''}</div>`;}).join('')}</div>`;
+      const cls=sc.cols===3?'g3':sc.cols===1?'':'g2';
+      body=`<div class="gwiz-cards ${cls}">${sc.opts.map(o=>{const sel=this.data[sc.field]===o.v?' sel':'';return`<div class="gwiz-card${sel}" onclick="wizard._csel('${sc.field}','${(o.v+'').replace(/'/g,'\\x27')}',this)"><div class="gwiz-card-chk">✓</div><div class="gwiz-card-l">${esc(o.l)}</div>${o.s?`<div class="gwiz-card-s">${esc(o.s)}</div>`:''}</div>`;}).join('')}</div>`;
     }else if(sc.type==='form'){
-      body=sc.fields.map(f=>`<div class="wiz-fgrp"><label class="wiz-lbl">${esc(f.label)}${f.optional?' <span style="color:var(--t3);font-weight:400">(opcional)</span>':''}</label><input class="wiz-inp" id="wiz-f-${f.field}" value="${esc(this.data[f.field]||'')}" placeholder="${esc(f.ph||'')}" oninput="wizard._fch('${f.field}',this.value)"></div>`).join('');
+      body=sc.fields.map(f=>`<div class="gwiz-fgrp"><label class="gwiz-lbl-f">${esc(f.label)}${f.optional?`<span class="gwiz-lbl-opt">opcional</span>`:''}</label><input class="gwiz-inp" id="gf-${f.field}" value="${esc(this.data[f.field]||'')}" placeholder="${esc(f.ph||'')}" oninput="wizard._fch('${f.field}',this.value)"></div>`).join('');
     }else if(sc.type==='textarea'){
-      body=`<textarea class="wiz-ta" id="wiz-ta-${sc.field}" rows="7" placeholder="${esc(sc.ph||'')}" oninput="wizard._fch('${sc.field}',this.value)">${esc(this.data[sc.field]||'')}</textarea>`;
+      const cnt=sc.counter?`<div class="gwiz-ta-foot"><span>Inclua datas, valores e protocolos de atendimento.</span><span id="gwiz-cnt-${sc.field}">${(this.data[sc.field]||'').length} / 3.000</span></div>`:'';
+      body=`<textarea class="gwiz-ta" id="gt-${sc.field}" rows="9" placeholder="${esc(sc.ph||'')}" oninput="wizard._fch('${sc.field}',this.value);${sc.counter?`document.getElementById('gwiz-cnt-${sc.field}').textContent=this.value.length+' / 3.000';`:''}">${esc(this.data[sc.field]||'')}</textarea>${cnt}`;
+    }else if(sc.type==='final'){
+      let fb='';
+      if(sc.hasLawyers){fb+=`<div class="gwiz-fgrp"><label class="gwiz-lbl-f">ADVOGADO RESPONSÁVEL</label>${lawyers.map(l=>{const ini=(l.nome.split(' ').slice(0,2).map(w=>w[0]||'').join('')).toUpperCase();const sel=this.data.responsavel===String(l.id)?' sel':'';return`<div class="gwiz-lcard${sel}" onclick="wizard._lsel('${l.id}',this)"><div class="gwiz-lcard-av">${ini}</div><div><div class="gwiz-lcard-name">${esc(l.nome)}</div><div class="gwiz-lcard-oab">OAB/${l.uf} nº ${l.oab}</div></div><div class="gwiz-lcard-chk"></div></div>`;}).join('')}</div>`;}
+      if(sc.hasModels){const mOpts=[...sc.mT,{id:'none',nome:'Padrão da IA (sem modelo)'}];fb+=`<div class="gwiz-fgrp"><label class="gwiz-lbl-f">MODELO DE ESTILO<span class="gwiz-lbl-opt">opcional</span></label>${mOpts.map(m=>{const sel=this.data.modelo_id===String(m.id)?' sel':'';return`<div class="gwiz-lcard${sel}" onclick="wizard._msel('${m.id}',this)" style="padding:12px 16px"><div style="flex:1"><div class="gwiz-lcard-name">${esc(m.nome)}</div></div><div class="gwiz-lcard-chk"></div></div>`;}).join('')}</div>`;}
+      const sumParts=[this._tL(this.data.tipo)];
+      if(this.data.area)sumParts.push(this._aL(this.data.area));
+      if(this.data.autor)sumParts.push((this.data.autor||'').split(',')[0].trim());
+      if(this.data.reu)sumParts.push('vs. '+(this.data.reu||'').split(',')[0].trim());
+      fb+=`<div class="gwiz-summary"><div class="gwiz-summary-lbl">RESUMO</div><div class="gwiz-summary-line">${sumParts.join(' · ')}</div></div>`;
+      body=fb;
     }
-    document.getElementById('wiz-body').innerHTML=`<div class="wiz-prog">${dots}</div><div class="wiz-step-n">Passo ${cur} de ${total}</div><div class="wiz-q">${esc(sc.title)}</div>${body}`;
+    document.getElementById('wiz-body').innerHTML=`<div class="gwiz-lbl">Passo ${cur} de ${total}</div><div class="gwiz-heading">${esc(sc.lbl)}</div>${sc.sub?`<div class="gwiz-sub">${esc(sc.sub)}</div>`:''}<div></div>${body}`;
     this._updFoot(sc,scs);
-    setTimeout(()=>{const el=document.querySelector('#wiz-body input.wiz-inp,#wiz-body textarea.wiz-ta');if(el)el.focus();},50);
+    setTimeout(()=>{const el=document.querySelector('#wiz-body .gwiz-inp,#wiz-body .gwiz-ta');if(el)el.focus();},50);
   }
   _updFoot(sc,scs){
     const back=document.getElementById('wiz-back'),next=document.getElementById('wiz-next');
     back.disabled=this.screenIdx===0;
     const isLast=this.screenIdx===scs.length-1;
-    if(sc.type==='cards'&&!sc.optional){
+    if(sc.type==='cards'){
       next.style.display='none';
-      back.style.marginLeft='auto';
     }else{
       next.style.display='';
-      back.style.marginLeft='';
-      if(sc.optional){next.textContent='Pular →';next.disabled=false;next.className='wiz-next';}
-      else{
-        next.textContent=isLast?'✦ Gerar peça':'Continuar →';
-        next.disabled=!this._hasData(sc);
-        next.className=isLast?'wiz-next gerar':'wiz-next';
-      }
+      next.disabled=!this._hasData(sc);
+      next.textContent=isLast?'✦ Gerar peça':'Próximo →';
     }
   }
-  _csel(field,val,el,optional){
-    el.closest('.wiz-cards').querySelectorAll('.wiz-card').forEach(c=>c.classList.remove('sel'));
+  _csel(field,val,el){
+    el.closest('.gwiz-cards').querySelectorAll('.gwiz-card').forEach(c=>c.classList.remove('sel'));
     el.classList.add('sel');this.data[field]=val;
-    if(!optional)setTimeout(()=>this.next(),270);
-    else{const scs=this._screens();this._updFoot(scs[this.screenIdx],scs);}
+    setTimeout(()=>this.next(),270);
+  }
+  _lsel(id,el){
+    el.closest('.gwiz-fgrp').querySelectorAll('.gwiz-lcard').forEach(c=>c.classList.remove('sel'));
+    el.classList.add('sel');this.data.responsavel=String(id);
+  }
+  _msel(id,el){
+    el.closest('.gwiz-fgrp').querySelectorAll('.gwiz-lcard').forEach(c=>c.classList.remove('sel'));
+    el.classList.add('sel');this.data.modelo_id=String(id);
   }
   _fch(field,val){
     this.data[field]=val;
@@ -2713,54 +2815,80 @@ class WizardEngine{
     const scs=this._screens();
     if(this.screenIdx>=scs.length)return;
     const sc=scs[this.screenIdx];
-    if(!sc.optional&&!this._hasData(sc))return;
+    if(!this._hasData(sc))return;
     this.screenIdx++;
     const newScs=this._screens();
     if(this.screenIdx>=newScs.length){this._generate();return;}
     this._render();
   }
+  voltarWizard(){
+    document.getElementById('gwiz-wrap').style.display='';
+    document.getElementById('gdoc-wrap').style.display='none';
+  }
+  _setProgress(pct,txt){
+    const bar=document.getElementById('gen-prog-bar');
+    const lbl=document.getElementById('gen-prog-txt');
+    if(bar)bar.style.width=Math.min(100,Math.max(0,pct))+'%';
+    if(lbl&&txt!==undefined&&txt!=='')lbl.textContent=txt;
+  }
   async _generate(){
     this.locked=true;
-    document.querySelector('.gen-layout').classList.add('generating');
-    document.getElementById('wiz-body').innerHTML=`<div class="wiz-status"><div class="wiz-status-ico">✦</div><div class="wiz-gen-dots"><div class="td"></div><div class="td"></div><div class="td"></div></div><div class="wiz-status-txt">Redigindo ${esc(this._tL(this.data.tipo))}...</div><div class="wiz-status-sub">A Pandecta está elaborando<br>sua peça agora.</div></div>`;
+    const gw=document.getElementById('gwiz-wrap'),gd=document.getElementById('gdoc-wrap');
+    gw.style.display='none';gd.style.display='flex';
     document.getElementById('wiz-foot').style.display='none';
-    document.getElementById('chat-st').textContent='Redigindo...';
+    const areaL=this.data.area?` — ${this._aL(this.data.area)}`:'';
+    const docTitle=`${this._tL(this.data.tipo)}${areaL}`;
+    document.getElementById('gdoc-label').textContent='Gerando peça';
+    document.getElementById('gdoc-title').textContent=docTitle;
     document.getElementById('gen-title').textContent=this._tL(this.data.tipo);
     document.getElementById('tb-status').textContent='Gerando...';
+    document.getElementById('doc-dot').className='doc-dot live';
+    document.getElementById('doc-dot').style.background='';
+    document.getElementById('doc-lbl').textContent='Redigindo...';
     document.getElementById('doc-empty').style.display='none';
     document.getElementById('doc-paper').style.display='block';
     document.getElementById('doc-paper').innerHTML='';
-    document.getElementById('doc-dot').className='doc-dot live';
-    document.getElementById('doc-lbl').textContent=`${this._tL(this.data.tipo)} — ${(this.data.autor||'').split(',')[0]}`;
+    document.getElementById('doc-acts').style.display='none';
+    this._setProgress(2,'Iniciando...');
     let ca=[],memoria=[];
     const q=`${this.data.area||''} ${this.data.tipo} ${(this.data.fatos||'').slice(0,300)}`;
     try{ca=await api('POST','/api/acervo/buscar',{query:q,top:5});}catch(e){}
     try{memoria=await api('POST','/api/memoria/consultar',{query:q,area:this.data.area||'',top:3});}catch(e){}
+    this._setProgress(5,'Consultando base jurídica...');
     textoGerado='';
     try{
       const _area=this.data.area||(['contrato','parecer'].includes(this.data.tipo)?'civil':'consumidor');
       const modeloId=this.data.modelo_id&&this.data.modelo_id!=='none'?this.data.modelo_id:null;
       const resp=await fetch('/api/gerar',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({area:_area,tipo:this.data.tipo,subtipo:this.data.subtipo||'',autor:this.data.autor,reu:this.data.reu,vara:this.data.vara||'',fatos:this.data.fatos,pedido:this.data.pedido||'',estilo:'',chunks_acervo:ca,chunks_memoria:memoria,modelo_id:modeloId})});
       if(!resp.ok||!resp.headers.get('content-type')?.includes('event-stream')){const t=await resp.text();let m='Erro '+resp.status;try{m=JSON.parse(t).error||m;}catch(e){}throw new Error(m);}
+      this._setProgress(8,'Redigindo peça...');
       const reader=resp.body.getReader(),dec=new TextDecoder();
-      while(true){const{done,value}=await reader.read();if(done)break;for(const ln of dec.decode(value).split('\n')){if(!ln.startsWith('data: '))continue;const p=ln.slice(6);if(p==='[DONE]')break;try{const d=JSON.parse(p);if(d.type==='content_block_delta'&&d.delta?.type==='text_delta'){textoGerado+=d.delta.text;renderDoc(textoGerado,true);}}catch(e){}}}
+      while(true){
+        const{done,value}=await reader.read();if(done)break;
+        for(const ln of dec.decode(value).split('\n')){
+          if(!ln.startsWith('data: '))continue;const p=ln.slice(6);if(p==='[DONE]')break;
+          try{const d=JSON.parse(p);if(d.type==='content_block_delta'&&d.delta?.type==='text_delta'){textoGerado+=d.delta.text;renderDoc(textoGerado,true);const pct=Math.min(92,8+(textoGerado.length/80));this._setProgress(pct,'');}}catch(e){}
+        }
+      }
       renderDoc(textoGerado,false);
+      this._setProgress(100,'Concluído');
       document.getElementById('doc-dot').className='doc-dot';
-      document.getElementById('doc-acts').style.display='flex';
-      document.getElementById('doc-paper').contentEditable='true';
-      document.getElementById('doc-lbl').textContent='Concluído · Clique para editar';
-      document.getElementById('chat-st').textContent='Concluído';
+      document.getElementById('doc-dot').style.background='#15803D';
+      document.getElementById('doc-lbl').textContent='Concluído · clique para editar';
+      document.getElementById('gdoc-label').textContent='Peça concluída';
+      document.getElementById('gen-title').textContent=this._tL(this.data.tipo);
       document.getElementById('tb-status').textContent='Concluído';
-      document.querySelector('.gen-layout').classList.remove('generating');
-      document.getElementById('wiz-body').innerHTML=`<div class="wiz-status"><div class="wiz-status-ico" style="opacity:.6">✓</div><div class="wiz-status-txt">Peça concluída!</div><div class="wiz-status-sub">Sua ${esc(this._tL(this.data.tipo))} está pronta.<br>Edite, copie ou exporte para Word.</div></div>`;
-      document.getElementById('wiz-foot').style.display='none';
+      document.getElementById('doc-paper').contentEditable='true';
+      document.getElementById('doc-acts').style.display='flex';
       await salvarHistorico(this.data,textoGerado,this._tL(this.data.tipo),this._aL(this.data.area));
     }catch(err){
-      document.querySelector('.gen-layout').classList.remove('generating');
-      document.getElementById('wiz-body').innerHTML=`<div class="wiz-status"><div class="wiz-status-ico">⚠</div><div class="wiz-status-txt">Erro ao gerar</div><div class="wiz-status-sub">${esc(err.message)}</div></div>`;
-      document.getElementById('chat-st').textContent='Erro';
+      this._setProgress(0,'Erro ao gerar');
+      document.getElementById('doc-paper').innerHTML=`<p style="color:rgba(255,100,100,.8);text-indent:0">Erro: ${esc(err.message)}</p>`;
+      document.getElementById('doc-dot').className='doc-dot';
+      document.getElementById('doc-dot').style.background='#DC2626';
+      document.getElementById('doc-lbl').textContent='Erro ao gerar';
       document.getElementById('tb-status').textContent='Erro';
-      document.getElementById('wiz-foot').style.display='flex';
+      document.getElementById('doc-acts').style.display='flex';
       this.locked=false;
     }
   }
