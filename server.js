@@ -1403,4 +1403,28 @@ app.get('/api/tickets/meus', requireAuth, (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
-ap
+app.get('/api/tickets', requireAuth, requireAdmin, (req, res) => {
+  try {
+    const rows = db.prepare(
+      "SELECT * FROM tickets ORDER BY CASE status WHEN 'aberto' THEN 0 ELSE 1 END, created_at DESC"
+    ).all();
+    res.json(rows);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/tickets/:id/responder', requireAuth, requireAdmin, (req, res) => {
+  try {
+    const { resposta } = req.body || {};
+    if (!resposta || !resposta.trim()) return res.status(400).json({ error: 'Resposta obrigatoria.' });
+    db.prepare(
+      "UPDATE tickets SET resposta=?, status='respondido', respondido_at=CURRENT_TIMESTAMP WHERE id=?"
+    ).run(resposta.trim(), req.params.id);
+    const ticket = db.prepare('SELECT * FROM tickets WHERE id=?').get(req.params.id);
+    sendTelegram('[OK] Ticket #' + req.params.id + ' respondido.');
+    res.json(ticket);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.listen(PORT, () => {
+  console.log(`Pandecta AI rodando na porta ${PORT}`);
+});
