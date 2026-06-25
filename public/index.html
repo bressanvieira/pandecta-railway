@@ -873,10 +873,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       </div>
 
       <div class="lf">
-        <label>Usuário</label>
+        <label>E-mail cadastrado</label>
         <div class="inp-icn">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 5-4s5 1.5 5 4"/>
+            <rect x="1.5" y="3" width="11" height="8" rx="1.5"/><path d="M1.5 4.5l5.5 3.5 5.5-3.5"/>
           </svg>
           <input id="inp-user" type="email" placeholder="seu@email.com" autocomplete="email">
         </div>
@@ -893,7 +893,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       </div>
 
       <button class="login-btn" onclick="fazerLogin()">Entrar</button>
-      <div class="login-err" id="login-err">Usuário ou senha incorretos.</div>
+      <div class="login-err" id="login-err">E-mail ou senha incorretos.</div>
       <div style="margin-top:22px;padding-top:18px;border-top:1px solid rgba(0,0,0,.07);">
         <a href="/cadastro" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:linear-gradient(135deg,rgba(200,164,106,.12),rgba(200,164,106,.06));border:1.5px solid var(--gold);border-radius:var(--r-sm);font-size:14px;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:.2px;transition:all .15s;box-shadow:0 2px 8px rgba(200,164,106,.12);" onmouseover="this.style.background='rgba(200,164,106,.18)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(200,164,106,.12),rgba(200,164,106,.06))'"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="7" r="3"/><path d="M4 19c0-3.314 2.686-6 6-6s6 2.686 6 6"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="10" y1="16" x2="10" y2="19" style="display:none"/></svg>Criar conta — 7 dias grátis</a>
         <p style="text-align:center;font-size:11px;color:var(--t3);margin-top:8px;">Sem cartão de crédito necessário</p>
@@ -3988,9 +3988,7 @@ let _pioRespondendoId=null;
 function openPioResponder(id){
   _pioRespondendoId=id;
   const msg=_pioAdminDados.find(m=>m.id===id);
-  const resp=prompt('Escreva sua resposta para '+( msg?msg.nome:'este pioneiro')+':
-
-(aparecerá diretamente para ele dentro da ferramenta)');
+  const resp=prompt('Escreva sua resposta para '+( msg?msg.nome:'este pioneiro')+':\n\n(aparecerá diretamente para ele na ferramenta)');
   if(!resp||!resp.trim()) return;
   enviarRespostaPioneer(id, resp.trim());
 }
