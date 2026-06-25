@@ -563,30 +563,17 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .hist-empty{text-align:center;padding:56px 40px;color:var(--t3);font-size:13px;line-height:1.7;}
 
 /* Viewer / Editor — layout correto */
-.hist-viewer{display:none;flex-direction:column;flex:1;overflow:hidden;background:#0C1020;}
+.hist-viewer{display:none;flex-direction:column;flex:1;overflow:hidden;}
 .hist-viewer.open{display:flex;}
-.hist-viewer-hd{flex-shrink:0;padding:14px 18px;background:#111827;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.hv-title{font-size:13px;font-weight:500;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,255,255,.8);}
+.hist-viewer-hd{flex-shrink:0;padding:14px 18px;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.hv-title{font-size:13px;font-weight:500;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hv-acts{display:flex;gap:6px;flex-shrink:0;align-items:center;}
-.hv-sep{width:1px;height:20px;background:rgba(255,255,255,.1);margin:0 4px;flex-shrink:0;}
+.hv-sep{width:1px;height:20px;background:var(--bd-md);margin:0 4px;flex-shrink:0;}
 .dbtn-danger{color:var(--err)!important;border-color:rgba(220,50,50,.35)!important;background:transparent!important;}
 .dbtn-danger:hover{background:rgba(220,50,50,.08)!important;}
-.hist-editor{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#0C1020;}
-.hist-paper{flex:1;overflow-y:auto;padding:48px 60px;font-family:'Georgia','Times New Roman',serif;font-size:12pt;line-height:1.75;color:rgba(255,255,255,.87);}
-.hist-paper::-webkit-scrollbar{width:4px;}
-.hist-paper::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px;}
-.hist-paper h1{color:#C8A46A;font-size:13.5pt;text-align:center;margin:0 0 20pt;letter-spacing:.02em;}
-.hist-paper h2{color:#C8A46A;font-size:12pt;font-weight:700;margin:18pt 0 6pt;border-bottom:.5pt solid rgba(200,164,106,.2);padding-bottom:3pt;}
-.hist-paper h3,.hist-paper h4{color:rgba(200,164,106,.75);}
-.hist-paper p{margin:0 0 7pt;text-align:justify;}
-.hist-paper blockquote{color:rgba(190,210,235,.65);border-left:2pt solid rgba(200,164,106,.3);margin:8pt 0 8pt 1cm;padding-left:.5cm;font-style:italic;}
-.hist-paper strong{color:rgba(255,255,255,.95);}
-.hist-paper hr{border:none;border-top:.5pt solid rgba(255,255,255,.1);margin:10pt 0;}
-.hist-paper table{width:100%;border-collapse:collapse;margin:8pt 0;}
-.hist-paper th{background:rgba(255,255,255,.05);padding:5pt 7pt;border:.5pt solid rgba(255,255,255,.1);font-weight:700;}
-.hist-paper td{padding:5pt 7pt;border:.5pt solid rgba(255,255,255,.08);}
-.hist-textarea{flex:1;width:100%;min-height:0;background:#111827;border:none;border-radius:0;padding:48px 60px;font-family:'Georgia',serif;font-size:12pt;line-height:1.75;color:rgba(255,255,255,.85);resize:none;outline:none;}
-.hist-textarea:focus{outline:none;}
+.hist-editor{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:20px;background:var(--bg);}
+.hist-textarea{flex:1;width:100%;min-height:0;background:var(--card);border:1px solid var(--bd-md);border-radius:var(--r);padding:20px 22px;font-family:'Georgia',serif;font-size:12pt;line-height:1.75;color:#111;resize:none;outline:none;transition:border .14s;}
+.hist-textarea:focus{border-color:var(--bd-dk);}
 
 /* ════ ACERVO ════ */
 .ac-notice{display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;padding:6px 12px;border-radius:6px;background:var(--surface);border:1px solid var(--bd);font-size:12px;color:var(--t2);}
@@ -1250,15 +1237,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <button class="dbtn dbtn-p" onclick="exportarWordHist()">
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:4px;"><path d="M7 1v9M4 7l3 3 3-3"/><path d="M2 11h10v1.5a.5.5 0 01-.5.5h-9a.5.5 0 01-.5-.5V11z"/></svg>Word
             </button>
-            <button class="dbtn" id="hist-edit-btn" onclick="histToggleEdit()" style="border-color:rgba(255,255,255,.2);color:rgba(190,210,235,.7);">&#x270E; Editar</button>
             <button class="dbtn" style="background:var(--ok);border-color:var(--ok);color:#fff;" onclick="salvarEdicao()">
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:4px;"><polyline points="2,7 5.5,11 12,3"/></svg>Salvar
             </button>
           </div>
         </div>
         <div class="hist-editor">
-          <div class="hist-paper" id="hist-pa"></div>
-          <textarea class="hist-textarea" id="hist-ta" spellcheck="false" style="display:none" placeholder="Carregando..."></textarea>
+          <textarea class="hist-textarea" id="hist-ta" spellcheck="false" placeholder="Carregando..."></textarea>
         </div>
       </div>
     </div>
@@ -3131,17 +3116,7 @@ function abrirViewer(id){
   document.getElementById('hv-title').textContent=`${histItemAtual.tipo_label||'Peça'} — ${histItemAtual.autor||''}`;
   const ta=document.getElementById('hist-ta');
   ta.value=histItemAtual.texto||'';
-  const pa=document.getElementById('hist-pa');
-  if(pa){pa.innerHTML=mdDoc(histItemAtual.texto||'');pa.style.display='';ta.style.display='none';const btn=document.getElementById('hist-edit-btn');if(btn)btn.textContent='✎ Editar';}
-}
-function histToggleEdit(){
-  const pa=document.getElementById('hist-pa'),ta=document.getElementById('hist-ta'),btn=document.getElementById('hist-edit-btn');
-  if(!pa||!ta)return;
-  if(ta.style.display==='none'){
-    ta.style.display='flex';pa.style.display='none';if(btn)btn.textContent='← Ver';setTimeout(()=>ta.focus(),50);
-  }else{
-    pa.innerHTML=mdDoc(ta.value);ta.style.display='none';pa.style.display='';if(btn)btn.textContent='✎ Editar';
-  }
+  setTimeout(()=>ta.focus(),80);
 }
 function fecharViewer(){
   document.getElementById('hist-viewer').classList.remove('open');
