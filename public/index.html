@@ -921,16 +921,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <!-- topbar home -->
       <div class="topbar">
-        <div class="tb-left"></div>
+        <div class="tb-left">
+          <span class="tb-page" style="font-weight:600;">Início</span>
+        </div>
         <div class="tb-right">
-          <button class="tb-icon-btn" title="Buscar">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><line x1="9.5" y1="9.5" x2="12.5" y2="12.5"/></svg>
-          </button>
-          <button class="tb-icon-btn" title="Notificações">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M7 1.5a4 4 0 014 4v2.5l1 1.5H2L3 8V5.5a4 4 0 014-4z"/><path d="M5.5 11.5a1.5 1.5 0 003 0"/></svg>
-          </button>
           <div class="tb-user" onclick="toggleDD('dd-home')">
             <div class="tb-av" id="av-home">A</div>
+            <div><div class="tb-uname" id="nm-home">–</div><div class="tb-usess">Sessão atual</div></div>
           </div>
           <div class="tb-dropdown" id="dd-home">
             <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
@@ -2150,7 +2147,7 @@ async function fazerLogin(){
     localStorage.setItem('pandecta_user',usuario);
     localStorage.setItem('pandecta_role',userRole);
     localStorage.setItem('pandecta_pioneer',isPioneer?'1':'0');
-    if(isPioneer) checkPioneerNotifs();
+    if(isPioneer || userRole==='admin') checkPioneerNotifs();
     await loadData();
     go('home');
     checkTourPopup();
@@ -4032,7 +4029,7 @@ async function enviarRespostaPioneer(id, resposta){
 let _pioNotifCount = 0;
 
 async function checkPioneerNotifs() {
-  if (!isPioneer) return;
+  if (!isPioneer && userRole !== 'admin') return;
   try {
     const data = await api('GET', '/api/pioneer/notif');
     _pioNotifCount = data.count || 0;
@@ -4042,7 +4039,7 @@ async function checkPioneerNotifs() {
 
 function renderPioNotifBadges() {
   document.querySelectorAll('.pio-bell-btn').forEach(el => el.remove());
-  if (!isPioneer || _pioNotifCount === 0) return;
+  if ((!isPioneer && userRole !== 'admin') || _pioNotifCount === 0) return;
   const badgeHtml = '<button class="pio-bell-btn" onclick="go(\'pioneer\')" title="' + _pioNotifCount + ' resposta(s) nova(s) no Canal Pioneiro">'
     + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>'
     + '<span class="pio-bell-dot">' + _pioNotifCount + '</span>'
@@ -4053,7 +4050,7 @@ function renderPioNotifBadges() {
 }
 
 async function markPioneerMsgsRead() {
-  if (!isPioneer || _pioNotifCount === 0) return;
+  if ((!isPioneer && userRole !== 'admin') || _pioNotifCount === 0) return;
   try {
     await api('PUT', '/api/pioneer/mensagens/marcar-lidas', {});
     _pioNotifCount = 0;
