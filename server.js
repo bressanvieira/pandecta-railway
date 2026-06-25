@@ -168,6 +168,23 @@ try {
   try { db.exec(`ALTER TABLE users ADD COLUMN semester TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE users ADD COLUMN trial_expires_at DATETIME`); } catch(e) {}
   try { db.exec(`ALTER TABLE users ADD COLUMN account_status TEXT DEFAULT 'active'`); } catch(e) {}
+  // migrations pioneiros
+  try { db.exec(`ALTER TABLE users ADD COLUMN is_pioneer INTEGER DEFAULT 0`); } catch(e) {}
+  try { db.exec(`ALTER TABLE fundadores ADD COLUMN status TEXT DEFAULT 'pendente'`); } catch(e) {}
+  try { db.exec(`ALTER TABLE fundadores ADD COLUMN user_id INTEGER`); } catch(e) {}
+  // tabela de mensagens do canal pioneiro
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS pioneer_messages (
+      id            INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id       INTEGER NOT NULL,
+      nome          TEXT NOT NULL,
+      mensagem      TEXT NOT NULL,
+      status        TEXT DEFAULT 'pendente',
+      resposta      TEXT DEFAULT '',
+      created_at    DATETIME DEFAULT CURRENT_TIMESTAMP,
+      respondido_at DATETIME
+    );
+  `);
 
     // seed — garante admin sempre acessível
   const adminRow = db.prepare('SELECT id FROM users WHERE email=?').get('admin@pandecta.ai');
@@ -250,8 +267,9 @@ app.post('/api/auth/login', (req, res) => {
         return res.status(402).json({ error: 'trial_expired', message: 'Seu periodo de teste de 7 dias encerrou. Escolha um plano para continuar.' });
       }
     }
-    const token = jwt.sign({ userId: user.id, email: user.email, nome: user.nome, role: user.role, plan: user.plan, account_status: user.account_status }, JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token, nome: user.nome, email: user.email, role: user.role, plan: user.plan, account_status: user.account_status });
+    const isPioneer = user.is_pioneer ? 1 : 0;
+    const token = jwt.sign({ userId: user.id, email: user.email, nome: user.nome, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, nome: user.nome, email: user.email, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -1109,6 +1127,143 @@ app.get('/api/fundadores', requireAuth, requireAdmin, (req, res) => {
     const rows = db.prepare('SELECT * FROM fundadores ORDER BY created_at DESC').all();
     res.json(rows);
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Aprovar pioneiro: cria conta (se não existir), marca is_pioneer=1 e envia texto pro Telegram
+app.post('/api/fundadores/:id/aprovar', requireAuth, requireAdmin, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'Banco indisponivel.' });
+  try {
+    const fundador = db.prepare('SELECT * FROM fundadores WHERE id=?').get(req.params.id);
+    if (!fundador) return res.status(404).json({ error: 'Inscrição não encontrada.' });
+    if (fundador.status === 'aprovado') return res.status(409).json({ error: 'Já aprovado.' });
+
+    const senhaTemp = 'Pioneiro' + new Date().getFullYear() + '!';
+    let userId = null;
+    const existingUser = db.prepare('SELECT id FROM users WHERE email=?').get(fundador.email.toLowerCase());
+    if (existingUser) {
+      db.prepare('UPDATE users SET is_pioneer=1, account_status=? WHERE id=?').run('active', existingUser.id);
+      userId = existingUser.id;
+    } else {
+      const hash = require('bcryptjs').hashSync(senhaTemp, 10);
+      const r = db.prepare(
+        `INSERT INTO users (email, password_hash, nome, role, is_pioneer, account_status, phone)
+         VALUES (?,?,?,?,?,?,?)`
+      ).run(fundador.email.toLowerCase(), hash, fundador.nome, 'user', 1, 'active', fundador.whatsapp || '');
+      userId = r.lastInsertRowid;
+    }
+    db.prepare('UPDATE fundadores SET status=?, user_id=? WHERE id=?').run('aprovado', userId, fundador.id);
+
+    const areas = { consumidor:'Consumidor', civil:'Civil', trabalhista:'Trabalhista', familia:'Família', imobiliario:'Imobiliário', empresarial:'Empresarial', criminal:'Criminal', outra:'Outra' };
+    const areaLabel = areas[fundador.area] || fundador.area || '';
+    const whatsappNum = fundador.whatsapp ? fundador.whatsapp.replace(/\D/g,'') : '';
+
+    const txtWhats =
+`Olá, Dr(a). ${fundador.nome}! 🎉
+
+Sua inscrição como *Advogado Pioneiro* na Pandecta AI foi aprovada!
+
+Aqui estão seus dados de acesso:
+🔗 Link: https://pandecta.com.br/app
+📧 E-mail: ${fundador.email}
+🔑 Senha provisória: ${existingUser ? '(use a senha que você cadastrou)' : senhaTemp}
+
+Ao entrar, você verá o *Canal Pioneiro* no menu — é o seu espaço direto comigo para ideias, críticas e sugestões.
+
+Seja bem-vindo(a) ao time! 🏅
+— Maurício, Pandecta AI`;
+
+    const tgMsg =
+`✅ <b>PIONEIRO APROVADO</b>
+
+Nome: ${fundador.nome}
+E-mail: ${fundador.email}
+WhatsApp: ${fundador.whatsapp || 'não informado'} ${whatsappNum ? '➜ https://wa.me/55' + whatsappNum : ''}
+Área: ${areaLabel}
+${existingUser ? '⚠️ Já tinha conta — is_pioneer ativado.' : '🆕 Conta criada com senha: ' + senhaTemp}
+
+━━━━━━━━━━━━━━━━━━━━
+📱 <b>COPIE E ENVIE NO WHATSAPP:</b>
+━━━━━━━━━━━━━━━━━━━━
+
+${txtWhats}`;
+
+    sendTelegram(tgMsg);
+    res.json({ ok: true, userId });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Reprovar pioneiro
+app.post('/api/fundadores/:id/reprovar', requireAuth, requireAdmin, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'Banco indisponivel.' });
+  try {
+    const fundador = db.prepare('SELECT * FROM fundadores WHERE id=?').get(req.params.id);
+    if (!fundador) return res.status(404).json({ error: 'Inscrição não encontrada.' });
+    db.prepare('UPDATE fundadores SET status=? WHERE id=?').run('reprovado', fundador.id);
+    sendTelegram(`❌ Pioneiro REPROVADO: ${fundador.nome} (${fundador.email})`);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── CANAL PIONEIRO ────────────────────────────────────────────────────────────
+function requirePioneer(req, res, next) {
+  if (!req.user.is_pioneer && req.user.role !== 'admin')
+    return res.status(403).json({ error: 'Acesso restrito a Advogados Pioneiros.' });
+  next();
+}
+
+app.post('/api/pioneer/mensagens', requireAuth, requirePioneer, (req, res) => {
+  try {
+    const { mensagem } = req.body || {};
+    if (!mensagem || !mensagem.trim()) return res.status(400).json({ error: 'Mensagem obrigatória.' });
+    const user = db.prepare('SELECT nome FROM users WHERE id=?').get(req.user.userId);
+    const r = db.prepare(
+      'INSERT INTO pioneer_messages (user_id, nome, mensagem) VALUES (?,?,?)'
+    ).run(req.user.userId, user ? user.nome || 'Pioneiro' : 'Pioneiro', mensagem.trim());
+    const msg = db.prepare('SELECT * FROM pioneer_messages WHERE id=?').get(r.lastInsertRowid);
+    sendTelegram(
+      '🏅 <b>Canal Pioneiro — nova mensagem</b>\n\n' +
+      'De: ' + (user ? user.nome : 'Pioneiro') + ' (' + req.user.email + ')\n\n' +
+      mensagem.trim().slice(0, 400)
+    );
+    res.json(msg);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/pioneer/mensagens/minhas', requireAuth, requirePioneer, (req, res) => {
+  try {
+    const rows = db.prepare(
+      'SELECT id,mensagem,status,resposta,created_at,respondido_at FROM pioneer_messages WHERE user_id=? ORDER BY created_at DESC'
+    ).all(req.user.userId);
+    res.json(rows);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/pioneer/mensagens', requireAuth, requireAdmin, (req, res) => {
+  try {
+    const rows = db.prepare(
+      "SELECT pm.*, u.email FROM pioneer_messages pm LEFT JOIN users u ON u.id=pm.user_id ORDER BY CASE pm.status WHEN 'pendente' THEN 0 WHEN 'lido' THEN 1 ELSE 2 END, pm.created_at DESC"
+    ).all();
+    res.json(rows);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/pioneer/mensagens/:id/lido', requireAuth, requireAdmin, (req, res) => {
+  try {
+    db.prepare("UPDATE pioneer_messages SET status='lido' WHERE id=? AND status='pendente'").run(req.params.id);
+    res.json({ ok: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/pioneer/mensagens/:id/responder', requireAuth, requireAdmin, (req, res) => {
+  try {
+    const { resposta } = req.body || {};
+    if (!resposta || !resposta.trim()) return res.status(400).json({ error: 'Resposta obrigatória.' });
+    db.prepare(
+      "UPDATE pioneer_messages SET resposta=?, status='respondido', respondido_at=CURRENT_TIMESTAMP WHERE id=?"
+    ).run(resposta.trim(), req.params.id);
+    const msg = db.prepare('SELECT * FROM pioneer_messages WHERE id=?').get(req.params.id);
+    res.json(msg);
+  } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
 app.get('/api/admin/stats', requireAuth, requireAdmin, (req, res) => {

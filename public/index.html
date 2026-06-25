@@ -1585,6 +1585,72 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
+
+<!-- ════ CANAL PIONEIRO ════ -->
+<div id="screen-pioneer" class="screen">
+  <div class="app-shell">
+    <div id="sb-pio"></div>
+    <div class="main-area">
+      <div class="topbar">
+        <div class="tb-left">
+          <span class="tb-crumb" onclick="go('home')">Início</span>
+          <span class="tb-sep">/</span>
+          <span class="tb-page">Canal Pioneiro</span>
+        </div>
+        <div class="tb-right">
+          <div class="tb-user" onclick="toggleDD('dd-pio')">
+            <div class="tb-av" id="av-pio">A</div>
+            <div><div class="tb-uname" id="nm-pio">–</div><div class="tb-usess">Sessão atual</div></div>
+          </div>
+          <div class="tb-dropdown" id="dd-pio">
+            <div class="dd-item" onclick="go('config')">⚙️ Configurações</div>
+            <div class="dd-sep"></div>
+            <div class="dd-item" onclick="fazerLogout()">🔒 Sair</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tkt-body">
+        <div class="tkt-toolbar">
+          <div>
+            <div class="page-h">🏅 Canal Pioneiro</div>
+            <div class="page-s">Seu espaço exclusivo — compartilhe ideias, críticas e sugestões diretamente com a equipe Pandecta.</div>
+          </div>
+          <button class="tkt-novo-btn" onclick="openPioneerModal()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6.5" y1="11" x2="6.5" y2="2"/><line x1="2" y1="6.5" x2="11" y2="6.5"/></svg>
+            Nova mensagem
+          </button>
+        </div>
+
+        <!-- Área de destaque -->
+        <div style="background:rgba(200,164,106,.06);border:1px solid rgba(200,164,106,.2);border-radius:10px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:flex-start;gap:14px;">
+          <span style="font-size:1.4rem;flex-shrink:0;">🎯</span>
+          <div style="font-size:13px;color:var(--t2);line-height:1.6;">
+            <strong style="color:var(--gold);">Como funciona?</strong> Você escreve — a equipe lê e responde aqui mesmo. Não precisa sair da ferramenta. Sua voz molda o produto.
+          </div>
+        </div>
+
+        <div id="pio-msgs-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal nova mensagem pioneiro -->
+<div id="pio-modal-bg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:none;align-items:center;justify-content:center;" onclick="if(event.target===this)closePioneerModal()">
+  <div style="background:#16213a;border:1px solid var(--bd);border-radius:14px;width:min(520px,94vw);padding:28px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-size:15px;font-weight:700;color:var(--t1);">💬 Nova mensagem</div>
+      <button onclick="closePioneerModal()" style="background:none;border:none;cursor:pointer;color:var(--t3);padding:4px;">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+      </button>
+    </div>
+    <div style="font-size:12px;color:var(--t3);margin-bottom:12px;">Compartilhe uma ideia, bug, sugestão ou qualquer feedback sobre a Pandecta.</div>
+    <textarea id="pio-m-msg" style="width:100%;min-height:130px;background:rgba(255,255,255,.05);border:1px solid var(--bd);border-radius:8px;color:var(--t1);font-family:inherit;font-size:14px;padding:12px;resize:vertical;outline:none;" placeholder="Ex: Seria incrível ter uma opção para...&#10;&#10;Ou: Encontrei um problema quando..."></textarea>
+    <button id="pio-m-send" onclick="enviarPioneerMsg()" style="margin-top:12px;width:100%;background:linear-gradient(135deg,#C8A46A,#a8893a);color:#001B2A;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;padding:13px;cursor:pointer;">Enviar mensagem</button>
+  </div>
+</div>
+
 <!-- ════ EQUIPE ════ -->
 <div id="screen-equipe" class="screen">
   <div class="app-shell">
@@ -1772,7 +1838,17 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div id="backups-list" style="padding:16px 20px;font-size:13px;color:var(--t3);">Carregando...</div>
         </div>
 
-        <div class="admin-section">
+        
+          <div class="admin-section" style="margin-top:32px;">
+            <div class="admin-section-hdr">
+              <div class="admin-section-title">💬 Canal Pioneiro — Mensagens</div>
+              <span id="pio-msgs-count" style="font-size:12px;color:var(--gold);font-weight:600;"></span>
+            </div>
+            <div id="pio-msgs-admin-list">
+              <div style="padding:20px;color:var(--t3);font-size:13px;">Carregando...</div>
+            </div>
+          </div>
+<div class="admin-section">
           <div class="admin-section-hdr">
             <div class="admin-section-title">💬 Tickets de Suporte</div>
             <span id="tickets-count" style="font-size:12px;color:var(--gold);font-weight:600;"></span>
@@ -1795,6 +1871,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
                   <th style="padding:10px 16px;text-align:left;color:var(--t3);font-weight:600;">Área</th>
                   <th style="padding:10px 16px;text-align:left;color:var(--t3);font-weight:600;">Exp.</th>
                   <th style="padding:10px 16px;text-align:left;color:var(--t3);font-weight:600;">Data</th>
+                  <th style="padding:10px 16px;text-align:left;color:var(--t3);font-weight:600;">Status</th>
+                  <th style="padding:10px 16px;text-align:left;color:var(--t3);font-weight:600;">Ação</th>
                 </tr>
               </thead>
               <tbody id="pioneiros-tbody">
@@ -1895,6 +1973,7 @@ if(typeof pdfjsLib!=='undefined') pdfjsLib.GlobalWorkerOptions.workerSrc='https:
 let authToken=localStorage.getItem('pandecta_token')||null;
 let usuario=localStorage.getItem('pandecta_user')||null;
 let userRole=localStorage.getItem('pandecta_role')||'user';
+let isPioneer=localStorage.getItem('pandecta_pioneer')==='1';
 let tipoSel='Todos', textoGerado='';
 let sessionFiles=[];
 let sessionHistory=[], officeData={}, lawyers=[], editingLawId=null;
@@ -1933,6 +2012,7 @@ function mkSidebar(active){
     {id:'equipe',   label:'Equipe',        icon:'<circle cx="7" cy="6" r="3"/><path d="M2 17c0-3 2.5-5 5-5s5 2 5 5"/><circle cx="14" cy="6" r="2.5"/><path d="M15.5 17c0-2 1.5-3.5 3-3.5"/>',action:"go('equipe')"},
     {id:'tickets',  label:'Suporte',       icon:'<path d="M3 10a6 6 0 0112 0"/><rect x="1.5" y="10" width="3" height="5" rx="1.5"/><rect x="13.5" y="10" width="3" height="5" rx="1.5"/>',action:"go('tickets')"},
     {id:'config',   label:'Configurações', icon:'<circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1.1 1.1M12.8 12.8l1.1 1.1M4.1 13.9l1.1-1.1M12.8 5.2l1.1-1.1"/>',action:"go('config')"},
+    ...(isPioneer||userRole==='admin'?[{id:'pioneer', label:'Canal Pioneiro', icon:'<path d="M9 2l2.1 4.3 4.7.7-3.4 3.3.8 4.7L9 12.5l-4.2 2.5.8-4.7L2.2 7l4.7-.7z"/>',action:"go('pioneer')"}]:[]),
     ...(userRole==='admin'?[{id:'admin', label:'Admin', icon:'<circle cx="9" cy="6" r="3"/><path d="M2 17c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><path d="M13 3l1.5 1.5L17 2"/>',action:"go('admin')"}]:[]),
   ];
   return `<nav class="sidebar">
@@ -1991,7 +2071,7 @@ function toggleSidebar(){
 function go(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
-  ['home','gen','hist','ac','config','equipe','sup','admin','modelos','tk'].forEach(sfx=>{
+  ['home','gen','hist','ac','config','equipe','sup','admin','modelos','tk','pio'].forEach(sfx=>{
     const el=document.getElementById('sb-'+sfx);
     if(el) el.innerHTML=mkSidebar(s);
   });
@@ -2004,9 +2084,11 @@ function go(s){
   if(s==='equipe') renderLawyers();
   if(s==='suporte'){ initSuporte(); }
   if(s==='tickets'){ loadMeusTickets(); }
+  if(s==='pioneer'){ loadPioneerMsgs(); }
   if(s==='modelos') loadModelos();
+  if(s==='pioneer'){ const sp=document.getElementById('sb-pio'); if(sp) sp.innerHTML=mkSidebar('pioneer'); }
   if(s==='admin'){
-    loadUsers();loadBackups();loadAdminStats();loadPioneiros();loadTicketsAdmin();
+    loadUsers();loadBackups();loadAdminStats();loadPioneiros();loadTicketsAdmin();loadPioneerMsgsAdmin();
     const init=usuario?usuario[0].toUpperCase():'A';
     const name=usuario?usuario[0].toUpperCase()+usuario.slice(1):'Admin';
     const av=document.getElementById('av-admin'),nm=document.getElementById('nm-admin');
@@ -2042,9 +2124,11 @@ async function fazerLogin(){
     authToken=data.token;
     usuario=data.nome||data.email;
     userRole=data.role||'user';
+    isPioneer=data.is_pioneer===1;
     localStorage.setItem('pandecta_token',authToken);
     localStorage.setItem('pandecta_user',usuario);
     localStorage.setItem('pandecta_role',userRole);
+    localStorage.setItem('pandecta_pioneer',isPioneer?'1':'0');
     await loadData();
     go('home');
     checkTourPopup();
@@ -2053,10 +2137,11 @@ async function fazerLogin(){
 }
 
 function fazerLogout(){
-  authToken=null;usuario=null;userRole='user';
+  authToken=null;usuario=null;userRole='user';isPioneer=false;
   localStorage.removeItem('pandecta_token');
   localStorage.removeItem('pandecta_user');
   localStorage.removeItem('pandecta_role');
+  localStorage.removeItem('pandecta_pioneer');
   location.reload();
 }
 document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin();});
@@ -3445,22 +3530,56 @@ async function loadPioneiros(){
     const count = document.getElementById('pioneiros-count');
     if(!tbody) return;
     if(!rows||!rows.length){
-      tbody.innerHTML='<tr><td colspan="6" style="padding:16px;color:var(--t3);text-align:center;">Nenhuma inscrição ainda.</td></tr>';
-      if(count) count.textContent='0 inscrições';
+      tbody.innerHTML='<tr><td colspan="8" style="padding:16px;color:var(--t3);text-align:center;">Nenhuma inscrição ainda.</td></tr>';
+      if(count) count.textContent='';
       return;
     }
-    if(count) count.textContent = rows.length+' inscrição'+(rows.length!==1?'ões':'');
-    tbody.innerHTML = rows.map(r=>`
-      <tr style="border-bottom:1px solid var(--bd);">
-        <td style="padding:10px 16px;color:var(--t1);font-weight:600;">${esc(r.nome)}</td>
-        <td style="padding:10px 16px;color:var(--t2);">${esc(r.email)}</td>
-        <td style="padding:10px 16px;color:var(--t2);">${esc(r.whatsapp)}</td>
-        <td style="padding:10px 16px;color:var(--t2);">${esc(r.area||'—')}</td>
-        <td style="padding:10px 16px;color:var(--t2);white-space:nowrap;">${esc(r.experiencia||'—')}</td>
-        <td style="padding:10px 16px;color:var(--t3);white-space:nowrap;">${fmtRelDate(r.created_at)}</td>
-      </tr>`).join('');
-  }catch(e){console.error('loadPioneiros:',e);}
+    if(count) count.textContent=rows.length+' inscrição(ões)';
+    const areas={consumidor:'Consumidor',civil:'Civil',trabalhista:'Trabalhista',familia:'Família',imobiliario:'Imobiliário',empresarial:'Empresarial',criminal:'Criminal',outra:'Outra'};
+    const exps={menos5:'< 5 anos','5a10':'5–10 anos','10a20':'10–20 anos',mais20:'> 20 anos'};
+    const statusBadge=(s)=>{
+      if(s==='aprovado') return '<span style="background:rgba(80,200,120,.12);color:#4ec97a;border-radius:4px;padding:2px 8px;font-size:11px;">✓ Aprovado</span>';
+      if(s==='reprovado') return '<span style="background:rgba(200,80,80,.12);color:#e07a7a;border-radius:4px;padding:2px 8px;font-size:11px;">✗ Reprovado</span>';
+      return '<span style="background:rgba(200,164,106,.12);color:var(--gold);border-radius:4px;padding:2px 8px;font-size:11px;">⏳ Pendente</span>';
+    };
+    tbody.innerHTML=rows.map(r=>`<tr style="border-bottom:1px solid var(--bd);">
+      <td style="padding:10px 16px;">${r.nome||'–'}</td>
+      <td style="padding:10px 16px;">${r.email||'–'}</td>
+      <td style="padding:10px 16px;">${r.whatsapp||'–'}</td>
+      <td style="padding:10px 16px;">${areas[r.area]||r.area||'–'}</td>
+      <td style="padding:10px 16px;">${exps[r.experiencia]||r.experiencia||'–'}</td>
+      <td style="padding:10px 16px;">${(r.created_at||'').slice(0,10)}</td>
+      <td style="padding:10px 16px;">${statusBadge(r.status||'pendente')}</td>
+      <td style="padding:10px 16px;white-space:nowrap;">
+        ${(r.status==='aprovado')?'<span style="color:var(--t3);font-size:12px;">—</span>':`
+          <button onclick="aprovarPioneiro(${r.id},this)" style="background:rgba(80,200,120,.12);color:#4ec97a;border:1px solid rgba(80,200,120,.3);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;margin-right:4px;">✓ Aprovar</button>
+          <button onclick="reprovarPioneiro(${r.id},this)" style="background:rgba(200,80,80,.1);color:#e07a7a;border:1px solid rgba(200,80,80,.25);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;">✗ Reprovar</button>
+        `}
+      </td>
+    </tr>`).join('');
+  }catch(e){ console.error('loadPioneiros:',e.message); }
 }
+
+async function aprovarPioneiro(id, btn){
+  if(!confirm('Aprovar este pioneiro? Isso criará a conta e enviará dados pelo Telegram.')) return;
+  btn.disabled=true; btn.textContent='…';
+  try{
+    await api('POST','/api/fundadores/'+id+'/aprovar');
+    toast('✅ Pioneiro aprovado! Confira o Telegram para o texto do WhatsApp.','ok');
+    loadPioneiros();
+  }catch(e){ toast('Erro: '+e.message,'err'); btn.disabled=false; btn.textContent='✓ Aprovar'; }
+}
+
+async function reprovarPioneiro(id, btn){
+  if(!confirm('Reprovar esta inscrição?')) return;
+  btn.disabled=true;
+  try{
+    await api('POST','/api/fundadores/'+id+'/reprovar');
+    toast('Inscrição reprovada.','ok');
+    loadPioneiros();
+  }catch(e){ toast('Erro: '+e.message,'err'); btn.disabled=false; }
+}
+
 
 async function loadAdminStats(){
   try{
@@ -3747,6 +3866,141 @@ function checkTourAutoShow(){
   if(!localStorage.getItem('pandecta_tour_visto')){
     setTimeout(()=>_abrirTourPopup(), 1000);
   }
+}
+
+
+// ════ CANAL PIONEIRO ════
+let _pioDados = [];
+
+function openPioneerModal(){
+  document.getElementById('pio-modal-bg').style.display='flex';
+  document.getElementById('pio-m-msg').value='';
+  document.getElementById('pio-m-msg').focus();
+}
+function closePioneerModal(){
+  document.getElementById('pio-modal-bg').style.display='none';
+}
+
+async function enviarPioneerMsg(){
+  const btn=document.getElementById('pio-m-send');
+  const msg=document.getElementById('pio-m-msg').value.trim();
+  if(!msg){ toast('Escreva sua mensagem antes de enviar.','err'); return; }
+  btn.disabled=true; btn.textContent='Enviando…';
+  try{
+    await api('POST','/api/pioneer/mensagens',{mensagem:msg});
+    closePioneerModal();
+    toast('Mensagem enviada! A equipe responderá em breve. 🏅','ok');
+    await loadPioneerMsgs();
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+  finally{ btn.disabled=false; btn.textContent='Enviar mensagem'; }
+}
+
+async function loadPioneerMsgs(){
+  const el=document.getElementById('pio-msgs-list');
+  if(!el) return;
+  try{
+    _pioDados=await api('GET','/api/pioneer/mensagens/minhas');
+    renderPioneerMsgs();
+  }catch(e){ el.innerHTML='<div style="padding:20px;color:var(--t3);font-size:13px;">Erro ao carregar mensagens.</div>'; }
+}
+
+function renderPioneerMsgs(){
+  const el=document.getElementById('pio-msgs-list');
+  if(!el) return;
+  if(!_pioDados||!_pioDados.length){
+    el.innerHTML=`<div style="text-align:center;padding:48px 20px;">
+      <div style="font-size:2.5rem;margin-bottom:12px;">💬</div>
+      <div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:8px;">Nenhuma mensagem ainda</div>
+      <div style="font-size:13px;color:var(--t3);">Seja o primeiro a enviar uma ideia ou feedback!</div>
+    </div>`;
+    return;
+  }
+  const statusMap={pendente:'⏳ Aguardando leitura',lido:'👀 Lido',respondido:'✅ Respondido'};
+  const statusColor={pendente:'rgba(200,164,106,.8)',lido:'rgba(100,160,220,.8)',respondido:'rgba(80,200,120,.8)'};
+  el.innerHTML=_pioDados.map(m=>`
+    <div style="background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:10px;padding:20px;margin-bottom:14px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;">
+        <div style="font-size:13px;color:var(--t1);line-height:1.6;white-space:pre-wrap;">${m.mensagem.replace(/</g,'&lt;')}</div>
+        <span style="flex-shrink:0;font-size:11px;color:${statusColor[m.status]||'var(--t3)'};white-space:nowrap;">${statusMap[m.status]||m.status}</span>
+      </div>
+      <div style="font-size:11px;color:var(--t3);">${formatDate(m.created_at)}</div>
+      ${m.resposta?`<div style="margin-top:14px;padding:14px 16px;background:rgba(200,164,106,.06);border-left:3px solid rgba(200,164,106,.4);border-radius:0 8px 8px 0;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:6px;">💬 Resposta da equipe Pandecta</div>
+        <div style="font-size:13px;color:var(--t2);line-height:1.6;white-space:pre-wrap;">${m.resposta.replace(/</g,'&lt;')}</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:8px;">${formatDate(m.respondido_at)}</div>
+      </div>`:''}
+    </div>`).join('');
+}
+
+// ════ ADMIN — CANAL PIONEIRO ════
+let _pioAdminDados = [];
+
+async function loadPioneerMsgsAdmin(){
+  const el=document.getElementById('pio-msgs-admin-list');
+  const ct=document.getElementById('pio-msgs-count');
+  if(!el) return;
+  try{
+    _pioAdminDados=await api('GET','/api/pioneer/mensagens');
+    if(ct) ct.textContent=_pioAdminDados.length+' mensagem(ns)';
+    renderPioneerMsgsAdmin();
+  }catch(e){ el.innerHTML='<div style="padding:16px;color:var(--t3);font-size:13px;">Erro ao carregar.</div>'; }
+}
+
+function renderPioneerMsgsAdmin(){
+  const el=document.getElementById('pio-msgs-admin-list');
+  if(!el) return;
+  if(!_pioAdminDados||!_pioAdminDados.length){
+    el.innerHTML='<div style="padding:20px;color:var(--t3);font-size:13px;text-align:center;">Nenhuma mensagem de pioneiros ainda.</div>';
+    return;
+  }
+  const statusBadge=(s)=>{
+    if(s==='respondido') return '<span style="background:rgba(80,200,120,.12);color:#4ec97a;border-radius:4px;padding:1px 7px;font-size:11px;">✓ Respondido</span>';
+    if(s==='lido') return '<span style="background:rgba(100,160,220,.12);color:#6ab4e8;border-radius:4px;padding:1px 7px;font-size:11px;">👀 Lido</span>';
+    return '<span style="background:rgba(200,164,106,.12);color:var(--gold);border-radius:4px;padding:1px 7px;font-size:11px;">⏳ Novo</span>';
+  };
+  el.innerHTML='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">'
+    +'<thead><tr style="border-bottom:1px solid var(--bd);">'
+    +'<th style="padding:10px 14px;text-align:left;color:var(--t3);">Pioneiro</th>'
+    +'<th style="padding:10px 14px;text-align:left;color:var(--t3);">Mensagem</th>'
+    +'<th style="padding:10px 14px;text-align:left;color:var(--t3);">Status</th>'
+    +'<th style="padding:10px 14px;text-align:left;color:var(--t3);">Data</th>'
+    +'<th style="padding:10px 14px;text-align:left;color:var(--t3);">Ação</th>'
+    +'</tr></thead><tbody>'
+    +_pioAdminDados.map(m=>`<tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+      <td style="padding:10px 14px;">
+        <div style="font-weight:600;color:var(--t1);">${m.nome}</div>
+        <div style="font-size:11px;color:var(--t3);">${m.email||''}</div>
+      </td>
+      <td style="padding:10px 14px;max-width:320px;">
+        <div style="color:var(--t2);line-height:1.5;white-space:pre-wrap;">${m.mensagem.replace(/</g,'&lt;').slice(0,200)}${m.mensagem.length>200?'…':''}</div>
+        ${m.resposta?`<div style="margin-top:8px;padding:8px 10px;background:rgba(200,164,106,.06);border-left:2px solid rgba(200,164,106,.3);border-radius:0 6px 6px 0;font-size:12px;color:var(--t3);">${m.resposta.replace(/</g,'&lt;').slice(0,120)}${m.resposta.length>120?'…':''}</div>`:''}
+      </td>
+      <td style="padding:10px 14px;">${statusBadge(m.status)}</td>
+      <td style="padding:10px 14px;color:var(--t3);">${(m.created_at||'').slice(0,10)}</td>
+      <td style="padding:10px 14px;white-space:nowrap;">
+        ${m.status!=='respondido'?`<button onclick="openPioResponder(${m.id})" style="background:rgba(200,164,106,.12);color:var(--gold);border:1px solid rgba(200,164,106,.25);border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;">Responder</button>`:'<span style="color:var(--t3);font-size:12px;">—</span>'}
+      </td>
+    </tr>`).join('')
+    +'</tbody></table></div>';
+}
+
+let _pioRespondendoId=null;
+function openPioResponder(id){
+  _pioRespondendoId=id;
+  const msg=_pioAdminDados.find(m=>m.id===id);
+  const resp=prompt('Escreva sua resposta para '+( msg?msg.nome:'este pioneiro')+':
+
+(aparecerá diretamente para ele dentro da ferramenta)');
+  if(!resp||!resp.trim()) return;
+  enviarRespostaPioneer(id, resp.trim());
+}
+
+async function enviarRespostaPioneer(id, resposta){
+  try{
+    await api('PUT','/api/pioneer/mensagens/'+id+'/responder',{resposta});
+    toast('Resposta enviada ao pioneiro! ✅','ok');
+    loadPioneerMsgsAdmin();
+  }catch(e){ toast('Erro: '+e.message,'err'); }
 }
 
 </script>
