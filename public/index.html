@@ -371,7 +371,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .gdoc-label{font-size:10.5px;font-weight:700;color:#C8A46A;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
 .gdoc-doc-title{font-size:20px;font-weight:700;color:rgba(255,255,255,.9);}
 .gdoc-status{display:flex;align-items:center;gap:7px;font-size:12.5px;color:rgba(190,210,235,.5);white-space:nowrap;}
-.gdoc-body{flex:1;overflow-y:auto;padding:40px 48px;}
+.gdoc-body{flex:1;overflow-y:auto;padding:40px 24px;display:flex;flex-direction:column;align-items:center;}
 .gdoc-body::-webkit-scrollbar{width:4px;}
 .gdoc-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px;}
 .gdoc-foot{flex-shrink:0;padding:14px 48px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:16px;}
@@ -385,15 +385,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .gab-sec:hover{background:rgba(255,255,255,.14);color:rgba(255,255,255,.9);}
 .gab-prim{background:#C8A46A;color:#fff;}
 .gab-prim:hover{background:#D6B37A;}
-/* doc-paper override — dark mode in screen-gen */
-#screen-gen .doc-paper{background:transparent!important;box-shadow:none!important;padding:0!important;color:rgba(255,255,255,.85)!important;max-width:800px;min-height:auto!important;border-radius:0!important;}
-#screen-gen .doc-paper h1{color:#C8A46A!important;font-size:13.5pt;}
-#screen-gen .doc-paper h2{color:#C8A46A!important;border-bottom-color:rgba(200,164,106,.2)!important;}
-#screen-gen .doc-paper h3,#screen-gen .doc-paper h4{color:rgba(200,164,106,.75)!important;}
-#screen-gen .doc-paper blockquote{border-left-color:rgba(200,164,106,.3)!important;color:rgba(190,210,235,.65)!important;}
-#screen-gen .doc-paper td,#screen-gen .doc-paper th{border-color:rgba(255,255,255,.1)!important;}
-#screen-gen .doc-paper th{background:rgba(255,255,255,.06)!important;color:rgba(255,255,255,.8)!important;}
-#screen-gen .cur{background:#C8A46A;}
+/* doc-paper — folha flutuando no escuro */
+#screen-gen .doc-paper{width:100%!important;max-width:780px!important;margin:0!important;box-shadow:0 4px 48px rgba(0,0,0,.6),0 0 0 1px rgba(200,164,106,.12)!important;}
+#screen-gen .doc-paper h1{color:#7A5828!important;}
+#screen-gen .doc-paper h2{color:#7A5828!important;}
+#screen-gen .cur{background:#555;}
+.gwiz-card-icon{font-size:20px;line-height:1;margin-bottom:10px;display:block;}
 /* doc-empty dark override */
 #screen-gen .doc-empty-ico{color:rgba(200,164,106,.3);}
 #screen-gen .doc-empty-txt{color:rgba(190,210,235,.4);}
@@ -2673,26 +2670,26 @@ class WizardEngine{
   _screens(){
     const d=this.data,sc=[];
     sc.push({id:'tipo',lbl:'O que deseja construir?',sub:'Selecione o tipo de documento jurídico.',type:'cards',field:'tipo',cols:3,opts:[
-      {l:'Petição Inicial',v:'peticao_inicial',s:'Ação judicial · JEC · Vara cível'},
-      {l:'Contestação',v:'defesa',s:'Resposta à ação judicial'},
-      {l:'Recurso',v:'recurso',s:'Apelação · Embargos · Agravo'},
-      {l:'Manifestação',v:'manifestacao',s:'Petição complementar'},
-      {l:'Contrato',v:'contrato',s:'Prestação de serviços · Honorários'},
-      {l:'Parecer',v:'parecer',s:'Opinião jurídica fundamentada'},
-      {l:'Notificação',v:'notificacao',s:'Extrajudicial · Interpelação'},
+      {l:'Petição Inicial',v:'peticao_inicial',icon:'⚖️',s:'Ação judicial · JEC · Vara cível'},
+      {l:'Contestação',v:'defesa',icon:'🛡️',s:'Resposta à ação judicial'},
+      {l:'Recurso',v:'recurso',icon:'📤',s:'Apelação · Embargos · Agravo'},
+      {l:'Manifestação',v:'manifestacao',icon:'✏️',s:'Petição complementar'},
+      {l:'Contrato',v:'contrato',icon:'📋',s:'Prestação de serviços · Honorários'},
+      {l:'Parecer',v:'parecer',icon:'💡',s:'Opinião jurídica fundamentada'},
+      {l:'Notificação',v:'notificacao',icon:'✉️',s:'Extrajudicial · Interpelação'},
     ]});
     if(d.tipo==='contrato')sc.push({id:'subtipo',lbl:'Que tipo de contrato?',sub:'Selecione a categoria do contrato.',type:'cards',field:'subtipo',cols:2,opts:[
-      {l:'Prestação de serviços',v:'servicos',s:'Trabalho autônomo / freelance'},
-      {l:'Honorários advocatícios',v:'honorarios',s:'Contrato com cliente'},
-      {l:'Confidencialidade (NDA)',v:'nda',s:'Sigilo de informações'},
-      {l:'Locação',v:'locacao',s:'Imóvel residencial ou comercial'},
-      {l:'Outro',v:'outro',s:'Outras modalidades'},
+      {l:'Prestação de serviços',v:'servicos',icon:'🔧',s:'Trabalho autônomo / freelance'},
+      {l:'Honorários advocatícios',v:'honorarios',icon:'💼',s:'Contrato com cliente'},
+      {l:'Confidencialidade (NDA)',v:'nda',icon:'🔒',s:'Sigilo de informações'},
+      {l:'Locação',v:'locacao',icon:'🏠',s:'Imóvel residencial ou comercial'},
+      {l:'Outro',v:'outro',icon:'📄',s:'Outras modalidades'},
     ]});
     if(d.tipo&&d.tipo!=='contrato'&&d.tipo!=='parecer')sc.push({id:'area',lbl:'Qual é a área do direito?',sub:'Selecione a área que melhor descreve o caso.',type:'cards',field:'area',cols:2,opts:[
-      {l:'Consumidor',v:'consumidor',s:'CDC · PROCON · E-commerce'},
-      {l:'Civil',v:'civil',s:'Contratos · Responsabilidade civil'},
-      {l:'Trabalhista',v:'trabalhista',s:'CLT · TST · Rescisão'},
-      {l:'Família',v:'familia',s:'Divórcio · Guarda · Alimentos'},
+      {l:'Consumidor',v:'consumidor',icon:'🛒',s:'CDC · PROCON · E-commerce'},
+      {l:'Civil',v:'civil',icon:'🏛️',s:'Contratos · Responsabilidade civil'},
+      {l:'Trabalhista',v:'trabalhista',icon:'🦺',s:'CLT · TST · Rescisão'},
+      {l:'Família',v:'familia',icon:'🏠',s:'Divórcio · Guarda · Alimentos'},
     ]});
     if(d.tipo){
       const isCtr=d.tipo==='contrato',isNtf=d.tipo==='notificacao';
@@ -2751,7 +2748,7 @@ class WizardEngine{
     let body='';
     if(sc.type==='cards'){
       const cls=sc.cols===3?'g3':sc.cols===1?'':'g2';
-      body=`<div class="gwiz-cards ${cls}">${sc.opts.map(o=>{const sel=this.data[sc.field]===o.v?' sel':'';return`<div class="gwiz-card${sel}" onclick="wizard._csel('${sc.field}','${(o.v+'').replace(/'/g,'\\x27')}',this)"><div class="gwiz-card-chk">✓</div><div class="gwiz-card-l">${esc(o.l)}</div>${o.s?`<div class="gwiz-card-s">${esc(o.s)}</div>`:''}</div>`;}).join('')}</div>`;
+      body=`<div class="gwiz-cards ${cls}">${sc.opts.map(o=>{const sel=this.data[sc.field]===o.v?' sel':'';return`<div class="gwiz-card${sel}" onclick="wizard._csel('${sc.field}','${(o.v+'').replace(/'/g,'\\x27')}',this)">${o.icon?`<span class="gwiz-card-icon">${o.icon}</span>`:''}<div class="gwiz-card-chk">✓</div><div class="gwiz-card-l">${esc(o.l)}</div>${o.s?`<div class="gwiz-card-s">${esc(o.s)}</div>`:''}</div>`;}).join('')}</div>`;
     }else if(sc.type==='form'){
       body=sc.fields.map(f=>`<div class="gwiz-fgrp"><label class="gwiz-lbl-f">${esc(f.label)}${f.optional?`<span class="gwiz-lbl-opt">opcional</span>`:''}</label><input class="gwiz-inp" id="gf-${f.field}" value="${esc(this.data[f.field]||'')}" placeholder="${esc(f.ph||'')}" oninput="wizard._fch('${f.field}',this.value)"></div>`).join('');
     }else if(sc.type==='textarea'){
