@@ -2086,7 +2086,6 @@ function go(s){
   if(s==='tickets'){ loadMeusTickets(); }
   if(s==='pioneer'){ loadPioneerMsgs(); }
   if(s==='modelos') loadModelos();
-  if(s==='pioneer'){ const sp=document.getElementById('sb-pio'); if(sp) sp.innerHTML=mkSidebar('pioneer'); }
   if(s==='admin'){
     loadUsers();loadBackups();loadAdminStats();loadPioneiros();loadTicketsAdmin();loadPioneerMsgsAdmin();
     const init=usuario?usuario[0].toUpperCase():'A';
@@ -3923,11 +3922,11 @@ function renderPioneerMsgs(){
         <div style="font-size:13px;color:var(--t1);line-height:1.6;white-space:pre-wrap;">${m.mensagem.replace(/</g,'&lt;')}</div>
         <span style="flex-shrink:0;font-size:11px;color:${statusColor[m.status]||'var(--t3)'};white-space:nowrap;">${statusMap[m.status]||m.status}</span>
       </div>
-      <div style="font-size:11px;color:var(--t3);">${formatDate(m.created_at)}</div>
+      <div style="font-size:11px;color:var(--t3);">${fmtDate(m.created_at)}</div>
       ${m.resposta?`<div style="margin-top:14px;padding:14px 16px;background:rgba(200,164,106,.06);border-left:3px solid rgba(200,164,106,.4);border-radius:0 8px 8px 0;">
         <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:6px;">💬 Resposta da equipe Pandecta</div>
         <div style="font-size:13px;color:var(--t2);line-height:1.6;white-space:pre-wrap;">${m.resposta.replace(/</g,'&lt;')}</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:8px;">${formatDate(m.respondido_at)}</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:8px;">${fmtDate(m.respondido_at)}</div>
       </div>`:''}
     </div>`).join('');
 }
