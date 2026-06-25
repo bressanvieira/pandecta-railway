@@ -186,6 +186,11 @@ try {
     );
   `);
 
+  // migration: coluna pioneiro_leu para notificações de resposta
+  try {
+    db.exec("ALTER TABLE pioneer_messages ADD COLUMN pioneiro_leu INTEGER DEFAULT 0");
+  } catch(e) { /* coluna já existe */ }
+
     // seed — garante admin sempre acessível
   const adminRow = db.prepare('SELECT id FROM users WHERE email=?').get('admin@pandecta.ai');
   if (!adminRow) {
@@ -1259,10 +1264,30 @@ app.put('/api/pioneer/mensagens/:id/responder', requireAuth, requireAdmin, (req,
     const { resposta } = req.body || {};
     if (!resposta || !resposta.trim()) return res.status(400).json({ error: 'Resposta obrigatória.' });
     db.prepare(
-      "UPDATE pioneer_messages SET resposta=?, status='respondido', respondido_at=CURRENT_TIMESTAMP WHERE id=?"
+      "UPDATE pioneer_messages SET resposta=?, status='respondido', respondido_at=CURRENT_TIMESTAMP, pioneiro_leu=0 WHERE id=?"
     ).run(resposta.trim(), req.params.id);
     const msg = db.prepare('SELECT * FROM pioneer_messages WHERE id=?').get(req.params.id);
     res.json(msg);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// notificações: conta respostas que o pioneiro ainda não viu
+app.get('/api/pioneer/notif', requireAuth, requirePioneer, (req, res) => {
+  try {
+    const row = db.prepare(
+      "SELECT COUNT(*) as count FROM pioneer_messages WHERE user_id=? AND status='respondido' AND pioneiro_leu=0"
+    ).get(req.user.userId);
+    res.json({ count: row.count });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// marca todas as respostas como lidas pelo pioneiro
+app.put('/api/pioneer/mensagens/marcar-lidas', requireAuth, requirePioneer, (req, res) => {
+  try {
+    db.prepare(
+      "UPDATE pioneer_messages SET pioneiro_leu=1 WHERE user_id=? AND status='respondido'"
+    ).run(req.user.userId);
+    res.json({ ok: true });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
