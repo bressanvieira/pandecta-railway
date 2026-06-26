@@ -964,8 +964,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   0%,100%{box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 4px rgba(200,164,106,.5),0 0 20px 6px rgba(200,164,106,.35);}
   50%{box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 7px rgba(200,164,106,.25),0 0 32px 10px rgba(200,164,106,.18);}
 }
-.tour-hl{color:rgba(255,255,255,.96)!important;background:rgba(200,164,106,.14)!important;border-radius:8px;}
-.tour-hl svg,.tour-hl path,.tour-hl circle,.tour-hl rect,.tour-hl line,.tour-hl polyline{stroke:rgba(255,255,255,.9)!important;}
+.tour-hl,.tour-hl *{color:#fff!important;}
+.tour-hl{background:rgba(200,164,106,.22)!important;border-radius:8px;text-shadow:0 1px 4px rgba(0,0,0,.6)!important;}
+.tour-hl svg,.tour-hl path,.tour-hl circle,.tour-hl rect,.tour-hl line,.tour-hl polyline{stroke:#fff!important;fill:none!important;}
 #tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:9000;pointer-events:all;}
 #tour-spotlight{position:fixed;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 3px var(--gold);z-index:9001;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1);}
 #tour-tooltip{position:fixed;z-index:9002;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:28px;width:380px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.32);transition:all .3s ease;}
