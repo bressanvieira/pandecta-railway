@@ -367,7 +367,8 @@ app.post('/api/auth/register', requireAuth, (req, res) => {
 });
 
 app.get('/api/auth/me', requireAuth, (req, res) => {
-  res.json({ userId: req.user.userId, email: req.user.email, nome: req.user.nome, role: req.user.role });
+  const u = db.prepare('SELECT account_status, trial_expires_at, plan FROM users WHERE id=?').get(req.user.userId);
+  res.json({ userId: req.user.userId, email: req.user.email, nome: req.user.nome, role: req.user.role, account_status: u?.account_status || 'trial', trial_expires_at: u?.trial_expires_at || null, plan: u?.plan || 'solo' });
 });
 
 // ââ USERS CRUD (admin only) âââââââââââââââââââââââââââââââââââââââââââââââââââ

@@ -2331,11 +2331,20 @@ async function api(method,path,body){
 // ════ LOAD DATA ════
 async function loadData(){
   try{
-    [lawyers,officeData,modelosList]=await Promise.all([
+    const [lawyersR,officeR,modelosR,meR]=await Promise.all([
       api('GET','/api/lawyers').catch(()=>[]),
       api('GET','/api/office').catch(()=>({})),
       api('GET','/api/templates').catch(()=>[]),
+      api('GET','/api/auth/me').catch(()=>({})),
     ]);
+    lawyers=lawyersR; officeData=officeR; modelosList=modelosR;
+    // Hidratar trial — cobre usuários já logados (token salvo)
+    if(meR.trial_expires_at){
+      _trialExpiresAt=meR.trial_expires_at;
+      _accountStatus=meR.account_status||'trial';
+      localStorage.setItem('pandecta_trial_expires',_trialExpiresAt);
+      localStorage.setItem('pandecta_acct_status',_accountStatus);
+    }
   }catch(e){console.error('loadData:',e);}
 }
 
