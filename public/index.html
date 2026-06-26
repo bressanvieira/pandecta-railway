@@ -1016,6 +1016,17 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 #tour-welcome .tw-start{padding:9px 22px;border-radius:8px;border:none;background:var(--gold);color:#001B2A;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;transition:all .12s;}
 #tour-welcome .tw-start:hover{filter:brightness(1.08);}
 /* botão tour no sidebar */
+/* ── Trial countdown sidebar ── */
+.sb-trial{padding:10px 14px 8px;border-top:1px solid var(--sb-bd);}
+.sb-trial-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.sb-trial-label{font-size:10.5px;color:rgba(255,255,255,.38);letter-spacing:.02em;}
+.sb-trial-days{font-size:10.5px;font-weight:700;color:var(--gold);}
+.sb-trial-days.urgent{color:#e05252;}
+.sb-trial-bar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
+.sb-trial-fill{height:100%;border-radius:2px;transition:width .4s ease;background:var(--gold);}
+.sb-trial-fill.urgent{background:#e05252;}
+.sb-trial-cta{display:block;margin-top:7px;font-size:10.5px;color:rgba(255,255,255,.28);text-align:center;cursor:pointer;background:none;border:none;font-family:inherit;width:100%;transition:color .12s;}
+.sb-trial-cta:hover{color:var(--gold);}
 .sb-tour-btn{display:flex;align-items:center;gap:8px;width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--t3);cursor:pointer;font-size:12px;font-family:inherit;transition:all .14s;margin-top:8px;}
 .sb-tour-btn:hover{background:var(--surface);color:var(--t2);border-color:var(--bd-md);}
 .sb-tour-btn svg{flex-shrink:0;}
@@ -2359,6 +2370,7 @@ function mkSidebar(active){
         return `<button class="sb-item${isActive?' active':''}" onclick="${it.action}"><svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg>${it.label}</button>`;
       }).join('')}
     </div>
+    \${_sbTrialBlock()}
     <div class="sb-bot">
       <button class="sb-tour-btn" onclick="mostrarTourPopup()" title="Tour guiado">
         <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="7"/><path d="M9 12v-1.5c0-.8.6-1.3 1.2-1.8C11 8 11.2 7 10.5 6.3A2.5 2.5 0 006.5 7.5"/><circle cx="9" cy="14" r=".7" fill="currentColor"/></svg>
@@ -2487,6 +2499,81 @@ async function loadHomeDash(){
   }
 }
 
+
+// ════ TRIAL COUNTDOWN ════
+let _trialExpiresAt = localStorage.getItem('pandecta_trial_expires') || null;
+let _accountStatus  = localStorage.getItem('pandecta_acct_status')  || 'trial';
+
+function trialDaysLeft(){
+  if(!_trialExpiresAt) return null;
+  const diff = new Date(_trialExpiresAt) - new Date();
+  return Math.max(0, Math.ceil(diff / 86400000));
+}
+
+function _sbTrialBlock(){
+  // Admin não vê contador de trial
+  if(userRole === 'admin') return '';
+  // Já assinou — não mostrar
+  if(_accountStatus === 'active') return '';
+  const days = trialDaysLeft();
+  if(days === null) return '';
+  const expired = days <= 0;
+  const urgent  = days <= 2;
+  const pct     = expired ? 0 : Math.round((days / 7) * 100);
+  const label   = expired
+    ? 'Trial encerrado'
+    : days === 1 ? '1 dia restante' : days + ' dias restantes';
+  const cls = urgent || expired ? ' urgent' : '';
+  return `
+    <div class="sb-trial">
+      <div class="sb-trial-top">
+        <span class="sb-trial-label">Plano — 7 dias trial</span>
+        <span class="sb-trial-days${cls}">${label}</span>
+      </div>
+      <div class="sb-trial-bar">
+        <div class="sb-trial-fill${cls}" style="width:${pct}%"></div>
+      </div>
+      <button class="sb-trial-cta" onclick="abrirModalAssinatura()">
+        ${expired ? '⚠ Reativar conta' : 'Ver planos'}
+      </button>
+    </div>`;
+}
+
+function abrirModalAssinatura(){
+  const expired = (trialDaysLeft() || 0) <= 0;
+  const existing = document.getElementById('trial-modal-bg');
+  if(existing) existing.remove();
+  const bg = document.createElement('div');
+  bg.id = 'trial-modal-bg';
+  bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+  bg.innerHTML = `
+    <div style="background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:36px 32px;max-width:400px;width:90%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.5);position:relative;">
+      <button onclick="document.getElementById('trial-modal-bg').remove()" style="position:absolute;top:14px;right:14px;background:none;border:none;cursor:pointer;color:var(--t3);font-size:18px;line-height:1;">✕</button>
+      <div style="width:52px;height:52px;background:${expired?'rgba(224,82,82,.12)':'rgba(200,164,106,.12)'};border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${expired?'#e05252':'#C8A46A'}" stroke-width="2" stroke-linecap="round"><path d="${expired?'M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z':'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 5v5l3 3'}"/></svg>
+      </div>
+      <div style="font-size:19px;font-weight:700;color:var(--t1);margin-bottom:10px;">${expired?'Seu trial encerrou':'Assine a Pandecta'}</div>
+      <div style="font-size:13.5px;color:var(--t2);line-height:1.7;margin-bottom:24px;">${expired
+        ?'Seu período de teste de 7 dias chegou ao fim. Assine para continuar gerando peças jurídicas com inteligência artificial.'
+        :'Continue aproveitando a IA jurídica mais precisa do Brasil. Escolha um plano e mantenha sua produtividade.'
+      }</div>
+      <div style="background:var(--surface);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:20px;text-align:left;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">Em breve</div>
+        <div style="font-size:14px;font-weight:600;color:var(--t1);">Planos Pandecta</div>
+        <div style="font-size:12.5px;color:var(--t2);margin-top:4px;line-height:1.5;">Estamos preparando nossos planos de assinatura. Em breve você poderá escolher o melhor para o seu escritório.</div>
+      </div>
+      <button onclick="document.getElementById('trial-modal-bg').remove()" style="width:100%;padding:13px;background:var(--gold);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;">Entendido</button>
+    </div>`;
+  document.body.appendChild(bg);
+}
+
+function checkTrialExpired(){
+  if(userRole === 'admin' || _accountStatus === 'active') return;
+  if((trialDaysLeft() || 1) <= 0){
+    setTimeout(abrirModalAssinatura, 800);
+  }
+}
+
 // ════ NAV ════
 function go(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
@@ -2550,10 +2637,15 @@ async function fazerLogin(){
     localStorage.setItem('pandecta_user',usuario);
     localStorage.setItem('pandecta_role',userRole);
     localStorage.setItem('pandecta_pioneer',isPioneer?'1':'0');
+    _trialExpiresAt=data.trial_expires_at||null;
+    _accountStatus=data.account_status||'trial';
+    if(_trialExpiresAt) localStorage.setItem('pandecta_trial_expires',_trialExpiresAt);
+    localStorage.setItem('pandecta_acct_status',_accountStatus);
     if(isPioneer || userRole==='admin') checkPioneerNotifs();
     await loadData();
     go('home');
     checkTourPopup();
+    checkTrialExpired();
   }catch(e){err.textContent='Erro ao conectar. Tente novamente.';err.style.display='block';}
   finally{btn.textContent='Entrar';btn.disabled=false;}
 }
@@ -2564,6 +2656,8 @@ function fazerLogout(){
   localStorage.removeItem('pandecta_user');
   localStorage.removeItem('pandecta_role');
   localStorage.removeItem('pandecta_pioneer');
+  localStorage.removeItem('pandecta_trial_expires');
+  localStorage.removeItem('pandecta_acct_status');
   location.reload();
 }
 document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin();});

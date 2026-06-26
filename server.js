@@ -274,7 +274,7 @@ app.post('/api/auth/login', (req, res) => {
     }
     const isPioneer = user.is_pioneer ? 1 : 0;
     const token = jwt.sign({ userId: user.id, email: user.email, nome: user.nome, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer }, JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token, nome: user.nome, email: user.email, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer });
+    res.json({ token, nome: user.nome, email: user.email, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer, trial_expires_at: user.trial_expires_at || null });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
