@@ -4460,8 +4460,9 @@ function _mostrarStep(i){
     document.body.appendChild(overlay);
 
     let rect = null;
+    let el = null;
     if(step.selector){
-      const el = document.querySelector(step.selector);
+      el = document.querySelector(step.selector);
       if(el) rect = el.getBoundingClientRect();
     }
 
@@ -4503,7 +4504,7 @@ function _mostrarStep(i){
       tip.style.left = tipLeft + 'px';
 
       // Destacar o elemento real com classe temporária
-      el.classList.add('tour-hl');
+      if(el) el.classList.add('tour-hl');
       const spot = document.createElement('div');
       spot.id = 'tour-spot';
       spot.style.cssText = `position:fixed;z-index:8050;border:3px solid #C9A84C;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 4px rgba(200,164,106,.5),0 0 20px 6px rgba(200,164,106,.35);pointer-events:none;animation:tour-pulse 1.8s ease-in-out infinite;top:${rect.top-8}px;left:${rect.left-8}px;width:${rect.width+16}px;height:${rect.height+16}px;`;
