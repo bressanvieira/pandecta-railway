@@ -272,6 +272,12 @@ app.post('/api/auth/login', (req, res) => {
         return res.status(402).json({ error: 'trial_expired', message: 'Seu periodo de teste de 7 dias encerrou. Escolha um plano para continuar.' });
       }
     }
+    // Fallback: usuários criados antes da coluna trial_expires_at ter sido adicionada
+    if (!user.trial_expires_at && user.created_at) {
+      const computed = new Date(new Date(user.created_at).getTime() + 7*24*60*60*1000).toISOString();
+      db.prepare('UPDATE users SET trial_expires_at=? WHERE id=?').run(computed, user.id);
+      user.trial_expires_at = computed;
+    }
     const isPioneer = user.is_pioneer ? 1 : 0;
     const token = jwt.sign({ userId: user.id, email: user.email, nome: user.nome, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, nome: user.nome, email: user.email, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer, trial_expires_at: user.trial_expires_at || null });
@@ -367,7 +373,13 @@ app.post('/api/auth/register', requireAuth, (req, res) => {
 });
 
 app.get('/api/auth/me', requireAuth, (req, res) => {
-  const u = db.prepare('SELECT account_status, trial_expires_at, plan FROM users WHERE id=?').get(req.user.userId);
+  const u = db.prepare('SELECT account_status, trial_expires_at, plan, created_at FROM users WHERE id=?').get(req.user.userId);
+  // Fallback: usuários criados antes da coluna trial_expires_at ter sido adicionada
+  if (u && !u.trial_expires_at && u.created_at) {
+    const computed = new Date(new Date(u.created_at).getTime() + 7*24*60*60*1000).toISOString();
+    db.prepare('UPDATE users SET trial_expires_at=? WHERE id=?').run(computed, req.user.userId);
+    u.trial_expires_at = computed;
+  }
   res.json({ userId: req.user.userId, email: req.user.email, nome: req.user.nome, role: req.user.role, account_status: u?.account_status || 'trial', trial_expires_at: u?.trial_expires_at || null, plan: u?.plan || 'solo' });
 });
 
