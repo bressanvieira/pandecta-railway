@@ -4696,13 +4696,14 @@ async function checkPioneerNotifs() {
 
 function renderPioNotifBadges() {
   document.querySelectorAll('.pio-bell-btn').forEach(el => el.remove());
-  if ((!isPioneer && userRole !== 'admin') || _pioNotifCount === 0) return;
-  const badgeHtml = '<button class="pio-bell-btn" onclick="go(\'pioneer\')" title="' + _pioNotifCount + ' resposta(s) nova(s) no Canal Pioneiro">'
+  if (!isPioneer && userRole !== 'admin') return;
+  var dot = _pioNotifCount > 0 ? '<span class="pio-bell-dot">' + _pioNotifCount + '</span>' : '';
+  var ttl = _pioNotifCount > 0 ? _pioNotifCount + ' nova(s) no Canal Pioneiro' : 'Canal Pioneiro';
+  var badgeHtml = '<button class="pio-bell-btn" onclick="go(\'pioneer\')" title="' + ttl + '">'
     + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>'
-    + '<span class="pio-bell-dot">' + _pioNotifCount + '</span>'
-    + '</button>';
-  document.querySelectorAll('.tb-right').forEach(function(el) {
-    el.insertAdjacentHTML('afterbegin', badgeHtml);
+    + dot + '</button>';
+  document.querySelectorAll('.tb-right').forEach(function(tb) {
+    tb.insertAdjacentHTML('afterbegin', badgeHtml);
   });
 }
 
