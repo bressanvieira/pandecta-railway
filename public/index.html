@@ -2450,7 +2450,7 @@ async function loadHomeDash(){
       rl.innerHTML=rec.map(x=>{
         const lbl=x.tipo_label||x.tipo||'Peça';
         const area=x.area_label||'';
-        return '<div class="hd-ri" onclick="go('historico')">'
+        return '<div class="hd-ri" onclick="go(\'historico\')">'
           +'<div class="hd-ri-ico"><svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 2h8l4 4v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><polyline points="12,2 12,6 16,6"/></svg></div>'
           +'<div class="hd-ri-ttl">'+lbl+'</div>'
           +(area?'<div class="hd-ri-tag">'+area+'</div>':'')

@@ -1,59 +1,83 @@
 #!/usr/bin/env node
 /**
- * validate.js — extrai JS inline do index.html e verifica sintaxe (sem executar)
+ * Pandecta — pre-deploy validator
  * Uso: node validate.js
- * Exit 0 = OK, Exit 1 = erro de sintaxe
+ * Retorna exit 0 se OK, exit 1 se há erros.
  */
-const fs   = require('fs');
+const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
-const os   = require('os');
+const vm = require('vm');
 
-const htmlPath = path.join(__dirname, 'public', 'index.html');
-const html = fs.readFileSync(htmlPath, 'utf-8');
+const FILE = path.join(__dirname, 'public/index.html');
+const html = fs.readFileSync(FILE, 'utf8');
 
-const scriptRe = /<script(?!\s+src)[^>]*>([\s\S]*?)<\/script>/gi;
-let allJs = '', m;
-while ((m = scriptRe.exec(html)) !== null) allJs += m[1] + '\n';
+let errors = 0;
+function fail(msg) { console.error('❌', msg); errors++; }
+function ok(msg)   { console.log ('✅', msg); }
 
-if (!allJs.trim()) { console.error('Nenhum script inline encontrado!'); process.exit(1); }
+// ── 1. Integridade básica ──────────────────────────────────
+html.trimEnd().endsWith('</html>')
+  ? ok('Arquivo termina com </html>')
+  : fail('Arquivo NÃO termina com </html> — provável truncamento');
 
-const tmp = path.join(os.tmpdir(), '_pandecta_validate.js');
-fs.writeFileSync(tmp, allJs);
+// ── 2. Extrai e valida cada bloco <script> ─────────────────
+const scriptRe = /<script(?![^>]*src=)[^>]*>([\s\S]*?)<\/script>/gi;
+let match, scriptIdx = 0;
+while ((match = scriptRe.exec(html)) !== null) {
+  scriptIdx++;
+  const src = match[1].trim();
+  if (!src) continue;
+  try {
+    new vm.Script(src, { filename: `inline-script-${scriptIdx}` });
+    ok(`Script #${scriptIdx} — sintaxe OK (${src.length} chars)`);
+  } catch (e) {
+    // Calcula linha real no HTML
+    const offset = match.index + match[0].indexOf(src);
+    const before = html.slice(0, offset + (e.stack.match(/:(\d+):\d+\)$/m)?.[1]-1||0)*1);
+    const lineNo = (before.match(/\n/g)||[]).length + 1;
+    fail(`Script #${scriptIdx} — ${e.message} (aprox. linha ${lineNo} do HTML)`);
+  }
+}
 
-try {
-  execFileSync(process.execPath, ['--check', tmp], { stdio: 'pipe' });
-  console.log('✅  Sintaxe JS OK — index.html pronto para deploy');
+// ── 3. IDs críticos presentes ──────────────────────────────
+const REQUIRED_IDS = [
+  'screen-home','screen-gen','screen-historico','screen-acervo',
+  'screen-config','screen-modelos','screen-equipe',
+  'inp-user','inp-pass','hd-total','hd-mes','hd-recent-list',
+];
+REQUIRED_IDS.forEach(id => {
+  html.includes(`id="${id}"`)
+    ? ok(`ID #${id} presente`)
+    : fail(`ID #${id} ausente`);
+});
+
+// ── 4. Funções JS críticas declaradas ─────────────────────
+const REQUIRED_FNS = [
+  'function go(','function fazerLogin(','function novaConversa(',
+  'function loadHomeDash(','function loadHistorico(','function loadAcervo(',
+  'function loadModelos(','function updateAvatars(',
+];
+REQUIRED_FNS.forEach(fn => {
+  html.includes(fn)
+    ? ok(`Função ${fn.replace('function ','')} declarada`)
+    : fail(`Função ${fn} NÃO encontrada`);
+});
+
+// ── 5. Padrões suspeitos ───────────────────────────────────
+// onclick com aspas não-escapadas dentro de strings JS
+const badOnclick = /return\s+'[^']*onclick="[^"]*\('[^']+'\)[^"]*"[^']*'/;
+if (badOnclick.test(html)) {
+  fail('Possível aspas simples não-escapadas em onclick dentro de string JS');
+} else {
+  ok('Padrão onclick/aspas OK');
+}
+
+// ── 6. Resultado ──────────────────────────────────────────
+console.log('\n' + '─'.repeat(50));
+if (errors === 0) {
+  console.log(`✅ TUDO OK — pode fazer git push`);
   process.exit(0);
-} catch (e) {
-  const stderr = e.stderr ? e.stderr.toString() : e.message;
-  // Mapear linha do JS extraído → linha aproximada no HTML
-  const errMatch = stderr.match(/:(\d+)/);
-  const jsLine   = errMatch ? parseInt(errMatch[1]) : null;
-  let htmlLine   = null;
-  if (jsLine) {
-    let count = 0, inScript = false;
-    const lines = html.split('\n');
-    for (let i = 0; i < lines.length; i++) {
-      if (/<script(?!\s+src)/i.test(lines[i])) inScript = true;
-      if (inScript) count++;
-      if (count === jsLine) { htmlLine = i + 1; break; }
-      if (/<\/script>/i.test(lines[i])) inScript = false;
-    }
-  }
-  console.error('❌  SyntaxError no JS do index.html');
-  if (htmlLine) console.error(`    → linha ~${htmlLine} no HTML (linha ${jsLine} no JS extraído)`);
-  const msgLine = stderr.split('\n').find(l => l.includes('SyntaxError') || l.includes('Error'));
-  if (msgLine) console.error(`    ${msgLine.trim()}`);
-  // Contexto
-  if (jsLine) {
-    const jsLines = allJs.split('\n');
-    const from = Math.max(0, jsLine - 3), to = Math.min(jsLines.length, jsLine + 2);
-    console.error('\nContexto JS:');
-    jsLines.slice(from, to).forEach((l, i) => {
-      const n = from + i + 1;
-      console.error(`  ${n === jsLine ? '>>>' : '   '} ${n}: ${l}`);
-    });
-  }
+} else {
+  console.error(`\n❌ ${errors} erro(s) encontrado(s) — NÃO faça push`);
   process.exit(1);
 }
