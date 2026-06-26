@@ -214,6 +214,82 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .home-faq-clear{font-size:11.5px;color:var(--t3);background:transparent;border:none;cursor:pointer;font-family:inherit;padding:0;transition:color .12s;}
 .home-faq-clear:hover{color:var(--t2);}
 
+/* ════ HOME DASHBOARD ════ */
+.hd-wrap{padding:28px 32px 40px;display:flex;flex-direction:column;gap:20px;}
+.hd-greeting h2{font-size:22px;font-weight:600;color:var(--t1);line-height:1.2;}
+.hd-greeting p{font-size:13px;color:var(--t2);margin-top:4px;}
+.hd-layout{display:grid;grid-template-columns:1fr 292px;gap:16px;}
+.hd-hero{background:#111827;border-radius:14px;padding:28px 30px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;min-height:190px;}
+.hd-hero::before{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:rgba(200,164,106,.05);pointer-events:none;}
+.hd-hero-eye{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.hd-hero-title{font-size:20px;font-weight:600;color:#fff;line-height:1.35;margin-bottom:8px;}
+.hd-hero-title span{color:var(--gold);}
+.hd-hero-sub{font-size:12.5px;color:rgba(255,255,255,.38);line-height:1.55;margin-bottom:22px;}
+.hd-hero-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.hd-btn-prim{display:flex;align-items:center;gap:7px;padding:10px 18px;background:var(--gold);border-radius:9px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .13s;}
+.hd-btn-prim:hover{opacity:.86;}
+.hd-btn-sec{display:flex;align-items:center;gap:7px;padding:9px 15px;border-radius:9px;color:rgba(255,255,255,.6);font-size:13px;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);font-family:inherit;transition:background .13s;}
+.hd-btn-sec:hover{background:rgba(255,255,255,.11);}
+.hd-summary{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;}
+.hd-sum-title{font-size:12.5px;font-weight:600;color:var(--t1);}
+.hd-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+.hd-kpi-val{font-size:22px;font-weight:700;color:var(--t1);line-height:1;}
+.hd-kpi-val.gold{color:var(--gold);}
+.hd-kpi-lbl{font-size:10.5px;color:var(--t3);margin-top:3px;}
+.hd-kpi-sub{font-size:10px;color:var(--gold);margin-top:1px;}
+.hd-divider{height:1px;background:var(--bd);}
+.hd-area-lbl{font-size:10.5px;color:var(--t3);margin-bottom:4px;}
+.hd-area-name{font-size:16px;font-weight:600;color:var(--t1);}
+.hd-area-bar{height:4px;background:var(--bd-md);border-radius:2px;margin-top:8px;overflow:hidden;}
+.hd-area-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .6s ease;}
+.hd-area-pct{font-size:10px;color:var(--t3);margin-top:4px;text-align:right;}
+.hd-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.hd-feat{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;cursor:pointer;transition:all .16s;}
+.hd-feat:hover{border-color:var(--bd-md);box-shadow:0 4px 16px rgba(0,0,0,.06);transform:translateY(-2px);}
+.hd-feat-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:11px;}
+.hd-feat-ico.ic-gold{background:rgba(200,164,106,.10);}
+.hd-feat-ico.ic-blue{background:rgba(37,99,235,.07);}
+.hd-feat-ico.ic-grn{background:rgba(21,128,61,.07);}
+.hd-feat-name{font-size:13.5px;font-weight:600;color:var(--t1);margin-bottom:5px;}
+.hd-feat-desc{font-size:12px;color:var(--t2);line-height:1.5;}
+.hd-feat-link{font-size:11.5px;color:var(--gold);margin-top:10px;display:flex;align-items:center;gap:4px;}
+.hd-bottom{display:grid;grid-template-columns:1fr 292px;gap:16px;align-items:start;}
+.hd-insights{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 20px;}
+.hd-ins-title{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:14px;}
+.hd-ins-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.hd-ins-item{display:flex;align-items:flex-start;gap:9px;}
+.hd-ins-ico{color:var(--gold);flex-shrink:0;margin-top:1px;line-height:0;}
+.hd-ins-ico svg{width:17px;height:17px;}
+.hd-ins-val{font-size:16px;font-weight:700;color:var(--t1);line-height:1;}
+.hd-ins-lbl{font-size:10.5px;color:var(--t3);margin-top:3px;}
+.hd-ins-sub{font-size:10px;color:var(--gold);margin-top:2px;}
+.hd-right-col{display:flex;flex-direction:column;gap:12px;}
+.hd-panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.hd-panel-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--bd);}
+.hd-panel-title{font-size:12.5px;font-weight:600;color:var(--t1);}
+.hd-panel-link{font-size:11px;color:var(--gold);cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
+.hd-ri{display:flex;align-items:center;gap:9px;padding:9px 13px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .12s;}
+.hd-ri:last-child{border-bottom:none;}
+.hd-ri:hover{background:var(--bg);}
+.hd-ri-ico{width:26px;height:26px;border-radius:7px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold);}
+.hd-ri-ico svg{width:13px;height:13px;}
+.hd-ri-ttl{font-size:12.5px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.hd-ri-tag{font-size:10px;padding:2px 7px;border-radius:20px;background:var(--gold-bg);color:#7B5E2A;font-weight:600;flex-shrink:0;white-space:nowrap;}
+.hd-act{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;border-bottom:1px solid var(--bd);}
+.hd-act:last-child{border-bottom:none;}
+.hd-act-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;}
+.hd-act-dot.dim{background:var(--bd-md);}
+.hd-act-info{flex:1;min-width:0;}
+.hd-act-txt{font-size:12.5px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hd-act-sub{font-size:11px;color:var(--t3);margin-top:1px;}
+.hd-act-time{font-size:11px;color:var(--t3);white-space:nowrap;flex-shrink:0;}
+.hd-tip{background:rgba(200,164,106,.06);border:1px solid rgba(200,164,106,.18);border-radius:10px;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.hd-tip-left{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--t2);flex:1;}
+.hd-tip-ico{color:var(--gold);flex-shrink:0;line-height:0;}
+.hd-tip-ico svg{width:15px;height:15px;}
+.hd-tip-link{font-size:11.5px;color:var(--gold);cursor:pointer;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;}
+.hd-empty{font-size:12.5px;color:var(--t3);padding:18px 15px;text-align:center;}
+
 /* ════ GENERATOR ════ */
 .gen-layout{flex:1;display:flex;overflow:hidden;}
 .chat-pane{width:390px;flex-shrink:0;display:flex;flex-direction:column;background:var(--chat-bg);border-right:1px solid var(--bd);}
@@ -1052,57 +1128,158 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       </div>
 
       <div class="home-body">
+        <div class="hd-wrap">
 
-        <!-- HERO -->
-        <div class="home-hero">
-          <img src="/pandecta-icone.png" class="home-hero-wm" alt="">
-          <div class="home-hero-content">
-            <div class="home-tag">Inteligência Jurídica</div>
-            <h1 class="home-h1">
-              Inteligência que entende o direito.<br>
-              Estratégia que <span class="accent">transforma decisões</span>.
-            </h1>
-            <p class="home-sub">Construa petições, contratos e manifestações com precisão. Selecione uma das opções abaixo para começar.</p>
+          <!-- Saudação -->
+          <div class="hd-greeting">
+            <h2 id="hd-hello">Bom dia 👋</h2>
+            <p>Pronto para transformar fatos em excelentes peças jurídicas?</p>
           </div>
 
-          <!-- Card 3D flutuante -->
-          <div class="home-mockup">
-            <div class="mock-scene">
-              <div class="mock-card">
-                <img src="/pandecta-icone.png" alt="P" onerror="this.style.display='none'">
+          <!-- Hero + Resumo -->
+          <div class="hd-layout">
+            <div class="hd-hero">
+              <div>
+                <div class="hd-hero-eye">Comece agora</div>
+                <div class="hd-hero-title">Criar uma peça jurídica<br><span>nunca foi tão rápido.</span></div>
+                <div class="hd-hero-sub">Petição, contestação, contrato e muito mais — com o apoio da IA, do início ao documento final.</div>
+              </div>
+              <div class="hd-hero-btns">
+                <button class="hd-btn-prim" onclick="novaConversa()">
+                  <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="10" y1="17" x2="10" y2="3"/><line x1="3" y1="10" x2="17" y2="10"/></svg>
+                  Nova peça
+                </button>
+                <button class="hd-btn-sec" onclick="go('gen')">
+                  <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M17 10c0 3.866-3.134 7-7 7a6.978 6.978 0 01-3.5-.934L3 17l.934-3.5A6.978 6.978 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
+                  Conversar com IA
+                </button>
               </div>
             </div>
-            <div class="mock-shadow"></div>
+            <div class="hd-summary">
+              <div class="hd-sum-title">Seu resumo</div>
+              <div class="hd-kpis">
+                <div>
+                  <div class="hd-kpi-val gold" id="hd-total">–</div>
+                  <div class="hd-kpi-lbl">Peças geradas</div>
+                  <div class="hd-kpi-sub">Total</div>
+                </div>
+                <div>
+                  <div class="hd-kpi-val" id="hd-mes">–</div>
+                  <div class="hd-kpi-lbl">Este mês</div>
+                  <div class="hd-kpi-sub" id="hd-mes-lbl">&nbsp;</div>
+                </div>
+                <div>
+                  <div class="hd-kpi-val" style="font-size:14px;padding-top:5px;line-height:1.15;" id="hd-tipo">–</div>
+                  <div class="hd-kpi-lbl">Tipo principal</div>
+                </div>
+              </div>
+              <div class="hd-divider"></div>
+              <div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                  <div class="hd-area-lbl">Área principal</div>
+                  <button class="hd-panel-link" onclick="go('historico')" style="font-size:10.5px;">Ver histórico</button>
+                </div>
+                <div class="hd-area-name" id="hd-area-name">–</div>
+                <div class="hd-area-bar"><div class="hd-area-fill" id="hd-area-fill" style="width:0%"></div></div>
+                <div class="hd-area-pct" id="hd-area-pct">&nbsp;</div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <!-- QUICK CARDS + CHIPS -->
-        <div class="home-cards-sect">
-          <div class="quick-cards">
-            <div class="qcard" onclick="novaConversa()">
-              <div class="qcard-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="10" y1="17" x2="10" y2="3"/><line x1="3" y1="10" x2="17" y2="10"/></svg></div>
-              <div class="qcard-t">Novo</div>
-              <div class="qcard-d">Inicie uma petição, contrato ou manifestação com IA.</div>
+          <!-- Cards de funcionalidade -->
+          <div class="hd-feats">
+            <div class="hd-feat" onclick="go('acervo')">
+              <div class="hd-feat-ico ic-gold">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#C8A46A" stroke-width="1.5" stroke-linecap="round"><path d="M3 7a2 2 0 012-2h4l2 2h5a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+              </div>
+              <div class="hd-feat-name">Acervo</div>
+              <div class="hd-feat-desc">Organize PDFs e DOCXs. A IA usa seus documentos como contexto na hora de gerar.</div>
+              <div class="hd-feat-link">Abrir acervo <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg></div>
             </div>
-            <div class="qcard" onclick="go('historico')">
-              <div class="qcard-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M10 7v3.5l2.5 1.5"/><path d="M5 4.5A7 7 0 002.5 9"/></svg></div>
-              <div class="qcard-t">Sessões recentes</div>
-              <div class="qcard-d">Continue de onde parou em construções anteriores.</div>
+            <div class="hd-feat" onclick="go('gen')">
+              <div class="hd-feat-ico ic-blue">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"><path d="M17 10c0 3.866-3.134 7-7 7a6.978 6.978 0 01-3.5-.934L3 17l.934-3.5A6.978 6.978 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
+              </div>
+              <div class="hd-feat-name">Assistente IA</div>
+              <div class="hd-feat-desc">Tire dúvidas, peça sugestões e obtenha apoio jurídico inteligente em conversa livre.</div>
+              <div class="hd-feat-link">Conversar <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg></div>
             </div>
-            <div class="qcard" onclick="go('acervo')">
-              <div class="qcard-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 7a2 2 0 012-2h4l2 2h5a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
-              <div class="qcard-t">Acervo</div>
-              <div class="qcard-d">Documentos e referências da sessão.</div>
-            </div>
-            <div class="qcard" onclick="go('modelos')">
-              <div class="qcard-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="4" y="2" width="12" height="16" rx="2"/><line x1="7" y1="7" x2="13" y2="7"/><line x1="7" y1="10" x2="13" y2="10"/><line x1="7" y1="13" x2="10" y2="13"/></svg></div>
-              <div class="qcard-t">Modelos</div>
-              <div class="qcard-d">Seus modelos de estilo e templates de peças.</div>
+            <div class="hd-feat" onclick="go('modelos')">
+              <div class="hd-feat-ico ic-grn">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#15803D" stroke-width="1.5" stroke-linecap="round"><rect x="4" y="2" width="12" height="16" rx="2"/><line x1="7" y1="7" x2="13" y2="7"/><line x1="7" y1="10" x2="13" y2="10"/><line x1="7" y1="13" x2="10" y2="13"/></svg>
+              </div>
+              <div class="hd-feat-name">Modelos</div>
+              <div class="hd-feat-desc">Padronize o estilo das suas peças com modelos Word como referência de escrita.</div>
+              <div class="hd-feat-link">Ver modelos <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg></div>
             </div>
           </div>
 
-        </div>
+          <!-- Insights + Painéis laterais -->
+          <div class="hd-bottom">
+            <div class="hd-insights">
+              <div class="hd-ins-title">Insights rápidos</div>
+              <div class="hd-ins-grid">
+                <div class="hd-ins-item">
+                  <div class="hd-ins-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="12" width="3" height="6" rx="1"/><rect x="8.5" y="8" width="3" height="10" rx="1"/><rect x="15" y="4" width="3" height="14" rx="1"/></svg></div>
+                  <div>
+                    <div class="hd-ins-val" id="hd-semana">–</div>
+                    <div class="hd-ins-lbl">Esta semana</div>
+                    <div class="hd-ins-sub">Peças criadas</div>
+                  </div>
+                </div>
+                <div class="hd-ins-item">
+                  <div class="hd-ins-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="10,2 12.5,7.5 18,8.2 14,12 15.2,17.5 10,14.5 4.8,17.5 6,12 2,8.2 7.5,7.5"/></svg></div>
+                  <div>
+                    <div class="hd-ins-val" style="font-size:13px;padding-top:2px;" id="hd-area-ins">–</div>
+                    <div class="hd-ins-lbl">Área favorita</div>
+                    <div class="hd-ins-sub" id="hd-area-ins-ct">&nbsp;</div>
+                  </div>
+                </div>
+                <div class="hd-ins-item">
+                  <div class="hd-ins-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 2h8l4 4v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><polyline points="12,2 12,6 16,6"/></svg></div>
+                  <div>
+                    <div class="hd-ins-val" style="font-size:13px;padding-top:2px;" id="hd-tipo-ins">–</div>
+                    <div class="hd-ins-lbl">Tipo frequente</div>
+                    <div class="hd-ins-sub" id="hd-tipo-ins-ct">&nbsp;</div>
+                  </div>
+                </div>
+                <div class="hd-ins-item">
+                  <div class="hd-ins-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 7a2 2 0 012-2h4l2 2h5a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+                  <div>
+                    <div class="hd-ins-val" id="hd-acervo-n">–</div>
+                    <div class="hd-ins-lbl">Docs no acervo</div>
+                    <div class="hd-ins-sub">PDF e DOCX</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hd-right-col">
+              <div class="hd-panel">
+                <div class="hd-panel-head">
+                  <span class="hd-panel-title">Continue de onde parou</span>
+                  <button class="hd-panel-link" onclick="go('historico')">Ver todos</button>
+                </div>
+                <div id="hd-recent-list"><div class="hd-empty">Nenhuma peça ainda.</div></div>
+              </div>
+              <div class="hd-panel">
+                <div class="hd-panel-head">
+                  <span class="hd-panel-title">Atividade recente</span>
+                </div>
+                <div id="hd-activity-list"><div class="hd-empty">Sem atividade.</div></div>
+              </div>
+            </div>
+          </div>
 
+          <!-- Dica Pandecta -->
+          <div class="hd-tip">
+            <div class="hd-tip-left">
+              <div class="hd-tip-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><line x1="10" y1="7" x2="10" y2="10.5"/><circle cx="10" cy="13.5" r="0.6" fill="currentColor"/></svg></div>
+              <span><strong>Dica Pandecta:</strong> Adicione documentos ao Acervo para que a IA use como contexto ao gerar suas peças — resultados muito mais precisos.</span>
+            </div>
+            <button class="hd-tip-link" onclick="go('acervo')">Ir ao Acervo <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg></button>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -2209,6 +2386,100 @@ function toggleSidebar(){
   else openSidebar();
 }
 
+
+// ════ HOME DASHBOARD ════
+async function loadHomeDash(){
+  // Saudação
+  const hEl=document.getElementById('hd-hello');
+  if(hEl&&usuario){
+    const hr=new Date().getHours();
+    const sd=hr<12?'Bom dia':hr<18?'Boa tarde':'Boa noite';
+    const nome=usuario.charAt(0).toUpperCase()+usuario.slice(1);
+    hEl.textContent=sd+', '+nome+' 👋';
+  }
+  // Histórico
+  let hist=[];
+  try{hist=await api('GET','/api/history');}catch(e){}
+  const total=hist.length;
+  const elTotal=document.getElementById('hd-total');
+  if(elTotal)elTotal.textContent=total||'0';
+  // Este mês
+  const now=new Date();
+  const mes=hist.filter(x=>{const d=new Date(x.createdAt);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
+  const elMes=document.getElementById('hd-mes');if(elMes)elMes.textContent=mes;
+  const elMesLbl=document.getElementById('hd-mes-lbl');if(elMesLbl)elMesLbl.textContent=mes===1?'peça':'peças';
+  // Esta semana
+  const semIni=new Date();semIni.setDate(now.getDate()-now.getDay());semIni.setHours(0,0,0,0);
+  const semana=hist.filter(x=>new Date(x.createdAt)>=semIni).length;
+  const elSem=document.getElementById('hd-semana');if(elSem)elSem.textContent=semana;
+  // Tipo principal
+  const tipos={};
+  hist.forEach(x=>{if(x.tipo)tipos[x.tipo]=(tipos[x.tipo]||0)+1;});
+  const tipoTop=Object.entries(tipos).sort((a,b)=>b[1]-a[1])[0];
+  if(tipoTop){
+    const label=hist.find(x=>x.tipo===tipoTop[0])?.tipo_label||tipoTop[0];
+    const short=label.length>12?label.split(' ')[0]:label;
+    const elTipo=document.getElementById('hd-tipo');if(elTipo)elTipo.textContent=short;
+    const elTipoIns=document.getElementById('hd-tipo-ins');if(elTipoIns)elTipoIns.textContent=short;
+    const elTipoCt=document.getElementById('hd-tipo-ins-ct');if(elTipoCt)elTipoCt.textContent=tipoTop[1]+'x gerado'+(tipoTop[1]===1?'':'s');
+  }
+  // Área principal
+  const areas={};
+  hist.forEach(x=>{if(x.area_label)areas[x.area_label]=(areas[x.area_label]||0)+1;});
+  const areaTop=Object.entries(areas).sort((a,b)=>b[1]-a[1])[0];
+  if(areaTop){
+    const elAN=document.getElementById('hd-area-name');if(elAN)elAN.textContent=areaTop[0];
+    const pct=total?Math.round(areaTop[1]/total*100):0;
+    const elFill=document.getElementById('hd-area-fill');if(elFill)setTimeout(()=>{elFill.style.width=pct+'%';},60);
+    const elPct=document.getElementById('hd-area-pct');if(elPct)elPct.textContent=pct+'% das peças';
+    const elAI=document.getElementById('hd-area-ins');if(elAI)elAI.textContent=areaTop[0];
+    const elACt=document.getElementById('hd-area-ins-ct');if(elACt)elACt.textContent=areaTop[1]+' peça'+(areaTop[1]===1?'':'s');
+  }
+  // Acervo count
+  try{
+    const ac=await api('GET','/api/acervo');
+    const n=Array.isArray(ac)?ac.length:0;
+    const elAc=document.getElementById('hd-acervo-n');if(elAc)elAc.textContent=n;
+  }catch(e){const el=document.getElementById('hd-acervo-n');if(el)el.textContent='0';}
+  // Continue de onde parou (3 mais recentes)
+  const rl=document.getElementById('hd-recent-list');
+  if(rl){
+    const rec=hist.slice(0,3);
+    if(!rec.length){rl.innerHTML='<div class="hd-empty">Nenhuma peça ainda.</div>';}
+    else{
+      rl.innerHTML=rec.map(x=>{
+        const lbl=x.tipo_label||x.tipo||'Peça';
+        const area=x.area_label||'';
+        return '<div class="hd-ri" onclick="go('historico')">'
+          +'<div class="hd-ri-ico"><svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 2h8l4 4v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><polyline points="12,2 12,6 16,6"/></svg></div>'
+          +'<div class="hd-ri-ttl">'+lbl+'</div>'
+          +(area?'<div class="hd-ri-tag">'+area+'</div>':'')
+          +'</div>';
+      }).join('');
+    }
+  }
+  // Atividade recente (4 mais recentes)
+  const al=document.getElementById('hd-activity-list');
+  if(al){
+    const act=hist.slice(0,4);
+    if(!act.length){al.innerHTML='<div class="hd-empty">Sem atividade.</div>';}
+    else{
+      al.innerHTML=act.map((x,i)=>{
+        const lbl=x.tipo_label||x.tipo||'Peça';
+        const area=x.area_label||'';
+        const d=new Date(x.createdAt);
+        const diff=Math.floor((Date.now()-d)/60000);
+        const tempo=diff<1?'agora':diff<60?diff+'min':diff<1440?Math.floor(diff/60)+'h':Math.floor(diff/1440)+'d';
+        return '<div class="hd-act">'
+          +'<div class="hd-act-dot'+(i>0?' dim':'')+'"></div>'
+          +'<div class="hd-act-info"><div class="hd-act-txt">'+lbl+'</div><div class="hd-act-sub">'+area+'</div></div>'
+          +'<div class="hd-act-time">'+tempo+'</div>'
+          +'</div>';
+      }).join('');
+    }
+  }
+}
+
 // ════ NAV ════
 function go(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
@@ -2229,6 +2500,7 @@ function go(s){
   if(s==='tickets'){ loadMeusTickets(); }
   if(s==='pioneer'){ loadPioneerMsgs(); markPioneerMsgsRead(); }
   if(s==='modelos') loadModelos();
+  if(s==='home') loadHomeDash();
   if(s==='admin'){
     loadUsers();loadBackups();loadAdminStats();loadPioneiros();loadTicketsAdmin();loadPioneerMsgsAdmin();
     const init=usuario?usuario[0].toUpperCase():'A';
