@@ -960,6 +960,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 }
 
 /* ══════════════════════ TOUR ══════════════════════ */
+@keyframes tour-pulse{
+  0%,100%{box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 4px rgba(200,164,106,.5),0 0 20px 6px rgba(200,164,106,.35);}
+  50%{box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 7px rgba(200,164,106,.25),0 0 32px 10px rgba(200,164,106,.18);}
+}
 #tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:9000;pointer-events:all;}
 #tour-spotlight{position:fixed;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 3px var(--gold);z-index:9001;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1);}
 #tour-tooltip{position:fixed;z-index:9002;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:28px;width:380px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.32);transition:all .3s ease;}
@@ -1149,9 +1153,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
                   <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="10" y1="17" x2="10" y2="3"/><line x1="3" y1="10" x2="17" y2="10"/></svg>
                   Nova peça
                 </button>
-                <button class="hd-btn-sec" onclick="go('gen')">
+                <button class="hd-btn-sec" onclick="go('suporte')">
                   <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M17 10c0 3.866-3.134 7-7 7a6.978 6.978 0 01-3.5-.934L3 17l.934-3.5A6.978 6.978 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
-                  Conversar com IA
+                  Conversar com a Pandecta
                 </button>
               </div>
             </div>
@@ -1196,7 +1200,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
               <div class="hd-feat-desc">Organize PDFs e DOCXs. A IA usa seus documentos como contexto na hora de gerar.</div>
               <div class="hd-feat-link">Abrir acervo <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg></div>
             </div>
-            <div class="hd-feat" onclick="go('gen')">
+            <div class="hd-feat" onclick="go('suporte')">
               <div class="hd-feat-ico ic-blue">
                 <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"><path d="M17 10c0 3.866-3.134 7-7 7a6.978 6.978 0 01-3.5-.934L3 17l.934-3.5A6.978 6.978 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
               </div>
@@ -2431,7 +2435,7 @@ async function loadHomeDash(){
     const elAN=document.getElementById('hd-area-name');if(elAN)elAN.textContent=areaTop[0];
     const pct=total?Math.round(areaTop[1]/total*100):0;
     const elFill=document.getElementById('hd-area-fill');if(elFill)setTimeout(()=>{elFill.style.width=pct+'%';},60);
-    const elPct=document.getElementById('hd-area-pct');if(elPct)elPct.textContent=pct+'% das peças';
+    const elPct=document.getElementById('hd-area-pct');if(elPct)elPct.textContent=areaTop[1]+' de '+total+' peças são desta área';
     const elAI=document.getElementById('hd-area-ins');if(elAI)elAI.textContent=areaTop[0];
     const elACt=document.getElementById('hd-area-ins-ct');if(elACt)elACt.textContent=areaTop[1]+' peça'+(areaTop[1]===1?'':'s');
   }
@@ -4475,20 +4479,38 @@ function _mostrarStep(i){
           ${i>0?`<button onclick="_tourNav(-1)" style="height:40px;padding:0 16px;background:#f1f5f9;color:#374151;border:none;border-radius:9px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">Anterior</button>`:''}
           ${i<TOUR_STEPS.length-1
             ?`<button onclick="_tourNav(1)" style="height:40px;padding:0 20px;background:#C9A84C;color:#001B2A;border:none;border-radius:9px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;">Próximo</button>`
-            :`<button onclick="_limparTour()" style="height:40px;padding:0 20px;background:#C9A84C;color:#001B2A;border:none;border-radius:9px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;">Concluir ✓</button>`
+            :`<button onclick="_limparTour(true)" style="height:40px;padding:0 20px;background:#C9A84C;color:#001B2A;border:none;border-radius:9px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;">Concluir ✓</button>`
           }
         </div>
       </div>`;
 
     if(rect){
-      const tipTop = rect.bottom + 14;
-      const tipLeft = Math.min(Math.max(8, rect.left), window.innerWidth - 396);
-      tip.style.top = (tipTop + 380 > window.innerHeight ? rect.top - 380 - 14 : tipTop) + 'px';
+      // Se elemento está na sidebar (lado esquerdo), tooltip à direita
+      const isSidebar = rect.right < 280;
+      let tipLeft, tipTop;
+      if(isSidebar){
+        tipLeft = rect.right + 20;
+        tipTop = Math.min(rect.top, window.innerHeight - 400);
+        tipTop = Math.max(8, tipTop);
+      } else {
+        tipLeft = Math.min(Math.max(8, rect.left), window.innerWidth - 396);
+        const below = rect.bottom + 14;
+        tipTop = (below + 380 > window.innerHeight ? rect.top - 380 - 14 : below);
+      }
+      tip.style.top = tipTop + 'px';
       tip.style.left = tipLeft + 'px';
 
       const spot = document.createElement('div');
       spot.id = 'tour-spot';
-      spot.style.cssText = `position:fixed;z-index:8050;border:2px solid #C9A84C;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.55);pointer-events:none;top:${rect.top-6}px;left:${rect.left-6}px;width:${rect.width+12}px;height:${rect.height+12}px;`;
+      spot.style.cssText = `position:fixed;z-index:8050;border:3px solid #C9A84C;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 4px rgba(200,164,106,.5),0 0 20px 6px rgba(200,164,106,.35);pointer-events:none;animation:tour-pulse 1.8s ease-in-out infinite;top:${rect.top-8}px;left:${rect.left-8}px;width:${rect.width+16}px;height:${rect.height+16}px;`;
+      // Seta indicadora quando tooltip está à direita do item
+      if(isSidebar){
+        const arrow = document.createElement('div');
+        arrow.id = 'tour-arrow';
+        const arrowTop = rect.top + rect.height/2 - 10;
+        arrow.style.cssText = `position:fixed;z-index:8101;left:${rect.right+6}px;top:${arrowTop}px;width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-right:14px solid #C9A84C;filter:drop-shadow(0 0 4px rgba(200,164,106,.6));`;
+        document.body.appendChild(arrow);
+      }
       document.body.appendChild(spot);
     } else {
       tip.style.top = '50%';
@@ -4505,11 +4527,12 @@ function _tourNav(dir){
   _mostrarStep(_tourStep);
 }
 
-function _limparTour(){
-  ['tour-overlay','tour-tip','tour-spot'].forEach(id=>{
+function _limparTour(goHome){
+  ['tour-overlay','tour-tip','tour-spot','tour-arrow'].forEach(id=>{
     const el=document.getElementById(id);
     if(el) el.remove();
   });
+  if(goHome) go('home');
 }
 
 function checkTourAutoShow(){
