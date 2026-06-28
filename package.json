@@ -1,7 +1,7 @@
 {
   "name": "pandecta-railway",
   "version": "2.0.0",
-  "description": "Pandecta — Inteligência Jurídica (Railway)",
+  "description": "Pandecta - Inteligencia Juridica (Railway)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
