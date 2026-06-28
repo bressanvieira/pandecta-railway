@@ -91,6 +91,16 @@ git push
 - Tour guiado (spotlight + popup boas-vindas com "não mostrar novamente")
 - Landing page pandecta.com.br + páginas legais (Termos, PP, LGPD)
 - Admin panel
+- **Dashboard home** redesenhado: saudação, hero card, KPIs reais, 3 feature cards, insights rápidos, "Continue de onde parou", dica Pandecta
+- **Trial countdown** no sidebar: barra regressiva 7→0 dias, modal de expiração ao terminar
+- **Sino de notificações** sempre visível para admin/pioneer; badge só aparece com mensagens novas
+- **Tour guiado** corrigido: spotlight visível, menu item branco durante highlight, retorna ao Início no Concluir
+- **validate.js** — validador pré-deploy: checa sintaxe JS dos `<script>` inline e IDs/funções obrigatórios
+
+### Bugs corrigidos (26/06/2026)
+- `\${_sbTrialBlock()}` escapado em template literal impedia renderização da barra de trial
+- `trial_expires_at` NULL para usuários antigos: server.js agora computa `created_at + 7 dias` como fallback e persiste no banco
+- Tour crashava após step 2: `const el` era block-scoped dentro de `if(step.selector){}` — corrigido para `let el = null` no escopo externo
 
 ---
 
@@ -103,8 +113,18 @@ git push
 
 ---
 
+## Instagram — Posts publicados
+
+- **Post 1** (26/06/2026): "20 Vagas — Advogado Pioneiro" — imagem estática navy+gold. Patrocinado.
+- **Post 2** (26/06/2026): Carrossel 4 slides — demonstração do produto (wizard + petição gerada). Patrocinado.
+- **Post 3** (26/06/2026): Logo + "A inteligência jurídica chegou." — imagem de marca.
+- Arquivos em `brand/` e `pandecta-post2-slide*.png`
+
+---
+
 ## Próximos passos
 
+- [ ] Resultado do impulsionamento Instagram (aguardar)
 - [ ] Feedback piloto Fabiano
 - [ ] Módulo Direito Imobiliário (Lei 8.245/91)
 - [ ] Busca ao vivo em jurisprudência
