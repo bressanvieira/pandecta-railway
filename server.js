@@ -886,42 +886,137 @@ SÃºmula 479 STJ â InstituiÃ§Ãµes financeiras respondem objetivamente 
 REsp 1.737.428/RS STJ â Marketplace: responsabilidade solidÃ¡ria quando viabiliza venda sem garantir reparaÃ§Ã£o.
 REsp 1.737.017/SP STJ â Teoria do Desvio Produtivo: tempo subtraÃ­do do consumidor = dano moral autÃ´nomo.`,
 
-  trabalhista: `LEGISLAÃÃO â DIREITO TRABALHISTA:
-Art. 7Âº CF/88 â Direitos: proteÃ§Ã£o contra despedida (I), 13Âº salÃ¡rio (VIII), jornada 8h/44h (XIII), fÃ©rias (XVII), FGTS (III), prescriÃ§Ã£o quinquenal (XXIX).
-Art. 58 CLT â Jornada normal: 8 horas diÃ¡rias.
-Art. 59 CLT â Horas extras: acrÃ©scimo mÃ­nimo de 50%.
-Art. 467 CLT â Parte incontroversa das verbas rescisÃ³rias: 50% de acrÃ©scimo se nÃ£o paga na audiÃªncia.
-Art. 477 CLT â Verbas rescisÃ³rias: prazo de 10 dias apÃ³s o tÃ©rmino do contrato.
-SÃºmula 85 TST â CompensaÃ§Ã£o de jornada requer acordo escrito ou convenÃ§Ã£o coletiva.
-SÃºmula 291 TST â Horas extras habituais geram reflexos em fÃ©rias, 13Âº, aviso prÃ©vio e FGTS.
-SÃºmula 338 TST â Ãnus da prova do horÃ¡rio: do empregador com mais de 10 empregados.
-SÃºmula 437 TST â SupressÃ£o do intervalo intrajornada: pagamento integral com adicional de 50%.`,
+  trabalhista: `LEGISLAÇÃO — DIREITO TRABALHISTA:
 
-  civil: `LEGISLAÃÃO â DIREITO CIVIL:
-Art. 186 CC â Ato ilÃ­cito: aÃ§Ã£o ou omissÃ£o que viola direito e causa dano.
-Art. 187 CC â Abuso de direito: exercÃ­cio que excede boa-fÃ©, bons costumes ou fins sociais.
-Art. 405 CC â Juros moratÃ³rios: a partir da citaÃ§Ã£o (obrigaÃ§Ãµes contratuais).
-Art. 421 CC â Liberdade contratual nos limites da funÃ§Ã£o social do contrato.
-Art. 475 CC â Parte lesada: pode pedir resoluÃ§Ã£o ou cumprimento forÃ§ado.
-Art. 927 CC â ObrigaÃ§Ã£o de reparar danos por ato ilÃ­cito.
-Art. 944 CC â IndenizaÃ§Ã£o mede-se pela extensÃ£o do dano.
-SÃºmula 37 STJ â CumulaÃ§Ã£o de danos materiais e morais do mesmo fato: admitida.
-SÃºmula 54 STJ â Juros desde o evento danoso (responsabilidade extracontratual).
-SÃºmula 362 STJ â CorreÃ§Ã£o monetÃ¡ria do dano moral desde o arbitramento.`,
+CONSTITUIÇÃO FEDERAL E CLT — DIREITOS FUNDAMENTAIS:
+Art. 7º CF/88 — Direitos: proteção contra despedida (I), 13º salário (VIII), jornada 8h/44h (XIII), férias + 1/3 (XVII), FGTS (III), prescrição quinquenal (XXIX).
+Art. 58 CLT — Jornada normal: 8 horas diárias / 44 semanais.
+Art. 59 CLT — Horas extras: acréscimo mínimo de 50% (100% em domingos e feriados).
+Art. 68 CLT — Trabalho noturno: adicional de 20% + hora reduzida (52min30s).
+Art. 130 CLT — Férias: 30 dias após 12 meses de serviço; 1/3 constitucional (Art. 7º, XVII CF).
+Art. 467 CLT — Parte incontroversa das verbas rescisórias: 50% de acréscimo se não paga na audiência.
+Art. 477 CLT — Verbas rescisórias: prazo de 10 dias após o término do contrato; multa de 1 salário por atraso.
+Art. 482 CLT — Justa causa: falta grave do empregado (ato lesivo, insubordinação, abandono etc.).
+Art. 483 CLT — Rescisão indireta: falta grave do empregador (Art. 7º, I CF); equiparada a demissão sem justa causa.
+Art. 790 CLT — Gratuidade de justiça: para quem percebe salário ≤40% do limite do RGPS ou comprovar insuficiência de recursos.
 
-  familia: `LEGISLAÃÃO â DIREITO DE FAMÃLIA:
-Art. 1.583 CC â Guarda: unilateral ou compartilhada.
-Art. 1.584 CC â Guarda compartilhada: aplicada na ausÃªncia de acordo entre os pais.
-Art. 1.585 CC â Liminar de guarda: pode ser deferida antes da decisÃ£o final.
-Art. 1.694 CC â Alimentos: compatÃ­veis com condiÃ§Ã£o social e possibilidades do alimentante.
-Art. 1.699 CC â Alimentos: revisÃ£o se houver mudanÃ§a de fortuna de qualquer das partes.
-Art. 1.701 CC â Direito a alimentos de boa-fÃ© enquanto nÃ£o fixados outros.
-Art. 1.703 CC â Pais: obrigados proporcionalmente pela manutenÃ§Ã£o dos filhos.
-Lei 11.698/2008 â Guarda compartilhada como regra geral.
-Lei 13.058/2014 â Igualdade de direitos pai/mÃ£e na guarda compartilhada.
-SÃºmula 277 STJ â Alimentos devidos desde a citaÃ§Ã£o em investigaÃ§Ã£o de paternidade.
-SÃºmula 358 STJ â Cancelamento de alimentos do filho maior: depende de decisÃ£o judicial.`,
-  imobiliario: `LEGISLAÇÃO — DIREITO IMOBILIÁRIO:
+REFORMA TRABALHISTA — LEI 13.467/2017:
+Art. 443 §2º CLT — Contrato intermitente: prestado com subordinação, convocação com 3 dias de antecedência.
+Art. 75-B CLT — Teletrabalho: condições por acordo individual escrito; horas extras se houver controle de jornada.
+Art. 507-A CLT — Cláusula compromissória de arbitragem: apenas para empregados com salário ≥2x do teto do RGPS.
+Art. 611-A CLT — Negociado sobre legislado: banco de horas, intervalo intrajornada mínimo de 30min.
+
+SÚMULAS TST:
+Súmula 85 TST — Compensação de jornada: requer acordo individual escrito ou convenção coletiva.
+Súmula 132 TST — Adicional de periculosidade: incide sobre salário base (não sobre comissões).
+Súmula 277 TST — Convenção coletiva: adesão tácita até a negociação seguinte.
+Súmula 291 TST — Horas extras habituais: reflexos em férias, 13º, aviso prévio e FGTS.
+Súmula 338 TST — Ônus da prova do horário: do empregador com mais de 10 empregados.
+Súmula 369 TST — Dirigente sindical: garantia de emprego desde o registro da candidatura.
+Súmula 437 TST — Supressão do intervalo intrajornada: pagamento integral + adicional de 50%.
+Súmula 443 TST — Dispensa discriminatória (doença grave): presunção de discriminação, reintegração ou indenização dobrada.
+
+OJ TST RELEVANTES:
+OJ 394-A SDI-1 — Motorista profissional: Art. 235-C CLT, jornada especial de 8h diárias.
+OJ 132 SDI-1 — Bancário: 6h diárias / 30h semanais; horas além = extras.
+OJ 277 SDI-1 — Vale-transporte: desconto máximo de 6% do salário.`,
+
+
+
+    civil: `LEGISLAÇÃO — DIREITO CIVIL:
+
+RESPONSABILIDADE CIVIL:
+Art. 186 CC — Ato ilícito: ação ou omissão que viola direito e causa dano a outrem.
+Art. 187 CC — Abuso de direito: exercício que excede boa-fé, bons costumes ou fins sociais.
+Art. 927 CC — Obrigação de reparar danos por ato ilícito (cabeça) e responsabilidade objetiva (p.u.).
+Art. 944 CC — Indenização mede-se pela extensão do dano; pode ser reduzida se houver culpa concorrente (Art. 945).
+Art. 945 CC — Culpa concorrente da vítima: reduz proporcionalmente a indenização.
+
+CONTRATOS:
+Art. 421 CC — Liberdade contratual nos limites da função social do contrato.
+Art. 422 CC — Boa-fé objetiva: obrigatória na conclusão e execução do contrato.
+Art. 475 CC — Inadimplemento: parte lesada pode pedir resolução ou cumprimento forçado.
+Art. 478 CC — Resolução por onerosidade excessiva: fato extraordinário + extrema vantagem para a outra parte.
+
+OBRIGAÇÕES E JUROS:
+Art. 389 CC — Não cumprida a obrigação: perdas e danos + juros + correção + honorários.
+Art. 395 CC — Mora: responde por perdas, juros e correção desde a constituição em mora.
+Art. 397 CC — Mora ex re: obrigação líquida com vencimento certo — mora automática após o vencimento.
+Art. 405 CC — Juros moratórios: a partir da citação (obrigações contratuais).
+
+PRAZOS PRESCRICIONAIS (Art. 206 CC):
+Art. 206, §2º — 2 anos: pretéritos alimentícios.
+Art. 206, §3º, I — 3 anos: pretéritos de aluguéis.
+Art. 206, §3º, IV — 3 anos: pretéritos de reparação civil (regra geral).
+Art. 206, §3º, V — 3 anos: pretensão de indenização por responsabilidade civil.
+Art. 206, §5º, I — 5 anos: dívidas líquidas constantes de instrumento público ou particular.
+Art. 205 CC — Prescrição geral: 10 anos (quando não houver prazo especial fixado).
+
+TUTELAS ESPECÍFICAS (CPC):
+Art. 497 CPC — Tutela específica: prestação de fazer/não fazer; juiz pode impor astreinte (Art. 537 CPC).
+Art. 498 CPC — Obrigação de entregar coisa: conversão em perdas e danos se inviável.
+Art. 300 CPC — Tutela de urgência: fumus boni iuris + periculum in mora.
+Art. 311 CPC — Tutela da evidência: independe de perigo; cabe quando direito incontroverso ou abuso processual.
+
+RESPONSABILIDADE MÉDICA:
+Obrigação de meio (médico): deve empregar toda técnica e diligência, não garante o resultado (STJ REsp 1.696.284).
+Obrigação de resultado (cirurgião plástico estético): invertido o ônus da prova (STJ REsp 1.395.254).
+Prazo prescricional: 3 anos (Art. 206, §3º, V CC) ou 5 anos se aplicado CDC (Art. 27 CDC).
+
+SÚMULAS RELEVANTES:
+Súmula 37 STJ — Cumulação de danos materiais e morais do mesmo fato: admitida.
+Súmula 54 STJ — Juros desde o evento danoso (responsabilidade extracontratual).
+Súmula 362 STJ — Correção monetária do dano moral desde o arbitramento.
+Súmula 387 STJ — É lícita a cumulação das indenizações de dano estético e dano moral.
+Súmula 370 STJ — Caracteriza dano moral a apresentação antecipada de cheque pré-datado.`,
+
+
+
+    familia: `LEGISLAÇÃO — DIREITO DE FAMÍLIA:
+
+GUARDA E ALIMENTOS — CÓDIGO CIVIL:
+Art. 1.583 CC — Guarda: unilateral (um dos pais exerce) ou compartilhada (ambos responsáveis).
+Art. 1.584 CC — Guarda compartilhada: aplicada como regra na ausência de acordo entre os pais.
+Art. 1.585 CC — Liminar de guarda: pode ser deferida antes da decisão final.
+Art. 1.694 CC — Alimentos: compatíveis com condição social e possibilidades do alimentante (binômio necessidade/possibilidade).
+Art. 1.695 CC — Alimentos devidos: quando não pode provedor suportar sem desamparo próprio.
+Art. 1.699 CC — Revisão de alimentos: cabe quando mudar a fortuna de quem os supre ou recebe.
+Art. 1.703 CC — Pais: obrigados proporcionalmente pela manutenção dos filhos.
+Lei 11.698/2008 + Lei 13.058/2014 — Guarda compartilhada como regra geral; igualdade de direitos pai/mãe.
+
+DIVÓRCIO E UNIÃO ESTÁVEL:
+Art. 226 §6º CF — Divórcio: direito potestativo, não há prazo mínimo nem culpa como requisito.
+Arts. 693-699 CPC — Proc. de família: mediação prioritária; CEJUSC obrigatório antes da audiência.
+Art. 731 CPC — Divórcio consensual extrajudicial: possível em cartório se sem filhos menores/inc.
+Art. 1.571 CC — Divórcio dissolve a sociedade conjugal e o vínculo matrimonial.
+Art. 1.723 CC — União estável: convivência pública, contínua, duradoura e com objetivo de constituir família.
+Lei 9.278/96 — União estável: bens adquiridos onerosamente são comuns; meação em caso de dissolução.
+Art. 1.725 CC — União estável: regime supletivo de comunhão parcial de bens.
+
+LEI MARIA DA PENHA — LEI 11.340/2006:
+Art. 5º LMP — Violência doméstica: ação ou omissão baseada no gênero no âmbito doméstico/familiar.
+Art. 7º LMP — Formas: física, psicológica, sexual, patrimonial, moral.
+Art. 12 LMP — Boletim de ocorrência: delegado remete a JO em 48h com solicitação de medidas protetivas.
+Art. 22 LMP — Medidas protetivas ao agressor: afastamento do lar, proibição de aproximação/contato, suspensão de porte.
+Art. 23 LMP — Medidas protetivas à ofendida: encaminhamento a abrigo, restituição de bens.
+Prazo: juiz decide sobre medidas protetivas em até 48h (Art. 18 LMP).
+
+INVENTÁRIO E HERANÇA:
+Art. 1.784 CC — Abertura da sucessão: imediata com a morte; herança transmitida aos herdeiros.
+Art. 610 CPC — Inventário extrajudicial: possível em cartório se todos herdeiros capazes e sem testamento.
+Art. 611 CPC — Inventário judicial: prazo de 2 meses após a abertura da sucessão.
+Art. 1.845 CC — Herdeiros necessários: descendentes, ascendentes e cônjuge.
+Art. 1.846 CC — Legítima: metade dos bens reservada aos herdeiros necessários.
+
+SÚMULAS RELEVANTES:
+Súmula 277 STJ — Alimentos em investigação de paternidade: devidos desde a citação.
+Súmula 358 STJ — Cancelamento de alimentos de filho maior: depende de decisão judicial.
+Súmula 364 STJ — Dano moral por violação da honra: admitido mesmo sem prova do abalo.
+Súmula 600 STJ — Para efeitos da LMP, compõe o núcleo familiar a relação íntima de afeto independentemente de coabitação.`,
+
+
+
+    imobiliario: `LEGISLAÇÃO — DIREITO IMOBILIÁRIO:
 
 LEI 8.245/91 — LOCAÇÃO DE IMÓVEIS URBANOS:
 Art. 4º — Rescisão pelo locatário: multa proporcional ao tempo restante (não é multa integral).
@@ -965,6 +1060,43 @@ REGRAS PROCESSUAIS IMOBILIÁRIAS:
 - Juros de mora na locação: 1% ao mês desde o vencimento + correção pelo IGPM ou índice contratual.`,
 
 };
+
+const AREA_RULES = {
+  consumidor: `REGRAS PROCESSUAIS — DIREITO DO CONSUMIDOR:
+- Endereçamento: EXCELENTÍSSIMO SENHOR DOUTOR JUIZ DE DIREITO / PRESIDENTE DO JUIZADO ESPECIAL CÍVEL
+- Rito: JEC (causas até 40 SM) ou Vara Cível comum. JEC: sem advogado até 20 SM.
+- Invertir ônus da prova quando verossímil a alegação ou hipossuficiente o consumidor (Art. 6º, VIII CDC).
+- Valor da causa: somar dano material + moral pleiteados.`,
+
+  trabalhista: `REGRAS PROCESSUAIS — DIREITO TRABALHISTA:
+- Endereçamento: EXCELENTÍSSIMO SENHOR DOUTOR JUIZ DO TRABALHO DA _ª VARA DO TRABALHO DE [CIDADE] — [REGIÃO] REGIÃO
+- Rito: CLT — audiência una (Art. 849 CLT); reclamação verbal possível (Art. 840 CLT).
+- Gratuidade de Justiça: declarar na petição com base no Art. 790 CLT se cabível.
+- Valor da causa: somar todas as verbas pleiteadas (horas extras, férias, 13º, FGTS, multas, dano moral).
+- Citar CNPJ da reclamada; indicar endereço do estabelecimento onde o reclamante laborava.`,
+
+  civil: `REGRAS PROCESSUAIS — DIREITO CIVIL:
+- Endereçamento: EXCELENTÍSSIMO SENHOR DOUTOR JUIZ DE DIREITO DA _ª VARA CÍVEL DE [COMARCA]/[UF]
+- Rito: Comum (CPC) para causas acima de 40 SM; Sumaríssimo no JEC.
+- Competência: domicílio do réu (regra geral, Art. 46 CPC); domicílio da vítima em resp. extracontratual.
+- Tutela de urgência: requerer liminarmente quando periculum in mora e fumus boni iuris (Art. 300 CPC).
+- Valor da causa: somar dano material + moral + lucros cessantes pleiteados.`,
+
+  familia: `REGRAS PROCESSUAIS — DIREITO DE FAMÍLIA:
+- Endereçamento: EXCELENTÍSSIMO SENHOR DOUTOR JUIZ DE DIREITO DA VARA DE FAMÍLIA E SUCESSÕES DE [COMARCA]/[UF]
+- Rito: Especial de família (Arts. 693-699 CPC); audiência de mediação obrigatória (CEJUSC).
+- Divórcio consensual sem filhos menores: possível extrajudicialmente (Art. 731 CPC).
+- Guarda/alimentos: requerer liminar quando houver urgência (Art. 1.585 CC; Art. 300 CPC).
+- LMP: encaminhar para Vara Criminal/JVD com competência para medidas protetivas (Art. 22 LMP).`,
+
+  imobiliario: `REGRAS PROCESSUAIS — DIREITO IMOBILIÁRIO:
+- Endereçamento: EXCELENTÍSSIMO SENHOR DOUTOR JUIZ DE DIREITO DA _ª VARA CÍVEL DE [COMARCA]/[UF]
+- Despejo por falta de pagamento: rito especial Lei 8.245/91, Art. 59 §1º — liminar de despejo em 15 dias.
+- Valor da causa: total dos aluguéis vencidos + multa + encargos (despejo); valor da causa = 12x aluguel mensal (revisão).
+- Usucapião: instrução com planta, memorial descritivo, certidões de matrícula e notificação de confinantes.
+- Ação de cobrança de aluguéis: prescrita em 3 anos (Art. 206, §3º, I CC).`,
+};
+
 
 const TIPO_LABELS = {
   peticao_inicial: 'PetiÃ§Ã£o Inicial',
@@ -1011,6 +1143,7 @@ app.post('/api/gerar', requireAuth, async (req, res) => {
   const tipoLabel    = TIPO_LABELS[tipo]  || 'PetiÃ§Ã£o Inicial';
   const subtipoLabel = subtipo ? (SUBTIPO_LABELS[subtipo] || subtipo) : '';
   const contexto     = LEGAL_CONTEXTS[area] || LEGAL_CONTEXTS.consumidor;
+  const areaRules   = AREA_RULES[area] || '';
   const today        = new Date().toLocaleDateString('pt-BR', {
     day:'2-digit', month:'long', year:'numeric', timeZone:'America/Sao_Paulo'
   });
@@ -1037,6 +1170,7 @@ app.post('/api/gerar', requireAuth, async (req, res) => {
 LEGISLAÃÃO E JURISPRUDÃNCIA RELEVANTE:
 âââââââââââââââââââââââââââââââââââââââ
 ${contexto}
+${areaRules ? `\n\nREGRAS PROCESSUAIS:\n${areaRules}` : ''}
 âââââââââââââââââââââââââââââââââââââââ
 
 TAREFA: Redija ${subtipoLabel?`um ${subtipoLabel} (${tipoLabel})`:`uma ${tipoLabel} para ${areaLabel}`} completo(a) e formal.
