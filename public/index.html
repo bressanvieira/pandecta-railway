@@ -3078,11 +3078,18 @@ class WizardEngine{
       {l:'Imobiliário',v:'imobiliario',icon:'🔑',s:'Locação · Despejo · Condomínio'},
     ]});
     if(d.tipo){
-      const isCtr=d.tipo==='contrato',isNtf=d.tipo==='notificacao';
-      sc.push({id:'partes',lbl:isCtr?'Identifique as partes do contrato':isNtf?'Quem envolve a notificação?':'Quem são as partes envolvidas?',sub:isCtr?'Preencha os dados das partes contratantes.':'Preencha os dados das partes do processo.',type:'form',fields:[
-        {field:'autor',label:isCtr?'CONTRATANTE':isNtf?'NOTIFICANTE':'AUTOR / REQUERENTE',ph:isCtr?'Nome completo, CPF/CNPJ, qualificação...':'Nome completo, qualificação e documentos...'},
-        {field:'reu',label:isCtr?'CONTRATADO':isNtf?'NOTIFICADO':'RÉU / REQUERIDO',ph:isCtr?'Nome da empresa ou pessoa, CNPJ/CPF...':'Nome da empresa ou pessoa requerida...'},
-        ...(isCtr?[]:[{field:'vara',label:'VARA / JUÍZO',ph:'Ex: 3ª Vara Cível · JEC Central · TRT 15ª Região...',optional:true}]),
+      const isCtr=d.tipo==='contrato',isNtf=d.tipo==='notificacao',isImob=d.area==='imobiliario',isTrab=d.area==='trabalhista';
+      const _autorLabel=isCtr?'CONTRATANTE':isNtf?'NOTIFICANTE':isImob?'LOCADOR / REQUERENTE':isTrab?'RECLAMANTE':'AUTOR / REQUERENTE';
+      const _reuLabel  =isCtr?'CONTRATADO' :isNtf?'NOTIFICADO' :isImob?'LOCATÁRIO / REQUERIDO':isTrab?'RECLAMADA':'RÉU / REQUERIDO';
+      const _autorPh   =isCtr?'Nome completo, CPF/CNPJ, qualificação...':isImob?'Nome completo, CPF/CNPJ, qualificação, endereço do imóvel...':isTrab?'Nome completo, CPF, CTPS, cargo e período trabalhado...':'Nome completo, qualificação e documentos...';
+      const _reuPh     =isCtr?'Nome da empresa ou pessoa, CNPJ/CPF...':isImob?'Nome do locatário, CPF/CNPJ, endereço atual...':isTrab?'Razão social, CNPJ, endereço da empresa...':'Nome da empresa ou pessoa requerida...';
+      const _varaLabel =isTrab?'VARA DO TRABALHO':'VARA / JUÍZO';
+      const _varaPh    =isTrab?'Ex: 3ª Vara do Trabalho de São Paulo · TRT 15ª Região...':isImob?'Ex: 2ª Vara Cível da Comarca de São Paulo/SP...':'Ex: 3ª Vara Cível · JEC Central...';
+      const _partesLbl =isCtr?'Identifique as partes do contrato':isNtf?'Quem envolve a notificação?':isImob?'Identifique locador e locatário':isTrab?'Identifique as partes da reclamação':'Quem são as partes envolvidas?';
+      sc.push({id:'partes',lbl:_partesLbl,sub:isCtr?'Preencha os dados das partes contratantes.':'Preencha os dados das partes do processo.',type:'form',fields:[
+        {field:'autor',label:_autorLabel,ph:_autorPh},
+        {field:'reu',label:_reuLabel,ph:_reuPh},
+        ...(isCtr?[]:[{field:'vara',label:_varaLabel,ph:_varaPh,optional:true}]),
       ]});
     }
     if(d.tipo){const isCtr=d.tipo==='contrato';sc.push({id:'fatos',lbl:isCtr?'Objeto e contexto do contrato':'Descreva os fatos do caso',sub:isCtr?'Detalhe o objeto, prazo e condições.':'Quanto mais detalhes, melhor a qualidade da peça.',type:'textarea',field:'fatos',ph:isCtr?'Descreva o serviço, prazo, valor e demais condições relevantes...':'Em [data], [parte] adquiriu/contratou... Inclua datas, valores e protocolos de atendimento.',counter:true});}
