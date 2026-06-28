@@ -1059,6 +1059,40 @@ REGRAS PROCESSUAIS IMOBILIÁRIAS:
 - CDC aplicado a imóvel na planta: incorporação sujeita ao CDC (STJ REsp 1.723.275/SP — Tese 996).
 - Juros de mora na locação: 1% ao mês desde o vencimento + correção pelo IGPM ou índice contratual.`,
 
+
+
+  previdenciario: `LEGISLAÇÃO — DIREITO PREVIDENCIÁRIO:
+
+BENEFÍCIOS POR INCAPACIDADE — LEI 8.213/91:
+Art. 42 Lei 8.213/91 — Aposentadoria por invalidez: segurado incapaz de forma total e permanente; carência de 12 contribuições (exceto acidente/doença grave).
+Art. 59 Lei 8.213/91 — Auxílio-doença (B31): incapacidade temporária >15 dias; carência de 12 contribuições (exceto acidente).
+Art. 60 Lei 8.213/91 — Auxílio-doença: inicia no 16º dia; primeiros 15 dias = responsabilidade do empregador.
+Art. 86 Lei 8.213/91 — Auxílio-acidente: sequela definitiva que reduz capacidade laboral; acuómulavel com salário.
+Art. 20 Lei 8.213/91 — Doença profissional/do trabalho: equiparada a acidente de trabalho.
+
+BPC/LOAS — LEI 8.742/93:
+Art. 20 Lei 8.742/93 — BPC: 1 salário mínimo mensal à pessoa com deficiência ou idoso ≥65 anos em situação de miserabilidade (renda per capita ≤1/4 SM; STJ: analisar conjunto probatório).
+Art. 20 §10 — Deficiência: impedimentos de longo prazo (conceito biopsicossocial — Lei 13.146/2015).
+Súmula 48 TNU — Renda per capita de 1/4 SM é presunção, não requisito absoluto; outras provas de miserabilidade são admitidas.
+Súmula 77 TNU — Renda do BPC de outro membro da família não é computada para cálculo da renda per capita.
+
+APOSENTADORIAS — REFORMA EC 103/2019:
+Art. 201 CF (EC 103/2019) — Aposentadoria por idade: 65 anos (H) / 62 anos (M) + 20/15 anos de contribuição.
+Transição por pontos: sistema de pontos (96H/86M em 2019 + 1 ponto/ano até 105H/100M).
+Art. 57 Lei 8.213/91 — Aposentadoria especial: 15, 20 ou 25 anos em atividade insalubre/periculosa.
+Art. 29 Lei 8.213/91 — Salário de benefício: média de 100% dos salários de contribuição desde jul/1994.
+
+PENSÃO POR MORTE E SALÁRIO-MATERNIDADE:
+Art. 74 Lei 8.213/91 — Pensão por morte: sem carência; cota de 50% + 10% por dependente.
+Art. 71 Lei 8.213/91 — Salário-maternidade: 120 dias; carência de 10 contribuições (contribuinte individual).
+
+PROCESSO:
+Art. 103 Lei 8.213/91 — Decâdência do direito de revisão: 10 anos do primeiro pagamento.
+Art. 103-A Lei 8.213/91 — Prescrição das prestações: 5 anos das parcelas não pagas.
+Súmula 29 TNU — Laudo pericial judicial prevalece sobre perícia administrativa do INSS.
+Súmula 33 TNU — Qualidade de segurado: pode ser comprovada por início de prova material.
+Súmula 44 TNU — Tempo rural: exige início de prova material contemporânea ao período.
+Súmula 149 STJ — Aposentadoria rural: comprovada por início de prova material + testemunhal.`,
 };
 
 const AREA_RULES = {
@@ -1095,6 +1129,16 @@ const AREA_RULES = {
 - Valor da causa: total dos aluguéis vencidos + multa + encargos (despejo); valor da causa = 12x aluguel mensal (revisão).
 - Usucapião: instrução com planta, memorial descritivo, certidões de matrícula e notificação de confinantes.
 - Ação de cobrança de aluguéis: prescrita em 3 anos (Art. 206, §3º, I CC).`,
+
+
+  previdenciario: `REGRAS PROCESSUAIS — DIREITO PREVIDENCIÁRIO:
+- Endereçamento JEF: MERITÍSSIMO JUIZ DO JUIZADO ESPECIAL FEDERAL DE [CIDADE]/[UF] — SEÇÃO JUDICIÁRIA DE [ESTADO]
+- Endereçamento Vara Federal: EXCELENTÍSSIMO SENHOR DOUTOR JUIZ FEDERAL DA _ª VARA FEDERAL DE [CIDADE]/[UF]
+- Rito: JEF (até 60 SM — Lei 10.259/01); Vara Federal comum acima de 60 SM; TRF competente para recursos.
+- Réu: INSTITUTO NACIONAL DO SEGURO SOCIAL — INSS (CNPJ 29.979.036/0001-40).
+- Valor da causa: soma das parcelas vencidas + 12 parcelas vincendas (valor do benefício mensal × 13).
+- DIB: requerer retroação à data do requerimento administrativo (DER); se sem pedido prévio, à DER judicial.
+- Gratuidade de Justiça: requerer na petição; segurados em geral fazem jus (Art. 98 CPC).`,
 };
 
 
@@ -1122,6 +1166,7 @@ const AREA_LABELS = {
   civil:       'Direito Civil',
   familia:     'Direito de FamÃ­lia',
   imobiliario: 'Direito Imobiliário',
+  previdenciario: 'Direito Previdenciário',
 };
 
 // ââ ROTA PRINCIPAL â GERAR ââââââââââââââââââââââââââââââââââââââââââââââââââââ
