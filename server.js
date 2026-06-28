@@ -921,6 +921,49 @@ Lei 11.698/2008 â Guarda compartilhada como regra geral.
 Lei 13.058/2014 â Igualdade de direitos pai/mÃ£e na guarda compartilhada.
 SÃºmula 277 STJ â Alimentos devidos desde a citaÃ§Ã£o em investigaÃ§Ã£o de paternidade.
 SÃºmula 358 STJ â Cancelamento de alimentos do filho maior: depende de decisÃ£o judicial.`,
+  imobiliario: `LEGISLAÇÃO — DIREITO IMOBILIÁRIO:
+
+LEI 8.245/91 — LOCAÇÃO DE IMÓVEIS URBANOS:
+Art. 4º — Rescisão pelo locatário: multa proporcional ao tempo restante (não é multa integral).
+Art. 9º — Denúncia cheia: (I) infração legal/contratual; (II) falta de pagamento; (III) reparações urgentes; (IV) uso próprio/familiar.
+Art. 23 — Obrigações do locatário: pagar aluguel no prazo, conservar o imóvel, não ceder sem anuência do locador.
+Art. 38 — Garantias: caução (máx. 3x aluguel), fiança, seguro fiança ou cessão fiduciária. Vedada cumulação (Art. 37, parágrafo único).
+Art. 46 — Locação residencial ≥30 meses: findo o prazo, denúncia vazia com aviso de 30 dias.
+Art. 47 — Locação residencial <30 meses (ou prorrogada por prazo indeterminado): denúncia cheia necessária (inciso III: uso próprio).
+Art. 51 — Ação renovatória (locação não residencial): contrato mínimo 5 anos, ajuizada entre 1 e 6 meses antes do vencimento.
+Art. 59 §1º — Liminar de despejo inaudita altera parte: (II) falta de pagamento; (III) término temporada; (IX) término do prazo contratual.
+Art. 62 — Purgação da mora: até audiência de instrução; admitida 1 vez a cada 12 meses.
+Art. 63 — Prazo para desocupação voluntária: 15 dias após trânsito em julgado.
+Art. 67 — Ação revisional: a cada 3 anos; parâmetro: valor de mercado; aluguel provisório fixado no despacho inicial.
+
+CONDOMÍNIO — CÓDIGO CIVIL:
+Art. 1.336 CC — Deveres do condômino: contribuir para despesas, não perturbar sossego, não realizar obras sem autorização.
+Art. 1.337 CC — Condômino inadimplente: multa até 5x a cota mensal; antissocial reiterado: até 10x (deliberação 3/4 dos condôminos).
+Art. 1.345 CC — Adquirente responde pelos débitos condominiais anteriores à aquisição (obrigação propter rem).
+
+USUCAPIÃO:
+Art. 1.238 CC — Extraordinária: 15 anos de posse mansa e pacífica; reduzida a 10 anos se moradia habitual ou trabalho produtivo.
+Art. 1.242 CC — Ordinária: 10 anos com justo título e boa-fé; reduzida a 5 anos se imóvel adquirido onerosamente e utilizado como moradia.
+Art. 1.239 CC — Rural (Pro Labore): área ≤50 ha, posse de 5 anos ininterruptos, sem outro imóvel rural ou urbano.
+Art. 183 CF + Art. 1.240 CC — Urbana Especial: área ≤250m², posse de 5 anos, moradia habitual, sem outro imóvel.
+Art. 1.240-A CC — Familiar: área ≤250m², posse de 2 anos após abandono do lar pelo cônjuge/companheiro.
+
+SÚMULAS RELEVANTES:
+Súmula 194 STJ — Prescrição da cobrança de aluguéis: 3 anos (Art. 206, §3º, I CC).
+Súmula 245 STJ — Retomada por uso próprio: prova da necessidade é ônus do locador.
+Súmula 335 STJ — Cláusula de renúncia a indenização por benfeitorias é válida na locação.
+Súmula 449 STJ — Vaga de garagem vinculada ao apartamento não pode ser alienada separadamente.
+Súmula 214 STJ — Fiador na locação responde pelos débitos do período de prorrogação legal, salvo exoneração.
+
+REGRAS PROCESSUAIS IMOBILIÁRIAS:
+- Ação de despejo: competência Vara Cível (não JEC, salvo valor ≤40 SM).
+- Endereçamento: "Excelentíssimo(a) Senhor(a) Doutor(a) Juiz(a) de Direito da ___ª Vara Cível da Comarca de [Cidade/UF]"
+- Liminar Art. 59 §1º: exige caução equivalente a 3 meses de aluguel para ser concedida inaudita altera parte.
+- Multa rescisória (Art. 4º): SEMPRE proporcional ao tempo restante — nunca aplicar multa integral se parcialmente cumprido.
+- Purgação da mora: informar ao juízo que a purgação só é admitida 1 vez a cada 12 meses (evitar abuso).
+- CDC aplicado a imóvel na planta: incorporação sujeita ao CDC (STJ REsp 1.723.275/SP — Tese 996).
+- Juros de mora na locação: 1% ao mês desde o vencimento + correção pelo IGPM ou índice contratual.`,
+
 };
 
 const TIPO_LABELS = {
@@ -946,6 +989,7 @@ const AREA_LABELS = {
   trabalhista: 'Direito Trabalhista',
   civil:       'Direito Civil',
   familia:     'Direito de FamÃ­lia',
+  imobiliario: 'Direito Imobiliário',
 };
 
 // ââ ROTA PRINCIPAL â GERAR ââââââââââââââââââââââââââââââââââââââââââââââââââââ
