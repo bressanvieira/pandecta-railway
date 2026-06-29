@@ -261,15 +261,16 @@ app.post('/api/auth/login', (req, res) => {
     // admin nunca bloqueado por trial
     const acctStatus = user.account_status || 'active';
     if (user.role !== 'admin') {
-      if (acctStatus === 'trial' && user.trial_expires_at) {
-        const expires = new Date(user.trial_expires_at);
-        if (expires < new Date()) {
-          db.prepare("UPDATE users SET account_status='trial_expired' WHERE id=?").run(user.id);
-          return res.status(402).json({ error: 'trial_expired', message: 'Seu periodo de teste de 7 dias encerrou. Escolha um plano para continuar.' });
-        }
-      }
-      if (acctStatus === 'trial_expired' || acctStatus === 'blocked') {
-        return res.status(402).json({ error: 'trial_expired', message: 'Seu periodo de teste de 7 dias encerrou. Escolha um plano para continuar.' });
+      // TRIAL DESATIVADO TEMPORARIAMENTE — reativar quando lançar planos pagos
+      // if (acctStatus === 'trial' && user.trial_expires_at) {
+      //   const expires = new Date(user.trial_expires_at);
+      //   if (expires < new Date()) {
+      //     db.prepare("UPDATE users SET account_status='trial_expired' WHERE id=?").run(user.id);
+      //     return res.status(402).json({ error: 'trial_expired', message: 'Seu periodo de teste de 7 dias encerrou. Escolha um plano para continuar.' });
+      //   }
+      // }
+      if (acctStatus === 'blocked') {
+        return res.status(402).json({ error: 'blocked', message: 'Conta bloqueada. Entre em contato com o suporte.' });
       }
     }
     // Fallback: usuários criados antes da coluna trial_expires_at ter sido adicionada
