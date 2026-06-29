@@ -596,6 +596,69 @@
     }
 
     /* ── RESPONSIVE ──────────────────────────────────────────────────── */
+
+    /* ── GUARDRAILS SECTION ── */
+    .guardrail-wrap {
+      padding: 96px 40px;
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .guardrail-inner { max-width: 1100px; margin: 0 auto; }
+    .guardrail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .guardrail-label { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #4CAF7A; margin-bottom: 16px; }
+    .guardrail-title { font-size: 36px; font-weight: 800; color: var(--white); line-height: 1.15; margin-bottom: 20px; }
+    .guardrail-title span { color: var(--gold); }
+    .guardrail-desc { font-size: 16px; color: rgba(255,255,255,.55); line-height: 1.7; margin-bottom: 32px; }
+    .guardrail-items { display: flex; flex-direction: column; gap: 14px; }
+    .guardrail-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 10px;
+    }
+    .guardrail-item-ico {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: rgba(76,175,122,.12); border: 1px solid rgba(76,175,122,.2);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .guardrail-item-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+    .guardrail-item-desc { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.5; }
+    .guardrail-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 14px; padding: 24px;
+    }
+    .guardrail-card-hd {
+      display: flex; align-items: center; gap: 10px;
+      padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.07); margin-bottom: 16px;
+    }
+    .guardrail-card-hd-ico {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(76,175,122,.15); display: flex; align-items: center; justify-content: center;
+    }
+    .guardrail-card-hd-label { font-size: 13px; font-weight: 700; color: var(--white); }
+    .guardrail-card-hd-status { margin-left: auto; font-size: 11px; font-weight: 700; color: #4CAF7A; display: flex; align-items: center; gap: 5px; }
+    .guardrail-card-hd-dot { width: 6px; height: 6px; border-radius: 50%; background: #4CAF7A; animation: pulse-green 2s infinite; }
+    @keyframes pulse-green { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+    .guardrail-check-row {
+      display: flex; align-items: center; gap: 10px; padding: 11px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .guardrail-check-row:last-child { border-bottom: none; }
+    .guardrail-check-ico { width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,.05); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .guardrail-check-label { flex: 1; font-size: 13px; color: rgba(255,255,255,.65); }
+    .guardrail-check-badge { font-size: 11px; font-weight: 700; color: #4CAF7A; background: rgba(76,175,122,.12); border: 1px solid rgba(76,175,122,.2); padding: 3px 8px; border-radius: 20px; }
+    .guardrail-footer-bar {
+      margin-top: 16px; padding: 12px 16px;
+      background: rgba(76,175,122,.08); border: 1px solid rgba(76,175,122,.15); border-radius: 8px;
+      font-size: 12px; color: rgba(255,255,255,.55); display: flex; align-items: center; gap: 8px;
+    }
     @media (max-width: 700px) {
       nav { padding: 0 20px; }
       .hero { padding: 120px 20px 80px; }
@@ -610,6 +673,9 @@
       .cta-final { padding: 64px 20px; }
       footer { padding: 28px 20px; flex-direction: column; text-align: center; }
       .footer-links { justify-content: center; }
+      .guardrail-wrap { padding: 64px 20px; }
+      .guardrail-grid { grid-template-columns: 1fr; gap: 40px; }
+      .guardrail-title { font-size: 28px; }
       .trust-items { gap: 20px; }
     }
   </style>
@@ -872,6 +938,103 @@
 </div>
 
 <!-- PRICING -->
+<!-- ══ GUARDRAILS / SEGURANÇA ══════════════════════════════════════════════════ -->
+<div class="guardrail-wrap">
+  <div class="guardrail-inner">
+    <div class="guardrail-grid">
+
+      <!-- Esquerda: texto explicativo -->
+      <div class="guardrail-left reveal">
+        <div class="guardrail-label">🛡️ Segurança não é opcional</div>
+        <h2 class="guardrail-title">A Pandecta usa <span>guardrails</span><br>para proteger você.</h2>
+        <p class="guardrail-desc">
+          Um PDF aparentemente normal pode conter instruções ocultas para manipular a IA e enfraquecer sua estratégia jurídica. A Pandecta detecta e bloqueia essas tentativas antes que afetem sua peça.
+        </p>
+        <div class="guardrail-items">
+          <div class="guardrail-item">
+            <div class="guardrail-item-ico">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4CAF7A" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M6 8.5l1.5 1.5 3-3"/></svg>
+            </div>
+            <div class="guardrail-item-body">
+              <div class="guardrail-item-title">Detectam padrões suspeitos</div>
+              <div class="guardrail-item-desc">Identificam comandos ocultos e instruções maliciosas em documentos do acervo.</div>
+            </div>
+          </div>
+          <div class="guardrail-item">
+            <div class="guardrail-item-ico">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4CAF7A" stroke-width="1.8" stroke-linecap="round"><path d="M8 2L2 5v4c0 3.3 2.5 5.5 6 6.2C14 14.5 14 9 14 9V5L8 2z"/></svg>
+            </div>
+            <div class="guardrail-item-body">
+              <div class="guardrail-item-title">Filtram antes de chegar à IA</div>
+              <div class="guardrail-item-desc">O conteúdo é sanitizado antes de ser processado — a IA nunca vê o comando malicioso.</div>
+            </div>
+          </div>
+          <div class="guardrail-item">
+            <div class="guardrail-item-ico">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4CAF7A" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="8" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2"/></svg>
+            </div>
+            <div class="guardrail-item-body">
+              <div class="guardrail-item-title">Garantem respostas confiáveis</div>
+              <div class="guardrail-item-desc">Sua petição é gerada com base nos fatos que você forneceu — não em instruções de terceiros.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Direita: card de proteção ativa -->
+      <div class="guardrail-right reveal">
+        <div class="guardrail-card">
+          <div class="guardrail-card-hd">
+            <div class="guardrail-card-hd-ico">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4CAF7A" stroke-width="1.8" stroke-linecap="round"><path d="M8 2L2 5v4c0 3.3 2.5 5.5 6 6.2C14 14.5 14 9 14 9V5L8 2z"/></svg>
+            </div>
+            <div class="guardrail-card-hd-label">Proteção ativa — Guardrails em ação</div>
+            <div class="guardrail-card-hd-status">
+              <div class="guardrail-card-hd-dot"></div>Ativo
+            </div>
+          </div>
+
+          <div class="guardrail-check-row">
+            <div class="guardrail-check-ico">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round"><path d="M7 1v9M4 7l3 3 3-3"/><path d="M2 11h10"/></svg>
+            </div>
+            <div class="guardrail-check-label">Documentos do Acervo (PDF/DOCX)</div>
+            <div class="guardrail-check-badge">Protegido</div>
+          </div>
+          <div class="guardrail-check-row">
+            <div class="guardrail-check-ico">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round"><path d="M2 12V4a1 1 0 011-1h8a1 1 0 011 1v8"/><path d="M5 7h4M5 9.5h2"/></svg>
+            </div>
+            <div class="guardrail-check-label">Geração de petições e contestações</div>
+            <div class="guardrail-check-badge">Protegido</div>
+          </div>
+          <div class="guardrail-check-row">
+            <div class="guardrail-check-ico">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round"><path d="M2 10l2-2 2 2 4-4"/><circle cx="11" cy="4" r="1.5"/></svg>
+            </div>
+            <div class="guardrail-check-label">Assistente jurídico multi-turn</div>
+            <div class="guardrail-check-badge">Protegido</div>
+          </div>
+          <div class="guardrail-check-row">
+            <div class="guardrail-check-ico">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="3" width="10" height="9" rx="1.5"/><path d="M5 3V2M9 3V2"/></svg>
+            </div>
+            <div class="guardrail-check-label">Modelos de referência de estilo</div>
+            <div class="guardrail-check-badge">Protegido</div>
+          </div>
+
+          <div class="guardrail-footer-bar">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#4CAF7A" stroke-width="1.6" stroke-linecap="round"><path d="M7 1L2 3.5v4C2 10.5 4.5 12.8 7 13.5c2.5-.7 5-3 5-6v-4L7 1z"/><polyline points="5,7 6.5,8.5 9.5,5.5"/></svg>
+            IA sem guardrails é um risco. <strong style="color:var(--gold)">IA com guardrails é vantagem competitiva.</strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
 <div id="precos" style="padding:96px 40px;background:var(--off);border-top:1px solid var(--bdr);">
   <div style="max-width:1100px;margin:0 auto;text-align:center;">
     <div class="section-label">Preços</div>
