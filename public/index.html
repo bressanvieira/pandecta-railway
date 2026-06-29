@@ -455,18 +455,28 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .gdoc-prog-bg{height:3px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;}
 .gdoc-prog-fill{height:100%;background:#C8A46A;border-radius:3px;transition:width .5s ease;width:0%;}
 .gdoc-prog-txt{font-size:11px;color:rgba(190,210,235,.38);}
-.gdoc-acts{display:flex;gap:8px;}
+.gdoc-acts{display:flex;gap:8px;align-items:center;}
+.gdoc-acts-left{display:flex;gap:8px;}
+.gdoc-secure-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(190,210,235,.45);padding:6px 10px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);}
+.gdoc-secure-badge svg{flex-shrink:0;}
 .gab{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .12s;border:none;}
 .gab-sec{background:rgba(255,255,255,.08);color:rgba(190,210,235,.65);}
 .gab-sec:hover{background:rgba(255,255,255,.14);color:rgba(255,255,255,.9);}
 .gab-prim{background:#C8A46A;color:#fff;}
 .gab-prim:hover{background:#D6B37A;}
-/* doc-paper — claro tela cheia */
-#screen-gen .doc-paper{background:transparent!important;box-shadow:none!important;padding:0!important;color:var(--t1)!important;max-width:none!important;min-height:auto!important;border-radius:0!important;width:100%!important;margin:0!important;}
-#screen-gen .doc-paper h1{color:#8B6B35!important;}
-#screen-gen .doc-paper h2{color:#8B6B35!important;border-bottom-color:rgba(139,107,53,.25)!important;}
-#screen-gen .doc-paper h3,#screen-gen .doc-paper h4{color:rgba(139,107,53,.8)!important;}
-#screen-gen .doc-paper blockquote{border-left-color:rgba(139,107,53,.3)!important;color:var(--t2)!important;}
+/* doc-paper — visualizador (canvas claro após geração) */
+.gdoc-body.doc-ready{background:#E8EAF0;}
+.gdoc-body.doc-ready .doc-paper{margin:0 auto;background:#FEFCF8;color:#111;box-shadow:0 2px 12px rgba(0,0,0,.10),0 20px 60px rgba(0,0,0,.12);border-radius:2px;padding:4cm 3cm;min-height:27cm;max-width:700px;width:100%;}
+.gdoc-body.doc-ready .doc-paper h1{color:#1A3558;}
+.gdoc-body.doc-ready .doc-paper h2{color:#1A3558;border-bottom-color:rgba(26,53,88,.18);}
+.gdoc-body.doc-ready .doc-paper h3,.gdoc-body.doc-ready .doc-paper h4{color:#2A4A72;}
+.gdoc-body.doc-ready .doc-paper blockquote{border-left-color:rgba(200,164,106,.5);color:#444;}
+/* durante streaming — dark */
+.gdoc-body:not(.doc-ready) .doc-paper{background:transparent!important;box-shadow:none!important;padding:0!important;color:var(--t1)!important;max-width:none!important;min-height:auto!important;border-radius:0!important;width:100%!important;margin:0!important;}
+.gdoc-body:not(.doc-ready) .doc-paper h1{color:#C8A46A!important;}
+.gdoc-body:not(.doc-ready) .doc-paper h2{color:#C8A46A!important;border-bottom-color:rgba(200,164,106,.25)!important;}
+.gdoc-body:not(.doc-ready) .doc-paper h3,.gdoc-body:not(.doc-ready) .doc-paper h4{color:rgba(200,164,106,.8)!important;}
+.gdoc-body:not(.doc-ready) .doc-paper blockquote{border-left-color:rgba(200,164,106,.3)!important;color:var(--t2)!important;}
 #screen-gen .cur{background:#C8A46A;}
 .gwiz-card-icon{font-size:20px;line-height:1;margin-bottom:10px;display:block;}
 .gwiz-inp-ta{resize:vertical;min-height:90px;line-height:1.65;}
@@ -1367,9 +1377,21 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
               <span class="gdoc-prog-txt" id="gen-prog-txt">Aguardando...</span>
             </div>
             <div class="gdoc-acts" id="doc-acts" style="display:none">
-              <button class="gab gab-sec" onclick="wizard.voltarWizard()">← Editar</button>
-              <button class="gab gab-sec" onclick="copiarDoc()">Copiar</button>
-              <button class="gab gab-prim" onclick="exportarWord()">↓ Word</button>
+              <div class="gdoc-acts-left">
+                <button class="gab gab-sec" onclick="wizard.voltarWizard()">
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:5px;"><path d="M7 2L3 5.5 7 9"/></svg>Editar
+                </button>
+                <button class="gab gab-sec" onclick="copiarDoc()">
+                  <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:5px;"><rect x="4" y="4" width="9" height="9" rx="1.5"/><path d="M1 10V2a1 1 0 011-1h8"/></svg>Copiar
+                </button>
+                <button class="gab gab-prim" onclick="exportarWord()">
+                  <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:5px;"><path d="M7 1v9M4 7l3 3 3-3"/><path d="M2 11h10v1.5a.5.5 0 01-.5.5h-9a.5.5 0 01-.5-.5V11z"/></svg>Baixar .DOCX
+                </button>
+              </div>
+              <div class="gdoc-secure-badge">
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="#4CAF7A" stroke-width="1.8" stroke-linecap="round"><path d="M7 1L2 3.5v4C2 10.5 4.5 12.8 7 13.5c2.5-.7 5-3 5-6v-4L7 1z"/><polyline points="5,7 6.5,8.5 9.5,5.5"/></svg>
+                Verificado pela Pandecta
+              </div>
             </div>
           </div>
         </div>
@@ -2958,7 +2980,7 @@ class ConversationEngine{
     document.getElementById('chat-st').textContent='Iniciando...';
     document.getElementById('gen-title').textContent='Nova peça';
     document.getElementById('tb-status').textContent='Aguardando...';
-    textoGerado='';this._showRow(true);document.getElementById('doc-paper').contentEditable='false';
+    textoGerado='';this._showRow(true);document.getElementById('doc-paper').contentEditable='false';document.getElementById('doc-scroll').classList.remove('doc-ready');
     if(ctx)this._parse(ctx);
     const primeiroNome=(usuario||'').split(/[\s@]/)[0];
     const saudacao=primeiroNome?`Olá, ${primeiroNome.charAt(0).toUpperCase()+primeiroNome.slice(1)}! `:'Olá! ';
@@ -3027,6 +3049,7 @@ class ConversationEngine{
       document.getElementById('doc-dot').className='doc-dot';
       document.getElementById('doc-acts').style.display='flex';
       document.getElementById('doc-paper').contentEditable='true';
+      document.getElementById('doc-scroll').classList.add('doc-ready');
       document.getElementById('doc-lbl').textContent='Concluído · Clique para editar';
       document.getElementById('chat-st').textContent='Concluído';
       document.getElementById('tb-status').textContent='Concluído';
