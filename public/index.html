@@ -472,7 +472,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .gdoc-body.doc-ready .doc-paper h3,.gdoc-body.doc-ready .doc-paper h4{color:#2A4A72;}
 .gdoc-body.doc-ready .doc-paper blockquote{border-left-color:rgba(200,164,106,.5);color:#444;}
 /* durante streaming — dark */
-.gdoc-body:not(.doc-ready){background:#0E101A;}.gdoc-body:not(.doc-ready) .doc-paper{margin:0 auto!important;background:#181B2A!important;box-shadow:0 4px 24px rgba(0,0,0,.35),0 16px 48px rgba(0,0,0,.22)!important;padding:32px 40px!important;color:var(--t1)!important;max-width:720px!important;min-height:60vh!important;border-radius:4px!important;border:1px solid rgba(255,255,255,.07)!important;width:100%!important;}
+.gdoc-body:not(.doc-ready){background:#0D0F1A;}.gdoc-body:not(.doc-ready) .doc-paper{margin:0 auto!important;background:#F5F0E8!important;box-shadow:0 4px 24px rgba(0,0,0,.40),0 20px 60px rgba(0,0,0,.28)!important;padding:3cm 2.5cm!important;color:#1A1D2B!important;max-width:700px!important;min-height:60vh!important;border-radius:2px!important;width:100%!important;}.gdoc-body:not(.doc-ready) .doc-paper h1,.gdoc-body:not(.doc-ready) .doc-paper h2{color:#1A3558!important;border-bottom-color:rgba(26,53,88,.2)!important;}.gdoc-body:not(.doc-ready) .doc-paper h3,.gdoc-body:not(.doc-ready) .doc-paper h4{color:#2A4A72!important;}.gdoc-body:not(.doc-ready) .doc-paper blockquote{border-left-color:rgba(200,130,58,.4)!important;color:#444!important;}
 .gdoc-body:not(.doc-ready) .doc-paper h1{color:#C8A46A!important;}
 .gdoc-body:not(.doc-ready) .doc-paper h2{color:#C8A46A!important;border-bottom-color:rgba(200,164,106,.25)!important;}
 .gdoc-body:not(.doc-ready) .doc-paper h3,.gdoc-body:not(.doc-ready) .doc-paper h4{color:rgba(200,164,106,.8)!important;}
@@ -3425,19 +3425,21 @@ async function buildWordDoc(texto,data){
 async function exportarWord(){
   if(!textoGerado)return;
   toast('Gerando Word...','ok');
-  const autor=(engine.data.autor||'Autor').split(',')[0].trim();
+  // Usar dados do WizardEngine (novo) com fallback para ConversationEngine (antigo)
+  const _edata = (wizard?.data && Object.keys(wizard.data).length > 0) ? wizard.data : engine.data;
+  const autor=(_edata.autor||'Autor').split(',')[0].trim();
   const tipoMap={peticao_inicial:'Peticao-Inicial',defesa:'Contestacao',recurso:'Recurso',notificacao:'Notificacao',contrato:'Contrato',parecer:'Parecer'};
-  const tipo=tipoMap[engine.data.tipo]||'Documento';
+  const tipo=tipoMap[_edata.tipo]||'Documento';
   const baseNome='Pandecta_'+tipo+'_'+autor.replace(/\s+/g,'-');
 
   // Usa modelo escolhido pelo usuário no fluxo, ou busca por tipo como fallback
   let b64Tpl = null;
-  const midSel = engine.data.modelo_id;
+  const midSel = _edata.modelo_id;
   if(midSel && midSel !== 'none'){
-    try{ const d=await api('GET','/api/templates/'+midSel+'/arquivo'); b64Tpl=d?.arquivo_b64||null; }catch(e){}
-  } else if(!midSel){
-    // Fluxo antigo: se o campo não existe (peças antigas), busca por tipo
-    b64Tpl = await getTemplatePorTipo(engine.data.tipo);
+    try{ const d=await api('GET','/api/templates/'+midSel+'/arquivo'); b64Tpl=d?.arquivo_b64||null; }catch(e){console.error('Erro ao buscar template:',e);}
+  }
+  if(!b64Tpl){
+    b64Tpl = await getTemplatePorTipo(_edata.tipo);
   }
   if(b64Tpl){
     const blobTpl = await exportarWordComTemplate(textoGerado, engine.data, b64Tpl);
@@ -3450,7 +3452,7 @@ async function exportarWord(){
   }
 
   // Fallback: export HTML padrão (.doc)
-  const html=await buildWordDoc(textoGerado,engine.data);
+  const html=await buildWordDoc(textoGerado,_edata);
   const blob=new Blob(['﻿',html],{type:'application/msword;charset=utf-8'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download=baseNome+'.doc';a.click();URL.revokeObjectURL(url);
