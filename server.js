@@ -825,7 +825,7 @@ REGRAS INVIOLÃVEIS:
 2. Linguagem jurÃ­dica formal e tÃ©cnica contemporÃ¢nea â sem arcaÃ­smos ("se digne a" â "requer")
 3. Nunca invente jurisprudÃªncia â use apenas o que foi fornecido no contexto
 4. REGRA CRÃTICA DE DATAS: calcule os dias de privaÃ§Ã£o/prejuÃ­zo atÃ© a DATA DE HOJE (data de protocolo), nÃ£o atÃ© a data do Ãºltimo fato narrado
-5. Ao final, adicione: "â Rascunho gerado por IA. RevisÃ£o e assinatura do advogado responsÃ¡vel obrigatÃ³rias. â"
+5. Ao final, adicione exatamente este rodapé: "— Rascunho gerado pela Pandecta AI. Revisão e assinatura do advogado responsável obrigatórias. —"
 6. Use nomenclatura uniforme: defina "1Âª RÃ©" OU "1Âª Requerida" e mantenha atÃ© o final
 
 REGRA CRÃTICA â TRIAGE DE REGIME CDC (v4):
