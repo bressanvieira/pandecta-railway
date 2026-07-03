@@ -472,7 +472,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .gdoc-body.doc-ready .doc-paper h3,.gdoc-body.doc-ready .doc-paper h4{color:#2A4A72;}
 .gdoc-body.doc-ready .doc-paper blockquote{border-left-color:rgba(200,164,106,.5);color:#444;}
 /* durante streaming — dark */
-.gdoc-body:not(.doc-ready) .doc-paper{background:transparent!important;box-shadow:none!important;padding:0!important;color:var(--t1)!important;max-width:none!important;min-height:auto!important;border-radius:0!important;width:100%!important;margin:0!important;}
+.gdoc-body:not(.doc-ready){background:#12141F;}.gdoc-body:not(.doc-ready) .doc-paper{margin:0 auto!important;background:rgba(255,255,255,.04)!important;box-shadow:0 2px 16px rgba(0,0,0,.28),0 20px 50px rgba(0,0,0,.2)!important;padding:4cm 3cm!important;color:var(--t1)!important;max-width:700px!important;min-height:27cm!important;border-radius:2px!important;border:1px solid rgba(255,255,255,.06)!important;width:100%!important;}
 .gdoc-body:not(.doc-ready) .doc-paper h1{color:#C8A46A!important;}
 .gdoc-body:not(.doc-ready) .doc-paper h2{color:#C8A46A!important;border-bottom-color:rgba(200,164,106,.25)!important;}
 .gdoc-body:not(.doc-ready) .doc-paper h3,.gdoc-body:not(.doc-ready) .doc-paper h4{color:rgba(200,164,106,.8)!important;}
@@ -3863,18 +3863,20 @@ async function exportarWordComTemplate(texto, data, tpl) {
     // Normaliza primeiro: une runs adjacentes que formam o marcador
     // Estratégia: replace direto no XML (funciona se o usuário digitou {{CONTEUDO}} sem formatação)
     if (xml.includes('{{CONTEUDO}}')) {
-      // Encontra o parágrafo inteiro que contém o marcador e substitui tudo
-      xml = xml.replace(/<w:p[^>]*>(?:(?!<w:p[ >])[\s\S])*?\{\{CONTEUDO\}\}[\s\S]*?<\/w:p>/,
-        wxmlConteudo);
-    } else if (xml.includes('CONTEUDO')) {
-      // Fallback: marcador simples sem chaves
-      xml = xml.replace(/<w:p[^>]*>(?:(?!<w:p[ >])[\s\S])*?CONTEUDO[\s\S]*?<\/w:p>/,
+      // Marcador explícito no template — substitui o parágrafo marcador
+      xml = xml.replace(/<w:p[^>]*>[\s\S]*?\{\{CONTEUDO\}\}[\s\S]*?<\/w:p>/,
         wxmlConteudo);
     } else {
-      // Marcador não encontrado: injeta antes do último parágrafo
-      const lastP = xml.lastIndexOf('<w:p>');
-      if (lastP > 0) xml = xml.slice(0, lastP) + wxmlConteudo + xml.slice(lastP);
-      else return null;
+      // Sem marcador: substitui TODO o conteúdo do <w:body> preservando <w:sectPr>
+      // (sectPr contém referências a headers/footers, tamanho de página etc.)
+      const sectMatch = xml.match(/<w:sectPr[\s\S]*?<\/w:sectPr>/);
+      const sectXml   = sectMatch ? sectMatch[0] : '';
+      if (/<w:body>/.test(xml)) {
+        xml = xml.replace(/<w:body>[\s\S]*<\/w:body>/,
+          '<w:body>' + wxmlConteudo + (sectXml ? '\n    ' + sectXml + '\n  ' : '') + '</w:body>');
+      } else {
+        return null;
+      }
     }
 
     zip.file('word/document.xml', xml);
