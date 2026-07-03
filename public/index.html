@@ -3829,32 +3829,93 @@ async function exportarWordComTemplate(texto, data, tpl) {
 
     // Converte o texto gerado em parágrafos Word XML
     function textoParaWXML(t) {
+      // Converte inline markdown → runs Word XML
+      function mdRuns(raw) {
+        // Escapar XML primeiro
+        const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        // Processar bold+italic, bold, italic
+        const parts = [];
+        const re = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|([^*]+))/g;
+        let m;
+        while ((m = re.exec(raw)) !== null) {
+          if (m[2]) parts.push({t: esc(m[2]), b:true, i:true});
+          else if (m[3]) parts.push({t: esc(m[3]), b:true, i:false});
+          else if (m[4]) parts.push({t: esc(m[4]), b:false, i:true});
+          else if (m[5]) parts.push({t: esc(m[5]), b:false, i:false});
+        }
+        if (!parts.length) return '<w:r><w:t xml:space="preserve">' + esc(raw) + '</w:t></w:r>';
+        return parts.map(p => {
+          const rpr = (p.b || p.i) ? '<w:rPr>' + (p.b?'<w:b/><w:bCs/>':'') + (p.i?'<w:i/><w:iCs/>':'') + '</w:rPr>' : '';
+          return '<w:r>' + rpr + '<w:t xml:space="preserve">' + p.t + '</w:t></w:r>';
+        }).join('');
+      }
+
       const lines = t.split('\n');
       let out = '';
       for (const line of lines) {
-        const safe = line
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
+        const trimmed = line.trim();
 
-        let style = '';
-        let txt   = safe;
-
-        if (/^\s*#{1,2}\s/.test(line)) {
-          txt   = safe.replace(/^#+\s*/, '');
-          style = '<w:pStyle w:val="Heading1"/>';
+        // Linha horizontal (---) → parágrafo vazio com borda inferior
+        if (/^---+$/.test(trimmed)) {
+          out += '<w:p><w:pPr><w:spacing w:after="80"/>'
+               + '<w:pBdr><w:bottom w:val="single" w:sz="4" w:space="1" w:color="D0C8B8"/></w:pBdr>'
+               + '</w:pPr></w:p>';
+          continue;
         }
 
-        if (!txt.trim()) {
-          out += '<w:p><w:pPr><w:spacing w:after="120"/></w:pPr></w:p>';
-        } else {
-          out += '<w:p>'
-               + '<w:pPr>' + style + '<w:spacing w:line="360" w:lineRule="auto" w:after="120"/>'
-               + '<w:jc w:val="both"/></w:pPr>'
-               + '<w:r><w:t xml:space="preserve">' + txt + '</w:t></w:r>'
-               + '</w:p>';
+        // Headings H1/H2 → Heading1; H3 → Heading2
+        if (/^#{1,2} /.test(trimmed)) {
+          const txt = trimmed.replace(/^#+\s*/, '');
+          out += '<w:p><w:pPr><w:pStyle w:val="Heading1"/>'
+               + '<w:spacing w:before="240" w:after="120"/></w:pPr>'
+               + mdRuns(txt) + '</w:p>';
+          continue;
         }
+        if (/^### /.test(trimmed)) {
+          const txt = trimmed.replace(/^###\s*/, '');
+          out += '<w:p><w:pPr><w:pStyle w:val="Heading2"/>'
+               + '<w:spacing w:before="200" w:after="80"/></w:pPr>'
+               + mdRuns(txt) + '</w:p>';
+          continue;
+        }
+
+        // Lista com bullet (- item ou * item)
+        if (/^[*-] /.test(trimmed)) {
+          const txt = trimmed.slice(2);
+          out += '<w:p><w:pPr>'
+               + '<w:ind w:left="720" w:hanging="360"/>'
+               + '<w:spacing w:line="360" w:lineRule="auto" w:after="80"/>'
+               + '</w:pPr>'
+               + '<w:r><w:t xml:space="preserve">• </w:t></w:r>'
+               + mdRuns(txt) + '</w:p>';
+          continue;
+        }
+
+        // Blockquote (> texto)
+        if (/^> /.test(trimmed)) {
+          const txt = trimmed.slice(2);
+          out += '<w:p><w:pPr>'
+               + '<w:ind w:left="720"/>'
+               + '<w:spacing w:line="360" w:lineRule="auto" w:after="80"/>'
+               + '<w:pBdr><w:left w:val="single" w:sz="12" w:space="8" w:color="C8C0B0"/></w:pBdr>'
+               + '<w:rPr><w:i/><w:iCs/><w:color w:val="555555"/></w:rPr>'
+               + '</w:pPr>'
+               + mdRuns(txt) + '</w:p>';
+          continue;
+        }
+
+        // Linha vazia
+        if (!trimmed) {
+          out += '<w:p><w:pPr><w:spacing w:after="80"/></w:pPr></w:p>';
+          continue;
+        }
+
+        // Parágrafo normal
+        out += '<w:p><w:pPr>'
+             + '<w:spacing w:line="360" w:lineRule="auto" w:after="120"/>'
+             + '<w:jc w:val="both"/>'
+             + '</w:pPr>'
+             + mdRuns(line) + '</w:p>';
       }
       return out;
     }
