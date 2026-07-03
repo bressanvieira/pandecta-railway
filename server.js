@@ -150,6 +150,7 @@ try {
   try { db.exec(`ALTER TABLE acervo ADD COLUMN tamanho INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN enviado_por TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE templates ADD COLUMN texto_referencia TEXT DEFAULT ''`); } catch(e) {}
+  try { db.exec(`ALTER TABLE templates ADD COLUMN style_profile TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE lawyers ADD COLUMN user_id INTEGER`); } catch(e) {}
   try { db.exec(`ALTER TABLE office ADD COLUMN user_id INTEGER`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN chunk_count INTEGER DEFAULT 0`); } catch(e) {}
@@ -1291,8 +1292,26 @@ app.post('/api/gerar', requireAuth, async (req, res) => {
   let modeloRefCtx = '';
   if (modelo_id) {
     try {
-      const tpl = db.prepare('SELECT texto_referencia FROM templates WHERE id=? AND user_id=?').get(modelo_id, req.user.userId);
-      if (tpl?.texto_referencia) modeloRefCtx = `\nMODELO DE REFERENCIA DE ESTILO (use como guia de formatacao e linguagem):\n${tpl.texto_referencia}\n`;
+      const tpl = db.prepare('SELECT texto_referencia, style_profile FROM templates WHERE id=? AND user_id=?').get(modelo_id, req.user.userId);
+      if (tpl?.texto_referencia) {
+        modeloRefCtx = `\nMODELO DE REFERÊNCIA DE ESTILO:\n${tpl.texto_referencia}\n`;
+        if (tpl.style_profile) {
+          try {
+            const sp = JSON.parse(tpl.style_profile);
+            const regras = [];
+            if (sp.max_linhas_paragrafo) regras.push(`Parágrafos com no máximo ${sp.max_linhas_paragrafo} linhas — REGRA INVIOLÁVEL`);
+            if (sp.espacamento_entre_paragrafos) regras.push(`Espaçamento entre parágrafos: ${sp.espacamento_entre_paragrafos}`);
+            if (sp.tom) regras.push(`Tom: ${sp.tom.replace(/_/g,' ')}`);
+            if (sp.uso_negrito) regras.push(`Uso de negrito: ${sp.uso_negrito}`);
+            if (sp.estrutura_tipica) regras.push(`Estrutura: ${sp.estrutura_tipica}`);
+            if (sp.abertura_tipica) regras.push(`Abertura típica: ${sp.abertura_tipica}`);
+            if (sp.fechamento_tipico) regras.push(`Fechamento típico: ${sp.fechamento_tipico}`);
+            if (sp.caracteristicas_unicas?.length) regras.push(...sp.caracteristicas_unicas.map(c => `• ${c}`));
+            if (sp.instrucoes_para_ia) regras.push(`\nINSTRUÇÃO GERAL: ${sp.instrucoes_para_ia}`);
+            if (regras.length) modeloRefCtx += `\nREGRAS DE ESTILO DO ADVOGADO (APLICAR OBRIGATORIAMENTE EM TODO O DOCUMENTO):\n${regras.map(r => `- ${r}`).join('\n')}\n`;
+          } catch(e) { /* style_profile corrompido, ignora */ }
+        }
+      }
     } catch(e) { /* modelo nao encontrado, ignora */ }
   }
 
@@ -1375,7 +1394,7 @@ app.options('/api/gerar', (req, res) => {
 app.get('/api/templates', requireAuth, (req, res) => {
   if (!db) return res.json([]);
   try {
-    const rows = db.prepare('SELECT id,nome,tipo,descricao,created_at FROM templates WHERE user_id=? ORDER BY created_at DESC').all(req.user.userId);
+    const rows = db.prepare('SELECT id,nome,tipo,descricao,style_profile,created_at FROM templates WHERE user_id=? ORDER BY created_at DESC').all(req.user.userId);
     res.json(rows);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -1397,7 +1416,21 @@ app.post('/api/templates', requireAuth, async (req, res) => {
       } catch(e) { console.error('mammoth extract template:', e.message); }
     }
     const r = db.prepare('INSERT INTO templates (nome,tipo,descricao,arquivo_b64,texto_referencia,user_id) VALUES (?,?,?,?,?,?)').run(nome, tipo, descricao, arquivo_b64, texto_referencia, req.user.userId);
-    res.json(db.prepare('SELECT id,nome,tipo,descricao,created_at FROM templates WHERE id=?').get(r.lastInsertRowid));
+    const newTpl = db.prepare('SELECT id,nome,tipo,descricao,created_at FROM templates WHERE id=?').get(r.lastInsertRowid);
+    // Disparar análise de estilo em background (não bloqueia a resposta)
+    if (texto_referencia) {
+      setImmediate(async () => {
+        try {
+          const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+          const ap = `Analise o texto jurídico abaixo e extraia as características de estilo de escrita do advogado.\nRetorne APENAS um objeto JSON válido, sem markdown, sem explicações, com estas propriedades:\n{\n  "max_linhas_paragrafo": <número>,\n  "espacamento_entre_paragrafos": <"simples"|"duplo"|"triplo">,\n  "tom": <"formal_classico"|"formal_moderno"|"tecnico_objetivo">,\n  "tamanho_paragrafos": <"curtos (1-3 linhas)"|"medios (4-6 linhas)"|"longos (7+ linhas)">,\n  "uso_negrito": <"frequente"|"moderado"|"raro"|"nenhum">,\n  "estrutura_tipica": <string>,\n  "abertura_tipica": <string>,\n  "fechamento_tipico": <string>,\n  "caracteristicas_unicas": <array de strings, até 5>,\n  "instrucoes_para_ia": <instrução prescritiva para aplicar este estilo na geração>\n}\n\nTEXTO DO MODELO:\n${texto_referencia.substring(0, 4000)}`;
+          const msg = await client.messages.create({ model: 'claude-haiku-4-5-20251001', max_tokens: 800, temperature: 0.1, messages: [{ role: 'user', content: ap }] });
+          let pj = (msg.content[0]?.text || '{}').trim().replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/\s*```$/i,'').trim();
+          try { JSON.parse(pj); db.prepare('UPDATE templates SET style_profile=? WHERE id=?').run(pj, r.lastInsertRowid); console.log('[STYLE] Perfil analisado para template', r.lastInsertRowid); }
+          catch(e) { console.warn('[STYLE] JSON inválido:', pj.substring(0,100)); }
+        } catch(e) { console.error('[STYLE] Erro análise automática:', e.message); }
+      });
+    }
+    res.json(newTpl);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -1408,6 +1441,58 @@ app.get('/api/templates/:id/arquivo', requireAuth, (req, res) => {
     if (!row || row.user_id !== req.user.userId) return res.status(404).json({ error: 'Não encontrado.' });
     res.json({ arquivo_b64: row.arquivo_b64, texto_referencia: row.texto_referencia || '' });
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/templates/:id/analisar-estilo', requireAuth, async (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const tpl = db.prepare('SELECT id, texto_referencia, user_id FROM templates WHERE id=? AND user_id=?')
+      .get(req.params.id, req.user.userId);
+    if (!tpl) return res.status(404).json({ error: 'Modelo não encontrado.' });
+    if (!tpl.texto_referencia) return res.status(400).json({ error: 'Modelo sem texto extraído.' });
+
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const analysisPrompt = `Analise o texto jurídico abaixo e extraia as características de estilo de escrita do advogado.
+Retorne APENAS um objeto JSON válido, sem markdown, sem explicações, com exatamente estas propriedades:
+
+{
+  "max_linhas_paragrafo": <número inteiro — máximo de linhas por parágrafo detectado>,
+  "espacamento_entre_paragrafos": <"simples" | "duplo" | "triplo">,
+  "tom": <"formal_classico" | "formal_moderno" | "tecnico_objetivo">,
+  "tamanho_paragrafos": <"curtos (1-3 linhas)" | "medios (4-6 linhas)" | "longos (7+ linhas)">,
+  "uso_negrito": <"frequente" | "moderado" | "raro" | "nenhum">,
+  "estrutura_tipica": <descrição em 1 frase do padrão de argumentação detectado>,
+  "abertura_tipica": <padrão de abertura dos parágrafos ou seções>,
+  "fechamento_tipico": <padrão de conclusão e pedido final>,
+  "caracteristicas_unicas": <array de strings com até 5 traços únicos do estilo deste advogado>,
+  "instrucoes_para_ia": <instrução direta e objetiva em português para aplicar este estilo na geração — seja específico e prescritivo>
+}
+
+TEXTO DO MODELO:
+${tpl.texto_referencia.substring(0, 4000)}`;
+
+    const msg = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 800,
+      temperature: 0.1,
+      messages: [{ role: 'user', content: analysisPrompt }],
+    });
+
+    let profileJson = msg.content[0]?.text?.trim() || '{}';
+    // Remover markdown se o modelo incluiu
+    profileJson = profileJson.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/i, '').trim();
+
+    // Validar JSON
+    let profile;
+    try { profile = JSON.parse(profileJson); }
+    catch(e) { return res.status(500).json({ error: 'Falha ao parsear perfil de estilo.', raw: profileJson }); }
+
+    db.prepare('UPDATE templates SET style_profile=? WHERE id=?').run(JSON.stringify(profile), tpl.id);
+    res.json({ ok: true, profile });
+  } catch(e) {
+    console.error('Erro ao analisar estilo:', e.message);
+    res.status(500).json({ error: e.message });
+  }
 });
 
 app.delete('/api/templates/:id', requireAuth, (req, res) => {

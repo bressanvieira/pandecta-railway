@@ -3658,6 +3658,32 @@ function renderModelos() {
     const label = TIPO_LABELS_MOD[m.tipo] || m.tipo;
     const cor   = TIPO_CORES[m.tipo]      || '#6B7280';
     const data  = m.created_at ? new Date(m.created_at).toLocaleDateString('pt-BR') : '';
+    // Perfil de estilo
+    let perfilHtml = '';
+    if (m.style_profile) {
+      try {
+        const sp = JSON.parse(m.style_profile);
+        const tags = [];
+        if (sp.max_linhas_paragrafo) tags.push('Máx. ' + sp.max_linhas_paragrafo + ' linhas/§');
+        if (sp.tom) tags.push(sp.tom.replace(/_/g,' '));
+        if (sp.tamanho_paragrafos) tags.push('§ ' + sp.tamanho_paragrafos);
+        if (sp.uso_negrito && sp.uso_negrito !== 'nenhum') tags.push('Negrito ' + sp.uso_negrito);
+        const tagsHtml = tags.map(t => '<span style="display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;background:rgba(200,164,106,.12);color:#C8A46A;border:1px solid rgba(200,164,106,.2);">' + esc(t) + '</span>').join('');
+        const instrucao = sp.instrucoes_para_ia ? '<div style="font-size:11px;color:var(--t2);line-height:1.5;margin-top:6px;font-style:italic;">"' + esc(sp.instrucoes_para_ia.substring(0,120)) + (sp.instrucoes_para_ia.length > 120 ? '…' : '') + '"</div>' : '';
+        perfilHtml = '<div style="border-top:1px solid var(--bd);padding-top:10px;margin-top:2px;">'
+          + '<div style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">✶ Perfil de estilo detectado</div>'
+          + '<div style="display:flex;flex-wrap:wrap;gap:4px;">' + tagsHtml + '</div>'
+          + instrucao
+          + '</div>';
+      } catch(e) {}
+    } else {
+      perfilHtml = '<div style="border-top:1px solid var(--bd);padding-top:10px;margin-top:2px;">'
+        + '<div style="font-size:11px;color:var(--t3);display:flex;align-items:center;gap:6px;">'
+        + '<svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><path d="M7 5v2.5l1.5 1.5"/></svg>'
+        + 'Perfil de estilo não analisado ainda'
+        + '<button onclick="analisarEstiloModelo(' + m.id + ')" style="margin-left:auto;font-size:10px;padding:2px 8px;border-radius:6px;border:1px solid var(--bd);background:var(--bg);color:var(--t2);cursor:pointer;">Analisar agora</button>'
+        + '</div></div>';
+    }
     return '<div style="background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px;">'
          + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">'
          + '<div style="flex:1;">'
@@ -3670,6 +3696,7 @@ function renderModelos() {
          + '</div>'
          + (m.descricao ? '<div style="font-size:12px;color:var(--t2);">' + esc(m.descricao) + '</div>' : '')
          + '<div style="font-size:11px;color:var(--t3);margin-top:2px;">Adicionado em ' + data + '</div>'
+         + perfilHtml
          + '</div>';
   }).join('');
 }
@@ -3714,6 +3741,15 @@ async function salvarModelo() {
     await loadModelos();
     toast('Modelo salvo!', 'ok');
   } catch(e) { toast('Erro: ' + e.message, 'err'); }
+}
+
+async function analisarEstiloModelo(id) {
+  try {
+    toast('Analisando estilo de escrita...', 'ok');
+    await api('POST', `/api/templates/${id}/analisar-estilo`, {});
+    await loadModelos();
+    toast('Perfil de estilo detectado!', 'ok');
+  } catch(e) { toast('Erro ao analisar: ' + e.message, 'err'); }
 }
 
 async function deletarModelo(id) {
