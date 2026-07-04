@@ -2517,9 +2517,9 @@ async function loadHomeDash(){
       al.innerHTML=act.map((x,i)=>{
         const lbl=x.tipo_label||x.tipo||'Peça';
         const area=x.area_label||'';
-        const d=new Date(x.createdAt);
-        const diff=Math.floor((Date.now()-d)/60000);
-        const tempo=diff<1?'agora':diff<60?diff+'min':diff<1440?Math.floor(diff/60)+'h':Math.floor(diff/1440)+'d';
+        const d=new Date(x.created_at||x.createdAt);
+        const diff=isNaN(d.getTime())?-1:Math.floor((Date.now()-d)/60000);
+        const tempo=diff<0?'':diff<1?'agora':diff<60?diff+'min':diff<1440?Math.floor(diff/60)+'h':Math.floor(diff/1440)+'d';
         return '<div class="hd-act">'
           +'<div class="hd-act-dot'+(i>0?' dim':'')+'"></div>'
           +'<div class="hd-act-info"><div class="hd-act-txt">'+lbl+'</div><div class="hd-act-sub">'+area+'</div></div>'

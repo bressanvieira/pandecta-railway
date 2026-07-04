@@ -116,7 +116,9 @@ git push
 - Auth (bcrypt + JWT + signup)
 - Multitenancy completo (todas as tabelas isoladas por user_id)
 - **Construtor wizard** (WizardEngine): tipo → área → partes → fatos → responsável → modelo de estilo
-- **Sistema de Modelos**: `.docx` → mammoth extrai texto → Claude usa como referência de estilo
+- **Sistema de Modelos (Plano A)**: `.docx` → mammoth extrai texto → Claude usa como referência de estilo + **Style Profile**: Haiku analisa o doc e extrai JSON com regras de estilo (max_linhas_paragrafo, tom, uso_negrito etc.) injetadas obrigatoriamente no prompt de geração. UI mostra tags douradas no card do modelo com as regras detectadas e botão "Analisar agora"
+- **Template Word visual (Plano B)**: export Word usa o .docx do modelo como template real — preserva `<w:sectPr>` (logo, cabeçalho, rodapé, tamanho de página) e injeta o conteúdo gerado no `<w:body>`. Markdown processado: bold, italic, headings H1/H2, HR, bullets, blockquotes
+- **Visualizador durante streaming**: papel creme `#F5F0E8` sobre canvas dark `#0D0F1A` — mesmo look do pós-geração, só o canvas muda (dark → cinza claro `#E8EAF0` ao finalizar)
 - **Histórico** com edição, cópia e exportação Word
 - **Acervo** (PDF/DOCX/TXT) com RAG por keyword
 - **Assistente** multi-turn com contexto do acervo
@@ -138,6 +140,9 @@ git push
 - Tour crashava após step 2: `const el` era block-scoped dentro de `if(step.selector){}` — corrigido para `let el = null` no escopo externo
 - `isPrev_f` undeclared no bloco fatos do WizardEngine causava ReferenceError silencioso impedindo avanço do wizard
 - Seção guardrails na landing invisível: elementos com classe `reveal` sem `watch()` registrado — corrigido adicionando `watch('.guardrail-left','reveal')` e `watch('.guardrail-right','reveal')`
+- **Export Word caía sempre no fallback HTML**: `exportarWord()` lia `engine.data` (ConversationEngine — sempre vazio) em vez de `wizard.data` (WizardEngine — onde `modelo_id` é salvo). Fix: `_edata = wizard?.data || engine.data`
+- **`textoParaWXML` sem markdown**: `**negrito**`, `---`, `## Título` apareciam como texto literal no Word. Reescrita com suporte completo a bold, italic, headings H1/H2, HR, bullets, blockquotes
+- **`exportarWordComTemplate` fallback quebrado**: `lastIndexOf('<w:p>')` nunca casava (XML usa `<w:p ` com atributos). Substituído por estratégia que extrai `<w:sectPr>` (headers/footers/página) e substitui todo o `<w:body>`
 
 ---
 
@@ -177,11 +182,17 @@ git push
 
 ## Próximos passos
 
+### Imediato
+- [ ] Mostrar Sistema de Modelos para o Fabiano (não sabe que existe — é o diferencial que ele mais pediu)
 - [ ] Aguardar resultado do impulsionamento Instagram
-- [ ] Mostrar Sistema de Modelos para o Fabiano
+
+### Pré-ExpoLaw (Outubro 2026)
 - [ ] Histórico com visualizador papel (igual ao pós-geração)
-- [ ] Login com Google (OAuth 2.0) — baixa prioridade
-- [ ] Busca ao vivo em jurisprudência (pré-ExpoLaw)
-- [ ] Sistema de pagamento — **pausado até validar com mais advogados**
+- [ ] Busca ao vivo em jurisprudência
+- [ ] Sistema de pagamento + reativar trial — **pausado até validar com mais advogados**
+
+### Baixa prioridade
+- [ ] Login com Google (OAuth 2.0)
 - [ ] Domínio pandecta.ai
-- **Deadline: ExpoLaw — Outubro 2026**
+
+**Deadline: ExpoLaw — Outubro 2026**
