@@ -436,7 +436,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .gwiz-lcard-name{font-size:14px;font-weight:600;color:rgba(255,255,255,.85);}
 .gwiz-lcard-oab{font-size:12px;color:rgba(190,210,235,.45);}
 .gwiz-lcard-chk{margin-left:auto;width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;transition:all .14s;}
-.gwiz-lcard.sel .gwiz-lcard-chk{background:#C8A46A;border-color:#C8A46A;}
+.gwiz-lcard.sel .gwiz-lcard-chk{background:#C8A46A;border-color:#C8A46A;}.gwiz-actions-row{display:flex;gap:10px;margin-top:10px;}.gwiz-action-link{flex:1;padding:10px 14px;border-radius:9px;border:1px solid rgba(200,164,106,.22);background:rgba(200,164,106,.05);color:#C8A46A;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;text-align:center;letter-spacing:.04em;transition:all .13s;}.gwiz-action-link:hover{border-color:rgba(200,164,106,.5);background:rgba(200,164,106,.12);}
 /* summary card */
 .gwiz-summary{border-radius:10px;border:1px solid rgba(200,164,106,.25);background:rgba(200,164,106,.07);padding:16px 18px;}
 .gwiz-summary-lbl{font-size:10px;font-weight:700;color:#C8A46A;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
@@ -3174,12 +3174,13 @@ class WizardEngine{
     }else if(sc.type==='final'){
       let fb='';
       if(sc.hasLawyers){fb+=`<div class="gwiz-fgrp"><label class="gwiz-lbl-f">ADVOGADO RESPONSÁVEL</label>${lawyers.map(l=>{const ini=(l.nome.split(' ').slice(0,2).map(w=>w[0]||'').join('')).toUpperCase();const sel=this.data.responsavel===String(l.id)?' sel':'';return`<div class="gwiz-lcard${sel}" onclick="wizard._lsel('${l.id}',this)"><div class="gwiz-lcard-av">${ini}</div><div><div class="gwiz-lcard-name">${esc(l.nome)}</div><div class="gwiz-lcard-oab">OAB/${l.uf} nº ${l.oab}</div></div><div class="gwiz-lcard-chk"></div></div>`;}).join('')}</div>`;}
-      {const mOpts=sc.hasModels?[...sc.mT,{id:'none',nome:'Padrão Pandecta AI'}]:[];fb+=`<div class="gwiz-fgrp"><label class="gwiz-lbl-f">MODELO DE ESTILO<span class="gwiz-lbl-opt">opcional</span></label>${mOpts.map(m=>{const sel=this.data.modelo_id===String(m.id)?' sel':'';return`<div class="gwiz-lcard${sel}" onclick="wizard._msel('${m.id}',this)" style="padding:12px 16px"><div style="flex:1"><div class="gwiz-lcard-name">${esc(m.nome)}</div></div><div class="gwiz-lcard-chk"></div></div>`;}).join('')}<button class="gwiz-add-btn" type="button" onclick="go('modelos')">+ Adicionar modelo</button></div>`;}
+      {const mOpts=sc.hasModels?[...sc.mT,{id:'none',nome:'Padrão Pandecta AI'}]:[];fb+=`<div class="gwiz-fgrp"><label class="gwiz-lbl-f">MODELO DE ESTILO<span class="gwiz-lbl-opt">opcional</span></label>${mOpts.map(m=>{const sel=this.data.modelo_id===String(m.id)?' sel':'';return`<div class="gwiz-lcard${sel}" onclick="wizard._msel('${m.id}',this)" style="padding:12px 16px"><div style="flex:1"><div class="gwiz-lcard-name">${esc(m.nome)}</div></div><div class="gwiz-lcard-chk"></div></div>`;}).join('')}</div>`;}
       const sumParts=[this._tL(this.data.tipo)];
       if(this.data.area)sumParts.push(this._aL(this.data.area));
       if(this.data.autor)sumParts.push((this.data.autor||'').split(',')[0].trim());
       if(this.data.reu)sumParts.push('vs. '+(this.data.reu||'').split(',')[0].trim());
       fb+=`<div class="gwiz-summary"><div class="gwiz-summary-lbl">RESUMO</div><div class="gwiz-summary-line">${sumParts.join(' · ')}</div></div>`;
+      fb+=`<div class="gwiz-actions-row"><button class="gwiz-action-link" type="button" onclick="go('equipe')">+ Adicionar advogado</button><button class="gwiz-action-link" type="button" onclick="go('modelos')">+ Adicionar modelo</button></div>`;
       body=fb;
     }
     document.getElementById('wiz-body').innerHTML=`<div class="gwiz-lbl">Passo ${cur} de ${total}</div><div class="gwiz-heading">${esc(sc.lbl)}</div>${sc.sub?`<div class="gwiz-sub">${esc(sc.sub)}</div>`:''}<div></div>${body}`;
