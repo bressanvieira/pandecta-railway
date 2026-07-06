@@ -1847,12 +1847,10 @@ app.put('/api/tickets/:id/responder', requireAuth, requireAdmin, (req, res) => {
 });
 
 // ── MENTOR IA — mensagens motivacionais 3x/dia via Telegram ──────────────────
-const cron = require('node-cron');
-
 const MENTOR_PROMPTS = {
-  manha: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E de manha.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem motivacional curta (3-5 frases) em portugues brasileiro para iniciar o dia. Seja direto, pessoal, empurre para acao concreta hoje. Use <b>negrito</b> HTML em palavras de impacto. Termine com um desafio concreto. Responda APENAS com a mensagem, sem explicacoes.',
-  meiodia: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E meio-dia.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem de check-in do meio-dia (3-5 frases) em portugues brasileiro. Seja espelho honesto. Empurre para acao agora. Use <b>negrito</b> HTML. Termine com: "Ja mandou sua mensagem hoje?". Responda APENAS com a mensagem.',
-  noite: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E noite.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem de encerramento do dia (3-5 frases) em portugues brasileiro. Reflita honestamente. Conecte ao porque real. Use <b>negrito</b> HTML. Termine com: "O que voce vai fazer diferente amanha?". Responda APENAS com a mensagem.'
+  manha: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E de manha.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador principal: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo minimo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem motivacional curta (3-5 frases) em portugues brasileiro para iniciar o dia. Seja direto, pessoal, empurre para acao concreta hoje. Use <b>negrito</b> HTML em palavras de impacto. Termine com um desafio concreto do dia. Responda APENAS com a mensagem, sem explicacoes.',
+  meiodia: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E meio-dia.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador principal: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo minimo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem de check-in do meio-dia (3-5 frases) em portugues brasileiro. Seja espelho honesto: ele fez o que precisava de manha? Empurre para acao agora. Use <b>negrito</b> HTML. Termine com: "Ja mandou sua mensagem hoje?". Responda APENAS com a mensagem.',
+  noite: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E noite.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador principal: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo minimo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem de encerramento do dia (3-5 frases) em portugues brasileiro. Reflita honestamente sobre o dia. Conecte ao porque real: filhos, janela, 60 anos. Use <b>negrito</b> HTML. Termine com: "O que voce vai fazer diferente amanha?". Responda APENAS com a mensagem.'
 };
 
 async function enviarMensagemMentor(turno) {
@@ -1873,10 +1871,19 @@ async function enviarMensagemMentor(turno) {
   }
 }
 
-cron.schedule('0 8 * * *',  () => enviarMensagemMentor('manha'),  { timezone: 'America/Sao_Paulo' });
-cron.schedule('0 13 * * *', () => enviarMensagemMentor('meiodia'), { timezone: 'America/Sao_Paulo' });
-cron.schedule('0 19 * * *', () => enviarMensagemMentor('noite'),   { timezone: 'America/Sao_Paulo' });
+// Scheduler nativo — verifica a cada minuto se e hora de enviar
+const mentorJaSentToday = {};
+setInterval(() => {
+  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+  const h = now.getHours(), m = now.getMinutes();
+  const today = now.toDateString();
+  const key = (turno) => today + '-' + turno;
+  if (h === 8  && m === 0 && !mentorJaSentToday[key('manha')])  { mentorJaSentToday[key('manha')]  = true; enviarMensagemMentor('manha'); }
+  if (h === 13 && m === 0 && !mentorJaSentToday[key('meiodia')]){ mentorJaSentToday[key('meiodia')] = true; enviarMensagemMentor('meiodia'); }
+  if (h === 19 && m === 0 && !mentorJaSentToday[key('noite')]) { mentorJaSentToday[key('noite')]  = true; enviarMensagemMentor('noite'); }
+}, 60000);
 console.log('[MENTOR] Agendamento ativo: 08h, 13h e 19h (America/Sao_Paulo)');
+
 
 // ── START ────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => console.log('Pandecta rodando na porta ' + PORT));
