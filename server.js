@@ -286,6 +286,17 @@ app.post('/api/auth/login', (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// ── MENTOR NOTIFY — chamado pelos agentes agendados do Cowork ────────────────
+const MENTOR_SECRET = process.env.MENTOR_SECRET || 'pandecta-mentor-2026';
+app.post('/api/mentor/notify', (req, res) => {
+  const auth = req.headers['x-mentor-secret'];
+  if (auth !== MENTOR_SECRET) return res.status(401).json({ ok: false, error: 'unauthorized' });
+  const { message } = req.body;
+  if (!message) return res.status(400).json({ ok: false, error: 'message required' });
+  sendTelegram(message);
+  res.json({ ok: true });
+});
+
 // DEBUG TEMPORÁRIO — remover após resolver
 app.get('/api/debug/ping', (req, res) => {
   if (!db) return res.json({ ok: false, db: false });
