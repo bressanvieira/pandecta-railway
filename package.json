@@ -13,7 +13,8 @@
     "better-sqlite3": "^9.6.0",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.3",
-    "mammoth": "^1.8.0"
+    "mammoth": "^1.8.0",
+    "node-cron": "^3.0.3"
   },
   "engines": {
     "node": ">=18.0.0"

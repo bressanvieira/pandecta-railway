@@ -1834,15 +1834,49 @@ app.put('/api/tickets/:id/responder', requireAuth, requireAdmin, (req, res) => {
   try {
     const { resposta } = req.body || {};
     if (!resposta || !resposta.trim()) return res.status(400).json({ error: 'Resposta obrigatoria.' });
+    const now = new Date().toISOString();
     db.prepare(
-      "UPDATE tickets SET resposta=?, status='respondido', respondido_at=CURRENT_TIMESTAMP WHERE id=?"
-    ).run(resposta.trim(), req.params.id);
+      "UPDATE tickets SET resposta=?, status='respondido', respondido_at=? WHERE id=?"
+    ).run(resposta.trim(), now, req.params.id);
     const ticket = db.prepare('SELECT * FROM tickets WHERE id=?').get(req.params.id);
-    sendTelegram('[OK] Ticket #' + req.params.id + ' respondido.');
-    res.json(ticket);
+    if (ticket) {
+      sendTelegram('[TICKET #' + ticket.id + ' RESPONDIDO]\nPara: ' + ticket.email + '\nResposta: ' + resposta.slice(0, 200));
+    }
+    res.json({ ok: true, ticket });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
-app.listen(PORT, () => {
-  console.log(`Pandecta AI rodando na porta ${PORT}`);
-});
+// ── MENTOR IA — mensagens motivacionais 3x/dia via Telegram ──────────────────
+const cron = require('node-cron');
+
+const MENTOR_PROMPTS = {
+  manha: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E de manha.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem motivacional curta (3-5 frases) em portugues brasileiro para iniciar o dia. Seja direto, pessoal, empurre para acao concreta hoje. Use <b>negrito</b> HTML em palavras de impacto. Termine com um desafio concreto. Responda APENAS com a mensagem, sem explicacoes.',
+  meiodia: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E meio-dia.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem de check-in do meio-dia (3-5 frases) em portugues brasileiro. Seja espelho honesto. Empurre para acao agora. Use <b>negrito</b> HTML. Termine com: "Ja mandou sua mensagem hoje?". Responda APENAS com a mensagem.',
+  noite: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E noite.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem de encerramento do dia (3-5 frases) em portugues brasileiro. Reflita honestamente. Conecte ao porque real. Use <b>negrito</b> HTML. Termine com: "O que voce vai fazer diferente amanha?". Responda APENAS com a mensagem.'
+};
+
+async function enviarMensagemMentor(turno) {
+  try {
+    const Anthropic = require('@anthropic-ai/sdk');
+    const client = new Anthropic.Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const msg = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      temperature: 0.9,
+      messages: [{ role: 'user', content: MENTOR_PROMPTS[turno] }]
+    });
+    const texto = msg.content[0].text.trim();
+    sendTelegram(texto);
+    console.log('[MENTOR] Mensagem enviada (' + turno + ')');
+  } catch(e) {
+    console.error('[MENTOR] Erro:', e.message);
+  }
+}
+
+cron.schedule('0 8 * * *',  () => enviarMensagemMentor('manha'),  { timezone: 'America/Sao_Paulo' });
+cron.schedule('0 13 * * *', () => enviarMensagemMentor('meiodia'), { timezone: 'America/Sao_Paulo' });
+cron.schedule('0 19 * * *', () => enviarMensagemMentor('noite'),   { timezone: 'America/Sao_Paulo' });
+console.log('[MENTOR] Agendamento ativo: 08h, 13h e 19h (America/Sao_Paulo)');
+
+// ── START ────────────────────────────────────────────────────────────────────
+app.listen(PORT, () => console.log('Pandecta rodando na porta ' + PORT));
