@@ -3540,7 +3540,7 @@ function abrirViewer(id){
   document.getElementById('hv-title').textContent=`${histItemAtual.tipo_label||'Peça'} — ${histItemAtual.autor||''}`;
   const ta=document.getElementById('hist-ta');
   ta.value=histItemAtual.texto||'';
-  setTimeout(()=>ta.focus(),80);
+  setTimeout(()=>{ta.focus();ta.setSelectionRange(0,0);ta.scrollTop=0;},80);
 }
 function fecharViewer(){
   document.getElementById('hist-viewer').classList.remove('open');

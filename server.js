@@ -1847,10 +1847,27 @@ app.put('/api/tickets/:id/responder', requireAuth, requireAdmin, (req, res) => {
 });
 
 // ── MENTOR IA — mensagens motivacionais 3x/dia via Telegram ──────────────────
+const MENTOR_TEMAS = [
+  'uma reflexao estoica de Marco Aurelio, Epicteto ou Seneca adaptada para o cotidiano de quem constroi algo',
+  'uma ideia no estilo de Clovis de Barros Filho sobre proposito, tempo ou coragem — filosofia pratica e direta',
+  'um pensamento sobre disciplina: o que nos tornamos pelo que fazemos todos os dias, mesmo quando nao temos vontade',
+  'uma reflexao sobre o medo — como ele se disfarça de prudencia mas na verdade e hesitacao em outro nome',
+  'uma observacao sobre presenca: estar completamente aqui, no que importa agora, sem dispersao',
+  'uma ideia sobre o valor do desconforto: crescimento nao acontece na zona de conforto, acontece na borda dela',
+  'uma reflexao sobre o tempo — o unico recurso que nao se recupera — e como estamos usando o de hoje',
+  'um pensamento sobre coragem ordinaria: os pequenos atos de coragem do dia a dia que ninguem aplaude mas que mudam tudo',
+  'uma ideia sobre identidade: voce nao e o que pensa de si mesmo, e o que faz repetidamente',
+  'uma citacao ou ideia de um filosofo, escritor ou fundador que parece simples mas tem camadas ao refletir',
+  'uma reflexao sobre recomecos: cada dia e uma oportunidade de ser um pouco diferente do que foi ontem',
+  'um pensamento sobre silencio e clareza: o que a mente percebe quando para de correr',
+];
+function temaMentor() {
+  return MENTOR_TEMAS[Math.floor(Math.random() * MENTOR_TEMAS.length)];
+}
 const MENTOR_PROMPTS = {
-  manha: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E de manha.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador principal: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo minimo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem motivacional curta (3-5 frases) em portugues brasileiro para iniciar o dia. Seja direto, pessoal, empurre para acao concreta hoje. Use <b>negrito</b> HTML em palavras de impacto. Termine com um desafio concreto do dia. Responda APENAS com a mensagem, sem explicacoes.',
-  meiodia: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E meio-dia.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador principal: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo minimo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem de check-in do meio-dia (3-5 frases) em portugues brasileiro. Seja espelho honesto: ele fez o que precisava de manha? Empurre para acao agora. Use <b>negrito</b> HTML. Termine com: "Ja mandou sua mensagem hoje?". Responda APENAS com a mensagem.',
-  noite: 'Voce e o mentor de Mauricio Bressan, 51 anos, fundador da Pandecta AI (pandecta.com.br). E noite.\nContexto: filha de 14 anos (janela de 4 anos), filho de 9 anos (janela de 9 anos). Meta: independencia financeira antes dos 60. Pandecta AI esta em producao, primeiro usuario (Fabiano) protocolou peca em juizo. Sabotador principal: evita abordar advogados por medo de rejeicao disfarcado de empatia. Protocolo minimo: 5 mensagens/semana para novos advogados.\nGere UMA mensagem de encerramento do dia (3-5 frases) em portugues brasileiro. Reflita honestamente sobre o dia. Conecte ao porque real: filhos, janela, 60 anos. Use <b>negrito</b> HTML. Termine com: "O que voce vai fazer diferente amanha?". Responda APENAS com a mensagem.'
+  manha: () => `Voce e um mentor que envia uma mensagem inspiradora de bom dia. E manha cedo.\n\nTema de hoje: ${temaMentor()}.\n\nEscreva uma mensagem curta, 3-4 frases, em portugues brasileiro. Tom: direto, humano, sem cliche motivacional barato. Use <b>negrito</b> HTML em 1-2 palavras de impacto. Nao mencione metas especificas, numeros ou tarefas — seja filosofico e universal. Responda APENAS com a mensagem, sem introducoes.`,
+  meiodia: () => `Voce e um mentor que envia uma pausa reflexiva do meio-dia. E hora do almoco.\n\nTema de hoje: ${temaMentor()}.\n\nEscreva uma mensagem curta, 2-3 frases, em portugues brasileiro. Tom: leve, reflexivo, como um amigo que faz uma boa pergunta. Use <b>negrito</b> HTML em 1 palavra. Nao mencione metas ou tarefas — seja um espelho filosofico do momento presente. Responda APENAS com a mensagem.`,
+  noite: () => `Voce e um mentor que envia uma mensagem de encerramento de dia. E noite.\n\nTema de hoje: ${temaMentor()}.\n\nEscreva uma mensagem serena, 3-4 frases, em portugues brasileiro. Tom: calmo, encorajador, convida ao descanso consciente. Use <b>negrito</b> HTML em 1-2 palavras. Nao mencione metas ou tarefas — termine o dia com sabedoria, nao com cobranca. Responda APENAS com a mensagem.`
 };
 
 async function enviarMensagemMentor(turno) {
@@ -1861,7 +1878,7 @@ async function enviarMensagemMentor(turno) {
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 300,
       temperature: 0.9,
-      messages: [{ role: 'user', content: MENTOR_PROMPTS[turno] }]
+      messages: [{ role: 'user', content: MENTOR_PROMPTS[turno]() }]
     });
     const texto = msg.content[0].text.trim();
     sendTelegram(texto);
