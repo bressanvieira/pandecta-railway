@@ -651,6 +651,26 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* Viewer / Editor — layout correto */
 .hist-viewer{display:none;flex-direction:column;flex:1;overflow:hidden;}
 .hist-viewer.open{display:flex;}
+.hist-doc-wrap{flex:1;overflow-y:auto;background:#E8EAF0;display:flex;justify-content:center;padding:28px 20px;}
+.hist-doc-paper{background:#fff;width:100%;max-width:760px;min-height:100%;padding:52px 64px;box-shadow:0 4px 32px rgba(0,0,0,.13);border-radius:4px;font-family:Arial,sans-serif;font-size:11pt;line-height:1.6;color:#1a1a1a;}
+.hist-doc-paper h1{font-size:14pt;font-weight:700;text-align:center;margin:14pt 0 8pt;text-transform:none;}
+.hist-doc-paper h2{font-size:13pt;font-weight:700;margin:16pt 0 6pt;border-bottom:1pt solid #C8C0B0;padding-bottom:3pt;}
+.hist-doc-paper h3{font-size:12pt;font-weight:700;font-style:italic;margin:10pt 0 4pt;}
+.hist-doc-paper p{margin:5pt 0;text-align:justify;text-indent:35pt;}
+.hist-doc-paper p.no-indent{text-indent:0;}
+.hist-doc-paper hr{border:none;border-top:0pt solid transparent;margin:3pt 0;}
+.hist-doc-paper strong{font-weight:700;}
+.hist-doc-paper em{font-style:italic;}
+.hist-doc-paper ul{margin:2pt 0 2pt 1cm;padding:0;list-style:none;}
+.hist-doc-paper ul li::before{content:"• ";margin-right:4px;}
+.hist-doc-paper .hist-lhead{width:100%;border-bottom:1.5pt solid #D0C8B8;margin-bottom:20pt;padding-bottom:12pt;display:flex;justify-content:space-between;align-items:flex-start;}
+.hist-doc-paper .hist-lhead-left{display:flex;flex-direction:column;gap:4px;}
+.hist-doc-paper .hist-lhead-right{font-size:9.5pt;color:#666;text-align:right;line-height:1.5;}
+.hist-doc-paper .hist-sign{margin-top:52pt;}
+.hist-doc-paper .hist-sign-line{border-top:0.5pt solid #999;margin-top:40pt;padding-top:4pt;}
+.hv-toggle{font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;border:1px solid var(--bd);background:var(--card);color:var(--t2);cursor:pointer;transition:all .12s;}
+.hv-toggle:hover{border-color:var(--gold);color:var(--gold);}
+.hv-toggle.editing{background:rgba(200,164,106,.12);border-color:rgba(200,164,106,.4);color:var(--gold);}
 .hist-viewer-hd{flex-shrink:0;padding:14px 18px;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .hv-title{font-size:13px;font-weight:500;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hv-acts{display:flex;gap:6px;flex-shrink:0;align-items:center;}
@@ -1441,6 +1461,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="hist-viewer-hd">
           <div class="hv-title" id="hv-title">Petição</div>
           <div class="hv-acts">
+            <button class="hv-toggle" id="hv-toggle-btn" onclick="toggleHistEdit()">&#9998; Editar</button>
             <button class="dbtn" onclick="fecharViewer()">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:4px;"><path d="M8 2L4 6l4 4"/></svg>Voltar
             </button>
@@ -1459,7 +1480,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             </button>
           </div>
         </div>
-        <div class="hist-editor">
+        <div class="hist-doc-wrap" id="hist-doc-wrap">
+          <div class="hist-doc-paper" id="hist-doc-paper"></div>
+        </div>
+        <div class="hist-editor" style="display:none;">
           <textarea class="hist-textarea" id="hist-ta" spellcheck="false" placeholder="Carregando..."></textarea>
         </div>
       </div>
@@ -2745,6 +2769,76 @@ function iniciarConversa(){const txt=document.getElementById('home-txt').value.t
 function novaConversa(){wizard.reset();go('gen');}
 function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,140)+'px';}
 
+function mdToDocHtml(t){
+  var lines=String(t||'').split('\n');
+  var html='';var i=0;
+  while(i<lines.length){
+    var l=lines[i];
+    if(/^-{3,}$/.test(l.trim())){html+='<hr>';}
+    else if(/^# /.test(l)&&!/^##/.test(l)){html+='<h1>'+l.slice(2).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')+'</h1>';}
+    else if(/^## /.test(l)&&!/^###/.test(l)){html+='<h2>'+l.slice(3).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')+'</h2>';}
+    else if(/^### /.test(l)){html+='<h3>'+l.slice(4).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')+'</h3>';}
+    else if(/^> /.test(l)){html+='<p class="no-indent" style="font-style:italic;border-left:2px solid #C0B8A8;padding-left:12px;text-indent:0">'+l.slice(2).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')+'</p>';}
+    else if(/^[*-] /.test(l)){var items='';while(i<lines.length&&/^[*-] /.test(lines[i])){items+='<li>'+lines[i].slice(2).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')+'</li>';i++;}html+='<ul>'+items+'</ul>';continue;}
+    else if(l.trim()===''){html+='<p style="margin:3pt 0">&nbsp;</p>';}
+    else{html+='<p>'+l.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')+'</p>';}
+    i++;
+  }
+  return html;
+}
+async function renderHistPaper(item){
+  var paper=document.getElementById('hist-doc-paper');
+  if(!paper)return;
+  var office=officeData||{};
+  var law=item.responsavel_id?lawyers.find(function(l){return String(l.id)===String(item.responsavel_id);}):null;
+  var logo=null;
+  try{logo=await getLogoBase64();}catch(e){}
+  var hoje=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric',timeZone:'America/Sao_Paulo'});
+  // cabeçalho
+  var logoHtml=logo?'<img src="'+logo+'" style="height:36px;object-fit:contain;display:block;" alt="logo">'
+    :(office.nome?'<span style="font-size:15pt;font-weight:700;color:#1C2130;">'+esc(office.nome)+'</span>':'<span style="font-size:13pt;font-weight:700;color:#1C2130;">Pandecta AI</span>');
+  var endDir=[office.endereco,office.cidade].filter(Boolean).join('<br>');
+  var contatos=[office.telefone,office.email].filter(Boolean).join(' &middot; ');
+  var lheadHtml='<div class="hist-lhead">'
+    +'<div class="hist-lhead-left">'+logoHtml
+    +(office.nome?'<span style="font-size:12pt;font-weight:700;color:#1C2130;">'+esc(office.nome)+'</span>':'')
+    +'</div>'
+    +'<div class="hist-lhead-right">'+(endDir||'')+(office.cep?'<br>CEP: '+esc(office.cep):'')+(contatos?'<br>'+contatos:'')+'</div>'
+    +'</div>';
+  // assinatura
+  var signHtml='';
+  if(law){
+    signHtml='<div class="hist-sign">'
+      +'<p class="no-indent">'+(office.cidade||'_____________')+', '+hoje+'.</p>'
+      +'<div class="hist-sign-line">'
+      +'<p class="no-indent" style="font-weight:700;">'+esc(law.nome)+'</p>'
+      +'<p class="no-indent">OAB/'+esc(law.uf)+' nº '+esc(String(law.oab))+'</p>'
+      +(law.cargo?'<p class="no-indent" style="color:#555;">'+esc(law.cargo)+'</p>':'')
+      +(law.email?'<p class="no-indent" style="color:#888;font-size:10pt;">'+esc(law.email)+'</p>':'')
+      +'</div></div>';
+  }
+  var disclaimer='<p class="no-indent" style="font-size:9pt;color:#AAA;font-style:italic;margin-top:24pt;border-top:0.5pt solid #DDD;padding-top:8pt;">&mdash; Rascunho gerado por Pandecta AI. Revisão e assinatura do advogado responsável obrigatórias. &mdash;</p>';
+  paper.innerHTML=lheadHtml+mdToDocHtml(item.texto||'')+signHtml+disclaimer;
+}
+function toggleHistEdit(){
+  var editor=document.getElementById('hist-viewer').querySelector('.hist-editor');
+  var docWrap=document.getElementById('hist-doc-wrap');
+  var btn=document.getElementById('hv-toggle-btn');
+  var isEditing=editor.style.display!=='none';
+  if(isEditing){
+    editor.style.display='none';docWrap.style.display='flex';
+    btn.innerHTML='&#9998; Editar';btn.classList.remove('editing');
+    histItemAtual.texto=document.getElementById('hist-ta').value;
+    renderHistPaper(histItemAtual).then(function(){
+      setTimeout(function(){document.getElementById('hist-doc-wrap').scrollTop=0;},30);
+    });
+  }else{
+    editor.style.display='flex';docWrap.style.display='none';
+    btn.innerHTML='&#128065; Visualizar';btn.classList.add('editing');
+    var ta=document.getElementById('hist-ta');
+    setTimeout(function(){ta.focus();ta.setSelectionRange(0,0);ta.scrollTop=0;},80);
+  }
+}
 function mdSimple(t){
   return String(t||'')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -3540,7 +3634,15 @@ function abrirViewer(id){
   document.getElementById('hv-title').textContent=`${histItemAtual.tipo_label||'Peça'} — ${histItemAtual.autor||''}`;
   const ta=document.getElementById('hist-ta');
   ta.value=histItemAtual.texto||'';
-  setTimeout(()=>{ta.focus();ta.setSelectionRange(0,0);ta.scrollTop=0;},80);
+  var editor=document.getElementById('hist-viewer').querySelector('.hist-editor');
+  var docWrap=document.getElementById('hist-doc-wrap');
+  if(editor){editor.style.display='none';}
+  if(docWrap){docWrap.style.display='flex';}
+  var btn=document.getElementById('hv-toggle-btn');
+  if(btn){btn.innerHTML='&#9998; Editar';btn.classList.remove('editing');}
+  renderHistPaper(histItemAtual).then(function(){
+    setTimeout(function(){if(docWrap)docWrap.scrollTop=0;},60);
+  });
 }
 function fecharViewer(){
   document.getElementById('hist-viewer').classList.remove('open');
