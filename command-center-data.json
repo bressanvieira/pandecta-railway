@@ -1,22 +1,25 @@
 {
   "meta": {
     "nome": "Pandecta Executive Command Center",
-    "versao": 1,
+    "versao": 2,
     "atualizado_em": "2026-07-13",
     "changelog": [
-      { "data": "2026-07-13", "versao": 1, "mudancas": "Criação do Command Center: estrutura completa com 7 domínios, roadmap, dashboard executivo e mindmap." }
+      { "data": "2026-07-13", "versao": 1, "mudancas": "Criação do Command Center: estrutura completa com 7 domínios, roadmap, dashboard executivo e mindmap." },
+      { "data": "2026-07-13", "versao": 2, "mudancas": "Redesign CEO-view (tema claro + gráficos). Campanha LinkedIn ativada. Prospecção: 15+ advogados abordados (3x a meta)." }
     ]
   },
   "dashboard": {
     "avancou": [
+      "15+ advogados abordados esta semana — 3x a meta mínima de 5",
+      "Campanha de captura de leads no LinkedIn ativada",
       "Fabiano usou 100% da peça gerada e protocolou em juízo (03/07) — primeira validação real em tribunal",
       "Sistema de Modelos completo: Style Profile via Haiku + template Word visual (Plano A + B)",
       "Guardrails anti-injection em 4 camadas implementados e destacados na landing page",
       "3 posts publicados no Instagram (2 patrocinados) — impulsionamento em andamento"
     ],
     "riscos": [
-      "Pipeline comercial parado: apenas 1 beta ativo (Fabiano) — dependência de uma única validação",
-      "Instagram pode não ser o canal certo para advogados (público em LinkedIn/YouTube)",
+      "Follow-up: 15+ abordagens só viram pipeline se cada resposta tiver retorno em 24h",
+      "Apenas 1 beta ativo (Fabiano) — dependência de uma única validação",
       "Refúgio no produto em vez de vendas — padrão sabotador conhecido e mapeado"
     ],
     "oportunidades": [
@@ -25,14 +28,14 @@
       "ExpoLaw (Out/2026) como marco de lançamento com casos reais de uso"
     ],
     "prioridades_semana": [
+      { "titulo": "Responder todo lead do LinkedIn em <24h", "motivo": "Campanha ativada + 15 abordagens = respostas chegando. Follow-up rápido é o que converte." },
       { "titulo": "Mostrar o Sistema de Modelos ao Fabiano", "motivo": "Diferencial que ele mais pediu e não sabe que existe. Pode virar o primeiro promotor ativo." },
-      { "titulo": "5 mensagens para advogados novos", "motivo": "Protocolo mínimo não negociável. Pipeline vazio = semana perdida da janela dos filhos." },
-      { "titulo": "Avaliar resultado do impulsionamento Instagram", "motivo": "Decidir se investe mais ou migra verba para LinkedIn." }
+      { "titulo": "Manter cadência de abordagens", "motivo": "15+ foi excelente. Consistência semanal > pico isolado." }
     ]
   },
   "protocolo_vendas": {
     "meta_semanal_mensagens": 5,
-    "abordados_esta_semana": 0,
+    "abordados_esta_semana": 15,
     "semana_referencia": "2026-07-13",
     "followup_horas": 24,
     "pergunta_sexta": "Quantos advogados abordei essa semana?",
@@ -77,7 +80,7 @@
       "iniciativas": [
         { "nome": "Landing page pandecta.com.br", "objetivo": "Presença institucional + captação de pioneiros + páginas legais (Termos, PP, LGPD)", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "alta" },
         { "nome": "Campanha Instagram (3 posts, 2 patrocinados)", "objetivo": "Testar Instagram como canal de aquisição de advogados", "status": "em_andamento", "responsavel": "Maurício", "dependencias": "Resultado do impulsionamento", "proxima_acao": "Analisar métricas do impulsionamento e decidir continuidade", "prazo": "2026-07", "prioridade": "media" },
-        { "nome": "Avaliar LinkedIn como canal principal", "objetivo": "Advogados parecem estar mais no LinkedIn/YouTube que no Instagram", "status": "proximo", "responsavel": "Maurício", "dependencias": "Resultado do Instagram", "proxima_acao": "Definir teste: perfil + 2 posts + abordagem direta via LinkedIn", "prazo": "2026-07", "prioridade": "media" },
+        { "nome": "Campanha de leads no LinkedIn", "objetivo": "Capturar leads de advogados no canal onde eles estão", "status": "em_andamento", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Monitorar leads da 1ª semana e responder em <24h", "prazo": "2026-07", "prioridade": "alta" },
         { "nome": "Identidade visual navy + gold", "objetivo": "Marca consistente em landing, posts e produto", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "media" },
         { "nome": "Domínio pandecta.ai", "objetivo": "Domínio premium para a marca", "status": "futuro", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "baixa" }
       ]
@@ -90,7 +93,7 @@
       "resumo": "1 beta validado em juízo (Fabiano). Protocolo mínimo: 5 abordagens/semana. Pipeline precisa de volume.",
       "iniciativas": [
         { "nome": "Fabiano — beta principal", "objetivo": "Transformar validação (protocolou em juízo 03/07) em advocacy e feedback contínuo", "status": "em_andamento", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Demonstrar o Sistema de Modelos (ele não sabe que existe — era o que mais pedia)", "prazo": "Esta semana", "prioridade": "alta" },
-        { "nome": "Protocolo semanal de prospecção", "objetivo": "5 mensagens novas/semana + follow-up em 24h — mínimo não negociável", "status": "em_andamento", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Enviar as 5 mensagens desta semana", "prazo": "Toda semana", "prioridade": "alta" },
+        { "nome": "Protocolo semanal de prospecção", "objetivo": "5 mensagens novas/semana + follow-up em 24h — mínimo não negociável", "status": "em_andamento", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Follow-up nas 15+ abordagens já feitas; manter cadência", "prazo": "Toda semana", "prioridade": "alta" },
         { "nome": "Consultora técnica jurídica", "objetivo": "Validação do produto pelo olhar jurídico especializado", "status": "aguardando", "responsavel": "Maurício", "dependencias": "Confirmar nome/disponibilidade", "proxima_acao": "Retomar contato e agendar sessão de validação", "prazo": "2026-07", "prioridade": "media" },
         { "nome": "Kiko — validação System Prompt v4", "objetivo": "Validação técnica do prompt (concluída 22/05)", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "baixa" },
         { "nome": "Sistema de pagamento + reativar trial", "objetivo": "Monetização com planos pagos", "status": "pausado", "responsavel": "Maurício", "dependencias": "Validação com mais advogados", "proxima_acao": "Retomar após 3+ betas ativos", "prazo": "Pré-ExpoLaw", "prioridade": "media" }
@@ -129,7 +132,7 @@
       "cor": "#6FCF97",
       "resumo": "Pré-receita. Custo baixo e controlado. KPIs centrados em validação e pipeline, não em MRR ainda.",
       "kpis": [
-        { "nome": "Advogados abordados/semana", "valor": "0", "meta": "5", "unidade": "msgs" },
+        { "nome": "Advogados abordados/semana", "valor": "15+", "meta": "5", "unidade": "msgs" },
         { "nome": "Betas ativos", "valor": "1", "meta": "3+", "unidade": "advogados" },
         { "nome": "Peças protocoladas em juízo", "valor": "1", "meta": "—", "unidade": "peças" },
         { "nome": "Pioneiros captados", "valor": "1", "meta": "20", "unidade": "vagas" },
@@ -144,16 +147,15 @@
   ],
   "roadmap": {
     "em_andamento": [
-      "Executive Command Center (esta página)",
+      "Campanha de leads no LinkedIn",
+      "Follow-up das 15+ abordagens da semana",
       "Campanha Instagram — aguardando resultado do impulsionamento",
-      "Protocolo semanal de prospecção (5 msgs/semana)",
       "Relacionamento com Fabiano (beta principal)"
     ],
     "proximos": [
       "Demonstrar Sistema de Modelos ao Fabiano",
       "Histórico com visualizador papel",
-      "Busca ao vivo em jurisprudência",
-      "Teste de canal: LinkedIn"
+      "Busca ao vivo em jurisprudência"
     ],
     "futuro": [
       "Sistema de pagamento + reativar trial",
