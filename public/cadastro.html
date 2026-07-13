@@ -323,26 +323,14 @@
 
     <div class="form-error" id="form-error"></div>
 
-    <!-- PLAN SELECTOR -->
-    <div class="form-section-label">Escolha seu plano</div>
-    <div class="plan-row" id="plan-row">
-      <div class="plan-card" data-plan="solo" onclick="selectPlan('solo')">
-        <div class="plan-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke="#0D1B2A" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-        <div class="plan-name">Solo</div>
-        <div class="plan-price">R$79<span>/mês</span></div>
-        <div class="plan-desc">30 peças · 1 usuário</div>
+    <!-- ACESSO GRATUITO — remover quando lançar planos pagos -->
+    <div style="display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,rgba(200,164,106,.1),rgba(200,164,106,.05));border:1px solid rgba(200,164,106,.35);border-radius:14px;padding:20px 24px;margin-bottom:4px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:rgba(200,164,106,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8A46A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       </div>
-      <div class="plan-card featured" data-plan="profissional" onclick="selectPlan('profissional')">
-        <div class="plan-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke="#0D1B2A" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-        <div class="plan-name">Profissional</div>
-        <div class="plan-price">R$179<span>/mês</span></div>
-        <div class="plan-desc">Ilimitado · 3 usuários</div>
-      </div>
-      <div class="plan-card" data-plan="escritorio" onclick="selectPlan('escritorio')">
-        <div class="plan-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke="#0D1B2A" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-        <div class="plan-name">Escritório</div>
-        <div class="plan-price">R$379<span>/mês</span></div>
-        <div class="plan-desc">Ilimitado · 10 usuários</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#C8A46A;letter-spacing:.04em;margin-bottom:3px;">Acesso gratuito · Período de validação</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.55;">Você está entre os primeiros advogados a usar a Pandecta. O acesso é <strong style="color:rgba(255,255,255,.85);">completamente gratuito</strong> durante esta fase — sem cartão de crédito, sem compromisso.</div>
       </div>
     </div>
 
