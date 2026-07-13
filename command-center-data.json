@@ -1,0 +1,179 @@
+{
+  "meta": {
+    "nome": "Pandecta Executive Command Center",
+    "versao": 1,
+    "atualizado_em": "2026-07-13",
+    "changelog": [
+      { "data": "2026-07-13", "versao": 1, "mudancas": "Criação do Command Center: estrutura completa com 7 domínios, roadmap, dashboard executivo e mindmap." }
+    ]
+  },
+  "dashboard": {
+    "avancou": [
+      "Fabiano usou 100% da peça gerada e protocolou em juízo (03/07) — primeira validação real em tribunal",
+      "Sistema de Modelos completo: Style Profile via Haiku + template Word visual (Plano A + B)",
+      "Guardrails anti-injection em 4 camadas implementados e destacados na landing page",
+      "3 posts publicados no Instagram (2 patrocinados) — impulsionamento em andamento"
+    ],
+    "riscos": [
+      "Pipeline comercial parado: apenas 1 beta ativo (Fabiano) — dependência de uma única validação",
+      "Instagram pode não ser o canal certo para advogados (público em LinkedIn/YouTube)",
+      "Refúgio no produto em vez de vendas — padrão sabotador conhecido e mapeado"
+    ],
+    "oportunidades": [
+      "Fabiano ainda não conhece o Sistema de Modelos — é o diferencial que ele mais pediu; demo pode gerar advocacy",
+      "Exordial AI tem pouquíssima tração no Instagram — janela aberta para posicionamento",
+      "ExpoLaw (Out/2026) como marco de lançamento com casos reais de uso"
+    ],
+    "prioridades_semana": [
+      { "titulo": "Mostrar o Sistema de Modelos ao Fabiano", "motivo": "Diferencial que ele mais pediu e não sabe que existe. Pode virar o primeiro promotor ativo." },
+      { "titulo": "5 mensagens para advogados novos", "motivo": "Protocolo mínimo não negociável. Pipeline vazio = semana perdida da janela dos filhos." },
+      { "titulo": "Avaliar resultado do impulsionamento Instagram", "motivo": "Decidir se investe mais ou migra verba para LinkedIn." }
+    ]
+  },
+  "protocolo_vendas": {
+    "meta_semanal_mensagens": 5,
+    "abordados_esta_semana": 0,
+    "semana_referencia": "2026-07-13",
+    "followup_horas": 24,
+    "pergunta_sexta": "Quantos advogados abordei essa semana?",
+    "ancora": "51 anos. Filha 14, filho 9. Independência antes dos 60. Cada semana sem pipeline é uma semana perdida dessa janela."
+  },
+  "dominios": [
+    {
+      "id": "estrategia",
+      "nome": "Estratégia",
+      "icone": "🎯",
+      "cor": "#C9A227",
+      "resumo": "IA jurídica especializada por área para advogados brasileiros. Diferencial: peças no estilo do escritório + guardrails visíveis.",
+      "iniciativas": [
+        { "nome": "Posicionamento: especialização por área jurídica", "objetivo": "Ser a IA que domina 6 áreas com contexto legal completo, não um chat genérico", "status": "continuo", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Manter especialização como mensagem central em todo material", "prazo": "—", "prioridade": "alta" },
+        { "nome": "Programa Advogado Pioneiro (20 vagas)", "objetivo": "Validar produto com advogados reais antes de cobrar", "status": "em_andamento", "responsavel": "Maurício", "dependencias": "Prospecção ativa", "proxima_acao": "Preencher vagas via abordagem direta (5/semana)", "prazo": "Pré-ExpoLaw", "prioridade": "alta" },
+        { "nome": "Lançamento ExpoLaw", "objetivo": "Apresentar produto validado com casos reais em outubro/2026", "status": "proximo", "responsavel": "Maurício", "dependencias": "Mais betas validados, histórico papel, busca jurisprudência", "proxima_acao": "Garantir 3+ advogados com peças protocoladas até setembro", "prazo": "2026-10", "prioridade": "alta" },
+        { "nome": "Monitoramento de concorrentes", "objetivo": "Acompanhar Exordial AI e Enter AI", "status": "continuo", "responsavel": "Maurício + Claude", "dependencias": "—", "proxima_acao": "Revisar features/tração da Exordial mensalmente", "prazo": "—", "prioridade": "media" }
+      ]
+    },
+    {
+      "id": "produto",
+      "nome": "Produto",
+      "icone": "⚖️",
+      "cor": "#5B8DEF",
+      "resumo": "MVP completo e validado em juízo. 6 áreas especializadas, WizardEngine, Sistema de Modelos, guardrails.",
+      "iniciativas": [
+        { "nome": "6 áreas jurídicas especializadas", "objetivo": "LEGAL_CONTEXTS + AREA_RULES + Wizard para Consumidor, Civil, Trabalhista, Família, Imobiliário e Previdenciário", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "alta" },
+        { "nome": "Sistema de Modelos (Plano A + B)", "objetivo": "Peças no estilo do escritório: Style Profile (Haiku) + export Word com template real do .docx", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Demonstrar ao Fabiano", "prazo": "Esta semana", "prioridade": "alta" },
+        { "nome": "Guardrails anti-injection (4 camadas)", "objetivo": "Proteção contra prompt injection no Acervo, geração, system prompt e assistente", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "alta" },
+        { "nome": "Histórico com visualizador papel", "objetivo": "Mesma experiência visual do pós-geração ao reabrir peças", "status": "proximo", "responsavel": "Maurício + Claude", "dependencias": "—", "proxima_acao": "Implementar reuso do doc-ready/doc-paper no histórico", "prazo": "Pré-ExpoLaw", "prioridade": "media" },
+        { "nome": "Busca ao vivo em jurisprudência", "objetivo": "Citar jurisprudência atualizada nas peças", "status": "proximo", "responsavel": "Maurício + Claude", "dependencias": "Definir fonte (API tribunais/busca)", "proxima_acao": "Mapear APIs disponíveis (Datajud, Jusbrasil)", "prazo": "Pré-ExpoLaw", "prioridade": "media" },
+        { "nome": "Executive Command Center", "objetivo": "Visão executiva viva do negócio em /command-center (admin)", "status": "em_andamento", "responsavel": "Claude", "dependencias": "—", "proxima_acao": "Deploy e revisão do Maurício", "prazo": "2026-07-13", "prioridade": "media" },
+        { "nome": "Login com Google (OAuth 2.0)", "objetivo": "Reduzir fricção no cadastro", "status": "futuro", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "baixa" }
+      ]
+    },
+    {
+      "id": "marketing",
+      "nome": "Marketing",
+      "icone": "📣",
+      "cor": "#E06C9F",
+      "resumo": "Landing no ar com seção de guardrails. Instagram testado com 3 posts; hipótese: advogados estão no LinkedIn/YouTube.",
+      "iniciativas": [
+        { "nome": "Landing page pandecta.com.br", "objetivo": "Presença institucional + captação de pioneiros + páginas legais (Termos, PP, LGPD)", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "alta" },
+        { "nome": "Campanha Instagram (3 posts, 2 patrocinados)", "objetivo": "Testar Instagram como canal de aquisição de advogados", "status": "em_andamento", "responsavel": "Maurício", "dependencias": "Resultado do impulsionamento", "proxima_acao": "Analisar métricas do impulsionamento e decidir continuidade", "prazo": "2026-07", "prioridade": "media" },
+        { "nome": "Avaliar LinkedIn como canal principal", "objetivo": "Advogados parecem estar mais no LinkedIn/YouTube que no Instagram", "status": "proximo", "responsavel": "Maurício", "dependencias": "Resultado do Instagram", "proxima_acao": "Definir teste: perfil + 2 posts + abordagem direta via LinkedIn", "prazo": "2026-07", "prioridade": "media" },
+        { "nome": "Identidade visual navy + gold", "objetivo": "Marca consistente em landing, posts e produto", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "media" },
+        { "nome": "Domínio pandecta.ai", "objetivo": "Domínio premium para a marca", "status": "futuro", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "baixa" }
+      ]
+    },
+    {
+      "id": "comercial",
+      "nome": "Comercial",
+      "icone": "🤝",
+      "cor": "#4CC38A",
+      "resumo": "1 beta validado em juízo (Fabiano). Protocolo mínimo: 5 abordagens/semana. Pipeline precisa de volume.",
+      "iniciativas": [
+        { "nome": "Fabiano — beta principal", "objetivo": "Transformar validação (protocolou em juízo 03/07) em advocacy e feedback contínuo", "status": "em_andamento", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Demonstrar o Sistema de Modelos (ele não sabe que existe — era o que mais pedia)", "prazo": "Esta semana", "prioridade": "alta" },
+        { "nome": "Protocolo semanal de prospecção", "objetivo": "5 mensagens novas/semana + follow-up em 24h — mínimo não negociável", "status": "em_andamento", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Enviar as 5 mensagens desta semana", "prazo": "Toda semana", "prioridade": "alta" },
+        { "nome": "Consultora técnica jurídica", "objetivo": "Validação do produto pelo olhar jurídico especializado", "status": "aguardando", "responsavel": "Maurício", "dependencias": "Confirmar nome/disponibilidade", "proxima_acao": "Retomar contato e agendar sessão de validação", "prazo": "2026-07", "prioridade": "media" },
+        { "nome": "Kiko — validação System Prompt v4", "objetivo": "Validação técnica do prompt (concluída 22/05)", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "baixa" },
+        { "nome": "Sistema de pagamento + reativar trial", "objetivo": "Monetização com planos pagos", "status": "pausado", "responsavel": "Maurício", "dependencias": "Validação com mais advogados", "proxima_acao": "Retomar após 3+ betas ativos", "prazo": "Pré-ExpoLaw", "prioridade": "media" }
+      ]
+    },
+    {
+      "id": "operacoes",
+      "nome": "Operações",
+      "icone": "⚙️",
+      "cor": "#B07CE8",
+      "resumo": "Rotinas e ferramentas internas: validate.js pré-deploy, Obsidian como base de conhecimento, revisão de sexta.",
+      "iniciativas": [
+        { "nome": "Rotina de sexta-feira", "objetivo": "Revisão semanal obrigatória: 'Quantos advogados abordei essa semana?'", "status": "continuo", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Responder a pergunta na sexta 17/07 e registrar aqui", "prazo": "Toda sexta", "prioridade": "alta" },
+        { "nome": "validate.js pré-deploy", "objetivo": "Checar sintaxe JS inline e IDs/funções obrigatórios antes de cada push", "status": "concluido", "responsavel": "Claude", "dependencias": "—", "proxima_acao": "Rodar antes de cada deploy", "prazo": "—", "prioridade": "media" },
+        { "nome": "Base de conhecimento Obsidian", "objetivo": "Plano Mestre, Protocolo Anti-Eu e validações de advogados documentados", "status": "continuo", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Manter validações atualizadas", "prazo": "—", "prioridade": "media" },
+        { "nome": "Manutenção do Command Center", "objetivo": "Claude atualiza o documento vivo a cada informação nova (nunca recria)", "status": "continuo", "responsavel": "Claude", "dependencias": "—", "proxima_acao": "Atualizar a cada sessão com novidades", "prazo": "—", "prioridade": "media" }
+      ]
+    },
+    {
+      "id": "tecnologia",
+      "nome": "Tecnologia",
+      "icone": "🖥️",
+      "cor": "#F2994A",
+      "resumo": "Node/Express + SQLite + SPA vanilla. Deploy automático na Railway (~$7/mês). Sonnet 4.6 gera, Haiku 4.5 assiste.",
+      "iniciativas": [
+        { "nome": "Infraestrutura Railway", "objetivo": "Deploy automático via git push, domínio pandecta.com.br", "status": "continuo", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "alta" },
+        { "nome": "Multitenancy completo", "objetivo": "Todas as tabelas isoladas por user_id", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "—", "prazo": "—", "prioridade": "alta" },
+        { "nome": "IA: Sonnet 4.6 (geração) + Haiku 4.5 (assistente/style)", "objetivo": "Peças de qualidade com custo controlado, streaming SSE", "status": "continuo", "responsavel": "Maurício", "dependencias": "API Anthropic", "proxima_acao": "Acompanhar novos modelos e custos", "prazo": "—", "prioridade": "alta" },
+        { "nome": "RAG do Acervo (keyword matching)", "objetivo": "Contexto do acervo do usuário nas gerações, sem embeddings", "status": "concluido", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Avaliar embeddings se keyword limitar qualidade", "prazo": "—", "prioridade": "media" }
+      ]
+    },
+    {
+      "id": "financeiro",
+      "nome": "Financeiro & Indicadores",
+      "icone": "📊",
+      "cor": "#6FCF97",
+      "resumo": "Pré-receita. Custo baixo e controlado. KPIs centrados em validação e pipeline, não em MRR ainda.",
+      "kpis": [
+        { "nome": "Advogados abordados/semana", "valor": "0", "meta": "5", "unidade": "msgs" },
+        { "nome": "Betas ativos", "valor": "1", "meta": "3+", "unidade": "advogados" },
+        { "nome": "Peças protocoladas em juízo", "valor": "1", "meta": "—", "unidade": "peças" },
+        { "nome": "Pioneiros captados", "valor": "1", "meta": "20", "unidade": "vagas" },
+        { "nome": "MRR", "valor": "R$ 0", "meta": "—", "unidade": "pré-monetização" },
+        { "nome": "Custo infra", "valor": "~$7/mês", "meta": "—", "unidade": "Railway + API" }
+      ],
+      "iniciativas": [
+        { "nome": "Estrutura de custos", "objetivo": "Railway Hobby ~$7/mês + API Anthropic sob demanda + verba de impulsionamento", "status": "continuo", "responsavel": "Maurício", "dependencias": "—", "proxima_acao": "Registrar gasto de impulsionamento e custo médio por peça gerada", "prazo": "2026-07", "prioridade": "media" },
+        { "nome": "Definição de planos e preços", "objetivo": "Modelo de monetização (Solo/Escritório?)", "status": "futuro", "responsavel": "Maurício", "dependencias": "Validação com mais advogados", "proxima_acao": "Esboçar pricing após 3+ betas", "prazo": "Pré-ExpoLaw", "prioridade": "media" }
+      ]
+    }
+  ],
+  "roadmap": {
+    "em_andamento": [
+      "Executive Command Center (esta página)",
+      "Campanha Instagram — aguardando resultado do impulsionamento",
+      "Protocolo semanal de prospecção (5 msgs/semana)",
+      "Relacionamento com Fabiano (beta principal)"
+    ],
+    "proximos": [
+      "Demonstrar Sistema de Modelos ao Fabiano",
+      "Histórico com visualizador papel",
+      "Busca ao vivo em jurisprudência",
+      "Teste de canal: LinkedIn"
+    ],
+    "futuro": [
+      "Sistema de pagamento + reativar trial",
+      "Login com Google (OAuth 2.0)",
+      "Domínio pandecta.ai",
+      "Lançamento ExpoLaw (Out/2026)"
+    ],
+    "bloqueios": [
+      "Monetização pausada até validar com mais advogados (3+ betas)",
+      "Decisão de canal de marketing depende do resultado do impulsionamento Instagram"
+    ]
+  },
+  "pessoas": [
+    { "nome": "Maurício", "papel": "Fundador, dev, PO", "nota": "Atibaia – SP" },
+    { "nome": "Fabiano", "papel": "Beta tester principal", "nota": "30+ anos, 3 escritórios. Protocolou peça em juízo 03/07. Não conhece o Sistema de Modelos." },
+    { "nome": "Kiko", "papel": "Validador técnico", "nota": "Validou System Prompt v4 (22/05)" },
+    { "nome": "Consultora jurídica", "papel": "Validação pelo olhar jurídico", "nota": "Nome pendente — retomar contato" }
+  ],
+  "concorrentes": [
+    { "nome": "Exordial AI", "site": "exordial.ai", "nota": "Goiânia. Jurisprudência em chat, contratos, petição em lote, transcrição, editor separado. Pouca tração no Instagram. Usam guardrails como marketing." },
+    { "nome": "Enter AI", "site": "getenter.ai", "nota": "Mapeado anteriormente." }
+  ]
+}

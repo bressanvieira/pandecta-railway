@@ -221,6 +221,7 @@ app.get('/pioneiros', (req, res) => res.sendFile(path.join(__dirname, 'public', 
 app.get('/termos-de-uso', (req, res) => res.sendFile(path.join(__dirname, 'public', 'termos-de-uso.html')));
 app.get('/politica-de-privacidade', (req, res) => res.sendFile(path.join(__dirname, 'public', 'politica-de-privacidade.html')));
 app.get('/lgpd', (req, res) => res.sendFile(path.join(__dirname, 'public', 'lgpd.html')));
+app.get('/command-center', (req, res) => res.sendFile(path.join(__dirname, 'public', 'command-center.html')));
 
 app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: '30d',
@@ -402,6 +403,18 @@ function requireAdmin(req, res, next) {
   if (req.user.role !== 'admin') return res.status(403).json({ error: 'Acesso restrito a administradores.' });
   next();
 }
+
+// ── EXECUTIVE COMMAND CENTER (admin only) ─────────────────────────────────────
+// Fonte de verdade: command-center-data.json (documento vivo, versionado no git)
+app.get('/api/command-center', requireAuth, requireAdmin, (req, res) => {
+  try {
+    const raw = fs.readFileSync(path.join(__dirname, 'command-center-data.json'), 'utf8');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.json(JSON.parse(raw));
+  } catch (e) {
+    res.status(500).json({ error: 'Falha ao ler o Command Center: ' + e.message });
+  }
+});
 
 app.get('/api/users', requireAuth, requireAdmin, (req, res) => {
   if (!db) return res.json([]);
@@ -1902,5 +1915,5 @@ setInterval(() => {
 console.log('[MENTOR] Agendamento ativo: 08h, 13h e 19h (America/Sao_Paulo)');
 
 
-// ── START ────────────────────────────────────────────────────────────────────
+// ── START ─────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => console.log('Pandecta rodando na porta ' + PORT));

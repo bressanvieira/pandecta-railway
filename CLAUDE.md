@@ -133,6 +133,7 @@ git push
 - **Guardrails anti-injection** em 4 camadas (ver seção Guardrails acima)
 - **Visualizador de documento** tipo papel pós-geração (canvas cinza + papel branco flutuante)
 - **Seção Guardrails** na landing page (entre Áreas e Preços) — layout dois-colunas, card "Proteção ativa" com dot verde pulsando
+- **Executive Command Center** em `/command-center` (admin) — dashboard executivo vivo alimentado por `command-center-data.json` (ver seção própria)
 
 ### Bugs corrigidos
 - `\${_sbTrialBlock()}` escapado em template literal impedia renderização da barra de trial
@@ -143,6 +144,26 @@ git push
 - **Export Word caía sempre no fallback HTML**: `exportarWord()` lia `engine.data` (ConversationEngine — sempre vazio) em vez de `wizard.data` (WizardEngine — onde `modelo_id` é salvo). Fix: `_edata = wizard?.data || engine.data`
 - **`textoParaWXML` sem markdown**: `**negrito**`, `---`, `## Título` apareciam como texto literal no Word. Reescrita com suporte completo a bold, italic, headings H1/H2, HR, bullets, blockquotes
 - **`exportarWordComTemplate` fallback quebrado**: `lastIndexOf('<w:p>')` nunca casava (XML usa `<w:p ` com atributos). Substituído por estratégia que extrai `<w:sectPr>` (headers/footers/página) e substitui todo o `<w:body>`
+
+---
+
+## Executive Command Center — Documento Vivo
+
+Visão executiva completa da Pandecta, disponível em **`pandecta.com.br/command-center`** (só perfil admin).
+
+- **Fonte de verdade:** `command-center-data.json` (raiz do repo, versionado no git)
+- **Página:** `public/command-center.html` — 100% data-driven, renderiza o JSON (dashboard, KPIs, domínios, roadmap kanban, mindmap Mermaid gerado automaticamente, changelog)
+- **API:** `GET /api/command-center` (requireAuth + requireAdmin) — lê o JSON do disco a cada request
+- **Deploy:** editar o JSON → commit/push via PowerShell → Railway atualiza
+
+### Protocolo de manutenção (OBRIGATÓRIO em toda sessão)
+1. **Nunca recriar do zero** — apenas atualizar o `command-center-data.json` quando Maurício trouxer informação nova
+2. Encaixar novas iniciativas no domínio correto (estrategia/produto/marketing/comercial/operacoes/tecnologia/financeiro)
+3. A cada atualização: incrementar `meta.versao`, atualizar `meta.atualizado_em` e **adicionar entrada no `meta.changelog`** (nunca apagar entradas antigas — é o histórico)
+4. Atualizar `dashboard` (avançou/riscos/oportunidades/3 prioridades da semana) quando o contexto mudar
+5. Atualizar `protocolo_vendas.abordados_esta_semana` quando Maurício reportar abordagens; resetar para 0 e atualizar `semana_referencia` a cada nova semana
+6. O mindmap Mermaid é gerado automaticamente pelo HTML a partir do JSON — não precisa editar
+7. Status válidos: `concluido`, `em_andamento`, `proximo`, `futuro`, `bloqueado`, `pausado`, `aguardando`, `continuo` | Prioridades: `alta`, `media`, `baixa`
 
 ---
 

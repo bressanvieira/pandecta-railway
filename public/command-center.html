@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Pandecta — Executive Command Center</title>
+<style>
+  :root{
+    --bg:#0D0F1A; --bg2:#131627; --card:#181C30; --card2:#1E2340;
+    --line:#2A3050; --txt:#E8EAF0; --dim:#8B92B0; --gold:#C9A227; --gold2:#E8C55A;
+    --green:#4CC38A; --blue:#5B8DEF; --red:#E5484D; --orange:#F2994A; --purple:#B07CE8; --pink:#E06C9F; --teal:#3FB8AF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font:15px/1.55 'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  a{color:var(--gold2);text-decoration:none}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 24px 80px}
+
+  /* ---- topbar ---- */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(13,15,26,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar-in{max-width:1280px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px}
+  .logo{font-family:Georgia,serif;font-size:20px;letter-spacing:.5px}
+  .logo b{color:var(--gold)}
+  .tb-sub{color:var(--dim);font-size:12px;border-left:1px solid var(--line);padding-left:16px}
+  .tb-right{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .badge-v{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--dim)}
+  .btn{background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--txt);padding:7px 14px;font-size:13px;cursor:pointer}
+  .btn:hover{border-color:var(--gold)}
+  .btn-gold{background:var(--gold);color:#0D0F1A;border-color:var(--gold);font-weight:600}
+
+  h2.sec{font-family:Georgia,serif;font-size:22px;margin:44px 0 6px;display:flex;align-items:center;gap:10px}
+  h2.sec::after{content:'';flex:1;height:1px;background:var(--line)}
+  .sec-sub{color:var(--dim);font-size:13px;margin-bottom:18px}
+
+  /* ---- hero / dashboard ---- */
+  .hero{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:28px}
+  .prio-card{background:linear-gradient(135deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:14px;padding:22px}
+  .prio-card h3{font-family:Georgia,serif;color:var(--gold2);font-size:17px;margin-bottom:14px}
+  .prio-item{display:flex;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+  .prio-num{width:34px;height:34px;min-width:34px;border-radius:50%;background:var(--gold);color:#0D0F1A;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center}
+  .prio-item b{display:block;font-size:15px}
+  .prio-item span{color:var(--dim);font-size:13px}
+
+  .sales{background:var(--card);border:1px solid var(--gold);border-radius:14px;padding:22px;position:relative;overflow:hidden}
+  .sales::before{content:'';position:absolute;inset:0;background:radial-gradient(600px 200px at 100% 0,rgba(201,162,39,.12),transparent)}
+  .sales h3{font-family:Georgia,serif;font-size:17px;color:var(--gold2);margin-bottom:4px;position:relative}
+  .sales .q{color:var(--dim);font-size:13px;margin-bottom:14px;position:relative}
+  .gauge{display:flex;gap:8px;margin:10px 0 6px;position:relative}
+  .gauge i{flex:1;height:14px;border-radius:7px;background:var(--card2);border:1px solid var(--line)}
+  .gauge i.on{background:var(--green);border-color:var(--green)}
+  .gauge-lbl{font-size:26px;font-weight:800;position:relative}
+  .gauge-lbl small{font-size:13px;color:var(--dim);font-weight:400}
+  .ancora{margin-top:14px;padding:12px;border-radius:10px;background:rgba(201,162,39,.08);border:1px dashed rgba(201,162,39,.4);font-size:13px;color:var(--gold2);font-style:italic;position:relative}
+
+  .tri{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+  .tri-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .tri-card h4{font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .tri-card ul{list-style:none}
+  .tri-card li{font-size:13px;color:var(--dim);padding:7px 0 7px 16px;border-top:1px solid var(--line);position:relative}
+  .tri-card li::before{content:'';position:absolute;left:0;top:14px;width:6px;height:6px;border-radius:50%}
+  .tc-g li::before{background:var(--green)} .tc-r li::before{background:var(--red)} .tc-o li::before{background:var(--gold)}
+
+  /* ---- KPIs ---- */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
+  .kpi .v{font-size:26px;font-weight:800;color:var(--gold2)}
+  .kpi .m{font-size:11px;color:var(--dim);margin-top:2px}
+  .kpi .n{font-size:12.5px;color:var(--txt);margin-top:6px}
+
+  /* ---- mindmap ---- */
+  .map-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;overflow:auto}
+  .map-box svg{width:100%;min-height:520px}
+
+  /* ---- domains ---- */
+  .doms{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .dom{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .dom-h{padding:16px 18px;display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--line);border-top:3px solid var(--dc)}
+  .dom-h .ic{font-size:22px}
+  .dom-h b{font-family:Georgia,serif;font-size:17px}
+  .dom-h .cnt{margin-left:auto;font-size:12px;color:var(--dim);background:var(--card2);border-radius:20px;padding:3px 10px}
+  .dom-sum{padding:12px 18px;color:var(--dim);font-size:13px;border-bottom:1px solid var(--line)}
+  .ini{padding:12px 18px;border-bottom:1px solid var(--line);cursor:pointer}
+  .ini:last-child{border-bottom:none}
+  .ini:hover{background:var(--card2)}
+  .ini-top{display:flex;align-items:center;gap:10px}
+  .ini-top b{font-size:14px;font-weight:600;flex:1}
+  .st{font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;white-space:nowrap}
+  .pr{width:9px;height:9px;border-radius:50%;min-width:9px}
+  .pr-alta{background:var(--red);box-shadow:0 0 8px var(--red)} .pr-media{background:var(--gold)} .pr-baixa{background:var(--dim)}
+  .ini-next{margin-top:6px;font-size:12.5px;color:var(--dim)}
+  .ini-next b{color:var(--gold2);font-weight:600}
+  .ini-det{display:none;margin-top:10px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12.5px}
+  .ini.open .ini-det{display:block}
+  .ini-det div{padding:3px 0}
+  .ini-det span{color:var(--dim);display:inline-block;min-width:110px}
+
+  /* ---- roadmap ---- */
+  .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .kcol{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;border-top:3px solid var(--kc)}
+  .kcol h4{font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;color:var(--kc)}
+  .kitem{background:var(--card2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13px;margin-bottom:8px}
+
+  /* ---- people / competitors / changelog ---- */
+  .cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px}
+  .pcard b{color:var(--gold2)}
+  .pcard .role{font-size:12px;color:var(--dim);margin:2px 0 8px}
+  .pcard p{font-size:13px;color:var(--txt)}
+  .chlog{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 18px}
+  .chlog .row{display:flex;gap:16px;padding:11px 0;border-top:1px solid var(--line);font-size:13px}
+  .chlog .row:first-child{border-top:none}
+  .chlog .d{color:var(--gold2);white-space:nowrap;font-weight:600}
+  .chlog .vv{color:var(--dim);white-space:nowrap}
+
+  /* ---- lock screen ---- */
+  #lock{display:none;min-height:80vh;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
+  #lock .shield{font-size:56px}
+  #lock h1{font-family:Georgia,serif}
+  #lock p{color:var(--dim);max-width:420px}
+  #loading{min-height:60vh;display:flex;align-items:center;justify-content:center;color:var(--dim);gap:12px}
+  .spin{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  @media(max-width:960px){.hero,.doms,.tri{grid-template-columns:1fr}.kanban{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.kanban{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="logo"><b>PANDECTA</b> AI</div>
+    <div class="tb-sub">Executive Command Center</div>
+    <div class="tb-right">
+      <span class="badge-v" id="meta-badge">—</span>
+      <a class="btn" href="/app">← Voltar ao app</a>
+    </div>
+  </div>
+</div>
+
+<div id="loading"><div class="spin"></div> Carregando o Command Center…</div>
+
+<div id="lock">
+  <div class="shield">🛡️</div>
+  <h1>Acesso restrito</h1>
+  <p>Esta página é exclusiva do perfil administrador da Pandecta. Faça login no app com uma conta admin e volte aqui.</p>
+  <a class="btn btn-gold" href="/app">Ir para o login</a>
+</div>
+
+<div class="wrap" id="main" style="display:none">
+
+  <!-- DASHBOARD EXECUTIVO -->
+  <div class="hero">
+    <div class="prio-card">
+      <h3>⭐ 3 Prioridades da Semana</h3>
+      <div id="prios"></div>
+    </div>
+    <div class="sales">
+      <h3>🔥 Protocolo de Vendas</h3>
+      <div class="q" id="sales-q">—</div>
+      <div class="gauge-lbl"><span id="sales-n">0</span>/<span id="sales-m">5</span> <small>mensagens esta semana</small></div>
+      <div class="gauge" id="sales-gauge"></div>
+      <div class="ancora" id="sales-ancora">—</div>
+    </div>
+  </div>
+
+  <div class="tri">
+    <div class="tri-card tc-g"><h4>✅ O que avançou</h4><ul id="avancou"></ul></div>
+    <div class="tri-card tc-r"><h4>⚠️ Riscos</h4><ul id="riscos"></ul></div>
+    <div class="tri-card tc-o"><h4>💡 Oportunidades</h4><ul id="oportunidades"></ul></div>
+  </div>
+
+  <!-- KPIs -->
+  <h2 class="sec">📊 Indicadores</h2>
+  <div class="sec-sub">Fase atual: validação. KPIs de pipeline valem mais que MRR.</div>
+  <div class="kpis" id="kpis"></div>
+
+  <!-- MINDMAP -->
+  <h2 class="sec">🗺️ Mapa Visual</h2>
+  <div class="sec-sub">A Pandecta no centro — tudo ao redor, por domínio. Gerado automaticamente do documento vivo.</div>
+  <div class="map-box"><pre class="mermaid" id="mindmap"></pre></div>
+
+  <!-- DOMÍNIOS -->
+  <h2 class="sec">🧭 Domínios &amp; Iniciativas</h2>
+  <div class="sec-sub">Clique numa iniciativa para ver objetivo, dependências, responsável e prazo.</div>
+  <div class="doms" id="doms"></div>
+
+  <!-- ROADMAP -->
+  <h2 class="sec">🛣️ Roadmap</h2>
+  <div class="kanban" id="kanban"></div>
+
+  <!-- PESSOAS -->
+  <h2 class="sec">👥 Pessoas</h2>
+  <div class="cards3" id="pessoas"></div>
+
+  <!-- CONCORRENTES -->
+  <h2 class="sec">🥊 Concorrentes</h2>
+  <div class="cards3" id="concorrentes"></div>
+
+  <!-- HISTÓRICO -->
+  <h2 class="sec">🕘 Histórico de Atualizações</h2>
+  <div class="chlog" id="chlog"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+const ST = {
+  concluido:   {t:'Concluído',   c:'#4CC38A'},
+  em_andamento:{t:'Em andamento',c:'#5B8DEF'},
+  proximo:     {t:'Próximo',     c:'#C9A227'},
+  futuro:      {t:'Futuro',      c:'#8B92B0'},
+  bloqueado:   {t:'Bloqueado',   c:'#E5484D'},
+  pausado:     {t:'Pausado',     c:'#F2994A'},
+  aguardando:  {t:'Aguardando',  c:'#B07CE8'},
+  continuo:    {t:'Contínuo',    c:'#3FB8AF'}
+};
+const EMO = {concluido:'✅',em_andamento:'🔄',proximo:'⏭️',futuro:'🔭',bloqueado:'⛔',pausado:'⏸️',aguardando:'⏳',continuo:'♾️'};
+const esc = s => String(s??'').replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const mm  = s => String(s??'').replace(/[(){}\[\]"`:;|]/g,' ').replace(/\s+/g,' ').trim();
+
+async function boot(){
+  const token = localStorage.getItem('pandecta_token');
+  if(!token) return lock();
+  let d;
+  try{
+    const r = await fetch('/api/command-center',{headers:{Authorization:'Bearer '+token}});
+    if(!r.ok) return lock();
+    d = await r.json();
+  }catch(e){ return lock(); }
+  document.getElementById('loading').style.display='none';
+  document.getElementById('main').style.display='block';
+  render(d);
+}
+function lock(){
+  document.getElementById('loading').style.display='none';
+  document.getElementById('lock').style.display='flex';
+}
+
+function render(d){
+  document.getElementById('meta-badge').textContent = 'v'+d.meta.versao+' · atualizado em '+d.meta.atualizado_em;
+
+  // prioridades
+  document.getElementById('prios').innerHTML = d.dashboard.prioridades_semana.map((p,i)=>
+    `<div class="prio-item"><div class="prio-num">${i+1}</div><div><b>${esc(p.titulo)}</b><span>${esc(p.motivo)}</span></div></div>`).join('');
+
+  // protocolo de vendas
+  const pv = d.protocolo_vendas;
+  document.getElementById('sales-q').textContent = '“'+pv.pergunta_sexta+'” — follow-up em '+pv.followup_horas+'h para quem responder.';
+  document.getElementById('sales-n').textContent = pv.abordados_esta_semana;
+  document.getElementById('sales-m').textContent = pv.meta_semanal_mensagens;
+  document.getElementById('sales-gauge').innerHTML =
+    Array.from({length:pv.meta_semanal_mensagens},(_,i)=>`<i class="${i<pv.abordados_esta_semana?'on':''}"></i>`).join('');
+  document.getElementById('sales-ancora').textContent = pv.ancora;
+
+  // tri
+  const li = a => a.map(x=>`<li>${esc(x)}</li>`).join('');
+  document.getElementById('avancou').innerHTML = li(d.dashboard.avancou);
+  document.getElementById('riscos').innerHTML = li(d.dashboard.riscos);
+  document.getElementById('oportunidades').innerHTML = li(d.dashboard.oportunidades);
+
+  // KPIs (do domínio financeiro)
+  const fin = d.dominios.find(x=>x.id==='financeiro');
+  if(fin && fin.kpis){
+    document.getElementById('kpis').innerHTML = fin.kpis.map(k=>
+      `<div class="kpi"><div class="v">${esc(k.valor)}</div><div class="m">meta: ${esc(k.meta)} · ${esc(k.unidade)}</div><div class="n">${esc(k.nome)}</div></div>`).join('');
+  }
+
+  // domínios
+  document.getElementById('doms').innerHTML = d.dominios.map(dm=>{
+    const inis = (dm.iniciativas||[]).map(x=>{
+      const st = ST[x.status]||ST.futuro;
+      return `<div class="ini" onclick="this.classList.toggle('open')">
+        <div class="ini-top">
+          <span class="pr pr-${esc(x.prioridade)}" title="prioridade ${esc(x.prioridade)}"></span>
+          <b>${esc(x.nome)}</b>
+          <span class="st" style="background:${st.c}22;color:${st.c};border:1px solid ${st.c}55">${EMO[x.status]||''} ${st.t}</span>
+        </div>
+        ${x.proxima_acao && x.proxima_acao!=='—' ? `<div class="ini-next"><b>Próxima ação:</b> ${esc(x.proxima_acao)}${x.prazo&&x.prazo!=='—'?' · <b>prazo:</b> '+esc(x.prazo):''}</div>`:''}
+        <div class="ini-det">
+          <div><span>Objetivo</span> ${esc(x.objetivo)}</div>
+          <div><span>Responsável</span> ${esc(x.responsavel)}</div>
+          <div><span>Dependências</span> ${esc(x.dependencias)}</div>
+          <div><span>Prazo</span> ${esc(x.prazo)}</div>
+          <div><span>Prioridade</span> ${esc(x.prioridade)}</div>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="dom" style="--dc:${dm.cor}">
+      <div class="dom-h"><span class="ic">${dm.icone}</span><b>${esc(dm.nome)}</b><span class="cnt">${(dm.iniciativas||[]).length} iniciativas</span></div>
+      <div class="dom-sum">${esc(dm.resumo)}</div>${inis}</div>`;
+  }).join('');
+
+  // roadmap kanban
+  const cols = [
+    ['🔄 Em andamento', d.roadmap.em_andamento, '#5B8DEF'],
+    ['⏭️ Próximos passos', d.roadmap.proximos, '#C9A227'],
+    ['🔭 Futuro', d.roadmap.futuro, '#8B92B0'],
+    ['⛔ Bloqueios', d.roadmap.bloqueios, '#E5484D']
+  ];
+  document.getElementById('kanban').innerHTML = cols.map(([t,items,c])=>
+    `<div class="kcol" style="--kc:${c}"><h4>${t}</h4>${items.map(i=>`<div class="kitem">${esc(i)}</div>`).join('')}</div>`).join('');
+
+  // pessoas & concorrentes
+  document.getElementById('pessoas').innerHTML = d.pessoas.map(p=>
+    `<div class="pcard"><b>${esc(p.nome)}</b><div class="role">${esc(p.papel)}</div><p>${esc(p.nota)}</p></div>`).join('');
+  document.getElementById('concorrentes').innerHTML = d.concorrentes.map(c=>
+    `<div class="pcard"><b>${esc(c.nome)}</b><div class="role">${esc(c.site)}</div><p>${esc(c.nota)}</p></div>`).join('');
+
+  // changelog
+  document.getElementById('chlog').innerHTML = [...d.meta.changelog].reverse().map(c=>
+    `<div class="row"><span class="d">${esc(c.data)}</span><span class="vv">v${esc(c.versao)}</span><span>${esc(c.mudancas)}</span></div>`).join('');
+
+  // mindmap mermaid — gerado do documento vivo
+  let map = 'mindmap\n  root((PANDECTA AI))\n';
+  d.dominios.forEach(dm=>{
+    map += `    ${dm.icone} ${mm(dm.nome)}\n`;
+    (dm.iniciativas||[]).forEach(x=>{
+      map += `      ${EMO[x.status]||''} ${mm(x.nome)}\n`;
+    });
+  });
+  const el = document.getElementById('mindmap');
+  el.textContent = map;
+  mermaid.initialize({
+    startOnLoad:false, theme:'dark', securityLevel:'loose',
+    themeVariables:{ darkMode:true, background:'#181C30', primaryColor:'#1E2340',
+      primaryTextColor:'#E8EAF0', primaryBorderColor:'#C9A227', lineColor:'#C9A227', fontSize:'14px' }
+  });
+  mermaid.run({nodes:[el]}).catch(err=>{
+    el.textContent = 'Falha ao renderizar o mapa: '+err.message;
+  });
+}
+boot();
+</script>
+</body>
+</html>
