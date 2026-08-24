@@ -1,7 +1,7 @@
 {
   "meta": {
     "nome": "Pandecta Executive Command Center",
-    "versao": 10,
+    "versao": 11,
     "atualizado_em": "2026-08-24",
     "changelog": [
       {
@@ -53,11 +53,17 @@
         "data": "2026-08-24",
         "versao": 10,
         "mudancas": "Maurício notou que o app não pedia senha de novo ao reabrir e perguntou se isso era risco de segurança — são advogados lidando com dados de cliente, ele não quer reclamação de acesso indevido. Confirmado: o JWT durava 7 dias sempre, sem opção de sessão curta. Ele decidiu: 1 dia por padrão, e só vira 7 dias se a pessoa marcar 'Manter-me conectado' explicitamente no login. Implementado: checkbox novo na tela de login (index.html), server.js aceita manterConectado no corpo do /api/auth/login e ajusta a validade do token; /api/cadastro (auto-login pós-cadastro) ficou fixo em 1 dia, sem opção de 7 — não tem checkbox nessa tela. Testado ponta a ponta: cadastro=24h, login sem marcar=24h, login marcando=168h. De caminho, confirmado com o Maurício que a variável JWT_SECRET existe de fato na Railway (não está caindo no valor padrão do código, que seria forjável por qualquer um)."
+      },
+      {
+        "data": "2026-08-24",
+        "versao": 11,
+        "mudancas": "Maurício revisitou a tela de início: \"era pra ser um dashboard, mas está muito poluída, as informações nem todas fazem sentido\" — e o histórico \"está 100% cara de IA... com poucas peças fica bonito, mas a medida que for crescendo vai ficar péssimo de analisar\". Pediu que a mudança seguisse o direcionamento das skills, não gosto pessoal — rodei o setup da skill impeccable (PRODUCT.md + DESIGN.md), depois o guia de modo Operate e o de simplificação (distill), e populei o banco local com peças de teste pra confirmar cada suspeita com captura real antes de mexer em código, não só por inspeção visual. Achado principal na home: os 3 cards de atalho (Acervo/Assistente IA/Modelos) eram navegação 100% redundante com a barra lateral fixa; o bloco \"Insights rápidos\" duplicava exatamente os mesmos dois fatos (área e tipo principal) já mostrados no card \"Seu resumo\"; e os painéis \"Continue de onde parou\" e \"Atividade recente\" liam a mesma query, só que em dois componentes visuais diferentes lado a lado. Achado principal no histórico: não era só gosto — a cor e o \"ícone\" de cada card vinham de um campo (item.area) que a API nunca retornou, então o lookup sempre caía no fallback e imprimia a palavra literal \"documento\" como texto solto em todo card, 20 vezes na tela. Era isso que lia como \"cara de IA\", não decoração ruim — um lookup morto vazando texto de debug. Corrigido: home perdeu o rótulo em caixa-alta acima do título (padrão banido pelo DESIGN.md), os 3 cards redundantes e o bloco de insights duplicado; os dois painéis de peças recentes viraram um só. A dica do Acervo agora só aparece se o acervo estiver vazio, em vez de sempre visível. De brinde, corrigido bug real que zerava os contadores \"Este mês\"/\"Esta semana\" (comparava com um campo que não existe na resposta da API). Histórico: a grade de cards virou tabela densa de uma coluna (ponto colorido por área — agora funcional de verdade —, tipo, área, autor, data, ações reveladas no hover e no foco de teclado), sem limite de altura por item, escalando para centenas de peças sem virar mosaico ilegível — exatamente o pedido (\"uma grade ou algo assim\"). Linha inteira clicável, sem botão \"Abrir\" redundante. Mobile ajustado (coluna de autor escondida, ações sempre visíveis). Detector: 6 → 6 (zero achados novos). validate.js OK. Conferido com captura real via Playwright: desktop, hover, filtro por área, abertura de documento e mobile 390px."
       }
     ]
   },
   "dashboard": {
     "avancou": [
+      "Ferramenta: dashboard de início e histórico simplificados (skill impeccable, modo Operate + distill) — removida navegação e estatísticas duplicadas na home, histórico virou tabela densa em vez de grade de cards (não escalava), e corrigido bug real que fazia todo card do histórico exibir a palavra \"documento\" (lookup de ícone/cor por área que nunca recebia dado da API)",
       "Segurança: sessão de login reduzida de 7 dias fixos para 1 dia por padrão — só vira 7 dias com checkbox 'Manter-me conectado' explícito. Decisão do Maurício por lidar com dados de advogado/cliente",
       "4 páginas órfãs (pioneiros, termos, privacidade, LGPD) fora do padrão novo — descobertas e refeitas; eram acessíveis direto pela landing e ainda mostravam a versão escura antiga",
       "Ferramenta: construtor de peças convertido de tema escuro para o mesmo sistema claro do resto do app — Maurício pegou a inconsistência antes de publicar. Detector 10 → 6, único navy do produto unificado",

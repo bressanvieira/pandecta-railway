@@ -136,7 +136,7 @@ git push
 - **Tour guiado** (spotlight + popup boas-vindas com "não mostrar novamente")
 - **Landing page** pandecta.com.br + páginas legais (Termos, PP, LGPD)
 - **Admin panel**
-- **Dashboard home** redesenhado: saudação, hero card, KPIs reais, 3 feature cards, insights rápidos, "Continue de onde parou", dica Pandecta
+- **Dashboard home**: saudação, hero card, resumo (KPIs reais), painel único "Peças recentes" (até 5), dica Pandecta condicional (só aparece com acervo vazio). Redesenhado 24/08 — ver "Dashboard e histórico — distill" abaixo
 - **Sino de notificações** sempre visível para admin/pioneer; badge só aparece com mensagens novas
 - **validate.js** — validador pré-deploy: checa sintaxe JS dos `<script>` inline e IDs/funções obrigatórios
 - **Guardrails anti-injection** em 4 camadas (ver seção Guardrails acima)
@@ -397,4 +397,55 @@ as 4 antes do push.
 **Falta fazer, em ordem**
 - [x] ~~4 páginas órfãs (pioneiros, termos, privacidade, LGPD) fora do padrão~~ — feito 24/08, ver acima
 - [ ] Publicar site + app no mesmo deploy (agora inclui as 4 páginas órfãs corrigidas)
+
+**24/08 — Dashboard home e Histórico: distill (não redesign) via skill `impeccable`.**
+Maurício: a home "era pra ser um dashboard, mas está muito poluída, as informações nem todas fazem sentido";
+o histórico "está 100% cara de IA... com poucas peças fica bonito, mas a medida que for crescendo vai ficar
+péssimo de analisar". Pediu que a mudança seguisse o direcionamento das skills, não gosto pessoal. Rodei
+`context.mjs` (PRODUCT.md + DESIGN.md), depois `reference/operate.md` (modo Operate — a tela serve a tarefa,
+densidade e escaneabilidade acima de expressão) e `reference/distill.md` (remover redundância, nunca remover
+funcionalidade). Os dois `DESIGN.md` recusas permanentes mais diretamente violados pelo estado antigo: **1)
+kicker/eyebrow acima de título** ("COMECE AGORA" sobre o título do hero) e **2) grade de cards do mesmo
+tamanho como estrutura de página** (os 3 cards Acervo/Assistente IA/Modelos na home; a grade de cards do
+histórico).
+
+Diagnóstico não foi por inspeção visual só — populei o banco local com 19 peças de teste e capturei a tela
+real via Playwright antes de mexer em qualquer código, pra confirmar cada suspeita com dado real:
+- **Home**: `hd-feats` (3 cards Acervo/Assistente IA/Modelos) é navegação 100% redundante — as 3 rotas já
+  existem fixas na sidebar, e "Assistente IA" duplica o botão "Conversar com a Pandecta" do próprio hero.
+  `hd-insights` (Insights rápidos: área favorita, tipo frequente) duplicava exatamente os mesmos dois fatos
+  já mostrados no card "Seu resumo" (área principal, tipo principal), só que em outro layout. Os painéis
+  "Continue de onde parou" e "Atividade recente" liam a mesma query (`hist.slice(0,3)` e `hist.slice(0,4)`)
+  — dois componentes visuais pra um dado idêntico, lado a lado.
+- **Histórico**: a grade de cards (`hist-grid`/`hist-card`) tinha um bug real, não só um problema de gosto —
+  a cor da faixa e o "ícone" de cada card vinham de `item.area` (`AREA_COLOR[areaKey]`/`AREA_ICON[areaKey]`),
+  mas a API nunca retornou esse campo (só `area_label`, o rótulo por extenso) — então `areaKey` era sempre
+  string vazia, a cor caía sempre no fallback dourado e o "ícone" imprimia a palavra literal do fallback
+  (**"documento"**) como texto solto antes do tipo em todo card. Era exatamente essa palavra repetida 20x na
+  tela que lia como "cara de IA" — não decoração ruim, um lookup morto vazando texto de debug.
+
+Correções:
+- **Home**: removido o kicker; removidos os 3 feature-cards (redundantes com a sidebar); removido o bloco
+  Insights rápidos (redundante com Seu resumo); "Continue de onde parou" e "Atividade recente" viraram um
+  único painel "Peças recentes" (5 itens, ícone + tipo + área + tempo relativo). A dica do Acervo agora só
+  aparece se o acervo estiver vazio (`hd-tip` com `display` controlado por `loadHomeDash()`), em vez de sempre
+  visível. De brinde, corrigido um bug real que zerava "Este mês" e "Esta semana": o filtro lia
+  `x.createdAt` (camelCase) mas a API retorna `created_at` — `new Date(undefined)` é sempre inválida, então
+  o contador nunca contava nada.
+- **Histórico**: grade de cards virou tabela densa de uma coluna (`hist-table`/`hist-row` — linha com ponto
+  colorido por área, tipo + área, autor, data, ações no hover), cabeçalho fixo (Documento/Autor/Data), sem
+  limite de altura por item — escala pra centenas de peças sem virar mosaico ilegível, que era exatamente o
+  pedido ("uma grade ou algo assim"). A cor por área agora funciona de verdade: nova função
+  `areaKeyFromLabel()` deriva a chave a partir do `area_label` (normalizando acento/maiúscula) em vez de
+  depender do campo `area` que não existe. A linha inteira é clicável (antes só o corpo do card abria o
+  documento, com um botão "Abrir" redundante ao lado) — sobrou só Copiar/Excluir como ações explícitas,
+  reveladas no hover e também no foco de teclado (`:focus-within`) pra não quebrar acessibilidade. Prévia de
+  texto do card foi removida — repetia o que já está a um clique de distância no visualizador.
+- Mobile (`≤768px`): coluna Autor escondida, ações sempre visíveis (não há hover em touch), linha quebra em
+  duas quando o nome do tipo não cabe.
+- CSS morto removido junto (`hd-feat*`, `hd-ins-*`, `hd-bottom`, `hd-right-col`, `hd-act*`, `hist-card*`,
+  `AREA_ICON`) — nada ficou órfão.
+- Detector: 6 → **6** (zero achados novos; os 6 aceitos como exceção em 23/08 seguem os mesmos — nenhum é
+  das telas mexidas aqui). `node validate.js` OK. Conferido com captura real via Playwright: desktop,
+  hover, filtro por área, abertura do documento, e mobile 390px — todos os fluxos intactos.
 

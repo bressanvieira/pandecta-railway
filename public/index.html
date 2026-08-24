@@ -274,8 +274,7 @@ html.has-session #screen-login{visibility:hidden;}
 .hd-layout{display:grid;grid-template-columns:1fr 292px;gap:16px;}
 .hd-hero{background:var(--navy);border-radius:14px;padding:28px 30px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;min-height:190px;}
 .hd-hero::before{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:rgba(200,164,106,.05);pointer-events:none;}
-.hd-hero-eye{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:10px;}
-.hd-hero-title{font-size:20px;font-weight:600;color:#fff;line-height:1.35;margin-bottom:8px;}
+.hd-hero-title{font-size:21px;font-weight:600;color:#fff;line-height:1.35;margin-bottom:8px;}
 .hd-hero-title span{color:var(--gold-lt);}
 .hd-hero-sub{font-size:12.5px;color:rgba(255,255,255,.38);line-height:1.55;margin-bottom:22px;}
 .hd-hero-btns{display:flex;gap:10px;flex-wrap:wrap;}
@@ -296,46 +295,18 @@ html.has-session #screen-login{visibility:hidden;}
 .hd-area-bar{height:4px;background:var(--bd-md);border-radius:2px;margin-top:8px;overflow:hidden;}
 .hd-area-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .6s ease;}
 .hd-area-pct{font-size:11px;color:var(--t3);margin-top:4px;text-align:right;}
-.hd-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.hd-feat{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;cursor:pointer;transition:all .16s;}
-.hd-feat:hover{border-color:var(--bd-md);box-shadow:0 4px 16px rgba(0,0,0,.06);transform:translateY(-2px);}
-.hd-feat-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:11px;}
-.hd-feat-ico.ic-gold{background:rgba(200,164,106,.10);}
-.hd-feat-ico.ic-blue{background:rgba(37,99,235,.07);}
-.hd-feat-ico.ic-grn{background:rgba(21,128,61,.07);}
-.hd-feat-name{font-size:13.5px;font-weight:600;color:var(--t1);margin-bottom:5px;}
-.hd-feat-desc{font-size:12px;color:var(--t2);line-height:1.5;}
-.hd-feat-link{font-size:11.5px;color:var(--gold);margin-top:10px;display:flex;align-items:center;gap:4px;}
-.hd-bottom{display:grid;grid-template-columns:1fr 292px;gap:16px;align-items:start;}
-.hd-insights{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 20px;}
-.hd-ins-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:14px;}
-.hd-ins-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.hd-ins-item{display:flex;align-items:flex-start;gap:9px;}
-.hd-ins-ico{color:var(--gold);flex-shrink:0;margin-top:1px;line-height:0;}
-.hd-ins-ico svg{width:17px;height:17px;}
-.hd-ins-val{font-size:16px;font-weight:700;color:var(--t1);line-height:1;}
-.hd-ins-lbl{font-size:12px;color:var(--t3);margin-top:3px;}
-.hd-ins-sub{font-size:11px;color:var(--gold);margin-top:2px;}
-.hd-right-col{display:flex;flex-direction:column;gap:12px;}
 .hd-panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
-.hd-panel-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--bd);}
-.hd-panel-title{font-size:12.5px;font-weight:600;color:var(--t1);}
-.hd-panel-link{font-size:11px;color:var(--gold);cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
-.hd-ri{display:flex;align-items:center;gap:9px;padding:9px 13px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .12s;}
+.hd-panel-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--bd);}
+.hd-panel-title{font-size:13px;font-weight:600;color:var(--t1);}
+.hd-panel-link{font-size:12px;color:var(--gold);cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
+.hd-ri{display:flex;align-items:center;gap:11px;padding:11px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .12s;}
 .hd-ri:last-child{border-bottom:none;}
 .hd-ri:hover{background:var(--bg);}
-.hd-ri-ico{width:26px;height:26px;border-radius:7px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold);}
+.hd-ri-ico{width:28px;height:28px;border-radius:7px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold);}
 .hd-ri-ico svg{width:13px;height:13px;}
-.hd-ri-ttl{font-size:12.5px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
-.hd-ri-tag{font-size:11px;padding:2px 7px;border-radius:20px;background:var(--gold-bg);color:#7B5E2A;font-weight:600;flex-shrink:0;white-space:nowrap;}
-.hd-act{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;border-bottom:1px solid var(--bd);}
-.hd-act:last-child{border-bottom:none;}
-.hd-act-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;}
-.hd-act-dot.dim{background:var(--bd-md);}
-.hd-act-info{flex:1;min-width:0;}
-.hd-act-txt{font-size:12.5px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.hd-act-sub{font-size:12px;color:var(--t3);margin-top:1px;}
-.hd-act-time{font-size:11px;color:var(--t3);white-space:nowrap;flex-shrink:0;}
+.hd-ri-ttl{font-size:13px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.hd-ri-tag{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--gold-bg);color:#7B5E2A;font-weight:600;flex-shrink:0;white-space:nowrap;}
+.hd-ri-time{font-size:11.5px;color:var(--t3);flex-shrink:0;white-space:nowrap;}
 .hd-tip{background:rgba(200,164,106,.06);border:1px solid rgba(200,164,106,.18);border-radius:10px;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .hd-tip-left{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--t2);flex:1;}
 .hd-tip-ico{color:var(--gold);flex-shrink:0;line-height:0;}
@@ -662,18 +633,26 @@ html.has-session #screen-login{visibility:hidden;}
 .hist-pill.active{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-bd);}
 .hist-count{font-size:12px;color:var(--t3);margin-left:auto;white-space:nowrap;}
 /* == HISTORICO GRID == */
-.hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
-.hist-card{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;position:relative;}
-.hist-card:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(0,0,0,.08);transform:translateY(-1px);}
-.hist-card-stripe{height:3px;width:100%;flex-shrink:0;}
-.hist-card-body{padding:16px 18px 12px;flex:1;}
-.hist-tipo{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;display:inline-flex;align-items:center;gap:5px;}
-.hist-autor{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.35;}
-.hist-meta{font-size:12px;color:var(--t3);margin-bottom:8px;}
-.hist-preview{font-size:12px;color:var(--t2);line-height:1.5;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;opacity:.75;}
-.hist-card-footer{padding:10px 14px;border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--surface);}
-.hist-card-acts{display:flex;gap:6px;}
-.hca-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:7px;border:1px solid var(--bd);background:var(--card);color:var(--t2);cursor:pointer;font-size:11.5px;font-weight:600;font-family:inherit;transition:all .12s;white-space:nowrap;}
+.hist-table{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.hist-thead{display:flex;align-items:center;gap:14px;padding:9px 18px;border-bottom:1px solid var(--bd);background:var(--surface);}
+.hist-th{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--t3);text-transform:uppercase;}
+.hist-th.th-doc{flex:1;min-width:0;}
+.hist-th.th-autor{width:190px;flex-shrink:0;}
+.hist-th.th-data{width:88px;flex-shrink:0;}
+.hist-th.th-acts{width:112px;flex-shrink:0;}
+.hist-row{display:flex;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .12s;}
+.hist-row:last-child{border-bottom:none;}
+.hist-row:hover{background:var(--bg);}
+.hist-row-doc{flex:1;min-width:0;display:flex;align-items:center;gap:10px;}
+.hist-row-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.hist-row-txt{min-width:0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+.hist-row-tipo{font-size:13.5px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-row-area{font-size:11.5px;color:var(--t3);white-space:nowrap;}
+.hist-row-autor{width:190px;flex-shrink:0;font-size:12.5px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-row-data{width:88px;flex-shrink:0;font-size:12px;color:var(--t3);}
+.hist-row-acts{width:112px;flex-shrink:0;display:flex;gap:4px;justify-content:flex-end;opacity:0;transition:opacity .12s;}
+.hist-row:hover .hist-row-acts,.hist-row:focus-within .hist-row-acts{opacity:1;}
+.hca-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;width:26px;height:26px;padding:0;border-radius:6px;border:1px solid var(--bd);background:var(--card);color:var(--t2);cursor:pointer;font-size:11.5px;font-weight:600;font-family:inherit;transition:all .12s;white-space:nowrap;}
 .hca-btn:hover{border-color:var(--bd-md);background:var(--bd);}
 .hca-btn.danger:hover{border-color:var(--err);color:var(--err);background:rgba(220,38,38,.06);}
 .hist-empty{text-align:center;padding:56px 40px;color:var(--t3);font-size:13px;line-height:1.7;}
@@ -977,10 +956,19 @@ html.has-session #screen-login{visibility:hidden;}
   .chat-pane{width:100%;height:50vh;border-right:none;border-bottom:1px solid var(--bd);flex-shrink:0;}
   .doc-pane{height:50vh;}
 
+  /* ── HOME ── */
+  .hd-wrap{padding:20px 16px 32px;}
+  .hd-layout{grid-template-columns:1fr;}
+
   /* ── HISTÓRICO ── */
   .hist-toolbar{flex-direction:column;gap:8px;}
   .hist-area-pills{flex-wrap:wrap;}
   .hist-viewer-hd{flex-wrap:wrap;gap:8px;}
+  .hist-th.th-autor,.hist-row-autor{display:none;}
+  .hist-row-acts{opacity:1;}
+  .hist-row{flex-wrap:wrap;row-gap:4px;}
+  .hist-row-doc{flex-basis:100%;}
+  .hist-row-data{margin-left:26px;}
 
   /* ── ACERVO: table com scroll horizontal ── */
   .ac-table-wrap{overflow-x:auto;}
@@ -1217,7 +1205,6 @@ html.has-session #screen-login{visibility:hidden;}
           <div class="hd-layout">
             <div class="hd-hero">
               <div>
-                <div class="hd-hero-eye">Comece agora</div>
                 <div class="hd-hero-title">Criar uma peça jurídica<br><span>nunca foi tão rápido.</span></div>
                 <div class="hd-hero-sub">Petição, contestação, contrato e muito mais — com o apoio da IA, do início ao documento final.</div>
               </div>
@@ -1263,92 +1250,17 @@ html.has-session #screen-login{visibility:hidden;}
             </div>
           </div>
 
-          <!-- Cards de funcionalidade -->
-          <div class="hd-feats">
-            <div class="hd-feat" onclick="go('acervo')">
-              <div class="hd-feat-ico ic-gold">
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#8A6A22" stroke-width="1.5" stroke-linecap="round"><path d="M3 7a2 2 0 012-2h4l2 2h5a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-              </div>
-              <div class="hd-feat-name">Acervo</div>
-              <div class="hd-feat-desc">Organize PDFs e DOCXs. A IA usa seus documentos como contexto na hora de gerar.</div>
-              <div class="hd-feat-link">Abrir acervo <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg></div>
+          <!-- Peças recentes (fonte única — sem duplicar o resumo acima) -->
+          <div class="hd-panel">
+            <div class="hd-panel-head">
+              <span class="hd-panel-title">Peças recentes</span>
+              <button class="hd-panel-link" onclick="go('historico')">Ver histórico</button>
             </div>
-            <div class="hd-feat" onclick="go('suporte')">
-              <div class="hd-feat-ico ic-blue">
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"><path d="M17 10c0 3.866-3.134 7-7 7a6.978 6.978 0 01-3.5-.934L3 17l.934-3.5A6.978 6.978 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
-              </div>
-              <div class="hd-feat-name">Assistente IA</div>
-              <div class="hd-feat-desc">Tire dúvidas, peça sugestões e obtenha apoio jurídico inteligente em conversa livre.</div>
-              <div class="hd-feat-link">Conversar <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg></div>
-            </div>
-            <div class="hd-feat" onclick="go('modelos')">
-              <div class="hd-feat-ico ic-grn">
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#15803D" stroke-width="1.5" stroke-linecap="round"><rect x="4" y="2" width="12" height="16" rx="2"/><line x1="7" y1="7" x2="13" y2="7"/><line x1="7" y1="10" x2="13" y2="10"/><line x1="7" y1="13" x2="10" y2="13"/></svg>
-              </div>
-              <div class="hd-feat-name">Modelos</div>
-              <div class="hd-feat-desc">Padronize o estilo das suas peças com modelos Word como referência de escrita.</div>
-              <div class="hd-feat-link">Ver modelos <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg></div>
-            </div>
+            <div id="hd-recent-list"><div class="hd-empty">Nenhuma peça ainda. Clique em <strong>Nova peça</strong> para começar.</div></div>
           </div>
 
-          <!-- Insights + Painéis laterais -->
-          <div class="hd-bottom">
-            <div class="hd-insights">
-              <div class="hd-ins-title">Insights rápidos</div>
-              <div class="hd-ins-grid">
-                <div class="hd-ins-item">
-                  <div class="hd-ins-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="12" width="3" height="6" rx="1"/><rect x="8.5" y="8" width="3" height="10" rx="1"/><rect x="15" y="4" width="3" height="14" rx="1"/></svg></div>
-                  <div>
-                    <div class="hd-ins-val" id="hd-semana">–</div>
-                    <div class="hd-ins-lbl">Esta semana</div>
-                    <div class="hd-ins-sub">Peças criadas</div>
-                  </div>
-                </div>
-                <div class="hd-ins-item">
-                  <div class="hd-ins-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="10,2 12.5,7.5 18,8.2 14,12 15.2,17.5 10,14.5 4.8,17.5 6,12 2,8.2 7.5,7.5"/></svg></div>
-                  <div>
-                    <div class="hd-ins-val" style="font-size:13px;padding-top:2px;" id="hd-area-ins">–</div>
-                    <div class="hd-ins-lbl">Área favorita</div>
-                    <div class="hd-ins-sub" id="hd-area-ins-ct">&nbsp;</div>
-                  </div>
-                </div>
-                <div class="hd-ins-item">
-                  <div class="hd-ins-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 2h8l4 4v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><polyline points="12,2 12,6 16,6"/></svg></div>
-                  <div>
-                    <div class="hd-ins-val" style="font-size:13px;padding-top:2px;" id="hd-tipo-ins">–</div>
-                    <div class="hd-ins-lbl">Tipo frequente</div>
-                    <div class="hd-ins-sub" id="hd-tipo-ins-ct">&nbsp;</div>
-                  </div>
-                </div>
-                <div class="hd-ins-item">
-                  <div class="hd-ins-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 7a2 2 0 012-2h4l2 2h5a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
-                  <div>
-                    <div class="hd-ins-val" id="hd-acervo-n">–</div>
-                    <div class="hd-ins-lbl">Docs no acervo</div>
-                    <div class="hd-ins-sub">PDF e DOCX</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="hd-right-col">
-              <div class="hd-panel">
-                <div class="hd-panel-head">
-                  <span class="hd-panel-title">Continue de onde parou</span>
-                  <button class="hd-panel-link" onclick="go('historico')">Ver todos</button>
-                </div>
-                <div id="hd-recent-list"><div class="hd-empty">Nenhuma peça ainda.</div></div>
-              </div>
-              <div class="hd-panel">
-                <div class="hd-panel-head">
-                  <span class="hd-panel-title">Atividade recente</span>
-                </div>
-                <div id="hd-activity-list"><div class="hd-empty">Sem atividade.</div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dica Pandecta -->
-          <div class="hd-tip">
+          <!-- Dica Pandecta — só aparece se o acervo ainda está vazio -->
+          <div class="hd-tip" id="hd-tip" style="display:none">
             <div class="hd-tip-left">
               <div class="hd-tip-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><line x1="10" y1="7" x2="10" y2="10.5"/><circle cx="10" cy="13.5" r="0.6" fill="currentColor"/></svg></div>
               <span><strong>Dica Pandecta:</strong> Adicione documentos ao Acervo para que a IA use como contexto ao gerar suas peças — resultados muito mais precisos.</span>
@@ -1482,7 +1394,15 @@ html.has-session #screen-login{visibility:hidden;}
           <span class="hist-count" id="hist-count"></span>
         </div>
 
-        <div class="hist-grid" id="hist-grid"></div>
+        <div class="hist-table" id="hist-table">
+          <div class="hist-thead">
+            <span class="hist-th th-doc">Documento</span>
+            <span class="hist-th th-autor">Autor</span>
+            <span class="hist-th th-data">Data</span>
+            <span class="hist-th th-acts" aria-hidden="true"></span>
+          </div>
+          <div id="hist-grid"></div>
+        </div>
         <div class="hist-empty" id="hist-empty">Nenhuma peça gerada ainda.<br>Clique em <strong>Nova peça</strong> para começar.</div>
       </div>
       <!-- Viewer / Editor -->
@@ -2562,13 +2482,9 @@ async function loadHomeDash(){
   if(elTotal)elTotal.textContent=total||'0';
   // Este mês
   const now=new Date();
-  const mes=hist.filter(x=>{const d=new Date(x.createdAt);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
+  const mes=hist.filter(x=>{const d=new Date(x.created_at);return !isNaN(d.getTime())&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
   const elMes=document.getElementById('hd-mes');if(elMes)elMes.textContent=mes;
   const elMesLbl=document.getElementById('hd-mes-lbl');if(elMesLbl)elMesLbl.textContent=mes===1?'peça':'peças';
-  // Esta semana
-  const semIni=new Date();semIni.setDate(now.getDate()-now.getDay());semIni.setHours(0,0,0,0);
-  const semana=hist.filter(x=>new Date(x.createdAt)>=semIni).length;
-  const elSem=document.getElementById('hd-semana');if(elSem)elSem.textContent=semana;
   // Tipo principal
   const tipos={};
   hist.forEach(x=>{if(x.tipo)tipos[x.tipo]=(tipos[x.tipo]||0)+1;});
@@ -2577,8 +2493,6 @@ async function loadHomeDash(){
     const label=hist.find(x=>x.tipo===tipoTop[0])?.tipo_label||tipoTop[0];
     const short=label.length>12?label.split(' ')[0]:label;
     const elTipo=document.getElementById('hd-tipo');if(elTipo)elTipo.textContent=short;
-    const elTipoIns=document.getElementById('hd-tipo-ins');if(elTipoIns)elTipoIns.textContent=short;
-    const elTipoCt=document.getElementById('hd-tipo-ins-ct');if(elTipoCt)elTipoCt.textContent=tipoTop[1]+'x gerado'+(tipoTop[1]===1?'':'s');
   }
   // Área principal
   const areas={};
@@ -2589,48 +2503,30 @@ async function loadHomeDash(){
     const pct=total?Math.round(areaTop[1]/total*100):0;
     const elFill=document.getElementById('hd-area-fill');if(elFill)setTimeout(()=>{elFill.style.width=pct+'%';},60);
     const elPct=document.getElementById('hd-area-pct');if(elPct)elPct.textContent=areaTop[1]+' de '+total+' peças são desta área';
-    const elAI=document.getElementById('hd-area-ins');if(elAI)elAI.textContent=areaTop[0];
-    const elACt=document.getElementById('hd-area-ins-ct');if(elACt)elACt.textContent=areaTop[1]+' peça'+(areaTop[1]===1?'':'s');
   }
-  // Acervo count
+  // Acervo — só decide se a dica de onboarding aparece (evita repetir o dado em outro lugar)
   try{
     const ac=await api('GET','/api/acervo');
     const n=Array.isArray(ac)?ac.length:0;
-    const elAc=document.getElementById('hd-acervo-n');if(elAc)elAc.textContent=n;
-  }catch(e){const el=document.getElementById('hd-acervo-n');if(el)el.textContent='0';}
-  // Continue de onde parou (3 mais recentes)
+    const elTip=document.getElementById('hd-tip');if(elTip)elTip.style.display=n?'none':'flex';
+  }catch(e){}
+  // Peças recentes — fonte única (antes duplicada em dois painéis diferentes)
   const rl=document.getElementById('hd-recent-list');
   if(rl){
-    const rec=hist.slice(0,3);
-    if(!rec.length){rl.innerHTML='<div class="hd-empty">Nenhuma peça ainda.</div>';}
+    const rec=hist.slice(0,5);
+    if(!rec.length){rl.innerHTML='<div class="hd-empty">Nenhuma peça ainda. Clique em <strong>Nova peça</strong> para começar.</div>';}
     else{
       rl.innerHTML=rec.map(x=>{
         const lbl=x.tipo_label||x.tipo||'Peça';
         const area=x.area_label||'';
+        const d=new Date(x.created_at);
+        const diff=isNaN(d.getTime())?-1:Math.floor((Date.now()-d)/60000);
+        const tempo=diff<0?'':diff<1?'agora':diff<60?diff+'min':diff<1440?Math.floor(diff/60)+'h':Math.floor(diff/1440)+'d';
         return '<div class="hd-ri" onclick="go(\'historico\')">'
           +'<div class="hd-ri-ico"><svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 2h8l4 4v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><polyline points="12,2 12,6 16,6"/></svg></div>'
           +'<div class="hd-ri-ttl">'+lbl+'</div>'
           +(area?'<div class="hd-ri-tag">'+area+'</div>':'')
-          +'</div>';
-      }).join('');
-    }
-  }
-  // Atividade recente (4 mais recentes)
-  const al=document.getElementById('hd-activity-list');
-  if(al){
-    const act=hist.slice(0,4);
-    if(!act.length){al.innerHTML='<div class="hd-empty">Sem atividade.</div>';}
-    else{
-      al.innerHTML=act.map((x,i)=>{
-        const lbl=x.tipo_label||x.tipo||'Peça';
-        const area=x.area_label||'';
-        const d=new Date(x.created_at||x.createdAt);
-        const diff=isNaN(d.getTime())?-1:Math.floor((Date.now()-d)/60000);
-        const tempo=diff<0?'':diff<1?'agora':diff<60?diff+'min':diff<1440?Math.floor(diff/60)+'h':Math.floor(diff/1440)+'d';
-        return '<div class="hd-act">'
-          +'<div class="hd-act-dot'+(i>0?' dim':'')+'"></div>'
-          +'<div class="hd-act-info"><div class="hd-act-txt">'+lbl+'</div><div class="hd-act-sub">'+area+'</div></div>'
-          +'<div class="hd-act-time">'+tempo+'</div>'
+          +(tempo?'<div class="hd-ri-time">'+tempo+'</div>':'')
           +'</div>';
       }).join('');
     }
@@ -3668,6 +3564,16 @@ async function loadHistorico(){
   try{sessionHistory=await api('GET','/api/history');}catch(e){sessionHistory=[];}
   renderHistorico();
 }
+function areaKeyFromLabel(label){
+  const n=(label||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  if(n.includes('consumidor'))return'consumidor';
+  if(n.includes('trabalhista'))return'trabalhista';
+  if(n.includes('familia'))return'familia';
+  if(n.includes('empresarial'))return'empresarial';
+  if(n.includes('tributario'))return'tributario';
+  if(n.includes('civil'))return'civil';
+  return'';
+}
 function renderHistorico(){
   const grid=document.getElementById('hist-grid'),empty=document.getElementById('hist-empty');
   if(!grid)return;
@@ -3681,29 +3587,24 @@ function renderHistorico(){
   empty.style.display=items.length?'none':'block';
   if(!items.length&&sessionHistory.length) empty.textContent='Nenhuma peça encontrada para essa busca.';
   else if(!items.length) empty.innerHTML='Nenhuma peça gerada ainda.<br>Clique em <strong>Nova peça</strong> para começar.';
-  const AREA_COLOR={consumidor:'#C9A84C',civil:'#3b82f6',trabalhista:'#10b981',familia:'#8b5cf6',empresarial:'#f59e0b',tributario:'#ef4444'};
-  const AREA_ICON={consumidor:'carrinho',civil:'colunas',trabalhista:'capacete',familia:'familia',empresarial:'predio',tributario:'dinheiro'};
+  const AREA_COLOR={consumidor:'#B08A2E',civil:'#3b6fd6',trabalhista:'#158f5f',familia:'#7c5cd6',empresarial:'#c07a13',tributario:'#c0392b'};
   grid.innerHTML=items.map(item=>{
-    const preview=(item.texto||'').replace(/#+\s*/g,'').replace(/\*+/g,'').replace(/\n+/g,' ').trim().slice(0,110);
-    const areaKey=(item.area||'').toLowerCase();
-    const cor=AREA_COLOR[areaKey]||'var(--gold)';
-    const icone=AREA_ICON[areaKey]||'documento';
+    const areaKey=areaKeyFromLabel(item.area_label);
+    const cor=AREA_COLOR[areaKey]||'var(--t3)';
     const dataFmt=fmtDate(item.created_at).replace(/,.*$/,'').trim();
-    return`<div class="hist-card">
-      <div class="hist-card-stripe" style="background:${cor}"></div>
-      <div class="hist-card-body" onclick="abrirViewer(${item.id})">
-        <div class="hist-tipo" style="color:${cor}">${icone} ${esc(item.tipo_label||'')} &middot; ${esc(item.area_label||'')}</div>
-        <div class="hist-autor">${esc(item.autor||'Sem autor')}</div>
-        <div class="hist-meta">${esc(dataFmt)}</div>
-        ${preview?`<div class="hist-preview">${esc(preview)}…</div>`:''}
+    return`<div class="hist-row" onclick="abrirViewer(${item.id})" tabindex="0" onkeydown="if(event.key==='Enter')abrirViewer(${item.id})">
+      <div class="hist-row-doc">
+        <span class="hist-row-dot" style="background:${cor}"></span>
+        <span class="hist-row-txt">
+          <span class="hist-row-tipo">${esc(item.tipo_label||'Peça')}</span>
+          <span class="hist-row-area">${esc(item.area_label||'')}</span>
+        </span>
       </div>
-      <div class="hist-card-footer">
-        <span style="font-size:12px;color:var(--t3);font-weight:500;">${item.usuario?esc(item.usuario):''}</span>
-        <div class="hist-card-acts">
-          <button class="hca-btn" onclick="event.stopPropagation();abrirViewer(${item.id})" title="Abrir e editar"><svg width="15" height="15" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.4 3.3a1.9 1.9 0 0 1 2.7 2.7L7.5 15.6l-3.6 1 1-3.6z"/><path d="M13.1 4.6l2.7 2.7"/></svg><span>Abrir</span></button>
-          <button class="hca-btn" onclick="event.stopPropagation();copiarHistById(${item.id})" title="Copiar texto" aria-label="Copiar texto"><svg width="15" height="15" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.6" y="7.6" width="11" height="11" rx="1.8"/><path d="M4.4 14.4h-.6a1.8 1.8 0 0 1-1.8-1.8V3.8A1.8 1.8 0 0 1 3.8 2h8.8a1.8 1.8 0 0 1 1.8 1.8v.6"/></svg></button>
-          <button class="hca-btn danger" onclick="event.stopPropagation();deletarHistById(${item.id})" title="Excluir peça" aria-label="Excluir peça"><svg width="15" height="15" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 5.8h14.8"/><path d="M8.2 5.8V4.4a1.5 1.5 0 0 1 1.5-1.5h2.6a1.5 1.5 0 0 1 1.5 1.5v1.4"/><path d="M5.4 5.8v12.1a1.5 1.5 0 0 0 1.5 1.5h8.2a1.5 1.5 0 0 0 1.5-1.5V5.8"/><path d="M9.2 9.6v6M12.8 9.6v6"/></svg></button>
-        </div>
+      <div class="hist-row-autor">${esc(item.autor||item.usuario||'—')}</div>
+      <div class="hist-row-data">${esc(dataFmt)}</div>
+      <div class="hist-row-acts">
+        <button class="hca-btn" onclick="event.stopPropagation();copiarHistById(${item.id})" title="Copiar texto" aria-label="Copiar texto"><svg width="14" height="14" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.6" y="7.6" width="11" height="11" rx="1.8"/><path d="M4.4 14.4h-.6a1.8 1.8 0 0 1-1.8-1.8V3.8A1.8 1.8 0 0 1 3.8 2h8.8a1.8 1.8 0 0 1 1.8 1.8v.6"/></svg></button>
+        <button class="hca-btn danger" onclick="event.stopPropagation();deletarHistById(${item.id})" title="Excluir peça" aria-label="Excluir peça"><svg width="14" height="14" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 5.8h14.8"/><path d="M8.2 5.8V4.4a1.5 1.5 0 0 1 1.5-1.5h2.6a1.5 1.5 0 0 1 1.5 1.5v1.4"/><path d="M5.4 5.8v12.1a1.5 1.5 0 0 0 1.5 1.5h8.2a1.5 1.5 0 0 0 1.5-1.5V5.8"/><path d="M9.2 9.6v6M12.8 9.6v6"/></svg></button>
       </div>
     </div>`;
   }).join('');
