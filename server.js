@@ -340,7 +340,7 @@ app.post('/api/cadastro', (req, res) => {
     );
 
     const token = jwt.sign(
-      { userId: r.lastInsertRowid, email: email.trim().toLowerCase(), nome: nomeCompleto, role: 'user', plan, account_status: 'trial' },
+      { userId: r.lastInsertRowid, email: email.trim().toLowerCase(), nome: nomeCompleto, role: 'user', plan, account_status: 'trial', is_pioneer: 0 },
       JWT_SECRET, { expiresIn: '7d' }
     );
 
@@ -360,7 +360,8 @@ app.post('/api/cadastro', (req, res) => {
     );
 
     res.json({ token, nome: nomeCompleto, email: email.trim().toLowerCase(),
-               role: 'user', plan, account_status: 'trial', trial_days: 7 });
+               role: 'user', plan, account_status: 'trial', trial_days: 7,
+               is_pioneer: 0, trial_expires_at: trialExpires });
   } catch (e) {
     if (e.message.includes('UNIQUE')) return res.status(409).json({ error: 'Este e-mail j\u00e1 est\u00e1 cadastrado.' });
     res.status(500).json({ error: e.message });

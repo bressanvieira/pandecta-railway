@@ -236,7 +236,7 @@ Documento completo no Obsidian: `🎯 Plano Mestre/11 - Protocolo Anti-Eu.md`
 - [ ] Mostrar Sistema de Modelos para o Fabiano (não sabe que existe — é o diferencial que ele mais pediu)
 - [ ] Aguardar resultado do impulsionamento Instagram
 
-### Pré-ExpoLaw (Outubro 2026)
+### Sem prazo — dependem de validação
 - [ ] Histórico com visualizador papel (igual ao pós-geração)
 - [ ] Busca ao vivo em jurisprudência
 - [ ] Sistema de pagamento + reativar trial — **pausado até validar com mais advogados**
@@ -245,4 +245,108 @@ Documento completo no Obsidian: `🎯 Plano Mestre/11 - Protocolo Anti-Eu.md`
 - [ ] Login com Google (OAuth 2.0)
 - [ ] Domínio pandecta.ai
 
-**Deadline: ExpoLaw — Outubro 2026**
+**ExpoLaw/Out-2026 descartada em 23/08/2026.** Decisão do Maurício: não apresentar em feira sem advogados além do Fabiano tendo usado e aprovado.
+
+**META QUE SUBSTITUIU A FEIRA — 30/09/2026: 3 advogados com peça protocolada.** Fabiano é 1 de 3. É o único prazo externo que existe. Toda sexta: *"Quantos advogados abordei essa semana?"*
+
+### Redesign visual — estado em 23/08/2026
+
+**Direção travada.** Padrão da categoria executado em fidelidade total, régua **Harvey / Ironclad / Spellbook**.
+Sistema completo em `DESIGN.md`; verdade de produto em `PRODUCT.md`. Ler os dois antes de mexer em qualquer tela.
+
+**Regra de verificação — obrigatória antes de todo push:**
+```powershell
+node validate.js
+node <skill>/scripts/detect.mjs --json public/<arquivo>.html   # meta: zero na landing
+```
+A skill `impeccable` está instalada. O detector precisa de `htmlparser2 css-select css-tree domutils`
+no `node_modules` da skill, senão roda degradado e subnotifica.
+
+**Concluído**
+- `public/landing.html` — reconstruída. Detector: 35 → **0**. NÃO publicada: sobe junto com o app.
+- `public/cadastro.html` e a tela de login — refeitas no mesmo sistema.
+- `public/index.html` — camada de tokens trocada e 142 emoji → 40 ícones SVG. Detector: 185 → **82** → **10** (23/08, passe tela a tela).
+
+**Passe tela a tela (23/08/2026) — concluído**
+Todas as 10 telas do app (início, histórico, acervo, modelos, equipe, configurações, suporte, canal
+pioneiro, admin, tickets) mais o assistente e o construtor de peças foram verificadas com captura real
+via Playwright — sem erro de JS, sem ícone quebrado. Correções aplicadas:
+- 37 textos abaixo de 11px e 2 casos de texto de corpo pequeno demais — todos para 11-12px.
+- 9 botões dourados com texto ilegível (`var(--gold)` + `#001B2A`, o texto navy antigo não bate mais
+  com o dourado escuro novo) — texto para branco.
+- Ícones fora de contraste em 3 pontos (cartão Acervo na home, modal de trial, badge do modelo).
+- Modal "Nova mensagem" do Canal Pioneiro tinha texto escuro sobre fundo `#16213a` — quase invisível.
+  Corrigido para texto claro; também tinha um atributo `style=""` duplicado no mesmo elemento (o
+  segundo era ignorado pelo navegador) — mesclado.
+- 7 modais/tooltips com sombra de 48-64px de blur (o "brilho genérico de IA") — trocados por elevação
+  discreta em duas camadas, mesma linguagem do `--shadow-lg` da landing.
+- 4 cartões do admin com borda colorida no topo (padrão de dashboard genérico) — removida.
+- Roxo `#7C3AED` fora da paleta (cartão admin + badge do plano Escritório) — trocado por `var(--blue)`.
+- Pulso de destaque do tour (`tour-pulse`) tinha um halo colorido borrado — removido, ficou só o anel sólido.
+- `.topbar` sem respiro vertical (`padding:0 20px`) em 11 pontos, incluindo a versão mobile que zerava
+  de novo — agora `padding:6px 20px` (e `6px 12px 6px 56px` no mobile).
+- Hover de botões dourados no construtor de peças (`.gwiz-next`, `.gab-prim`) clareava a cor e quebrava
+  o contraste do texto branco — agora escurece com `opacity`.
+
+**24/08 — construtor de peças (`#screen-gen`) convertido de escuro pra claro.**
+Maurício apontou o problema certo: uma tela inteira mudando de clara pra escura no meio do fluxo é
+exatamente o tipo de "surpresa" que a régua de padronização proíbe — quem entra pelo site não pode achar
+que caiu numa ferramenta diferente. A exceção que eu tinha documentado sozinho (23/08, "modo de composição
+focado") foi revertida. Agora `#screen-gen` usa os mesmos tokens de todo o resto: `.gwiz-*` (seleção de
+tipo/área/partes/fatos), `.gdoc-*` (geração e visualizador) e `.gab-*` (ações do documento) todos em
+`var(--card)`/`var(--t1)`/`var(--gold)`, sem nenhum `rgba(255,255,255,x)` ou hex escuro sobrando. O
+visualizador de documento (`.doc-paper`) já era claro — só a moldura ao redor dele (`.gdoc-body`) que
+ficava escura durante o streaming; agora fica em `var(--surface)` o tempo todo, sem trocar de tema entre
+"gerando" e "pronto". Também tirei os overrides `#screen-gen.active .tb-*` — a barra superior dessa tela
+usa o mesmo `.topbar` claro de qualquer outra.
+
+**Um único navy, não três.** Achei três tons de "escuro" fazendo o mesmo papel em lugares diferentes:
+`#0D1B2A` na landing (rodapé/CTA), `#111827` no card de destaque da home, `#0C1020` no construtor antigo
+e nos avatares de chat. Criei o token `--navy: #0D1B2A` no `index.html` — mesmo valor exato da landing —
+e apontei todos os usos pra ele. Esse é o único preto-azulado que existe no produto agora; se precisar de
+um acento escuro em algum lugar novo, é esse.
+
+**Aceito como exceção documentada (6 achados restantes no detector, todos "warning", não "slop")**
+- 3 pontinhos pulsantes (`.td`, `.gen-dot`, `.smsg-dot`) — indicador de "digitando"/"gerando", dado real
+  em andamento, não decoração. É exatamente o caso que a regra da skill permite.
+- 2 barras de progresso com `transition: width` — teoricamente devia ser `transform`, mas são preenchimentos
+  que só animam uma vez; risco de regressão maior que o ganho de trocar por `scaleX`.
+- 1 contêiner estrutural (`.ac-table-wrap`) sinalizado como "sem respiro" — dar padding quebraria o
+  encaixe do cabeçalho da tabela com a borda arredondada. Não é conteúdo, é a casca.
+
+**Tokens do app (`:root` do index.html)**
+- Cromo (barra lateral) em **grafite `#16191E`**, não azul-marinho — o navy+dourado é o que a concorrência copiou.
+- Conteúdo em **papel branco**. O creme saiu da interface e ficou só em `--paper: #FDFBF6`, a folha da peça.
+- Dourado tem dois tons: `--gold #8A6A22` sobre claro (passa AA); `--gold-lt #D3B667` só sobrava pra uso
+  sobre escuro e, com o construtor de peças convertido, praticamente não tem mais onde aparecer.
+- Único acento escuro do produto: `--navy #0D1B2A` — mesmo valor da landing, usado com parcimônia (card
+  de destaque da home, avatares de chat/IA).
+- Fonte: **Libre Franklin** (Inter saiu). Source Serif 4 só no corpo da peça.
+
+**Sistema de ícones**
+- Registro `ICONS` + função `ico(nome, tamanho)` no topo do script principal do `index.html`.
+- Traço 1.6, `viewBox 0 0 22 22`, `currentColor`. **Nunca voltar a usar emoji como ícone.**
+- Cuidado: `wizard._render()` escreve o botão "Próximo" com `innerHTML` — se alguém trocar por
+  `textContent`, o SVG da seta some a cada passo.
+
+**Sessão / auto-login (3 bugs corrigidos em 23/08)**
+1. `cadastro.html` gravava a sessão como `token`/`usuario`; o app lê `pandecta_token`/`pandecta_user`. Corrigido.
+2. O app não tinha entrada automática — todo usuário refazia login em toda visita, mesmo com token válido
+   de 7 dias. Agora `bootSessao()` valida contra `/api/auth/me` e entra direto; token inválido cai no login limpo.
+3. `checkTourPopup()` não existia (é `checkTourAutoShow()`); o ReferenceError bloqueava o tour e o
+   `checkTrialExpired()` depois de todo login.
+
+**Falta fazer, em ordem**
+- [x] ~~37 textos de interface abaixo de 11px e 13 casos de espaçamento apertado~~ — feito 23/08 (ver "Passe tela a tela" acima)
+- [x] ~~Passar tela a tela: home, historico, acervo, modelos, equipe, config, suporte, pioneer, admin, tickets~~ — feito 23/08, todas verificadas com captura real
+- [x] ~~Tela "Nova peça" (`#screen-gen`)~~ — feito 24/08: convertida de escuro pra claro, mesmo sistema do
+      resto do app. Ver "construtor de peças convertido" acima.
+- [x] ~~Recapturar `shot-*.webp` com a ferramenta redesenhada e trocar na landing~~ — feito 23/08, e
+      `shot-wizard.webp` recapturado de novo em 24/08 depois da conversão do construtor pra claro (a
+      primeira versão mostrava a tela escura antiga — corrigido antes de publicar).
+- [ ] Publicar site + app no mesmo deploy
+
+**Decisão comercial pendente do Maurício:** a landing diz "7 dias grátis" em 3 lugares; o cadastro diz
+"gratuito durante a fase de validação". O `server.js` está com o bloqueio de trial comentado, ou seja,
+hoje é gratuito. Alinhar as duas pontas quando ele decidir.
+

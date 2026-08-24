@@ -3,1358 +3,762 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandecta AI — Inteligência Jurídica para Advogados</title>
-  <meta name="description" content="Gere petições, contratos e recursos com precisão técnica. O assistente jurídico com IA que aprende com o seu escritório.">
+  <title>Pandecta AI — Inteligência jurídica para advogados brasileiros</title>
+  <meta name="description" content="A Pandecta transforma os fatos do caso em petição, contestação, recurso ou contrato — fundamentada, no estilo do seu escritório e pronta para protocolar.">
+  <meta name="theme-color" content="#0D1B2A">
+  <link rel="icon" href="/icone-pandecta.webp">
+
+  <meta property="og:title" content="Pandecta AI — Inteligência jurídica para advogados brasileiros">
+  <meta property="og:description" content="Dos fatos do caso à peça pronta para protocolar, no estilo do seu escritório.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pandecta.com.br/">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 
-    :root {
-      --navy:     #0D1B2A;
-      --navy2:    #122033;
-      --navy3:    #1a2d44;
-      --gold:     #C9A84C;
-      --gold-lt:  #d4b668;
-      --gold-bg:  rgba(201,168,76,.08);
-      --gold-bd:  rgba(201,168,76,.25);
-      --white:    #ffffff;
-      --off:      #f7f5f0;
-      --t1:       #0D1B2A;
-      --t2:       #3a4a5c;
-      --t3:       #7a8a9a;
-      --bdr:      #e8e4dc;
-      --r:        12px;
-    }
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   TOKENS
+   ══════════════════════════════════════════════════════════════════ */
+:root{
+  --paper:#FFFFFF;
+  --surface:#F6F6F3;
+  --surface-2:#EFEEE9;
+  --navy:#0D1B2A;
+  --navy-2:#14263A;
+  --navy-3:#1D3348;
+  --ink:#101A24;
+  --ink-2:#46525E;
+  --ink-3:#636C76;
+  --line:#E3E2DD;
+  --line-2:#D2D1CA;
+  --gold:#8A6A22;
+  --gold-on-navy:#D3B667;
+  --green:#2F6B4F;
 
-    html { scroll-behavior: smooth; }
+  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px; --sp-5:24px;
+  --sp-6:32px; --sp-7:48px; --sp-8:64px; --sp-9:96px; --sp-10:128px;
 
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--t1);
-      background: var(--white);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+  --shadow-sm:0 1px 2px rgba(16,26,36,.06);
+  --shadow-md:0 1px 3px rgba(16,26,36,.06), 0 5px 12px -5px rgba(16,26,36,.17);
+  --shadow-lg:0 2px 5px rgba(16,26,36,.07), 0 14px 24px -10px rgba(16,26,36,.24);
 
-    /* ── NAV ──────────────────────────────────────────────────────────── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 40px; height: 64px;
-      background: rgba(13,27,42,.96);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(201,168,76,.15);
-    }
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none;
-    }
-    .nav-logo img { height: 38px; }
-    .nav-logo-text {
-      font-size: 17px; font-weight: 700; color: var(--white);
-      letter-spacing: -.3px;
-    }
-    .nav-logo-text span { color: var(--gold); }
-    .nav-right { display: flex; align-items: center; gap: 16px; }
-    .nav-link {
-      font-size: 13.5px; color: rgba(255,255,255,.65);
-      text-decoration: none; transition: color .15s;
-    }
-    .nav-link:hover { color: var(--white); }
-    .btn-nav {
-      padding: 8px 20px;
-      background: var(--gold); color: var(--navy);
-      border: none; border-radius: 8px;
-      font-size: 13.5px; font-weight: 600;
-      cursor: pointer; text-decoration: none;
-      transition: opacity .15s;
-    }
-    .btn-nav:hover { opacity: .88; }
+  --ease:cubic-bezier(.16,1,.3,1);
+  --measure:66ch;
+}
 
-    /* ── HERO ─────────────────────────────────────────────────────────── */
-    .hero {
-      background: var(--navy);
-      padding: 140px 40px 100px;
-      text-align: center;
-      position: relative; overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
-      width: 800px; height: 800px;
-      background: radial-gradient(circle, rgba(201,168,76,.08) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    /* marca d'água decorativa do ícone P */
-    .brand-watermark {
-      position: absolute;
-      pointer-events: none;
-      z-index: 0;
-      opacity: .035;
-      user-select: none;
-      mix-blend-mode: screen;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 5px 14px;
-      background: var(--gold-bg); border: 1px solid var(--gold-bd);
-      border-radius: 20px;
-      font-size: 12px; font-weight: 500; color: var(--gold);
-      margin-bottom: 28px;
-    }
-    .hero-badge::before { content: '●'; font-size: 8px; }
-    .hero h1 {
-      font-size: clamp(36px, 5vw, 60px);
-      font-weight: 800; line-height: 1.1;
-      color: var(--white);
-      letter-spacing: -1.5px;
-      max-width: 820px; margin: 0 auto 24px;
-    }
-    .hero h1 em {
-      font-style: normal; color: var(--gold);
-    }
-    .hero-sub {
-      font-size: clamp(16px, 2vw, 19px);
-      color: rgba(255,255,255,.6);
-      max-width: 600px; margin: 0 auto 44px;
-      line-height: 1.65;
-    }
-    .hero-ctas {
-      display: flex; align-items: center; justify-content: center;
-      gap: 14px; flex-wrap: wrap;
-    }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 32px;
-      background: var(--gold); color: var(--navy);
-      border: none; border-radius: 10px;
-      font-size: 15px; font-weight: 700;
-      cursor: pointer; text-decoration: none;
-      transition: all .15s;
-      box-shadow: 0 4px 24px rgba(201,168,76,.3);
-    }
-    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px;
-      background: transparent; color: rgba(255,255,255,.8);
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 10px;
-      font-size: 15px; font-weight: 500;
-      cursor: pointer; text-decoration: none;
-      transition: all .15s;
-    }
-    .btn-secondary:hover { border-color: rgba(255,255,255,.5); color: var(--white); }
-    .hero-note {
-      margin-top: 20px;
-      font-size: 12px; color: rgba(255,255,255,.35);
-    }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
 
-    /* ── MOCKUP ───────────────────────────────────────────────────────── */
-    .mockup-wrap {
-      background: var(--navy);
-      padding: 0 40px 80px;
-      display: flex; justify-content: center;
-    }
-    .mockup {
-      width: 100%; max-width: 900px;
-      background: var(--navy2);
-      border: 1px solid rgba(201,168,76,.15);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 40px 80px rgba(0,0,0,.5);
-    }
-    .mockup-bar {
-      padding: 12px 18px;
-      background: rgba(0,0,0,.3);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .mockup-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-    }
-    .mockup-dot:nth-child(1) { background: #ff5f57; }
-    .mockup-dot:nth-child(2) { background: #febc2e; }
-    .mockup-dot:nth-child(3) { background: #28c840; }
-    .mockup-url {
-      flex: 1; text-align: center;
-      font-size: 11px; color: rgba(255,255,255,.3);
-    }
-    .mockup-body {
-      display: flex; min-height: 340px;
-    }
-    .mockup-sidebar {
-      width: 200px; padding: 20px 14px;
-      background: rgba(0,0,0,.2);
-      border-right: 1px solid rgba(255,255,255,.06);
-      display: flex; flex-direction: column; gap: 4px;
-      flex-shrink: 0;
-    }
-    .mockup-logo-row {
-      display: flex; align-items: center; gap: 8px;
-      padding: 0 4px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      margin-bottom: 8px;
-    }
-    .mockup-logo-ico {
-      width: 24px; height: 24px;
-      background: var(--gold); border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .mockup-logo-ico svg { width: 14px; height: 14px; }
-    .mockup-brand-text { font-size: 12px; font-weight: 700; color: var(--white); }
-    .mockup-nav-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 7px 10px; border-radius: 7px;
-      font-size: 12px; color: rgba(255,255,255,.5);
-    }
-    .mockup-nav-item.active {
-      background: rgba(201,168,76,.1);
-      color: var(--gold);
-    }
-    .mockup-nav-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: currentColor; flex-shrink: 0;
-    }
-    .mockup-main { flex: 1; padding: 24px; }
-    .mockup-tag {
-      display: inline-block;
-      padding: 3px 10px; border-radius: 20px;
-      background: var(--gold-bg); border: 1px solid var(--gold-bd);
-      font-size: 10px; font-weight: 600; color: var(--gold);
-      text-transform: uppercase; letter-spacing: .5px;
-      margin-bottom: 14px;
-    }
-    .mockup-h { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 12px; }
-    .mockup-lines { display: flex; flex-direction: column; gap: 6px; }
-    .mockup-line {
-      height: 8px; border-radius: 4px;
-      background: rgba(255,255,255,.08);
-    }
-    .mockup-line.w100 { width: 100%; }
-    .mockup-line.w85  { width: 85%; }
-    .mockup-line.w70  { width: 70%; }
-    .mockup-line.w90  { width: 90%; }
-    .mockup-line.w60  { width: 60%; }
-    .mockup-cursor {
-      display: inline-block; width: 2px; height: 14px;
-      background: var(--gold); margin-left: 4px;
-      animation: blink 1s step-end infinite; vertical-align: middle;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Libre Franklin',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:17px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-feature-settings:'kern' 1;
+}
 
-    /* ── GERAÇÃO ANIMADA ─────────────────────────────────────────────── */
-    .gen-stream { display: flex; flex-direction: column; gap: 5px; overflow: hidden; max-height: 120px; }
-    .gen-line {
-      height: 9px; border-radius: 5px;
-      background: linear-gradient(90deg, rgba(201,168,76,.5) 0%, rgba(201,168,76,.15) 100%);
-      transform-origin: left;
-      animation: growLine 0.4s ease forwards;
-      opacity: 0;
-    }
-    .gen-line.dim {
-      background: linear-gradient(90deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,.04) 100%);
-    }
-    @keyframes growLine {
-      from { opacity: 0; transform: scaleX(0); }
-      to   { opacity: 1; transform: scaleX(1); }
-    }
-    .gen-progress {
-      height: 2px; border-radius: 1px;
-      background: rgba(255,255,255,.06); margin: 16px 0 12px;
-      overflow: hidden;
-    }
-    .gen-progress-bar {
-      height: 100%; border-radius: 1px;
-      background: linear-gradient(90deg, var(--gold), var(--gold-lt));
-      animation: progressAnim 4.5s ease-in-out infinite;
-    }
-    @keyframes progressAnim {
-      0%   { width: 0%; }
-      60%  { width: 85%; }
-      100% { width: 92%; }
-    }
-    .gen-status {
-      font-size: 11px; color: var(--gold);
-      display: flex; align-items: center; gap: 6px;
-      margin-bottom: 14px; font-weight: 500;
-    }
-    .gen-status-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--gold);
-      animation: pulse 1.2s ease-in-out infinite;
-    }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
-    .gen-section-label {
-      font-size: 10px; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 1px;
-      color: rgba(255,255,255,.3); margin: 12px 0 8px;
-    }
+/* browser surfaces — themed, not left to defaults */
+::selection{background:rgba(138,106,34,.18);color:var(--ink);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px;}
+*{scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;}
+*::-webkit-scrollbar{width:10px;height:10px;}
+*::-webkit-scrollbar-thumb{background:var(--line-2);border:3px solid var(--paper);border-radius:8px;}
+*::-webkit-scrollbar-track{background:transparent;}
 
-    /* ── LOGOS / TRUST ─────────────────────────────────────────────────── */
-    .trust {
-      background: var(--off);
-      padding: 40px;
-      text-align: center;
-      border-top: 1px solid var(--bdr);
-    }
-    .trust-text {
-      font-size: 12px; font-weight: 500;
-      text-transform: uppercase; letter-spacing: 1px;
-      color: var(--t3); margin-bottom: 24px;
-    }
-    .trust-items {
-      display: flex; align-items: center; justify-content: center;
-      gap: 40px; flex-wrap: wrap;
-    }
-    .trust-item {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 13px; font-weight: 500; color: var(--t2);
-    }
-    .trust-icon { font-size: 18px; }
+img{max-width:100%;height:auto;display:block;}
+a{color:inherit;text-decoration:none;}
+strong{font-weight:600;}
 
-    /* ── FEATURES ─────────────────────────────────────────────────────── */
-    .section {
-      padding: 96px 40px;
-      max-width: 1100px; margin: 0 auto;
-    }
-    .section-label {
-      font-size: 11px; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 1.5px;
-      color: var(--gold); margin-bottom: 16px;
-    }
-    .section-h {
-      font-size: clamp(28px, 3.5vw, 42px);
-      font-weight: 800; line-height: 1.15;
-      letter-spacing: -.8px; color: var(--t1);
-      max-width: 600px; margin-bottom: 16px;
-    }
-    .section-sub {
-      font-size: 17px; color: var(--t2);
-      max-width: 520px; margin-bottom: 56px; line-height: 1.65;
-    }
-    .features-wrap {
-      background: var(--navy);
-      padding: 96px 40px;
-      position: relative;
-      overflow: hidden;
-    }
-    .features-wrap .section-label { color: var(--gold); }
-    .features-wrap .section-h { color: var(--white); }
-    .features-wrap .section-sub { color: rgba(255,255,255,.5); }
-    .features-inner { max-width: 1100px; margin: 0 auto; }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 16px;
-    }
-    .feature-card {
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 14px;
-      padding: 28px 24px;
-      transition: background .2s, border-color .2s, transform .15s;
-    }
-    .feature-card:hover {
-      background: rgba(255,255,255,.08);
-      border-color: rgba(201,168,76,.35);
-      transform: translateY(-2px);
-    }
-    .feature-icon {
-      width: 44px; height: 44px;
-      background: rgba(201,168,76,.1); border: 1px solid rgba(201,168,76,.25);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; margin-bottom: 18px;
-    }
-    .feature-h {
-      font-size: 15px; font-weight: 700; color: var(--white);
-      margin-bottom: 8px;
-    }
-    .feature-p {
-      font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.65;
-    }
+.shell{max-width:1180px;margin:0 auto;padding:0 32px;}
+.narrow{max-width:820px;}
 
-    /* ── HOW IT WORKS ─────────────────────────────────────────────────── */
-    .how-wrap {
-      background: var(--navy);
-      padding: 96px 40px;
-      position: relative;
-      overflow: hidden;
-    }
-    .how-inner {
-      max-width: 1100px; margin: 0 auto;
-    }
-    .how-wrap .section-label { color: var(--gold); }
-    .how-wrap .section-h { color: var(--white); }
-    .how-wrap .section-sub { color: rgba(255,255,255,.55); }
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 28px; margin-top: 48px;
-    }
-    .step {
-      display: flex; gap: 16px;
-    }
-    .step-num {
-      width: 36px; height: 36px; flex-shrink: 0;
-      background: var(--gold-bg); border: 1px solid var(--gold-bd);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700; color: var(--gold);
-    }
-    .step-h { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
-    .step-p { font-size: 13.5px; color: rgba(255,255,255,.5); line-height: 1.6; }
+h1,h2,h3,h4{text-wrap:balance;letter-spacing:-.02em;line-height:1.1;font-weight:700;}
+h1{font-size:clamp(38px,5vw,60px);letter-spacing:-.024em;line-height:1.04;}
+h2{font-size:clamp(28px,3.4vw,40px);}
+h3{font-size:19px;letter-spacing:-.01em;line-height:1.3;font-weight:600;}
+p{max-width:var(--measure);}
 
-    /* ── AREAS ────────────────────────────────────────────────────────── */
-    .areas-wrap {
-      background: var(--navy);
-      padding: 80px 40px;
-      text-align: center;
-    }
-    .areas-wrap .section-label { color: var(--gold); }
-    .areas-wrap .section-h { color: var(--white); margin: 0 auto 12px; }
-    .areas-wrap .section-sub { color: rgba(255,255,255,.5); margin: 0 auto 48px; }
-    .areas-inner { max-width: 1000px; margin: 0 auto; }
-    .area-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin-bottom: 40px;
-    }
-    .area-card {
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 14px;
-      padding: 24px 20px 20px;
-      text-align: left;
-      transition: background .2s, border-color .2s, transform .15s;
-      cursor: default;
-    }
-    .area-card:hover {
-      background: rgba(255,255,255,.09);
-      border-color: rgba(201,168,76,.35);
-      transform: translateY(-2px);
-    }
-    .area-card.featured {
-      background: rgba(201,168,76,.08);
-      border-color: rgba(201,168,76,.3);
-    }
-    .area-card-icon { font-size: 22px; margin-bottom: 12px; }
-    .area-card-name {
-      font-size: 14px; font-weight: 600;
-      color: var(--white); margin-bottom: 6px; line-height: 1.3;
-    }
-    .area-card-types {
-      font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.5;
-    }
-    .area-docs {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      justify-content: center;
-    }
-    .area-doc-pill {
-      padding: 6px 16px;
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 20px;
-      font-size: 13px; color: rgba(255,255,255,.6);
-    }
+.lede{font-size:19px;line-height:1.6;color:var(--ink-2);}
+.small{font-size:15px;line-height:1.6;color:var(--ink-3);}
+.mark{font-family:'Source Serif 4',Georgia,serif;}
 
-    /* ── PRICING ──────────────────────────────────────────────────────── */
-    .pricing-wrap {
-      padding: 96px 40px;
-      max-width: 900px; margin: 0 auto;
-      text-align: center;
-    }
-    .pricing-wrap .section-h { margin: 0 auto 16px; }
-    .pricing-wrap .section-sub { margin: 0 auto 56px; }
-    .pricing-card {
-      background: var(--navy);
-      border: 1px solid rgba(201,168,76,.2);
-      border-radius: 20px;
-      padding: 48px;
-      position: relative; overflow: hidden;
-    }
-    .pricing-card::before {
-      content: '';
-      position: absolute; top: -100px; right: -100px;
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(201,168,76,.1) 0%, transparent 70%);
-    }
-    .pricing-badge {
-      display: inline-block;
-      padding: 4px 14px; border-radius: 20px;
-      background: var(--gold-bg); border: 1px solid var(--gold-bd);
-      font-size: 11px; font-weight: 600; color: var(--gold);
-      text-transform: uppercase; letter-spacing: .8px;
-      margin-bottom: 24px;
-    }
-    .pricing-price {
-      font-size: 56px; font-weight: 800;
-      color: var(--white); line-height: 1;
-      margin-bottom: 8px;
-    }
-    .pricing-price span {
-      font-size: 22px; font-weight: 500;
-      color: rgba(255,255,255,.5); vertical-align: top; margin-top: 10px; display: inline-block;
-    }
-    .pricing-period {
-      font-size: 14px; color: rgba(255,255,255,.4);
-      margin-bottom: 36px;
-    }
-    .pricing-items {
-      list-style: none; text-align: left;
-      display: inline-grid; grid-template-columns: 1fr 1fr;
-      gap: 12px 40px; margin-bottom: 40px;
-    }
-    .pricing-items li {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 14px; color: rgba(255,255,255,.75);
-    }
-    .pricing-items li::before {
-      content: '✓';
-      color: var(--gold); font-weight: 700; flex-shrink: 0;
-    }
-    .btn-pricing {
-      display: inline-block;
-      padding: 16px 48px;
-      background: var(--gold); color: var(--navy);
-      border-radius: 10px; border: none;
-      font-size: 16px; font-weight: 700;
-      cursor: pointer; text-decoration: none;
-      transition: all .15s;
-      box-shadow: 0 4px 24px rgba(201,168,76,.35);
-    }
-    .btn-pricing:hover { opacity: .9; transform: translateY(-1px); }
-    .pricing-note {
-      margin-top: 14px;
-      font-size: 12px; color: rgba(255,255,255,.3);
-    }
+.sec{padding:var(--sp-9) 0;}
+.sec-hd{margin-bottom:var(--sp-8);}
+.sec-hd p{margin-top:var(--sp-4);font-size:18px;color:var(--ink-2);}
+.rule{height:1px;background:var(--line);border:0;}
 
-    /* ── QUOTE ────────────────────────────────────────────────────────── */
-    .quote-wrap {
-      background: var(--off);
-      padding: 80px 40px;
-      text-align: center;
-      border-top: 1px solid var(--bdr);
-    }
-    .quote {
-      max-width: 700px; margin: 0 auto;
-      font-size: clamp(18px, 2.5vw, 24px);
-      font-weight: 500; line-height: 1.5;
-      color: var(--t1);
-      font-style: italic;
-      margin-bottom: 24px;
-    }
-    .quote-by {
-      font-size: 13px; font-weight: 500;
-      color: var(--t3);
-    }
-    .quote-by strong { color: var(--t1); }
+/* ── buttons ─────────────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:inherit;font-size:15px;font-weight:600;letter-spacing:-.005em;
+  padding:13px 22px;border-radius:6px;border:1px solid transparent;
+  cursor:pointer;white-space:nowrap;
+  transition:background .18s var(--ease),border-color .18s var(--ease),color .18s var(--ease),box-shadow .18s var(--ease),transform .18s var(--ease);
+}
+.btn svg{flex:none;}
+.btn-p{background:var(--navy);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-p:hover{background:var(--navy-2);box-shadow:var(--shadow-md);transform:translateY(-1px);}
+.btn-p:active{transform:translateY(0);}
+.btn-s{background:var(--paper);color:var(--ink);border-color:var(--line-2);}
+.btn-s:hover{border-color:var(--ink-3);background:var(--surface);}
+.btn-ghost{color:var(--ink-2);padding:13px 14px;}
+.btn-ghost:hover{color:var(--ink);}
+.btn-lt{background:#fff;color:var(--navy);}
+.btn-lt:hover{background:var(--surface);transform:translateY(-1px);}
+.btn-on-navy{background:transparent;color:#fff;border-color:rgba(255,255,255,.28);}
+.btn-on-navy:hover{border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);}
+.btn-lg{font-size:16px;padding:15px 26px;}
 
-    /* ── CTA FINAL ─────────────────────────────────────────────────────── */
-    .cta-final {
-      background: var(--navy);
-      padding: 96px 40px;
-      text-align: center;
-    }
-    .cta-final h2 {
-      font-size: clamp(28px, 4vw, 46px);
-      font-weight: 800; line-height: 1.15;
-      color: var(--white); letter-spacing: -1px;
-      max-width: 680px; margin: 0 auto 20px;
-    }
-    .cta-final h2 em { font-style: normal; color: var(--gold); }
-    .cta-final p {
-      font-size: 17px; color: rgba(255,255,255,.55);
-      margin-bottom: 40px;
-    }
+/* ── nav ─────────────────────────────────────────────────────────── */
+nav{
+  position:sticky;top:0;z-index:100;background:rgba(255,255,255,.86);
+  backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .25s var(--ease),background .25s var(--ease);
+}
+nav.stuck{border-bottom-color:var(--line);}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:24px;height:66px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo img{height:24px;width:24px;}
+.nav-logo b{font-size:16px;font-weight:700;letter-spacing:.02em;}
+.nav-logo span{color:var(--gold);font-weight:600;}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-link{font-size:15px;color:var(--ink-2);padding:9px 12px;border-radius:5px;transition:color .15s,background .15s;}
+.nav-link:hover{color:var(--ink);background:var(--surface);}
+.nav-link-mob{display:none;}
+.nav-cta{display:flex;align-items:center;gap:8px;}
+.nav-toggle{display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:9px 11px;cursor:pointer;color:var(--ink);}
 
-    /* ── FOOTER ──────────────────────────────────────────────────────── */
-    footer {
-      background: var(--navy);
-      border-top: 1px solid rgba(255,255,255,.06);
-      padding: 36px 40px;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 16px;
-    }
-    .footer-logo {
-      font-size: 15px; font-weight: 700; color: var(--white);
-    }
-    .footer-logo span { color: var(--gold); }
-    .footer-links { display: flex; gap: 24px; }
-    .footer-link {
-      font-size: 13px; color: rgba(255,255,255,.35);
-      text-decoration: none; transition: color .15s;
-    }
-    .footer-link:hover { color: rgba(255,255,255,.7); }
-    .footer-copy {
-      font-size: 12px; color: rgba(255,255,255,.25);
-      width: 100%; text-align: center; margin-top: 8px;
-    }
+/* ── hero ────────────────────────────────────────────────────────── */
+.hero{padding:clamp(56px,8vw,104px) 0 0;overflow:hidden;}
+.hero-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center;}
+.hero h1{margin-bottom:var(--sp-5);}
+.hero .lede{margin-bottom:var(--sp-6);max-width:46ch;}
+.hero-acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.hero-note{margin-top:var(--sp-4);font-size:14px;color:var(--ink-3);}
 
-    /* ── RESPONSIVE ──────────────────────────────────────────────────── */
+.hero-shot{position:relative;}
+.hero-shot img{
+  width:100%;border-radius:9px;
+  box-shadow:var(--shadow-lg);background:var(--surface);
+}
+.hero-stamp{
+  position:absolute;left:-14px;bottom:26px;
+  background:var(--paper);border:1px solid var(--line);border-radius:7px;
+  padding:12px 16px;box-shadow:var(--shadow-md);max-width:270px;
+}
+.hero-stamp b{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--green);}
+.hero-stamp span{display:block;margin-top:4px;font-size:13px;line-height:1.45;color:var(--ink-3);}
 
-    /* ── GUARDRAILS SECTION ── */
-    .guardrail-wrap {
-      padding: 96px 40px;
-      background: var(--navy);
-      border-top: 1px solid rgba(255,255,255,.06);
-    }
-    .guardrail-inner { max-width: 1100px; margin: 0 auto; }
-    .guardrail-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
-    }
-    .guardrail-label { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #4CAF7A; margin-bottom: 16px; }
-    .guardrail-title { font-size: 36px; font-weight: 800; color: var(--white); line-height: 1.15; margin-bottom: 20px; }
-    .guardrail-title span { color: var(--gold); }
-    .guardrail-desc { font-size: 16px; color: rgba(255,255,255,.55); line-height: 1.7; margin-bottom: 32px; }
-    .guardrail-items { display: flex; flex-direction: column; gap: 14px; }
-    .guardrail-item {
-      display: flex; align-items: flex-start; gap: 14px;
-      padding: 16px 18px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 10px;
-    }
-    .guardrail-item-ico {
-      width: 36px; height: 36px; border-radius: 8px;
-      background: rgba(76,175,122,.12); border: 1px solid rgba(76,175,122,.2);
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .guardrail-item-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
-    .guardrail-item-desc { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.5; }
-    .guardrail-card {
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.09);
-      border-radius: 14px; padding: 24px;
-    }
-    .guardrail-card-hd {
-      display: flex; align-items: center; gap: 10px;
-      padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.07); margin-bottom: 16px;
-    }
-    .guardrail-card-hd-ico {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: rgba(76,175,122,.15); display: flex; align-items: center; justify-content: center;
-    }
-    .guardrail-card-hd-label { font-size: 13px; font-weight: 700; color: var(--white); }
-    .guardrail-card-hd-status { margin-left: auto; font-size: 11px; font-weight: 700; color: #4CAF7A; display: flex; align-items: center; gap: 5px; }
-    .guardrail-card-hd-dot { width: 6px; height: 6px; border-radius: 50%; background: #4CAF7A; animation: pulse-green 2s infinite; }
-    @keyframes pulse-green { 0%,100%{opacity:1;} 50%{opacity:.4;} }
-    .guardrail-check-row {
-      display: flex; align-items: center; gap: 10px; padding: 11px 0;
-      border-bottom: 1px solid rgba(255,255,255,.05);
-    }
-    .guardrail-check-row:last-child { border-bottom: none; }
-    .guardrail-check-ico { width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,.05); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .guardrail-check-label { flex: 1; font-size: 13px; color: rgba(255,255,255,.65); }
-    .guardrail-check-badge { font-size: 11px; font-weight: 700; color: #4CAF7A; background: rgba(76,175,122,.12); border: 1px solid rgba(76,175,122,.2); padding: 3px 8px; border-radius: 20px; }
-    .guardrail-footer-bar {
-      margin-top: 16px; padding: 12px 16px;
-      background: rgba(76,175,122,.08); border: 1px solid rgba(76,175,122,.15); border-radius: 8px;
-      font-size: 12px; color: rgba(255,255,255,.55); display: flex; align-items: center; gap: 8px;
-    }
-    @media (max-width: 700px) {
-      nav { padding: 0 20px; }
-      .hero { padding: 120px 20px 80px; }
-      .mockup-wrap { padding: 0 20px 60px; }
-      .mockup-sidebar { display: none; }
-      .section { padding: 64px 20px; }
-      .how-wrap { padding: 64px 20px; }
-      .areas-wrap { padding: 64px 20px; }
-      .pricing-wrap { padding: 64px 20px; }
-      .pricing-card { padding: 32px 20px; }
-      .pricing-items { grid-template-columns: 1fr; }
-      .cta-final { padding: 64px 20px; }
-      footer { padding: 28px 20px; flex-direction: column; text-align: center; }
-      .footer-links { justify-content: center; }
-      .guardrail-wrap { padding: 64px 20px; }
-      .guardrail-grid { grid-template-columns: 1fr; gap: 40px; }
-      .guardrail-title { font-size: 28px; }
-      .trust-items { gap: 20px; }
-    }
-  </style>
+/* ── proof bar ───────────────────────────────────────────────────── */
+.proof{margin-top:clamp(56px,7vw,88px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface);padding:var(--sp-7) 0;}
+.proof-in{display:grid;grid-template-columns:1.35fr 1fr;gap:clamp(28px,4vw,64px);align-items:center;}
+.proof blockquote{font-family:'Source Serif 4',Georgia,serif;font-size:21px;line-height:1.5;color:var(--ink);max-width:44ch;}
+.proof cite{display:block;margin-top:var(--sp-4);font-family:'Libre Franklin',sans-serif;font-size:14px;font-style:normal;color:var(--ink-3);}
+.proof cite b{color:var(--ink-2);font-weight:600;}
+.proof-facts{display:grid;gap:var(--sp-4);}
+.proof-fact{display:flex;gap:12px;font-size:15px;line-height:1.5;color:var(--ink-2);}
+.proof-fact svg{flex:none;margin-top:3px;color:var(--gold);}
+
+/* ── steps (narrative rows) ──────────────────────────────────────── */
+.row{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center;padding:var(--sp-8) 0;}
+.row + .row{border-top:1px solid var(--line);}
+.sec-hd + .row{padding-top:0;}
+.row-flip .row-txt{order:2;}
+.row-txt h3{font-size:26px;letter-spacing:-.018em;margin-bottom:var(--sp-4);}
+.row-txt p{color:var(--ink-2);}
+.row-txt .small{margin-top:var(--sp-4);}
+.row-shot img{width:100%;border-radius:8px;border:1px solid var(--line);box-shadow:var(--shadow-md);background:var(--surface);}
+figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-3);}
+
+/* ── capability list ─────────────────────────────────────────────── */
+.caps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 clamp(32px,5vw,64px);border-top:1px solid var(--line);}
+.cap{display:grid;grid-template-columns:22px 1fr;gap:16px;padding:var(--sp-5) 0;border-bottom:1px solid var(--line);}
+.cap svg{color:var(--gold);margin-top:3px;}
+.cap h3{font-size:16.5px;margin-bottom:5px;}
+.cap p{font-size:15px;line-height:1.6;color:var(--ink-2);}
+
+/* ── areas ───────────────────────────────────────────────────────── */
+.areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0 clamp(32px,5vw,64px);border-top:1px solid var(--line);}
+.area{padding:var(--sp-5) 0;border-bottom:1px solid var(--line);}
+.area h3{font-size:16.5px;margin-bottom:4px;}
+.area p{font-size:14.5px;line-height:1.55;color:var(--ink-3);}
+.tipos{display:flex;flex-wrap:wrap;gap:8px;margin-top:var(--sp-7);}
+.tipo{font-size:14px;color:var(--ink-2);border:1px solid var(--line-2);border-radius:100px;padding:7px 15px;background:var(--paper);}
+
+/* ── guardrails ──────────────────────────────────────────────────── */
+.guard{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.guard-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:start;}
+.guard-list{display:grid;gap:var(--sp-4);margin-top:var(--sp-6);}
+.guard-item{display:grid;grid-template-columns:20px 1fr;gap:14px;}
+.guard-item svg{color:var(--green);margin-top:4px;}
+.guard-item h3{font-size:15.5px;font-weight:600;letter-spacing:-.005em;margin-bottom:3px;}
+.guard-item p{font-size:14.5px;line-height:1.55;color:var(--ink-2);}
+.guard-panel{background:var(--paper);border:1px solid var(--line);border-radius:9px;box-shadow:var(--shadow-sm);overflow:hidden;}
+.guard-panel-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;border-bottom:1px solid var(--line);font-size:14.5px;font-weight:600;}
+.guard-panel-hd em{font-style:normal;font-size:13px;font-weight:500;color:var(--green);display:flex;align-items:center;gap:6px;}
+.guard-panel-hd em::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);}
+.guard-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px;font-size:14.5px;color:var(--ink-2);}
+.guard-row + .guard-row{border-top:1px solid var(--line);}
+.guard-tag{font-size:12.5px;font-weight:600;color:var(--green);background:rgba(47,107,79,.09);border-radius:4px;padding:3px 9px;}
+.guard-foot{padding:15px 20px;border-top:1px solid var(--line);background:var(--surface);font-size:14px;line-height:1.55;color:var(--ink-2);}
+
+/* ── video ───────────────────────────────────────────────────────── */
+.video-frame{margin-top:var(--sp-7);border:1px solid var(--line);border-radius:9px;overflow:hidden;box-shadow:var(--shadow-md);background:var(--surface-2);}
+.video-frame div{position:relative;padding-top:56.25%;}
+.video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+
+/* ── pricing ─────────────────────────────────────────────────────── */
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:var(--sp-4);align-items:stretch;}
+.plan{border:1px solid var(--line);border-radius:10px;padding:var(--sp-6) var(--sp-5) var(--sp-5);display:flex;flex-direction:column;background:var(--paper);}
+.plan-hi{border-color:var(--navy);box-shadow:var(--shadow-md);}
+.plan-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:var(--sp-5);}
+.plan-name{font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);}
+.plan-flag{font-size:12.5px;font-weight:600;color:var(--paper);background:var(--navy);border-radius:4px;padding:4px 10px;}
+.plan-price{display:flex;align-items:baseline;gap:3px;font-variant-numeric:tabular-nums;}
+.plan-price i{font-style:normal;font-size:19px;font-weight:600;color:var(--ink-2);}
+.plan-price b{font-size:46px;font-weight:700;letter-spacing:-.03em;line-height:1;}
+.plan-meta{margin-top:8px;font-size:14.5px;color:var(--ink-3);}
+.plan ul{list-style:none;margin:var(--sp-5) 0 var(--sp-6);display:grid;gap:11px;}
+.plan li{display:grid;grid-template-columns:17px 1fr;gap:11px;font-size:15px;line-height:1.5;color:var(--ink-2);}
+.plan li svg{color:var(--gold);margin-top:4px;}
+.plan .btn{width:100%;margin-top:auto;}
+.plan-annual{margin-top:12px;text-align:center;font-size:13.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;}
+.plans-note{margin-top:var(--sp-5);text-align:center;font-size:14.5px;color:var(--ink-3);}
+
+/* ── dark fields ─────────────────────────────────────────────────── */
+.dark{background:var(--navy);color:#fff;}
+.dark h2{color:#fff;}
+.dark p{color:rgba(255,255,255,.72);}
+.pioneer{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.pioneer-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center;}
+.pioneer h2 em{font-style:normal;color:var(--gold);}
+.pioneer .lede{margin:var(--sp-5) 0 var(--sp-6);}
+.pioneer-acts{display:flex;flex-wrap:wrap;gap:10px;}
+.pioneer-note{margin-top:var(--sp-4);font-size:14px;color:var(--ink-3);}
+.perks{background:var(--paper);border:1px solid var(--line);border-radius:9px;overflow:hidden;box-shadow:var(--shadow-sm);}
+.perk{padding:17px 20px;display:grid;grid-template-columns:20px 1fr;gap:14px;align-items:start;}
+.perk + .perk{border-top:1px solid var(--line);}
+.perk svg{color:var(--gold);margin-top:3px;}
+.perk b{display:block;font-size:15px;font-weight:600;color:var(--ink);}
+.perk span{font-size:13.5px;color:var(--ink-3);}
+
+.final{background:var(--navy);text-align:center;}
+.final h2{margin-bottom:var(--sp-4);}
+.final p{margin:0 auto var(--sp-6);color:rgba(255,255,255,.7);}
+.final .btn{margin:0 auto;}
+
+/* ── footer ──────────────────────────────────────────────────────── */
+footer{background:var(--paper);color:var(--ink-2);border-top:1px solid var(--line);padding:var(--sp-8) 0 var(--sp-6);font-size:14.5px;}
+.foot-grid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:var(--sp-7);}
+.foot-brand img{height:28px;width:28px;margin-bottom:var(--sp-4);}
+.foot-brand p{font-size:14.5px;line-height:1.6;color:var(--ink-3);max-width:34ch;}
+footer h3{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin-bottom:var(--sp-4);}
+footer ul{list-style:none;display:grid;gap:10px;}
+footer a{transition:color .15s;}
+footer a:hover{color:var(--ink);}
+.foot-bot{margin-top:var(--sp-8);padding-top:var(--sp-5);border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--ink-3);}
+
+/* ── motion: one authored entrance ───────────────────────────────── */
+.rise{opacity:0;transform:translateY(14px);}
+.in .rise{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.in .rise:nth-child(2){transition-delay:.06s;}
+.in .rise:nth-child(3){transition-delay:.12s;}
+.in .rise:nth-child(4){transition-delay:.18s;}
+.reveal{opacity:0;transform:translateY(18px);}
+.reveal.seen{opacity:1;transform:none;transition:opacity .8s var(--ease),transform .8s var(--ease);}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .rise,.reveal{opacity:1!important;transform:none!important;transition:none!important;}
+  .btn{transition:none;}
+}
+
+/* ── responsive ──────────────────────────────────────────────────── */
+@media (max-width:960px){
+  .hero-grid,.proof-in,.row,.guard-grid,.pioneer-grid{grid-template-columns:1fr;}
+  .row-flip .row-txt{order:0;}
+  .row{gap:var(--sp-6);}
+  .hero-shot{margin-top:var(--sp-6);}
+  .hero-stamp{left:0;bottom:-16px;}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:var(--sp-6);}
+  .foot-brand{grid-column:1/-1;}
+}
+@media (max-width:720px){
+  body{font-size:16px;}
+  .shell{padding:0 20px;}
+  .sec{padding:var(--sp-8) 0;}
+  .nav-links{display:none;}
+  .nav-toggle{display:inline-flex;}
+  .nav-cta .btn-ghost{display:none;}
+  .nav-in{gap:12px;}
+  .nav-logo b{white-space:nowrap;font-size:15px;}
+  .nav-logo img{height:22px;width:22px;}
+  .nav-cta .btn-p{padding:11px 16px;font-size:14px;}
+  nav.open .nav-links{
+    display:flex;flex-direction:column;align-items:stretch;gap:2px;
+    position:absolute;left:0;right:0;top:66px;background:var(--paper);
+    border-bottom:1px solid var(--line);padding:12px 20px 18px;box-shadow:var(--shadow-md);
+  }
+  nav.open .nav-link{padding:12px;}
+  nav.open .nav-link-mob{display:block;}
+  .hero-stamp{position:static;max-width:none;margin-top:var(--sp-4);}
+  .foot-grid{grid-template-columns:1fr;}
+}
+</style>
 </head>
 <body>
+<!--
+  THESIS: A prova é a peça. Esta página abre com o documento real que a Pandecta
+  produz e recusa o arranjo padrão da categoria — hero centralizado, grade de seis
+  cards com emoji, três passos numerados, dourado brilhando no escuro.
+  OWN-WORLD: Papel branco como superfície principal, navy da marca reservado a dois
+  campos escuros no fim, ouro escurecido para passar contraste e usado só em ícone e
+  marcador. Libre Franklin para voz institucional, Source Serif 4 no que é documento.
+  Fio de 1px como única moldura; sombra com deslocamento real, nunca halo.
+  STORY: O advogado entende em cinco segundos que isto produz peça protocolável,
+  vê a peça antes da promessa, reconhece o próprio fluxo nas telas reais e assina.
+  FIRST VIEWPORT: Duas colunas. À esquerda a tese em uma linha, subtítulo e duas
+  ações — primária escura. À direita, captura real do visualizador de documento,
+  com o selo de peça protocolada ancorado na borda inferior esquerda da imagem.
+  FORM: saída de sempre — padrão da categoria executado em fidelidade total, régua
+  Harvey / Ironclad / Spellbook, escolhida pelo usuário sobre a mão sorteada. Seed 44fef8bc.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish
+  review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
+-->
 
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="/">
-    <img src="/pandecta-icone.png" alt="P" style="height:44px;width:44px;object-fit:contain;mix-blend-mode:screen;flex-shrink:0;">
-    <span class="nav-logo-text">PANDECTA <span style="color:var(--gold)">AI</span></span>
-  </a>
-  <div class="nav-right">
-    <a class="nav-link" href="#funcionalidades">Funcionalidades</a>
-    <a class="nav-link" href="#precos">Preços</a>
-    <a class="nav-link" href="/pioneiros" style="color:#C9A84C;font-weight:600;">Pioneiros ✦</a>
-    <a class="btn-nav" href="/app">Entrar</a>
+<nav id="nav">
+  <div class="shell nav-in">
+    <a class="nav-logo" href="/" aria-label="Pandecta AI — início">
+      <img src="/icone-pandecta.webp" alt="" width="24" height="24">
+      <b>PANDECTA <span>AI</span></b>
+    </a>
+    <div class="nav-links" id="navlinks">
+      <a class="nav-link" href="#produto">Produto</a>
+      <a class="nav-link" href="#areas">Áreas</a>
+      <a class="nav-link" href="#seguranca">Segurança</a>
+      <a class="nav-link" href="#precos">Preços</a>
+      <a class="nav-link" href="/pioneiros">Programa Pioneiros</a>
+      <a class="nav-link nav-link-mob" href="/app">Entrar na plataforma</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="/app">Entrar</a>
+      <a class="btn btn-p" href="/cadastro">Criar conta</a>
+      <button class="nav-toggle" id="navtoggle" aria-label="Abrir menu" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 5h14M2 9h14M2 13h14"/></svg>
+      </button>
+    </div>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <!-- marca d'água decorativa -->
-  <img src="/pandecta-icone.png" class="brand-watermark" style="width:600px;height:600px;object-fit:contain;top:-80px;right:-80px;opacity:.04;" alt="">
-  <a href="/pioneiros" class="hero-badge" style="text-decoration:none;cursor:pointer;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">Programa Pioneiros — apenas 20 vagas</a>
-  <h1>O conhecimento jurídico do seu escritório, <em>amplificado por IA</em></h1>
-  <p class="hero-sub">
-    Gere petições, contestações, recursos e contratos com rapidez e precisão.
-    A Pandecta respeita os padrões do seu escritório e ajuda sua equipe a produzir mais em menos tempo.
-  </p>
-  <div class="hero-ctas">
-    <a href="/cadastro" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#C9A84C,#d4b668);color:#0D1B2A;font-size:17px;font-weight:800;padding:18px 48px;border-radius:14px;text-decoration:none;letter-spacing:.3px;box-shadow:0 8px 36px rgba(201,168,76,.45);transition:transform .15s,box-shadow .15s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 14px 44px rgba(201,168,76,.6)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 36px rgba(201,168,76,.45)'">
-      ⚡ Comece aqui — 7 dias grátis
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-    </a>
-    <a class="btn-secondary" href="#funcionalidades">Ver funcionalidades</a>
-  </div>
-  <p style="font-size:11.5px;color:rgba(255,255,255,.35);margin-top:14px;">Sem cartão de crédito &bull; Cancele quando quiser</p>
+<!-- ══════════ HERO ══════════ -->
+<header class="hero">
+  <div class="shell hero-grid" id="herogrid">
+    <div>
+      <h1 class="rise">Dos fatos do caso à peça pronta para protocolar.</h1>
+      <p class="lede rise">A Pandecta redige petições, contestações, recursos, contratos e notificações com fundamentação real — no formato e no estilo do seu escritório.</p>
+      <div class="hero-acts rise">
+        <a class="btn btn-p btn-lg" href="/cadastro">
+          Criar conta — 7 dias grátis
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <a class="btn btn-s btn-lg" href="#produto">Ver como funciona</a>
+      </div>
+      <p class="hero-note rise">Sem cartão de crédito. Cancele quando quiser.</p>
+    </div>
 
+    <div class="hero-shot rise">
+      <img src="/shot-documento.webp" width="2000" height="1250" alt="Visualizador da Pandecta exibindo uma petição inicial de direito do consumidor em papel com o timbre do escritório." fetchpriority="high" decoding="async">
+      <div class="hero-stamp">
+        <b>
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 4.5 6.5 11.5 3 8"/></svg>
+          Peça protocolada em juízo
+        </b>
+        <span>Um advogado com 30 anos de prática usou 100% do texto gerado e protocolou o caso.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- prova -->
+  <div class="proof">
+    <div class="shell proof-in">
+      <div>
+        <blockquote class="mark">“Finalmente uma ferramenta que entende direito brasileiro de verdade. Não é um ChatGPT com prompt — é um sistema treinado para o nosso contexto jurídico.”</blockquote>
+        <cite><b>Fabiano</b> — Advogado, 30+ anos de prática, 3 escritórios</cite>
+      </div>
+      <div class="proof-facts">
+        <div class="proof-fact">
+          <svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h7l3 3v11H4z"/><path d="M11 2v3h3"/><path d="M6.5 10.5h5M6.5 13h3"/></svg>
+          <span>Seis áreas com regras processuais próprias: Consumidor, Civil, Trabalhista, Família, Imobiliário e Previdenciário.</span>
+        </div>
+        <div class="proof-fact">
+          <svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 3 4.5v4.2c0 3.4 2.5 6.4 6 7.3 3.5-.9 6-3.9 6-7.3V4.5z"/><path d="M6.6 9 8.4 10.8 11.9 7.3"/></svg>
+          <span>Guardrails em quatro camadas contra instruções ocultas em documentos enviados.</span>
+        </div>
+        <div class="proof-fact">
+          <svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3" width="13" height="12" rx="1.5"/><path d="M2.5 6.5h13M6 3v3.5"/></svg>
+          <span>Exportação em Word usando o seu próprio modelo — cabeçalho, rodapé e logo preservados.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ COMO A PEÇA NASCE ══════════ -->
+<section class="sec" id="produto">
+  <div class="shell">
+    <div class="sec-hd narrow">
+      <h2>Três telas entre o caso e o protocolo.</h2>
+      <p>Sem template genérico e sem copiar e colar. As capturas abaixo são da ferramenta, como ela está hoje.</p>
+    </div>
+
+    <div class="row reveal">
+      <div class="row-txt">
+        <h3>Você descreve o caso</h3>
+        <p>Tipo de peça, área do direito, dados das partes e os fatos relevantes. O construtor conduz passo a passo e aceita um modelo do seu escritório como referência de estilo.</p>
+        <p class="small">Petição inicial, contestação, recurso, manifestação, contrato, parecer e notificação extrajudicial.</p>
+      </div>
+      <figure class="row-shot">
+        <img src="/shot-wizard.webp" width="1600" height="1000" alt="Construtor de peças da Pandecta com os sete tipos de documento disponíveis para seleção." loading="lazy" decoding="async">
+        <figcaption>Construtor de peças — passo 1</figcaption>
+      </figure>
+    </div>
+
+    <div class="row row-flip reveal">
+      <div class="row-txt">
+        <h3>A Pandecta fundamenta e redige</h3>
+        <p>O sistema aplica as regras processuais da área, consulta os documentos do seu acervo e o histórico do escritório, e escreve a peça inteira com a fundamentação já articulada aos fatos que você deu.</p>
+        <p class="small">O texto aparece em tempo real, sobre papel, exatamente como será exportado.</p>
+      </div>
+      <figure class="row-shot">
+        <img src="/shot-documento.webp" width="2000" height="1250" alt="Peça gerada exibida no visualizador da Pandecta, em papel branco com o timbre do escritório e formatação jurídica." loading="lazy" decoding="async">
+        <figcaption>Visualizador de documento — peça ilustrativa, partes fictícias</figcaption>
+      </figure>
+    </div>
+
+    <div class="row reveal">
+      <div class="row-txt">
+        <h3>Tudo do escritório fica em um lugar</h3>
+        <p>Peças geradas, acervo de documentos, modelos de estilo e equipe. Cada advogado com seu próprio acesso e histórico, com os dados isolados por usuário.</p>
+        <p class="small">Histórico indexado com busca por autor, área, tipo ou trecho do texto.</p>
+      </div>
+      <figure class="row-shot">
+        <img src="/shot-inicio.webp" width="1600" height="1000" alt="Tela inicial da Pandecta com resumo de peças, acervo, assistente e modelos." loading="lazy" decoding="async">
+        <figcaption>Início — conta nova, ainda sem peças</figcaption>
+      </figure>
+    </div>
+  </div>
 </section>
 
-<!-- MOCKUP -->
-<div class="mockup-wrap">
-  <div class="mockup">
-    <div class="mockup-bar">
-      <div class="mockup-dot"></div>
-      <div class="mockup-dot"></div>
-      <div class="mockup-dot"></div>
-      <span class="mockup-url">pandecta.com.br/app</span>
+<!-- ══════════ CAPACIDADES ══════════ -->
+<section class="sec" style="background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="shell">
+    <div class="sec-hd narrow">
+      <h2>O que vem junto</h2>
+      <p>Cada recurso existe porque um advogado pediu, não porque cabia na página.</p>
     </div>
-    <div class="mockup-body">
-      <div class="mockup-sidebar">
-        <div class="mockup-logo-row">
-          <div class="mockup-logo-ico">
-            <svg viewBox="0 0 14 14" fill="none" stroke="#0D1B2A" stroke-width="2" stroke-linecap="round"><path d="M7 2L2 5v7h10V5L7 2z"/></svg>
-          </div>
-          <span class="mockup-brand-text">Pandecta AI</span>
-        </div>
-        <div class="mockup-nav-item active"><div class="mockup-nav-dot"></div> Nova peça</div>
-        <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Histórico</div>
-        <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Acervo</div>
-        <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Equipe</div>
-        <div class="mockup-nav-item"><div class="mockup-nav-dot"></div> Configurações</div>
+    <div class="caps">
+      <div class="cap">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2 4 11h5l-1 7 7-9h-5z"/></svg>
+        <div><h3>Gerador de peças</h3><p>Petições, contestações, recursos, contratos e notificações com fundamentação automática em artigos e jurisprudência aplicáveis ao caso.</p></div>
       </div>
-      <div class="mockup-main">
-        <div class="mockup-tag" id="gen-tag">Petição Inicial · Consumidor</div>
-        <div class="mockup-h" id="gen-title">Redigindo peça<span class="mockup-cursor"></span></div>
-        <div class="gen-status" id="gen-status-row">
-          <div class="gen-status-dot"></div>
-          <span id="gen-status-txt">Fundamentando com CDC e jurisprudência...</span>
-        </div>
-        <div class="gen-progress"><div class="gen-progress-bar" id="gen-bar"></div></div>
-        <div class="gen-stream" id="gen-stream"></div>
+      <div class="cap">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5a3 3 0 0 0-3 3v.4a2.6 2.6 0 0 0-1.6 4.5A2.8 2.8 0 0 0 7.4 16H10zM10 3.5a3 3 0 0 1 3 3v.4a2.6 2.6 0 0 1 1.6 4.5A2.8 2.8 0 0 1 12.6 16H10z"/></svg>
+        <div><h3>Memória do escritório</h3><p>A Pandecta consulta as peças anteriores do escritório para reaproveitar argumentos que já funcionaram em casos semelhantes.</p></div>
       </div>
-    </div>
-  </div>
-</div>
-
-<script>
-(function(){
-  var statuses=['Fundamentando com CDC e jurisprudência...','Consultando acervo do escritório...','Redigindo fatos e fundamentos...','Aplicando Súmula 54 do STJ...','Formulando pedidos e requerimentos...','Revisando estrutura processual...'];
-  var widths=[98,82,91,74,100,86,93,68,100,79,88,95,72,100,83,90,76,100,88,65];
-  var labels={3:'DOS FATOS',7:'DO DIREITO',12:'DOS PEDIDOS'};
-  var stream=document.getElementById('gen-stream');
-  var statusEl=document.getElementById('gen-status-txt');
-  var bar=document.getElementById('gen-bar');
-  if(!stream)return;
-  var idx=0,sIdx=0;
-  var prog=0;
-  function addLine(){
-    if(idx>=widths.length){idx=0;stream.innerHTML='';prog=0;bar.style.transition='none';bar.style.width='0%';}
-    if(labels[idx]){
-      var lbl=document.createElement('div');
-      lbl.className='gen-section-label';
-      lbl.textContent=labels[idx];
-      stream.appendChild(lbl);
-    }
-    var line=document.createElement('div');
-    line.className='gen-line'+(idx%4===0?'':' dim');
-    line.style.width=widths[idx]+'%';
-    line.style.animationDelay='0s';
-    stream.appendChild(line);
-    stream.scrollTop=stream.scrollHeight;
-    prog=Math.min(92,Math.round((idx/widths.length)*92));
-    bar.style.transition='width 0.3s ease';
-    bar.style.width=prog+'%';
-    idx++;
-  }
-  function rotateStatus(){
-    statusEl.style.opacity='0';
-    setTimeout(function(){
-      sIdx=(sIdx+1)%statuses.length;
-      statusEl.textContent=statuses[sIdx];
-      statusEl.style.opacity='1';
-    },300);
-  }
-  statusEl.style.transition='opacity 0.3s';
-  bar.style.animation='none';
-  bar.style.width='0%';
-  setInterval(addLine,350);
-  setInterval(rotateStatus,1900);
-})();
-</script>
-
-<!-- TRUST -->
-<div class="trust">
-  <p class="trust-text">Validado por advogados · Fundamentação real · Atualizado com a jurisprudência vigente</p>
-  <div class="trust-items">
-    <div class="trust-item"><span class="trust-icon">⚖️</span> CDC completo (Arts. 12, 14, 18)</div>
-    <div class="trust-item"><span class="trust-icon">📋</span> Súmulas STJ (54, 362, 479)</div>
-    <div class="trust-item"><span class="trust-icon">🏛️</span> Regras JEC (Lei 9.099/95)</div>
-    <div class="trust-item"><span class="trust-icon">🔒</span> LGPD — seus dados são criptografados e seguros</div>
-  </div>
-</div>
-
-<!-- VIDEO -->
-<div style="padding:80px 40px;background:var(--navy);border-top:1px solid rgba(255,255,255,.06);text-align:center;">
-  <div style="max-width:860px;margin:0 auto;">
-    <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Veja em ação</div>
-    <h2 style="font-size:32px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:12px;">Ouça o que é a Pandecta AI</h2>
-    <p style="font-size:16px;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:40px;max-width:560px;margin-left:auto;margin-right:auto;">Entenda em minutos como a Pandecta funciona, para quem é e por que advogados estão usando no dia a dia.</p>
-    <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.6);border:1px solid rgba(200,164,106,.2);">
-      <iframe
-        src="https://www.youtube.com/embed/aSZf1kW49qY"
-        title="Pandecta AI — O que é e como funciona"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-        style="position:absolute;top:0;left:0;width:100%;height:100%;">
-      </iframe>
-    </div>
-  </div>
-</div>
-
-<!-- FEATURES -->
-<div id="funcionalidades" class="features-wrap">
-  <img src="/pandecta-icone.png" class="brand-watermark" style="width:500px;height:500px;object-fit:contain;bottom:-80px;left:-60px;" alt="">
-  <div class="features-inner">
-    <div class="section-label">Funcionalidades</div>
-    <h2 class="section-h">Tudo que o advogado precisa em um só lugar</h2>
-    <p class="section-sub">Do caso à peça assinada, em minutos. Sem abrir o Word, sem copiar e colar.</p>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <div class="feature-h">Gerador de peças jurídicas</div>
-        <p class="feature-p">Petições, contestações, recursos, contratos e notificações gerados com IA. Fundamentação automática com artigos e jurisprudência do caso.</p>
+      <div class="cap">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 5.5A1.5 1.5 0 0 1 4 4h3.4l1.4 1.8H16a1.5 1.5 0 0 1 1.5 1.5v7.2A1.5 1.5 0 0 1 16 16H4a1.5 1.5 0 0 1-1.5-1.5z"/></svg>
+        <div><h3>Acervo inteligente</h3><p>Suba contratos, modelos e pareceres em PDF ou DOCX. A IA usa esses documentos como fonte na hora de escrever a peça nova.</p></div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">🧠</div>
-        <div class="feature-h">Memória do escritório</div>
-        <p class="feature-p">O Pandecta aprende com suas peças anteriores. Quando você gera algo novo, ele consulta o histórico do escritório para argumentos similares.</p>
+      <div class="cap">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 2.5h7l4 4v11h-11z"/><path d="M11.5 2.5v4h4"/><path d="M7 11h6M7 13.8h4"/></svg>
+        <div><h3>Exportação em Word de verdade</h3><p>O arquivo sai no seu próprio template: cabeçalho, rodapé, logo, tamanho de página e assinatura do responsável. Pronto para protocolar.</p></div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">📁</div>
-        <div class="feature-h">Acervo inteligente</div>
-        <p class="feature-p">Suba seus contratos, modelos e pareceres. A IA usa esses documentos como referência na hora de gerar novas peças — RAG com o acervo do escritório.</p>
+      <div class="cap">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="5.5"/><path d="M13 13l4 4"/></svg>
+        <div><h3>Histórico com busca</h3><p>Toda peça gerada fica salva e indexada. Busque por autor, área, tipo ou palavras do texto, edite direto e reexporte.</p></div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">📄</div>
-        <div class="feature-h">Exportação Word profissional</div>
-        <p class="feature-p">Gera arquivo .doc com cabeçalho do escritório, logo, assinatura do advogado responsável e formatação jurídica real. Pronto para protocolar.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔍</div>
-        <div class="feature-h">Histórico com busca</div>
-        <p class="feature-p">Todas as peças geradas ficam salvas e indexadas. Busca por autor, área, tipo ou palavras do texto. Edição inline e reexportação.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">👥</div>
-        <div class="feature-h">Multiusuário por escritório</div>
-        <p class="feature-p">Cada advogado tem seu próprio acesso e histórico. Gestão de equipe, perfis e permissões pelo painel admin. Dados isolados por usuário.</p>
+      <div class="cap">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="6.5" r="2.6"/><path d="M3 16c0-2.5 2-4.5 4.5-4.5S12 13.5 12 16"/><path d="M13.4 4.4a2.6 2.6 0 0 1 0 5M14.4 11.8c1.7.6 2.9 2.2 2.9 4.2"/></svg>
+        <div><h3>Multiusuário por escritório</h3><p>Cada advogado com seu acesso e histórico. Gestão de equipe, perfis e permissões pelo painel, com dados isolados por usuário.</p></div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- HOW IT WORKS -->
-<div class="how-wrap">
-  <img src="/pandecta-icone.png" class="brand-watermark" style="width:480px;height:480px;object-fit:contain;top:-60px;right:-60px;" alt="">
-  <div class="how-inner">
-    <div class="section-label">Como funciona</div>
-    <h2 class="section-h" style="color:var(--white)">Do caso à peça em 3 passos</h2>
-    <p class="section-sub" style="color:rgba(255,255,255,.55)">Sem templates genéricos. Sem copiar e colar. Cada peça gerada com os fatos do seu caso.</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div>
-          <div class="step-h">Descreva o caso</div>
-          <p class="step-p">Área jurídica, tipo de peça, dados das partes e fatos relevantes. O assistente guia você passo a passo.</p>
+<!-- ══════════ ÁREAS ══════════ -->
+<section class="sec" id="areas">
+  <div class="shell">
+    <div class="sec-hd narrow">
+      <h2>Seis áreas, com as regras processuais de cada uma.</h2>
+      <p>Não é um modelo genérico respondendo sobre direito brasileiro. Cada área carrega seu próprio contexto legal e suas próprias regras de redação.</p>
+    </div>
+    <div class="areas">
+      <div class="area"><h3>Direito do Consumidor</h3><p>CDC · JEC · Indenização · Vício do produto · Cobrança indevida</p></div>
+      <div class="area"><h3>Direito Civil</h3><p>Contratos · Danos morais · Responsabilidade civil · Posse e propriedade</p></div>
+      <div class="area"><h3>Direito Trabalhista</h3><p>CLT e Reforma · Súmulas do TST · Verbas rescisórias · Horas extras · Rescisão indireta</p></div>
+      <div class="area"><h3>Direito de Família</h3><p>Divórcio · Guarda · Alimentos · Inventário · Lei Maria da Penha</p></div>
+      <div class="area"><h3>Direito Imobiliário</h3><p>Locação · Despejo · Condomínio · Usucapião · Lei 8.245/91</p></div>
+      <div class="area"><h3>Direito Previdenciário</h3><p>INSS · Auxílio-doença · Aposentadoria · BPC/LOAS · EC 103/2019</p></div>
+    </div>
+    <div class="tipos">
+      <span class="tipo">Petição Inicial</span>
+      <span class="tipo">Contestação</span>
+      <span class="tipo">Recurso / Apelação</span>
+      <span class="tipo">Contrato</span>
+      <span class="tipo">Notificação Extrajudicial</span>
+      <span class="tipo">Parecer Jurídico</span>
+      <span class="tipo">Manifestação / Memorial</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ GUARDRAILS ══════════ -->
+<section class="sec guard" id="seguranca">
+  <div class="shell guard-grid">
+    <div>
+      <h2>Um PDF pode conter instruções escondidas. A Pandecta bloqueia antes.</h2>
+      <p style="margin-top:var(--sp-5);color:var(--ink-2);">Um documento aparentemente comum pode carregar comandos ocultos para manipular a IA e enfraquecer a sua estratégia. A Pandecta detecta e neutraliza essas tentativas em quatro camadas, antes que cheguem à sua peça.</p>
+      <div class="guard-list">
+        <div class="guard-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.5"/><path d="M6.4 9 8.2 10.8 11.7 7.3"/></svg>
+          <div><h3>Detecta padrões suspeitos</h3><p>Identifica comandos ocultos e instruções maliciosas nos documentos do acervo.</p></div>
+        </div>
+        <div class="guard-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.5"/><path d="M6.4 9 8.2 10.8 11.7 7.3"/></svg>
+          <div><h3>Filtra antes de chegar à IA</h3><p>O conteúdo é sanitizado antes de ser processado — a IA nunca vê o comando malicioso.</p></div>
+        </div>
+        <div class="guard-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.5"/><path d="M6.4 9 8.2 10.8 11.7 7.3"/></svg>
+          <div><h3>Garante resposta confiável</h3><p>A peça é gerada com base nos fatos que você forneceu, não em instruções de terceiros.</p></div>
         </div>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div>
-          <div class="step-h">A IA fundamenta e redige</div>
-          <p class="step-p">A Pandecta busca artigos, súmulas e jurisprudência aplicáveis, consulta seu acervo e histórico, e gera a peça completa.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div>
-          <div class="step-h">Edite e exporte</div>
-          <p class="step-p">Revise o texto no editor, faça ajustes finos e exporte em Word com cabeçalho e assinatura do escritório.</p>
-        </div>
+    </div>
+
+    <div class="guard-panel">
+      <div class="guard-panel-hd"><span>Proteção ativa</span><em>Em operação</em></div>
+      <div class="guard-row"><span>Documentos do acervo (PDF/DOCX)</span><span class="guard-tag">Protegido</span></div>
+      <div class="guard-row"><span>Geração de petições e contestações</span><span class="guard-tag">Protegido</span></div>
+      <div class="guard-row"><span>Assistente jurídico multi-turn</span><span class="guard-tag">Protegido</span></div>
+      <div class="guard-row"><span>Modelos de referência de estilo</span><span class="guard-tag">Protegido</span></div>
+      <div class="guard-foot">IA sem guardrails é um risco. <strong>IA com guardrails é vantagem competitiva.</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VÍDEO ══════════ -->
+<section class="sec">
+  <div class="shell">
+    <div class="sec-hd narrow" style="margin-bottom:0;">
+      <h2>Ouça o que é a Pandecta</h2>
+      <p>Em alguns minutos: como funciona, para quem é e por que advogados estão usando no dia a dia.</p>
+    </div>
+    <div class="video-frame reveal">
+      <div>
+        <iframe src="https://www.youtube.com/embed/aSZf1kW49qY" title="Apresentação da Pandecta AI" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- AREAS -->
-<div class="areas-wrap">
-  <div class="areas-inner">
-    <div class="section-label" style="text-align:center">Especialidades</div>
-    <h2 class="section-h">Áreas do direito suportadas</h2>
-    <p class="section-sub">Cobertura completa das principais demandas do escritório brasileiro.</p>
-    <div class="area-cards">
-      <div class="area-card featured">
-        <div class="area-card-icon">🛒</div>
-        <div class="area-card-name">Direito do Consumidor</div>
-        <div class="area-card-types">CDC · JEC · Indenização · Vício do produto · Cobrança indevida</div>
-      </div>
-      <div class="area-card">
-        <div class="area-card-icon">⚖️</div>
-        <div class="area-card-name">Direito Civil</div>
-        <div class="area-card-types">Contratos · Danos morais · Responsabilidade civil · Posse e propriedade</div>
-      </div>
-      <div class="area-card">
-        <div class="area-card-icon">🦺</div>
-        <div class="area-card-name">Direito Trabalhista</div>
-        <div class="area-card-types">Reclamação · Verbas rescisórias · Horas extras · Rescisão indireta</div>
-      </div>
-      <div class="area-card">
-        <div class="area-card-icon">👨‍👩‍👧</div>
-        <div class="area-card-name">Direito de Família</div>
-        <div class="area-card-types">Divórcio · Guarda · Alimentos · Inventário · Lei Maria da Penha</div>
-      </div>
-      <div class="area-card">
-        <div class="area-card-icon">🔑</div>
-        <div class="area-card-name">Direito Imobiliário</div>
-        <div class="area-card-types">Locação · Despejo · Condomínio · Usucapião · Lei 8.245/91</div>
-      </div>
-      <div class="area-card">
-        <div class="area-card-icon">🛡️</div>
-        <div class="area-card-name">Direito Previdenciário</div>
-        <div class="area-card-types">INSS · Auxílio-doença · Aposentadoria · BPC/LOAS · Pensão por morte</div>
-      </div>
+<!-- ══════════ PREÇOS ══════════ -->
+<section class="sec" id="precos" style="background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="shell">
+    <div class="sec-hd narrow">
+      <h2>Preços</h2>
+      <p>Todos os planos incluem acesso completo às funcionalidades e 7 dias de teste, sem cartão de crédito.</p>
     </div>
-    <div class="area-docs">
-      <div class="area-doc-pill">Petição Inicial</div>
-      <div class="area-doc-pill">Contestação</div>
-      <div class="area-doc-pill">Recurso / Apelação</div>
-      <div class="area-doc-pill">Contrato</div>
-      <div class="area-doc-pill">Notificação Extrajudicial</div>
-      <div class="area-doc-pill">Parecer Jurídico</div>
-      <div class="area-doc-pill">Manifestação / Memorial</div>
-    </div>
-  </div>
-</div>
+    <div class="plans">
 
-<!-- PRICING -->
-<!-- ══ GUARDRAILS / SEGURANÇA ══════════════════════════════════════════════════ -->
-<div class="guardrail-wrap">
-  <div class="guardrail-inner">
-    <div class="guardrail-grid">
-
-      <!-- Esquerda: texto explicativo -->
-      <div class="guardrail-left reveal">
-        <div class="guardrail-label">🛡️ Segurança não é opcional</div>
-        <h2 class="guardrail-title">A Pandecta usa <span>guardrails</span><br>para proteger você.</h2>
-        <p class="guardrail-desc">
-          Um PDF aparentemente normal pode conter instruções ocultas para manipular a IA e enfraquecer sua estratégia jurídica. A Pandecta detecta e bloqueia essas tentativas antes que afetem sua peça.
-        </p>
-        <div class="guardrail-items">
-          <div class="guardrail-item">
-            <div class="guardrail-item-ico">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4CAF7A" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M6 8.5l1.5 1.5 3-3"/></svg>
-            </div>
-            <div class="guardrail-item-body">
-              <div class="guardrail-item-title">Detectam padrões suspeitos</div>
-              <div class="guardrail-item-desc">Identificam comandos ocultos e instruções maliciosas em documentos do acervo.</div>
-            </div>
-          </div>
-          <div class="guardrail-item">
-            <div class="guardrail-item-ico">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4CAF7A" stroke-width="1.8" stroke-linecap="round"><path d="M8 2L2 5v4c0 3.3 2.5 5.5 6 6.2C14 14.5 14 9 14 9V5L8 2z"/></svg>
-            </div>
-            <div class="guardrail-item-body">
-              <div class="guardrail-item-title">Filtram antes de chegar à IA</div>
-              <div class="guardrail-item-desc">O conteúdo é sanitizado antes de ser processado — a IA nunca vê o comando malicioso.</div>
-            </div>
-          </div>
-          <div class="guardrail-item">
-            <div class="guardrail-item-ico">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4CAF7A" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="8" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2"/></svg>
-            </div>
-            <div class="guardrail-item-body">
-              <div class="guardrail-item-title">Garantem respostas confiáveis</div>
-              <div class="guardrail-item-desc">Sua petição é gerada com base nos fatos que você forneceu — não em instruções de terceiros.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Direita: card de proteção ativa -->
-      <div class="guardrail-right reveal">
-        <div class="guardrail-card">
-          <div class="guardrail-card-hd">
-            <div class="guardrail-card-hd-ico">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4CAF7A" stroke-width="1.8" stroke-linecap="round"><path d="M8 2L2 5v4c0 3.3 2.5 5.5 6 6.2C14 14.5 14 9 14 9V5L8 2z"/></svg>
-            </div>
-            <div class="guardrail-card-hd-label">Proteção ativa — Guardrails em ação</div>
-            <div class="guardrail-card-hd-status">
-              <div class="guardrail-card-hd-dot"></div>Ativo
-            </div>
-          </div>
-
-          <div class="guardrail-check-row">
-            <div class="guardrail-check-ico">
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round"><path d="M7 1v9M4 7l3 3 3-3"/><path d="M2 11h10"/></svg>
-            </div>
-            <div class="guardrail-check-label">Documentos do Acervo (PDF/DOCX)</div>
-            <div class="guardrail-check-badge">Protegido</div>
-          </div>
-          <div class="guardrail-check-row">
-            <div class="guardrail-check-ico">
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round"><path d="M2 12V4a1 1 0 011-1h8a1 1 0 011 1v8"/><path d="M5 7h4M5 9.5h2"/></svg>
-            </div>
-            <div class="guardrail-check-label">Geração de petições e contestações</div>
-            <div class="guardrail-check-badge">Protegido</div>
-          </div>
-          <div class="guardrail-check-row">
-            <div class="guardrail-check-ico">
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round"><path d="M2 10l2-2 2 2 4-4"/><circle cx="11" cy="4" r="1.5"/></svg>
-            </div>
-            <div class="guardrail-check-label">Assistente jurídico multi-turn</div>
-            <div class="guardrail-check-badge">Protegido</div>
-          </div>
-          <div class="guardrail-check-row">
-            <div class="guardrail-check-ico">
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="3" width="10" height="9" rx="1.5"/><path d="M5 3V2M9 3V2"/></svg>
-            </div>
-            <div class="guardrail-check-label">Modelos de referência de estilo</div>
-            <div class="guardrail-check-badge">Protegido</div>
-          </div>
-
-          <div class="guardrail-footer-bar">
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#4CAF7A" stroke-width="1.6" stroke-linecap="round"><path d="M7 1L2 3.5v4C2 10.5 4.5 12.8 7 13.5c2.5-.7 5-3 5-6v-4L7 1z"/><polyline points="5,7 6.5,8.5 9.5,5.5"/></svg>
-            IA sem guardrails é um risco. <strong style="color:var(--gold)">IA com guardrails é vantagem competitiva.</strong>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-<div id="precos" style="padding:96px 40px;background:var(--off);border-top:1px solid var(--bdr);">
-  <div style="max-width:1100px;margin:0 auto;text-align:center;">
-    <div class="section-label">Preços</div>
-    <h2 class="section-h" style="margin:0 auto 16px">Escolha o plano ideal para o seu escritório</h2>
-    <p class="section-sub" style="margin:0 auto 56px">Todos os planos incluem acesso completo às funcionalidades. Cancele quando quiser.</p>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start;margin-bottom:32px;">
-
-      <!-- SOLO -->
-      <div style="background:var(--white);border:1px solid var(--bdr);border-radius:20px;padding:36px 32px;text-align:left;">
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:16px;">Solo</div>
-        <div style="font-size:48px;font-weight:800;color:var(--t1);line-height:1;margin-bottom:6px;"><span style="font-size:20px;font-weight:500;color:var(--t2);vertical-align:top;margin-top:8px;display:inline-block;">R$</span>79</div>
-        <div style="font-size:13px;color:var(--t3);margin-bottom:28px;">por mês · 1 advogado</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> 30 peças por mês</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Todos os tipos de peça</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Histórico completo</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Export Word</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Suporte por e-mail</li>
+      <div class="plan">
+        <div class="plan-top"><span class="plan-name">Solo</span></div>
+        <div class="plan-price"><i>R$</i><b>79</b></div>
+        <div class="plan-meta">por mês · 1 advogado</div>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>30 peças por mês</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Todos os tipos de peça</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Histórico completo</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Exportação em Word</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Suporte por e-mail</span></li>
         </ul>
-        <a href="/cadastro?plano=solo" style="display:block;text-align:center;padding:13px 0;background:transparent;border:1.5px solid var(--t1);border-radius:10px;font-size:14px;font-weight:600;color:var(--t1);text-decoration:none;transition:all .15s;" onmouseover="this.style.background='var(--t1)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--t1)'">Começar agora</a>
-        <p style="text-align:center;font-size:11px;color:var(--t3);margin-top:12px;">Anual: R$59/mês</p>
+        <a class="btn btn-s" href="/cadastro?plano=solo">Começar agora</a>
+        <div class="plan-annual">No plano anual: R$59/mês</div>
       </div>
 
-      <!-- PROFISSIONAL (destaque) -->
-      <div style="background:var(--navy);border:2px solid rgba(201,168,76,.3);border-radius:20px;padding:36px 32px;text-align:left;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(13,27,42,.25);">
-        <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%);pointer-events:none;"></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);">Profissional</div>
-          <div style="font-size:10px;font-weight:600;padding:3px 10px;background:var(--gold-bg);border:1px solid var(--gold-bd);border-radius:20px;color:var(--gold);">Mais popular</div>
-        </div>
-        <div style="font-size:48px;font-weight:800;color:var(--white);line-height:1;margin-bottom:6px;"><span style="font-size:20px;font-weight:500;color:rgba(255,255,255,.5);vertical-align:top;margin-top:8px;display:inline-block;">R$</span>179</div>
-        <div style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:28px;">por mês · até 3 usuários</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> <strong style="color:var(--white);">Peças ilimitadas</strong></li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> Memória de argumentos</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> Acervo de modelos</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> Histórico com busca</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(255,255,255,.8);"><span style="color:var(--gold);font-weight:700;">✓</span> Suporte prioritário</li>
+      <div class="plan plan-hi">
+        <div class="plan-top"><span class="plan-name">Profissional</span><span class="plan-flag">Mais escolhido</span></div>
+        <div class="plan-price"><i>R$</i><b>179</b></div>
+        <div class="plan-meta">por mês · até 3 usuários</div>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span><strong>Peças ilimitadas</strong></span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Memória de argumentos</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Acervo de modelos</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Histórico com busca</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Suporte prioritário</span></li>
         </ul>
-        <a href="/cadastro?plano=profissional" style="display:block;text-align:center;padding:14px 0;background:var(--gold);border-radius:10px;font-size:14px;font-weight:700;color:var(--navy);text-decoration:none;box-shadow:0 4px 20px rgba(201,168,76,.35);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">Começar agora</a>
-        <p style="text-align:center;font-size:11px;color:rgba(255,255,255,.3);margin-top:12px;">Anual: R$139/mês</p>
+        <a class="btn btn-p" href="/cadastro?plano=profissional">Começar agora</a>
+        <div class="plan-annual">No plano anual: R$139/mês</div>
       </div>
 
-      <!-- ESCRITÓRIO -->
-      <div style="background:var(--white);border:1px solid var(--bdr);border-radius:20px;padding:36px 32px;text-align:left;">
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:16px;">Escritório</div>
-        <div style="font-size:48px;font-weight:800;color:var(--t1);line-height:1;margin-bottom:6px;"><span style="font-size:20px;font-weight:500;color:var(--t2);vertical-align:top;margin-top:8px;display:inline-block;">R$</span>379</div>
-        <div style="font-size:13px;color:var(--t3);margin-bottom:28px;">por mês · até 10 usuários</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> <strong>Peças ilimitadas</strong></li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Tudo do Profissional</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Acervo compartilhado</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> Dashboard de produção</li>
-          <li style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--t2);"><span style="color:var(--gold);font-weight:700;">✓</span> SLA 4h · Onboarding guiado</li>
+      <div class="plan">
+        <div class="plan-top"><span class="plan-name">Escritório</span></div>
+        <div class="plan-price"><i>R$</i><b>379</b></div>
+        <div class="plan-meta">por mês · até 10 usuários</div>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span><strong>Peças ilimitadas</strong></span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Tudo do Profissional</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Acervo compartilhado</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>Dashboard de produção</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4.5 6.2 11.3 3 8.1"/></svg><span>SLA de 4h e onboarding guiado</span></li>
         </ul>
-        <a href="mailto:contato@pandecta.com.br" style="display:block;text-align:center;padding:13px 0;background:transparent;border:1.5px solid var(--t1);border-radius:10px;font-size:14px;font-weight:600;color:var(--t1);text-decoration:none;transition:all .15s;" onmouseover="this.style.background='var(--t1)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--t1)'">Falar com a equipe</a>
-        <p style="text-align:center;font-size:11px;color:var(--t3);margin-top:12px;">Anual: R$299/mês</p>
+        <a class="btn btn-s" href="mailto:contato@pandecta.com.br?subject=Plano%20Escrit%C3%B3rio%20-%20Pandecta%20AI">Falar com a equipe</a>
+        <div class="plan-annual">No plano anual: R$299/mês</div>
       </div>
 
     </div>
-    <p style="font-size:12px;color:var(--t3);text-align:center;">Todos os planos com 7 dias de teste grátis, sem cartão de crédito.</p>
+    <p class="plans-note">Os planos pagos entram no ar após a fase de validação com os escritórios pioneiros.</p>
   </div>
-</div>
+</section>
 
-<!-- QUOTE -->
-<div class="quote-wrap">
-  <p class="quote">"Finalmente uma ferramenta que entende direito brasileiro de verdade. Não é um ChatGPT com prompt — é um sistema treinado para o nosso contexto jurídico."</p>
-  <p class="quote-by"><strong>Fabiano</strong> — Advogado, 30+ anos de prática, 3 escritórios</p>
-</div>
-
-<!-- PIONEIROS CTA -->
-<div style="background:linear-gradient(135deg,#0D1B2A 0%,#122033 100%);padding:96px 40px;text-align:center;position:relative;overflow:hidden;">
-  <!-- Glow decorativo -->
-  <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse at center,rgba(201,168,76,.18) 0%,transparent 70%);pointer-events:none;"></div>
-
-  <!-- Badge exclusividade -->
-  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.12);border:1.5px solid rgba(201,168,76,.4);border-radius:100px;padding:7px 18px;margin-bottom:32px;position:relative;">
-    <span style="width:7px;height:7px;background:#C9A84C;border-radius:50%;display:inline-block;box-shadow:0 0 8px #C9A84C;"></span>
-    <span style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#C9A84C;">Programa Pioneiros &mdash; Apenas 20 vagas</span>
-  </div>
-
-  <h2 style="font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.15;color:#ffffff;letter-spacing:-1px;max-width:720px;margin:0 auto 20px;">
-    Seja um dos 20 advogados<br>que v&#227;o <span style="color:#C9A84C;">moldar a Pandecta.</span>
-  </h2>
-  <p style="font-size:17px;color:rgba(255,255,255,.6);max-width:560px;margin:0 auto 48px;line-height:1.7;">
-    Acesso completo, pre&#231;o de pioneiro e voz direta no desenvolvimento da ferramenta. Em troca: seu feedback real, do dia a dia do escrit&#243;rio.
-  </p>
-
-  <!-- Beneficios rapidos -->
-  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:48px;">
-    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px 20px;">
-      <span style="font-size:18px;">&#127919;</span>
-      <span style="font-size:13.5px;font-weight:600;color:rgba(255,255,255,.85);">3 meses gr&#225;tis</span>
+<!-- ══════════ PIONEIROS ══════════ -->
+<section class="sec pioneer">
+  <div class="shell pioneer-grid">
+    <div>
+      <h2>Seja um dos <em>20 advogados</em> que vão moldar a Pandecta.</h2>
+      <p class="lede">Acesso completo, preço de pioneiro e voz direta no desenvolvimento da ferramenta. Em troca, o seu retorno real — o do dia a dia do escritório.</p>
+      <div class="pioneer-acts">
+        <a class="btn btn-p btn-lg" href="/pioneiros">
+          Quero ser Pioneiro
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <a class="btn btn-s btn-lg" href="https://wa.me/5511994246862" rel="noopener">Falar no WhatsApp</a>
+      </div>
+      <p class="pioneer-note">Sem compromisso · Sem cartão de crédito · Vagas limitadas</p>
     </div>
-    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px 20px;">
-      <span style="font-size:18px;">&#128172;</span>
-      <span style="font-size:13.5px;font-weight:600;color:rgba(255,255,255,.85);">Acesso direto ao fundador</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px 20px;">
-      <span style="font-size:18px;">&#127885;</span>
-      <span style="font-size:13.5px;font-weight:600;color:rgba(255,255,255,.85);">Selo Pioneiro vit&#225;licio</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px 20px;">
-      <span style="font-size:18px;">&#128205;</span>
-      <span style="font-size:13.5px;font-weight:600;color:rgba(255,255,255,.85);">Pre&#231;o travado para sempre</span>
+    <div class="perks">
+      <div class="perk">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.5"/><path d="M9 5.2V9l2.5 1.6"/></svg>
+        <div><b>3 meses grátis</b><span>Acesso completo, sem cobrança</span></div>
+      </div>
+      <div class="perk">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 11.5a1.6 1.6 0 0 1-1.6 1.6H5.6L2.4 16V4.1A1.6 1.6 0 0 1 4 2.5h9.4A1.6 1.6 0 0 1 15 4.1z"/></svg>
+        <div><b>Acesso direto ao fundador</b><span>Seu pedido vira roadmap</span></div>
+      </div>
+      <div class="perk">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 2.4 2 4.1 4.5.7-3.3 3.2.8 4.5L9 12.8l-4 2.1.8-4.5L2.5 7.2l4.5-.7z"/></svg>
+        <div><b>Selo Pioneiro vitalício</b><span>Reconhecimento permanente</span></div>
+      </div>
+      <div class="perk">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.6" y="8" width="10.8" height="7.4" rx="1.5"/><path d="M6.2 8V5.6a2.8 2.8 0 0 1 5.6 0V8"/></svg>
+        <div><b>Preço travado para sempre</b><span>Reajuste nunca alcança você</span></div>
+      </div>
     </div>
   </div>
+</section>
 
-  <a href="/pioneiros" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#C9A84C,#d4b668);color:#0D1B2A;font-size:16px;font-weight:800;padding:18px 44px;border-radius:12px;text-decoration:none;letter-spacing:.2px;box-shadow:0 8px 32px rgba(201,168,76,.35);transition:transform .15s,box-shadow .15s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px rgba(201,168,76,.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 32px rgba(201,168,76,.35)'">
-    Quero ser Pioneiro
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-  </a>
+<!-- ══════════ CTA FINAL ══════════ -->
+<section class="sec dark final">
+  <div class="shell narrow">
+    <h2>Comece hoje. A primeira peça sai em minutos.</h2>
+    <p>Sem treinamento, sem configuração. Você descreve o caso e a Pandecta escreve.</p>
+    <a class="btn btn-lt btn-lg" href="/cadastro">
+      Criar minha conta
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+  </div>
+</section>
 
-  <p style="margin-top:20px;font-size:12px;color:rgba(255,255,255,.3);">Sem compromisso &bull; Sem cart&#227;o de cr&#233;dito &bull; Vagas limitadas</p>
-</div>
-
-<!-- CTA FINAL -->
-<div class="cta-final">
-  <h2>Comece hoje.<br>Primeira peça em <em>menos de 5 minutos.</em></h2>
-  <p>Sem treinamento necessário. Sem configuração complexa. Só descrever o caso.</p>
-  <a class="btn-primary" href="/cadastro?plano=profissional" style="font-size:16px;padding:16px 40px">
-    Criar minha conta
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-  </a>
-</div>
-
-<!-- FOOTER -->
-<footer style="background:var(--navy);border-top:1px solid rgba(255,255,255,.06);padding:56px 40px 36px;">
-  <div style="max-width:1100px;margin:0 auto;">
-    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:40px;margin-bottom:48px;flex-wrap:wrap;">
-
-      <!-- Marca -->
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-          <img src="/pandecta-icone.png" alt="P" style="height:44px;width:44px;object-fit:contain;mix-blend-mode:screen;flex-shrink:0;">
-          <span style="font-size:16px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.9);">PANDECTA <span style="color:var(--gold)">AI</span></span>
-        </div>
-        <p style="font-size:13px;color:rgba(255,255,255,.4);line-height:1.7;max-width:260px;">Inteligência jurídica para advogados brasileiros. Gere peças com precisão técnica e aprenda com o seu escritório.</p>
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="shell">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="/icone-pandecta.webp" alt="Pandecta AI" width="28" height="28">
+        <p>Inteligência jurídica para advogados brasileiros. Peças com precisão técnica, no estilo do seu escritório.</p>
       </div>
-
-      <!-- Produto -->
       <div>
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:16px;">Produto</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <a href="#funcionalidades" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Funcionalidades</a>
-          <a href="#precos" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Planos e preços</a>
-          <a href="/app" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Entrar na plataforma</a>
-        </div>
+        <h3>Produto</h3>
+        <ul>
+          <li><a href="#produto">Como funciona</a></li>
+          <li><a href="#areas">Áreas do direito</a></li>
+          <li><a href="#seguranca">Segurança</a></li>
+          <li><a href="#precos">Preços</a></li>
+          <li><a href="/app">Entrar na plataforma</a></li>
+        </ul>
       </div>
-
-      <!-- Legal -->
       <div>
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:16px;">Legal</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <a href="/termos-de-uso" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Termos de uso</a>
-          <a href="/politica-de-privacidade" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Política de privacidade</a>
-          <a href="/lgpd" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">LGPD</a>
-        </div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/termos-de-uso">Termos de uso</a></li>
+          <li><a href="/politica-de-privacidade">Política de privacidade</a></li>
+          <li><a href="/lgpd">LGPD</a></li>
+        </ul>
       </div>
-
-      <!-- Contato -->
       <div>
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:16px;">Contato</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <a href="https://wa.me/5511994246862" target="_blank" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">📱 WhatsApp: +55 11 99424-6862</a>
-          <a href="mailto:contato@pandecta.com.br" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">✉️ contato@pandecta.com.br</a>
-          <div style="font-size:13px;color:rgba(255,255,255,.35);">📍 Atibaia – SP, Brasil</div>
-          <div style="font-size:12px;color:rgba(255,255,255,.25);">CNPJ: XX.XXX.XXX/0001-XX</div>
-        </div>
+        <h3>Contato</h3>
+        <ul>
+          <li><a href="https://wa.me/5511994246862" rel="noopener">WhatsApp +55 11 99424-6862</a></li>
+          <li><a href="mailto:contato@pandecta.com.br">contato@pandecta.com.br</a></li>
+          <li>Atibaia — SP, Brasil</li>
+        </ul>
       </div>
-
     </div>
-    <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div style="font-size:12px;color:rgba(255,255,255,.25);">© 2026 Pandecta AI · Todos os direitos reservados</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.2);">Desenvolvido no Brasil 🇧🇷</div>
+    <div class="foot-bot">
+      <span>© 2026 Pandecta AI · Todos os direitos reservados</span>
+      <span>Desenvolvido no Brasil</span>
     </div>
   </div>
 </footer>
 
-<style>
-/* ═══ SCROLL-REVEAL ════════════════════════════════════ */
-.reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-36px);
-  transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1);
-}
-.reveal-left.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-.reveal-right {
-  opacity: 0;
-  transform: translateX(36px);
-  transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1);
-}
-.reveal-right.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-.reveal-scale {
-  opacity: 0;
-  transform: scale(.92);
-  transition: opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1);
-}
-.reveal-scale.visible {
-  opacity: 1;
-  transform: scale(1);
-}
-/* delay helpers */
-[data-delay="1"] { transition-delay: .08s !important; }
-[data-delay="2"] { transition-delay: .16s !important; }
-[data-delay="3"] { transition-delay: .24s !important; }
-[data-delay="4"] { transition-delay: .32s !important; }
-[data-delay="5"] { transition-delay: .40s !important; }
-[data-delay="6"] { transition-delay: .48s !important; }
-</style>
-
 <script>
-/* ═══ SCROLL-REVEAL ENGINE ════════════════════════════ */
 (function(){
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        e.target.classList.add('visible');
-      } else {
-        e.target.classList.remove('visible');
-      }
-    });
-  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  'use strict';
 
-  function watch(sel, cls, delayStart){
-    document.querySelectorAll(sel).forEach(function(el, i){
-      el.classList.add(cls);
-      if(delayStart!==undefined) el.setAttribute('data-delay', Math.min(i+1+delayStart, 6));
-      io.observe(el);
+  /* nav: hairline appears once the page moves */
+  var nav = document.getElementById('nav');
+  function onScroll(){ nav.classList.toggle('stuck', window.scrollY > 8); }
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  /* mobile menu */
+  var toggle = document.getElementById('navtoggle');
+  toggle.addEventListener('click', function(){
+    var open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  });
+  document.getElementById('navlinks').addEventListener('click', function(e){
+    if (e.target.closest('a')) { nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }
+  });
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* the one authored moment: the hero settles in on load */
+  if (reduce) {
+    document.getElementById('herogrid').classList.add('in');
+  } else {
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ document.getElementById('herogrid').classList.add('in'); });
     });
   }
 
-  // Blocos de seção — fade up
-  watch('.trust','reveal');
-  watch('.features-inner .section-label','reveal');
-  watch('.features-inner .section-h','reveal');
-  watch('.features-inner .section-sub','reveal');
-  watch('.how-inner .section-label','reveal');
-  watch('.how-inner .section-h','reveal');
-  watch('.how-inner .section-sub','reveal');
-  watch('.areas-inner .section-label','reveal');
-  watch('.areas-inner .section-h','reveal');
-  watch('.areas-inner .section-sub','reveal');
-  watch('.pricing-wrap .section-h','reveal');
-  watch('.pricing-wrap .section-sub','reveal');
-  watch('.guardrail-left','reveal');
-  watch('.guardrail-right','reveal');
-
-  // Cards de features — stagger
-  watch('.feature-card','reveal-scale',0);
-
-  // Passos do "como funciona"
-  document.querySelectorAll('.step').forEach(function(el,i){
-    el.classList.add('reveal');
-    el.setAttribute('data-delay', Math.min(i+1,4));
-    io.observe(el);
-  });
-
-  // Áreas de atuação
-  document.querySelectorAll('.area-card').forEach(function(el,i){
-    el.classList.add('reveal-scale');
-    el.setAttribute('data-delay', Math.min(i+1,6));
-    io.observe(el);
-  });
-
-  // Cards de pricing — pega os 3 filhos diretos do grid de preços
-  var pGrid = document.querySelector('#precos [style*="grid-template-columns"]');
-  if(pGrid){
-    var pCards = pGrid.children;
-    var classes = ['reveal-left','reveal','reveal-right'];
-    Array.from(pCards).forEach(function(el,i){
-      el.classList.add(classes[i] || 'reveal');
-      el.setAttribute('data-delay', i+1);
-      io.observe(el);
-    });
+  /* sections arrive once, quietly */
+  var targets = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)) {
+    targets.forEach(function(el){ el.classList.add('seen'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) { en.target.classList.add('seen'); io.unobserve(en.target); }
+      });
+    }, {rootMargin:'0px 0px -12% 0px', threshold:0.05});
+    targets.forEach(function(el){ io.observe(el); });
   }
-
-  // CTA final
-  watch('.cta-final','reveal-scale');
-
-  // Mockup — scale in
-  var mockup = document.querySelector('.mockup');
-  if(mockup){ mockup.classList.add('reveal-scale'); io.observe(mockup); }
 })();
 </script>
-
 </body>
 </html>
