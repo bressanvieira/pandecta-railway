@@ -344,9 +344,48 @@ um acento escuro em algum lugar novo, é esse.
 - [x] ~~Recapturar `shot-*.webp` com a ferramenta redesenhada e trocar na landing~~ — feito 23/08, e
       `shot-wizard.webp` recapturado de novo em 24/08 depois da conversão do construtor pra claro (a
       primeira versão mostrava a tela escura antiga — corrigido antes de publicar).
-- [ ] Publicar site + app no mesmo deploy
 
 **Decisão comercial pendente do Maurício:** a landing diz "7 dias grátis" em 3 lugares; o cadastro diz
 "gratuito durante a fase de validação". O `server.js` está com o bloqueio de trial comentado, ou seja,
 hoje é gratuito. Alinhar as duas pontas quando ele decidir.
+
+**24/08 — 4 páginas órfãs descobertas e refeitas (pioneiros, termos, privacidade, LGPD).**
+Maurício reportou que `/pioneiros` não tinha sido atualizada. Investigando, o problema era maior: essas
+4 páginas (`public/pioneiros.html`, `termos-de-uso.html`, `politica-de-privacidade.html`, `lgpd.html`) são
+arquivos **standalone**, servidos por rota própria no `server.js` (linhas 220-223) — nunca fizeram parte
+do passe tela a tela porque esse passe cobriu só as telas dentro de `index.html`. Estavam intocadas desde
+junho/2026: tema escuro antigo (`#001B2A`/`#C8A96B`), fonte de sistema em vez de Libre Franklin, ícones em
+emoji (🔓🎯🏅✉☁🤖). E são acessíveis: `landing.html` linka direto pras 4 (menu, CTA do herói, rodapé) — ou
+seja, qualquer visitante caía de volta na ferramenta antiga com dois cliques. Maurício pediu pra corrigir
+as 4 antes do push.
+- `pioneiros.html` — reconstruída inteira no sistema novo (tokens/fontes/ícones SVG), mantendo 100% da
+  lógica JS (validação, máscara de WhatsApp, fade-in, submit pra `/api/fundadores`) e do copy.
+- `termos-de-uso.html`, `politica-de-privacidade.html`, `lgpd.html` — como essas 3 já eram inteiramente
+  orientadas a variáveis CSS, a técnica foi trocar só os tokens (`:root`) e os poucos literais hex/rgba
+  soltos, sem tocar uma palavra do texto jurídico. Cabeçalho trocado pro mesmo padrão ícone+wordmark do
+  resto do site; emoji de apoio removidos (2 viraram ícone SVG — nuvem/chip nos subprocessadores da LGPD;
+  os outros eram só decoração de texto e saíram sem substituto).
+- Detector rodado nas 4 depois da conversão e os achados reais corrigidos: `side-tab` (borda colorida
+  lateral em callout — virou borda inteira), `low-contrast` (dourado sobre fundo cinza-claro ficava
+  4.2-4.3:1; texto desses pontos específicos foi pra `#7A5D1E`, um dourado mais escuro, só nesses casos),
+  `undersized-ui-text` (labels de card em 10.5px → 11px), `all-caps-body` e `pulsing-dot` decorativo no
+  badge do pioneiros (o pulso ali não representa dado ao vivo, então saiu — diferente dos pontinhos do app).
+- **Bug real encontrado e corrigido, não relacionado a cor:** em `lgpd.html`, o índice ("Nesta página")
+  usava a tag `<nav class="toc">` — e a regra `nav{...}` do cabeçalho fixo (seletor por tag, sem classe)
+  também pegava esse `<nav>`, colapsando a caixa do índice pra 64px e derramando a lista por cima do
+  conteúdo abaixo. Bug pré-existente desde a versão escura (só ficou visualmente óbvio ao rodar no tema
+  claro). Corrigido trocando a tag do índice pra `<div class="toc">`.
+- **Aceito como exceção documentada** (advisory ou de baixo impacto, não relacionado a tema/marca):
+  `numbered-section-labels` (numeração "01, 02..." ao lado de cada `<h2>` — mantida porque o índice linka
+  por esses números, tem valor de referência cruzada num documento jurídico); `em-dash-overuse` na LGPD
+  (34 travessões — estilo de redação jurídica formal, texto não foi alterado); `flat-type-hierarchy` na
+  política de privacidade e na LGPD (muitos tamanhos de fonte próximos entre si — é densidade tipográfica
+  de documento longo com muitas variações de rótulo/tabela, não é o tipo de inconsistência visual que
+  motivou esse passe).
+- Todas as 4: `node validate.js` continua OK (só cobre `index.html`), detector rodado individualmente em
+  cada uma, telas conferidas com captura real via Playwright.
+
+**Falta fazer, em ordem**
+- [x] ~~4 páginas órfãs (pioneiros, termos, privacidade, LGPD) fora do padrão~~ — feito 24/08, ver acima
+- [ ] Publicar site + app no mesmo deploy (agora inclui as 4 páginas órfãs corrigidas)
 

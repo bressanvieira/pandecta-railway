@@ -1,7 +1,7 @@
 {
   "meta": {
     "nome": "Pandecta Executive Command Center",
-    "versao": 8,
+    "versao": 9,
     "atualizado_em": "2026-08-24",
     "changelog": [
       {
@@ -43,11 +43,17 @@
         "data": "2026-08-24",
         "versao": 8,
         "mudancas": "Maurício perguntou se a ferramenta inteira já batia com o novo direcionamento antes de publicar — e não batia: a tela do construtor de peças ainda rodava num tema escuro separado, decisão que eu tinha tomado sozinho na sessão anterior tratando como 'modo de composição focado'. Ele apontou o critério certo (quem entra pelo site não pode ter surpresa) e pediu pra converter. Feito: construtor de peças (seleção de tipo/área/partes/fatos, geração e visualizador de documento) passou para o mesmo sistema claro do resto do app — sem nenhuma cor ou fundo escuro sobrando ali. De caminho, encontrei e corrigi três tons de 'navy' diferentes fazendo o mesmo papel em lugares diferentes (landing, card de destaque da home, construtor antigo) — agora é um token só, mesmo valor exato da landing. Screenshot do construtor recapturada de novo (a primeira ainda mostrava a versão escura). Detector: 10 → 6. Landing e validate.js seguem limpos. Pronto para publicar."
+      },
+      {
+        "data": "2026-08-24",
+        "versao": 9,
+        "mudancas": "Maurício reportou que a página Pioneiros não tinha sido atualizada — a investigação achou 4 páginas órfãs inteiras (pioneiros, termos de uso, política de privacidade, LGPD), servidas por rota própria no server.js, fora do escopo do passe tela a tela porque não fazem parte do index.html. Estavam intocadas desde junho: tema escuro antigo, fonte de sistema, ícones em emoji — e acessíveis direto pelo menu e rodapé da landing nova, ou seja, dois cliques bastavam pra cair de volta na versão antiga. As 4 foram refeitas no sistema novo (pioneiros reconstruída inteira; as 3 páginas jurídicas tiveram só os tokens de cor trocados, texto legal intacto). No processo, achei e corrigi um bug real de layout na LGPD (o índice usava a tag <nav>, que colidia com a regra CSS do cabeçalho fixo e colapsava a caixa) — bug que já existia na versão escura, só ficou visível ao rodar em tema claro. Detector rodado nas 4 e achados reais corrigidos (bordas coloridas laterais, contraste, texto pequeno demais); densidade tipográfica e numeração de seção em documentos jurídicos longos aceitos como exceção documentada."
       }
     ]
   },
   "dashboard": {
     "avancou": [
+      "4 páginas órfãs (pioneiros, termos, privacidade, LGPD) fora do padrão novo — descobertas e refeitas; eram acessíveis direto pela landing e ainda mostravam a versão escura antiga",
       "Ferramenta: construtor de peças convertido de tema escuro para o mesmo sistema claro do resto do app — Maurício pegou a inconsistência antes de publicar. Detector 10 → 6, único navy do produto unificado",
       "Ferramenta: passe tela a tela concluído nas 10 telas do app — detector 82 → 10, os 10 restantes documentados como aceitáveis",
       "Ferramenta: 142 emoji → 40 ícones SVG desenhados; detector 185 → 82; login e cadastro refeitos",
@@ -201,6 +207,16 @@
           "responsavel": "Maurício + Claude",
           "dependencias": "—",
           "proxima_acao": "Publicar landing + app juntos (git push + deploy Railway) — Maurício vai fazer um pente fino depois de publicado",
+          "prazo": "24/08/2026",
+          "prioridade": "alta"
+        },
+        {
+          "nome": "Redesign das 4 páginas órfãs (pioneiros, termos, privacidade, LGPD)",
+          "objetivo": "Essas páginas ficaram fora do passe tela a tela (não fazem parte do index.html) e continuavam no tema escuro antigo, acessíveis direto pela landing nova",
+          "status": "concluido",
+          "responsavel": "Maurício + Claude",
+          "dependencias": "—",
+          "proxima_acao": "Publicar junto com landing + app no mesmo deploy",
           "prazo": "24/08/2026",
           "prioridade": "alta"
         },
@@ -583,7 +599,7 @@
   "roadmap": {
     "em_andamento": [
       "META 30/09/2026 — 3 advogados com peça protocolada (Fabiano = 1 de 3)",
-      "Publicar landing + app juntos — redesign concluído, falta só o git push + deploy",
+      "Publicar landing + app + 4 páginas órfãs juntos — redesign concluído, falta só o git push + deploy",
       "Waalaxy: 450 prospects, campanha rodando há ~4 semanas — resultado não medido",
       "Auditoria do inbox LinkedIn (aceites/respostas desde 13/07)",
       "Relacionamento com Fabiano (beta principal — retomar pós-férias)",

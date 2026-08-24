@@ -12,15 +12,16 @@
     }
 
     :root {
-      --bg-deep:      #001B2A;
-      --bg-card:      #002438;
-      --bg-section:   #00304d;
-      --gold:         #C8A96B;
-      --gold-light:   #dfc291;
-      --text:         #F4F4F4;
-      --text-muted:   #a8bbc8;
-      --border:       rgba(200, 169, 107, 0.20);
-      --divider:      rgba(244, 244, 244, 0.08);
+      --bg-deep:      #FFFFFF;
+      --bg-card:      #F6F6F3;
+      --bg-section:   #EFEEE9;
+      --gold:         #8A6A22;
+      --gold-light:   #5F4A18;
+      --text:         #101A24;
+      --text-muted:   #46525E;
+      --border:       rgba(138,106,34,0.20);
+      --divider:      rgba(16,26,36,0.08);
+      --line-2:       #D2D1CA;
     }
 
     html {
@@ -37,9 +38,12 @@
 
     /* ── Header ── */
     header {
-      background: var(--bg-card);
+      background: rgba(255,255,255,.9);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
       border-bottom: 1px solid var(--border);
-      padding: 24px 40px;
+      padding: 0 40px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -51,32 +55,48 @@
     header a.logo-link {
       display: flex;
       align-items: center;
+      gap: 10px;
       text-decoration: none;
+      color: var(--text);
     }
 
-    header img.logo {
-      height: 36px;
-      width: auto;
+    header a.logo-link img.logo {
+      height: 24px;
+      width: 24px;
+    }
+
+    header a.logo-link b {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    header a.logo-link b span {
+      color: var(--gold);
+      font-weight: 600;
     }
 
     header a.back-link {
-      color: var(--gold);
+      color: var(--text-muted);
       text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 14.5px;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: color 0.2s;
+      padding: 9px 14px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
     }
 
     header a.back-link:hover {
-      color: var(--gold-light);
+      color: var(--text);
+      background: var(--bg-card);
     }
 
     /* ── Hero strip ── */
     .hero {
-      background: linear-gradient(135deg, var(--bg-card) 0%, #003355 100%);
+      background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-section) 100%);
       border-bottom: 1px solid var(--border);
       padding: 56px 40px 48px;
       text-align: center;
@@ -101,7 +121,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(200, 169, 107, 0.12);
+      background: rgba(138, 106, 34, 0.12);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 6px 16px;
@@ -188,7 +208,7 @@
     }
 
     .section-number {
-      background: rgba(200, 169, 107, 0.15);
+      background: rgba(138, 106, 34, 0.15);
       border: 1px solid var(--border);
       border-radius: 8px;
       width: 36px;
@@ -198,7 +218,7 @@
       justify-content: center;
       font-size: 13px;
       font-weight: 700;
-      color: var(--gold);
+      color: #7A5D1E;
       flex-shrink: 0;
     }
 
@@ -244,8 +264,8 @@
     }
 
     .callout-warning {
-      background: rgba(200, 169, 107, 0.08);
-      border-left: 3px solid var(--gold);
+      background: rgba(138, 106, 34, 0.08);
+      border: 1px solid rgba(138, 106, 34, 0.28);
       color: var(--text-muted);
     }
 
@@ -254,24 +274,22 @@
       color: var(--gold);
       font-size: 13px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       margin-bottom: 6px;
     }
 
     .callout-info {
-      background: rgba(0, 100, 160, 0.15);
-      border-left: 3px solid #3b9edd;
+      background: rgba(31,79,168,.08);
+      border: 1px solid rgba(31,79,168,.28);
       color: var(--text-muted);
     }
 
     .callout-info strong {
       display: block;
-      color: #3b9edd;
+      color: #1F4FA8;
       font-size: 13px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       margin-bottom: 6px;
     }
 
@@ -287,7 +305,7 @@
       text-align: left;
       padding: 10px 14px;
       background: var(--bg-section);
-      color: var(--gold);
+      color: #7A5D1E;
       font-weight: 600;
       font-size: 13px;
       text-transform: uppercase;
@@ -335,11 +353,6 @@
       margin-bottom: 16px;
     }
 
-    footer img {
-      height: 28px;
-      opacity: 0.75;
-    }
-
     /* ── Responsive ── */
     @media (max-width: 640px) {
       header { padding: 16px 20px; }
@@ -354,10 +367,11 @@
 
 <!-- ══ HEADER ══════════════════════════════════════════════════════════ -->
 <header>
-  <a href="https://pandecta.com.br" class="logo-link" title="Página inicial Pandecta">
-    <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI" class="logo" />
+  <a href="/" class="logo-link" title="Página inicial Pandecta">
+    <img src="/icone-pandecta.webp" alt="" class="logo" />
+    <b>PANDECTA <span>AI</span></b>
   </a>
-  <a href="https://pandecta.com.br" class="back-link">
+  <a href="/" class="back-link">
     ← Voltar ao site
   </a>
 </header>
@@ -861,9 +875,6 @@
 
 <!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
 <footer>
-  <div class="footer-logo">
-    <img src="/pandecta-logo-horizontal.png" alt="Pandecta AI" />
-  </div>
   <p>
     &copy; 2026 Pandecta AI &nbsp;·&nbsp;
     <a href="https://pandecta.com.br">pandecta.com.br</a>
