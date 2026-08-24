@@ -290,11 +290,24 @@ html.has-session #screen-login{visibility:hidden;}
 .hd-kpi-lbl{font-size:12px;color:var(--t3);margin-top:3px;}
 .hd-kpi-sub{font-size:11px;color:var(--gold);margin-top:1px;}
 .hd-divider{height:1px;background:var(--bd);}
-.hd-area-lbl{font-size:12px;color:var(--t3);margin-bottom:4px;}
-.hd-area-name{font-size:16px;font-weight:600;color:var(--t1);}
-.hd-area-bar{height:4px;background:var(--bd-md);border-radius:2px;margin-top:8px;overflow:hidden;}
-.hd-area-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .6s ease;}
-.hd-area-pct{font-size:11px;color:var(--t3);margin-top:4px;text-align:right;}
+.hd-area-lbl{font-size:12px;color:var(--t3);margin-bottom:9px;}
+.hd-area-chart{display:flex;flex-direction:column;gap:8px;}
+.hd-area-row{display:flex;align-items:center;gap:8px;}
+.hd-area-row-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.hd-area-row-lbl{font-size:12px;color:var(--t2);width:82px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hd-area-row-track{flex:1;height:6px;background:var(--bd-md);border-radius:3px;overflow:hidden;}
+.hd-area-row-fill{display:block;height:100%;border-radius:3px;transition:width .6s ease;}
+.hd-area-row-val{font-size:11.5px;color:var(--t3);width:18px;text-align:right;flex-shrink:0;}
+.hd-activity{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 18px 14px;}
+.hd-activity-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;}
+.hd-activity-title{font-size:13px;font-weight:600;color:var(--t1);}
+.hd-activity-sub{font-size:12px;color:var(--t3);}
+.hd-activity-chart{display:flex;align-items:flex-end;gap:5px;height:56px;}
+.hd-activity-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;}
+.hd-activity-bar{width:100%;max-width:22px;border-radius:3px 3px 1px 1px;background:var(--gold);min-height:3px;transition:height .5s ease;}
+.hd-activity-bar.zero{background:var(--bd-md);}
+.hd-activity-bar.today{background:var(--navy);}
+.hd-activity-day{font-size:9.5px;color:var(--t3);white-space:nowrap;}
 .hd-panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
 .hd-panel-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--bd);}
 .hd-panel-title{font-size:13px;font-weight:600;color:var(--t1);}
@@ -1239,15 +1252,22 @@ html.has-session #screen-login{visibility:hidden;}
               </div>
               <div class="hd-divider"></div>
               <div>
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                  <div class="hd-area-lbl">Área principal</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <div class="hd-area-lbl">Peças por área</div>
                   <button class="hd-panel-link" onclick="go('historico')" style="font-size:12px;">Ver histórico</button>
                 </div>
-                <div class="hd-area-name" id="hd-area-name">–</div>
-                <div class="hd-area-bar"><div class="hd-area-fill" id="hd-area-fill" style="width:0%"></div></div>
-                <div class="hd-area-pct" id="hd-area-pct">&nbsp;</div>
+                <div class="hd-area-chart" id="hd-area-chart"><div class="hd-empty">–</div></div>
               </div>
             </div>
+          </div>
+
+          <!-- Atividade — volume real dos últimos 14 dias, não estático -->
+          <div class="hd-activity">
+            <div class="hd-activity-head">
+              <span class="hd-activity-title">Atividade</span>
+              <span class="hd-activity-sub" id="hd-activity-sub">últimos 14 dias</span>
+            </div>
+            <div class="hd-activity-chart" id="hd-activity-chart"></div>
           </div>
 
           <!-- Peças recentes (fonte única — sem duplicar o resumo acima) -->
@@ -2494,15 +2514,58 @@ async function loadHomeDash(){
     const short=label.length>12?label.split(' ')[0]:label;
     const elTipo=document.getElementById('hd-tipo');if(elTipo)elTipo.textContent=short;
   }
-  // Área principal
+  // Peças por área — todas as áreas com volume, não só a principal
   const areas={};
   hist.forEach(x=>{if(x.area_label)areas[x.area_label]=(areas[x.area_label]||0)+1;});
-  const areaTop=Object.entries(areas).sort((a,b)=>b[1]-a[1])[0];
-  if(areaTop){
-    const elAN=document.getElementById('hd-area-name');if(elAN)elAN.textContent=areaTop[0];
-    const pct=total?Math.round(areaTop[1]/total*100):0;
-    const elFill=document.getElementById('hd-area-fill');if(elFill)setTimeout(()=>{elFill.style.width=pct+'%';},60);
-    const elPct=document.getElementById('hd-area-pct');if(elPct)elPct.textContent=areaTop[1]+' de '+total+' peças são desta área';
+  const areaSorted=Object.entries(areas).sort((a,b)=>b[1]-a[1]);
+  const acEl=document.getElementById('hd-area-chart');
+  if(acEl){
+    if(!areaSorted.length){acEl.innerHTML='<div class="hd-empty">Sem dados ainda.</div>';}
+    else{
+      const maxA=areaSorted[0][1];
+      acEl.innerHTML=areaSorted.slice(0,5).map(([label,n])=>{
+        const cor=areaColor(label);
+        const pct=Math.round(n/maxA*100);
+        return '<div class="hd-area-row">'
+          +'<span class="hd-area-row-dot" style="background:'+cor+'"></span>'
+          +'<span class="hd-area-row-lbl">'+esc(label.replace(/^Direito (de |do |da )?/i,''))+'</span>'
+          +'<span class="hd-area-row-track"><span class="hd-area-row-fill" style="width:0%;background:'+cor+'" data-w="'+pct+'"></span></span>'
+          +'<span class="hd-area-row-val">'+n+'</span>'
+          +'</div>';
+      }).join('');
+      setTimeout(()=>{acEl.querySelectorAll('.hd-area-row-fill').forEach(el=>{el.style.width=el.dataset.w+'%';});},60);
+    }
+  }
+  // Atividade — volume real dos últimos 14 dias (não estático, computado do histórico)
+  const days=[];
+  for(let i=13;i>=0;i--) days.push(new Date(now.getFullYear(),now.getMonth(),now.getDate()-i));
+  const countByDay=days.map(d=>hist.filter(x=>{
+    const xd=new Date(x.created_at);
+    return !isNaN(xd.getTime())&&xd.getFullYear()===d.getFullYear()&&xd.getMonth()===d.getMonth()&&xd.getDate()===d.getDate();
+  }).length);
+  const maxDay=Math.max(1,...countByDay);
+  const chEl=document.getElementById('hd-activity-chart');
+  if(chEl){
+    chEl.innerHTML=days.map((d,i)=>{
+      const n=countByDay[i];
+      const h=Math.max(Math.round(n/maxDay*100),n?6:3);
+      const isToday=i===days.length-1;
+      return '<div class="hd-activity-col" title="'+d.toLocaleDateString('pt-BR')+': '+n+' peça'+(n===1?'':'s')+'">'
+        +'<div class="hd-activity-bar'+(n===0?' zero':'')+(isToday?' today':'')+'" style="height:0%" data-h="'+h+'"></div>'
+        +'<span class="hd-activity-day">'+d.getDate()+'</span>'
+        +'</div>';
+    }).join('');
+    setTimeout(()=>{chEl.querySelectorAll('.hd-activity-bar').forEach(el=>{el.style.height=el.dataset.h+'%';});},60);
+  }
+  const semAtual=countByDay.slice(7,14).reduce((a,b)=>a+b,0);
+  const semAnt=countByDay.slice(0,7).reduce((a,b)=>a+b,0);
+  const subEl=document.getElementById('hd-activity-sub');
+  if(subEl){
+    if(!semAtual&&!semAnt) subEl.textContent='últimos 14 dias';
+    else{
+      const diff=semAtual-semAnt;
+      subEl.textContent=diff===0?'ritmo estável esta semana':(diff>0?'+':'')+diff+' peça'+(Math.abs(diff)===1?'':'s')+' vs. semana anterior';
+    }
   }
   // Acervo — só decide se a dica de onboarding aparece (evita repetir o dado em outro lugar)
   try{
@@ -3564,6 +3627,7 @@ async function loadHistorico(){
   try{sessionHistory=await api('GET','/api/history');}catch(e){sessionHistory=[];}
   renderHistorico();
 }
+const AREA_COLOR={consumidor:'#B08A2E',civil:'#3b6fd6',trabalhista:'#158f5f',familia:'#7c5cd6',empresarial:'#c07a13',tributario:'#c0392b'};
 function areaKeyFromLabel(label){
   const n=(label||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
   if(n.includes('consumidor'))return'consumidor';
@@ -3574,6 +3638,7 @@ function areaKeyFromLabel(label){
   if(n.includes('civil'))return'civil';
   return'';
 }
+function areaColor(label){return AREA_COLOR[areaKeyFromLabel(label)]||'var(--t3)';}
 function renderHistorico(){
   const grid=document.getElementById('hist-grid'),empty=document.getElementById('hist-empty');
   if(!grid)return;
@@ -3587,10 +3652,8 @@ function renderHistorico(){
   empty.style.display=items.length?'none':'block';
   if(!items.length&&sessionHistory.length) empty.textContent='Nenhuma peça encontrada para essa busca.';
   else if(!items.length) empty.innerHTML='Nenhuma peça gerada ainda.<br>Clique em <strong>Nova peça</strong> para começar.';
-  const AREA_COLOR={consumidor:'#B08A2E',civil:'#3b6fd6',trabalhista:'#158f5f',familia:'#7c5cd6',empresarial:'#c07a13',tributario:'#c0392b'};
   grid.innerHTML=items.map(item=>{
-    const areaKey=areaKeyFromLabel(item.area_label);
-    const cor=AREA_COLOR[areaKey]||'var(--t3)';
+    const cor=areaColor(item.area_label);
     const dataFmt=fmtDate(item.created_at).replace(/,.*$/,'').trim();
     return`<div class="hist-row" onclick="abrirViewer(${item.id})" tabindex="0" onkeydown="if(event.key==='Enter')abrirViewer(${item.id})">
       <div class="hist-row-doc">

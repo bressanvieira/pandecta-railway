@@ -449,3 +449,31 @@ Correções:
   das telas mexidas aqui). `node validate.js` OK. Conferido com captura real via Playwright: desktop,
   hover, filtro por área, abertura do documento, e mobile 390px — todos os fluxos intactos.
 
+**24/08 — Dashboard home, 2ª rodada: Maurício apontou que só tirar redundância não bastava.**
+Reação ao primeiro passe: "não mudou praticamente nada além das exclusões... não chama a atenção do
+advogado trazendo informações relevantes. Algum gráfico por exemplo." Ele tinha razão — distill só
+remove, e a tela ficou honesta mas achatada, sem nenhum momento de leitura rápida. Adicionei densidade
+de informação real (dado de verdade, nada inventado — `PRODUCT.md` proíbe métrica fictícia), amparado
+pelo próprio `operate.md`: "A single surface can earn Committed... a dashboard where one category color
+carries a report" — permissão explícita pra isso, não gosto pessoal de novo.
+- **"Peças por área" virou gráfico de barras real** (era só a área principal com uma barrinha única) —
+  todas as áreas com volume, ordenadas, cada uma com a cor por área que já existe no histórico (mesma
+  paleta, `AREA_COLOR`/`areaColor()` — antes só declarados dentro de `renderHistorico()`, agora no escopo
+  do script pra reusar aqui). Sistema de cor por área agora amarra as duas telas visualmente.
+- **Painel "Atividade" novo** — gráfico de barras dos últimos 14 dias, contagem real por dia a partir do
+  `created_at` de cada peça (não estático, não decorativo), barra de hoje destacada em navy, legenda
+  dinâmica ("+N peças vs. semana anterior" comparando os dois períodos de 7 dias). É o "algum gráfico"
+  que faltava.
+- **Bug real encontrado no processo:** as barras de preenchimento coloridas (`.hd-area-row-fill`) não
+  apareciam — só a trilha cinza de fundo. Causa: são `<span>` (inline por padrão) com `width`/`height` via
+  style inline, e propriedade `width`/`height` **não tem efeito em elemento inline não-substituído** (regra
+  do CSS, não bug de navegador) — a barra colorida renderizava com 0px de largura sempre, escondida atrás
+  da trilha. Corrigido com `display:block` na classe. Achado com `getBoundingClientRect()` via Playwright
+  (`rectWidth: 0` em todas), não só inspeção visual — o mesmo tipo de verificação que pegou o bug do
+  "documento" no histórico mais cedo hoje.
+- Populei o banco local com 25 peças espalhadas em 14 dias + 5 áreas pra validar os dois gráficos com dado
+  real antes de screenshot, e removi depois (banco local voltou a ter só a peça original).
+- Detector: 5 (foi 6) — `transition:width` do preenchimento da barra de área é o mesmo padrão já aceito
+  documentado (barra que anima uma vez, não continuamente). `node validate.js` OK. Conferido com captura
+  real desktop e mobile 390px — os dois gráficos renderizam corretos, proporcionais, coloridos.
+
