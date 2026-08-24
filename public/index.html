@@ -129,6 +129,10 @@ html.has-session #screen-login{visibility:hidden;}
 .inp-icn svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none;}
 .inp-icn input{padding-left:38px;}
 
+.login-remember{display:flex;align-items:center;gap:8px;margin:14px 0 4px;cursor:pointer;user-select:none;}
+.login-remember input{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;}
+.login-remember span{font-size:13.5px;color:var(--t2);}
+
 /* Botão */
 .login-btn{
   width:100%;padding:15px;margin-top:8px;background:var(--t1);color:#FFF;
@@ -1157,6 +1161,11 @@ html.has-session #screen-login{visibility:hidden;}
           <input id="inp-pass" type="password" placeholder="••••••••">
         </div>
       </div>
+
+      <label class="login-remember">
+        <input type="checkbox" id="inp-remember">
+        <span>Manter-me conectado por 7 dias neste dispositivo</span>
+      </label>
 
       <button class="login-btn" onclick="fazerLogin()">Entrar</button>
       <div class="login-err" id="login-err">E-mail ou senha incorretos.</div>
@@ -2756,12 +2765,13 @@ document.addEventListener('click',e=>{if(!e.target.closest('.tb-right'))document
 async function fazerLogin(){
   const u=document.getElementById('inp-user').value.trim().toLowerCase();
   const p=document.getElementById('inp-pass').value;
+  const manter=document.getElementById('inp-remember').checked;
   const err=document.getElementById('login-err');
   const btn=document.querySelector('.login-btn');
   err.style.display='none';
   btn.textContent='Entrando...';btn.disabled=true;
   try{
-    const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:u,password:p})});
+    const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:u,password:p,manterConectado:manter})});
     const data=await r.json();
     if(!r.ok){err.textContent=data.error||'Email ou senha incorretos.';err.style.display='block';return;}
     authToken=data.token;

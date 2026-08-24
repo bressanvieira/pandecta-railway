@@ -39,6 +39,15 @@ SaaS de inteligência jurídica para advogados brasileiros. Gera petições, con
 - JWT payload usa **`userId`** — sempre `req.user.userId`, **nunca** `req.user.id`
 - bcryptjs para senhas | roles: `user` / `admin`
 - **Trial desativado temporariamente** — bloco de expiração comentado no server.js. Reativar quando lançar planos pagos. Apenas `account_status='blocked'` bloqueia acesso.
+- **Validade do token (24/08/2026, decisão do Maurício)**: sessão é **1 dia por padrão** — em `/api/auth/login`
+  e `/api/cadastro`. Só vira **7 dias** se a pessoa marcar "Manter-me conectado" no login (`manterConectado:true`
+  no body, checkbox `#inp-remember` em `index.html`). Cadastro nunca oferece 7 dias — auto-login pós-cadastro é
+  sempre de 1 dia. Motivo: são advogados lidando com dados de clientes; ele não quer alguém reclamando "acessaram
+  minha conta sem senha". Não mexer nisso sem confirmar com ele — é uma decisão de produto, não só técnica.
+- **`JWT_SECRET`**: confirmado que existe uma variável de ambiente própria na Railway (não é o fallback
+  `'pandecta-dev-secret-trocar-em-producao'` do código). Se algum dia essa var sumir do Railway, todos os
+  tokens passam a ser forjáveis por qualquer um que leia o `server.js` — checar isso é o primeiro passo em
+  qualquer investigação de acesso indevido.
 
 ### Edição do index.html
 - **Nunca usar `open(..., 'w')`** em Python — trunca o arquivo. Usar leitura binária + verificar `endswith(b'</html>\n')`

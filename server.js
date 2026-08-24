@@ -253,7 +253,7 @@ function requireAuth(req, res, next) {
 // ââ AUTH ROUTES âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 app.post('/api/auth/login', (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, manterConectado } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email e senha obrigatÃ³rios.' });
   if (!db) return res.status(503).json({ error: 'DB indisponÃ­vel.' });
   try {
@@ -282,7 +282,10 @@ app.post('/api/auth/login', (req, res) => {
       user.trial_expires_at = computed;
     }
     const isPioneer = user.is_pioneer ? 1 : 0;
-    const token = jwt.sign({ userId: user.id, email: user.email, nome: user.nome, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer }, JWT_SECRET, { expiresIn: '7d' });
+    // Sessão curta por padrão (advogados lidam com dados sensíveis de clientes) — só
+    // estende para 7 dias quando a pessoa marca "Manter-me conectado" explicitamente.
+    const sessaoValidade = manterConectado ? '7d' : '1d';
+    const token = jwt.sign({ userId: user.id, email: user.email, nome: user.nome, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer }, JWT_SECRET, { expiresIn: sessaoValidade });
     res.json({ token, nome: user.nome, email: user.email, role: user.role, plan: user.plan, account_status: user.account_status, is_pioneer: isPioneer, trial_expires_at: user.trial_expires_at || null });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -339,9 +342,10 @@ app.post('/api/cadastro', (req, res) => {
       institution.trim(), semester.trim(), trialExpires
     );
 
+    // Mesma regra do login: sessão curta por padrão logo após o cadastro.
     const token = jwt.sign(
       { userId: r.lastInsertRowid, email: email.trim().toLowerCase(), nome: nomeCompleto, role: 'user', plan, account_status: 'trial', is_pioneer: 0 },
-      JWT_SECRET, { expiresIn: '7d' }
+      JWT_SECRET, { expiresIn: '1d' }
     );
 
     // Notificação Telegram

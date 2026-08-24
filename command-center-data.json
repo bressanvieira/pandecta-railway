@@ -1,7 +1,7 @@
 {
   "meta": {
     "nome": "Pandecta Executive Command Center",
-    "versao": 9,
+    "versao": 10,
     "atualizado_em": "2026-08-24",
     "changelog": [
       {
@@ -48,11 +48,17 @@
         "data": "2026-08-24",
         "versao": 9,
         "mudancas": "Maurício reportou que a página Pioneiros não tinha sido atualizada — a investigação achou 4 páginas órfãs inteiras (pioneiros, termos de uso, política de privacidade, LGPD), servidas por rota própria no server.js, fora do escopo do passe tela a tela porque não fazem parte do index.html. Estavam intocadas desde junho: tema escuro antigo, fonte de sistema, ícones em emoji — e acessíveis direto pelo menu e rodapé da landing nova, ou seja, dois cliques bastavam pra cair de volta na versão antiga. As 4 foram refeitas no sistema novo (pioneiros reconstruída inteira; as 3 páginas jurídicas tiveram só os tokens de cor trocados, texto legal intacto). No processo, achei e corrigi um bug real de layout na LGPD (o índice usava a tag <nav>, que colidia com a regra CSS do cabeçalho fixo e colapsava a caixa) — bug que já existia na versão escura, só ficou visível ao rodar em tema claro. Detector rodado nas 4 e achados reais corrigidos (bordas coloridas laterais, contraste, texto pequeno demais); densidade tipográfica e numeração de seção em documentos jurídicos longos aceitos como exceção documentada."
+      },
+      {
+        "data": "2026-08-24",
+        "versao": 10,
+        "mudancas": "Maurício notou que o app não pedia senha de novo ao reabrir e perguntou se isso era risco de segurança — são advogados lidando com dados de cliente, ele não quer reclamação de acesso indevido. Confirmado: o JWT durava 7 dias sempre, sem opção de sessão curta. Ele decidiu: 1 dia por padrão, e só vira 7 dias se a pessoa marcar 'Manter-me conectado' explicitamente no login. Implementado: checkbox novo na tela de login (index.html), server.js aceita manterConectado no corpo do /api/auth/login e ajusta a validade do token; /api/cadastro (auto-login pós-cadastro) ficou fixo em 1 dia, sem opção de 7 — não tem checkbox nessa tela. Testado ponta a ponta: cadastro=24h, login sem marcar=24h, login marcando=168h. De caminho, confirmado com o Maurício que a variável JWT_SECRET existe de fato na Railway (não está caindo no valor padrão do código, que seria forjável por qualquer um)."
       }
     ]
   },
   "dashboard": {
     "avancou": [
+      "Segurança: sessão de login reduzida de 7 dias fixos para 1 dia por padrão — só vira 7 dias com checkbox 'Manter-me conectado' explícito. Decisão do Maurício por lidar com dados de advogado/cliente",
       "4 páginas órfãs (pioneiros, termos, privacidade, LGPD) fora do padrão novo — descobertas e refeitas; eram acessíveis direto pela landing e ainda mostravam a versão escura antiga",
       "Ferramenta: construtor de peças convertido de tema escuro para o mesmo sistema claro do resto do app — Maurício pegou a inconsistência antes de publicar. Detector 10 → 6, único navy do produto unificado",
       "Ferramenta: passe tela a tela concluído nas 10 telas do app — detector 82 → 10, os 10 restantes documentados como aceitáveis",
