@@ -2165,7 +2165,7 @@ html.has-session #screen-login{visibility:hidden;}
               <thead>
                 <tr>
                   <th>Usuário</th>
-                  <th>Contato</th>
+                  <th>Telefone</th>
                   <th>Perfil</th>
                   <th>Plano</th>
                   <th>Status</th>
@@ -4683,6 +4683,8 @@ async function loadUsers(){
       const isAdmin=u.role==='admin';
       const initials=(u.nome||u.email||'?').slice(0,1).toUpperCase();
       const planCls='plan-'+(u.plan||'solo');
+      const waNum=(u.phone||'').replace(/\D/g,'');
+      const phoneHtml=u.phone?(waNum?'<a href="https://wa.me/55'+waNum+'" target="_blank" rel="noopener" style="color:var(--t1);text-decoration:none;border-bottom:1px dashed var(--bd);">'+esc(u.phone)+'</a>':esc(u.phone)):'–';
       const statusBtns=isAdmin
         ?'<span style="font-size:11px;color:var(--t3);font-style:italic;">admin</span>'
         :'<div style="display:flex;gap:5px;flex-wrap:wrap;">'
@@ -4697,7 +4699,7 @@ async function loadUsers(){
         +'<div><div style="font-weight:500;font-size:13px;color:var(--t1);">'+esc(u.nome||'–')+'</div>'
         +'<div style="font-size:11px;color:var(--t3);margin-top:1px;">'+esc(u.email)+'</div></div>'
         +'</div></td>'
-        +'<td class="td-sub">'+esc(u.phone||'–')+'</td>'
+        +'<td class="td-sub">'+phoneHtml+'</td>'
         +'<td class="td-sub">'+profIcon+' '+profTxt+'</td>'
         +'<td><span class="plan-badge '+planCls+'">'+planLabel(u.plan)+'</span></td>'
         +'<td><span class="status-badge '+sClass+'">'+sLabel+'</span></td>'

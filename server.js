@@ -169,6 +169,9 @@ try {
   try { db.exec(`ALTER TABLE users ADD COLUMN semester TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE users ADD COLUMN trial_expires_at DATETIME`); } catch(e) {}
   try { db.exec(`ALTER TABLE users ADD COLUMN account_status TEXT DEFAULT 'active'`); } catch(e) {}
+  // migrations termos de uso (aceite obrigatorio no cadastro)
+  try { db.exec(`ALTER TABLE users ADD COLUMN terms_accepted_at DATETIME`); } catch(e) {}
+  try { db.exec(`ALTER TABLE users ADD COLUMN terms_ip TEXT DEFAULT ''`); } catch(e) {}
   // migrations pioneiros
   try { db.exec(`ALTER TABLE users ADD COLUMN is_pioneer INTEGER DEFAULT 0`); } catch(e) {}
   try { db.exec(`ALTER TABLE fundadores ADD COLUMN status TEXT DEFAULT 'pendente'`); } catch(e) {}
@@ -314,10 +317,12 @@ app.get('/api/debug/ping', (req, res) => {
 app.post('/api/cadastro', (req, res) => {
   const { email, password, nome, sobrenome, phone, plan = 'solo',
           profile_type = 'advogado', oab_number = '', oab_uf = '',
-          institution = '', semester = '' } = req.body;
+          institution = '', semester = '', terms_accepted = false } = req.body;
 
   if (!email || !password || !nome || !sobrenome || !phone)
     return res.status(400).json({ error: 'Preencha todos os campos obrigat\u00f3rios.' });
+  if (!terms_accepted)
+    return res.status(400).json({ error: 'Voc\u00ea precisa aceitar os Termos de Uso e a Pol\u00edtica de Privacidade.' });
   if (password.length < 8)
     return res.status(400).json({ error: 'Senha deve ter no m\u00ednimo 8 caracteres.' });
   if (profile_type === 'advogado' && (!oab_number || !oab_uf))
@@ -327,19 +332,22 @@ app.post('/api/cadastro', (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indispon\u00edvel.' });
 
   try {
+    const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || '';
     const hash = bcrypt.hashSync(password, 10);
     const trialExpires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
     const nomeCompleto = (nome.trim() + ' ' + sobrenome.trim()).trim();
 
     const r = db.prepare(`
       INSERT INTO users (email, password_hash, nome, role, phone, plan, profile_type,
-                         oab_number, oab_uf, institution, semester, trial_expires_at, account_status)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'trial')
+                         oab_number, oab_uf, institution, semester, trial_expires_at, account_status,
+                         terms_accepted_at, terms_ip)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'trial',?,?)
     `).run(
       email.trim().toLowerCase(), hash, nomeCompleto, 'user',
       phone.trim(), plan, profile_type,
       oab_number.trim().toUpperCase(), oab_uf.trim().toUpperCase(),
-      institution.trim(), semester.trim(), trialExpires
+      institution.trim(), semester.trim(), trialExpires,
+      new Date().toISOString(), ip
     );
 
     // Mesma regra do login: sessão curta por padrão logo após o cadastro.
@@ -427,7 +435,7 @@ app.get('/api/users', requireAuth, requireAdmin, (req, res) => {
     res.json(db.prepare(`
       SELECT id, email, nome, role, phone, plan, profile_type,
              oab_number, oab_uf, institution, semester,
-             trial_expires_at, account_status, created_at
+             trial_expires_at, account_status, created_at, terms_accepted_at
       FROM users ORDER BY created_at DESC
     `).all());
   } catch (e) { res.status(500).json({ error: e.message }); }

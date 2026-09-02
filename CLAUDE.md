@@ -208,26 +208,67 @@ Documento completo no Obsidian: `🎯 Plano Mestre/11 - Protocolo Anti-Eu.md`
 ## Pessoas
 
 - **Maurício** — fundador, dev, PO. Atibaia – SP. `mauriciovbressan@gmail.com`
-- **Fabiano** — beta tester principal. 30+ anos, 3 escritórios (Imobiliário ~50% + Consumidor + Contratos). Convite enviado 24/06/2026. Retorno positivo 03/07/2026 — usou 100% da peça, protocolou em juízo. Não conhece o Sistema de Modelos ainda (mostrar).
+- **Fabiano** — beta tester principal. 30+ anos, 3 escritórios (Imobiliário ~50% + Consumidor + Contratos). Convite enviado 24/06/2026. Retorno positivo 03/07/2026 — usou 100% da peça, protocolou em juízo. Não conhece o Sistema de Modelos ainda (mostrar). **25/08:** sumiu logo após retornar de férias — Maurício já mandou mensagem de check-in sem cobrança, resposta pendente.
+- **Victor** — outro contato próximo (detalhe de papel/histórico ainda não registrado aqui). **25/08:** mesmo padrão do Fabiano — sumiu ao voltar de férias. Maurício já mandou check-in, resposta pendente. Hipótese dele (intuição forte, **não confirmada**): o tempo livre deu espaço pra conversar com alguém que ofereceu construir algo parecido (ex.: amigo diretor de TI do Fabiano).
 - **Kiko** — validou System Prompt v4 (22/05/2026)
 - **Consultora técnica jurídica** *(nome pendente)* — validação pelo olhar jurídico
 
 ---
 
-## Instagram — Posts publicados
+## Instagram — Estratégia e posts (@pandecta.ai)
 
-- **Post 1** (26/06/2026): "20 Vagas — Advogado Pioneiro" — imagem estática navy+gold. Patrocinado.
-- **Post 2** (26/06/2026): Carrossel 4 slides — demonstração do produto (wizard + petição gerada). Patrocinado.
-- **Post 3** (26/06/2026): Logo + "A inteligência jurídica chegou." — imagem de marca.
-- Arquivos em `brand/` e `pandecta-post2-slide*.png`
-- **Observação:** Instagram pode não ser o canal ideal para advogados — público parece estar mais no LinkedIn/YouTube. Aguardar resultado do impulsionamento antes de investir mais.
+**Decisão de canal (28/08/2026):** Instagram confirmado como canal pago principal, não LinkedIn — decisão
+por dois motivos, não só preferência. (1) Conflito de imagem: Maurício trabalha em outra empresa e não pode
+aparecer em vídeo pessoal no LinkedIn. (2) Custo: CPC no Meta (~€0,50–2,50) é até 10x mais barato que LinkedIn
+(~€5–15), e o corte de mercado geral é Meta pra oferta de ticket baixo (<€5k de contrato) — os planos da
+Pandecta (R$79–379/mês) estão bem dentro dessa faixa; LinkedIn compensa mais pra ticket alto/enterprise com
+múltiplos aprovadores, que não é o caso aqui. **Ressalva:** a afirmação de que "tem muito advogado no Insta
+que compra, não só curte" vem de agências vendendo esse serviço (interesse próprio, não prova) — vale testar
+com verba baixa medindo cadastro real, não curtida, antes de escalar.
+
+**Decisão de conteúdo (28/08/2026):** Maurício vai aparecer em vídeo, gravando ele mesmo — já fez isso antes
+(perfil de NFT) e gosta de gravar. Vantagem de mercado que ele identificou: como não é advogado, a narrativa
+não pode ser "feito por advogado, pra advogados" (linha da Torix) — é "trago 30 anos de engenharia; o advogado
+tem que ser o advogado" (validação jurídica real via Kiko e Fabiano, não afirmação vazia). Base de pesquisa:
+não existe estudo controlado provando que founder-led marketing funciona (maioria do conteúdo sobre o tema é
+anedota de agência/blog) — mas psicologia de credibilidade de fonte e reconhecimento facial é achado real e
+antigo, e o dado de alcance do LinkedIn (perfil pessoal favorecido pelo algoritmo) é mensurável, só que não
+se aplica aqui pelo motivo (1) acima.
+
+**Auditoria do perfil atual (28/08/2026) — motivo pra reformar antes do primeiro vídeo:** só 2 seguidores, 3
+posts, zero vídeo. E o problema real: os 3 posts ainda usam o sistema visual **antigo** (navy escuro + dourado,
+logo velha) — exatamente o padrão que o produto abandonou no redesign de 23-24/08 (hoje: grafite + papel
+branco + dourado usado com parcimônia). Postar vídeo novo em cima desse grid antigo criaria dissonância de
+marca. Bio atual usa emoji como marcador (🇧🇷📚🚀) — viola a recusa permanente #3 do `DESIGN.md` ("sem emoji
+como sistema de ícone").
+
+**Plano de reforma do perfil (antes do 1º vídeo):**
+- Avatar: `icone-ink.webp` (marca em tinta escura) sobre fundo branco sólido — não usar variante dourada
+  transparente (risco de legibilidade em avatar pequeno) nem navy (abandonado).
+- Nome: `Pandecta AI`
+- Bio (sem emoji, dentro do limite de 150 caracteres) — duas opções prontas:
+  1. "Da tecnologia ao Direito: peças fundamentadas, no estilo do seu escritório, prontas para revisão profissional." (110c)
+  2. "Petições e contratos fundamentados por IA, no estilo do seu escritório — prontos para revisão profissional." (107c)
+- Link: manter `pandecta.com.br`
+- Posts antigos (20 Vagas / carrossel produto / logo): **arquivar, não apagar** — some do grid público sem
+  perder o histórico, e o grid recomeça limpo no sistema visual novo.
+- Arquivos de posts antigos em `brand/` e `pandecta-post2-slide*.png` (mantidos como registro histórico).
+
+**Status:** Maurício ainda vai executar a reforma do perfil manualmente (Claude não tem acesso de escrita ao
+Instagram). Depois disso, pronto pra começar a cadência de vídeo.
 
 ---
 
 ## Concorrentes mapeados
 
+- **ChatADV** — mapeado 25/08 (sessão de diagnóstico comercial). 200 mil usuários alegados, convênios com OAB, WhatsApp, 19M jurisprudências indexadas. Não combina rastreio de prazo/andamento com geração de peça por IA (mesma lacuna dos outros três abaixo).
+- **Judex** — mapeado 25/08, mesma sessão. Detalhe ainda não aprofundado.
+- **Jurídico AI** — mapeado 25/08, mesma sessão. Detalhe ainda não aprofundado. Não combina rastreio de prazo/andamento com geração de peça por IA.
+- **Jus IA / Jusbrasil** — mapeado 25/08, mesma sessão. Detalhe ainda não aprofundado.
+- **Leitura consolidada (25/08):** nenhum concorrente direto mapeado até agora combina duas coisas ao mesmo tempo — rastreio de prazo/andamento processual **e** geração de peça por IA no estilo do escritório. A Torix tem o rastreio mas não tem IA na redação; os quatro acima (quando têm IA) não têm o rastreio. Essa lacuna motivou a Prioridade 1 do roadmap de produto (ver Próximos passos).
 - **Exordial AI** (exordial.ai) — similar, baseado em Goiânia. Têm: jurisprudência em chat, contratos, petição em lote, transcrição de áudio, editor de documento separado (/editor). Pouquíssima tração no Instagram (40 curtidas no maior post). Usam guardrails como marketing.
 - **Enter AI** (getenter.ai) — mapeado anteriormente
+- **Torix** (torix.com.br) — mapeado 24/08, a pedido de Maurício ("achei o site... está muito semelhante ao nosso"). Análise: é adjacente, não concorrente direto. Núcleo do produto é **gestão de escritório** (prazos, intimações do DJEN por CNJ, agenda/Kanban, financeiro, portal do cliente white-label) — não redação de peça por IA. O gerador de documentos deles é "por algoritmo, sem IA" (preenchimento de campo em procuração/contrato de honorários/templates). IA entra só em dois pontos pontuais: ATA por IA (transcreve audiência/reunião em ata estruturada) e resumo em linguagem simples pro portal do cliente. Zero sobreposição com o núcleo da Pandecta (fatos do caso → peça redigida no estilo do escritório). Semelhança é de categoria/tom ("feito por advogado, pra advogados"), não de produto. Dados de mercado relevantes: já cobrando, por escritório (não por usuário), mais barato que os planos da Pandecta e sem limite de usuário mesmo no tier de entrada de equipe — Solo R$49,99 · Escritório R$99,99 (ilimitado, 3 OABs) · Banca R$149 (ilimitado); trial de 14 dias sem cartão. Visual: tema escuro navy (`#0d1830`) — o look que a Pandecta acabou de abandonar na migração pra claro. Não indexado no Google nem achado em busca por nome — site muito pequeno/recente, sem presença em rede social encontrada.
 
 ---
 
@@ -236,14 +277,56 @@ Documento completo no Obsidian: `🎯 Plano Mestre/11 - Protocolo Anti-Eu.md`
 - **Vault:** `C:\Users\usuario\Documents\Obsidian Vault`
 - **Projeto Jurídica AI:** `🗂️ Projetos\⚖️ Jurídica AI\`
 - **Validações:** `📋 Validações de Advogados\`
+- **Notas principais mantidas em sincronia com este CLAUDE.md e o `command-center-data.json`:**
+  `⚖️ Pandecta.md` (hub — status, log de decisões, concorrentes), `Pandecta — CONTEXTO.md` (onboarding
+  rápido pra novos chats), `Pandecta — Roadmap & Tarefas.md` (progresso/sprints)
+
+### Protocolo de manutenção (24/08/2026, a pedido de Maurício: "acho importante mantermos o Obsidian sempre atualizado em caso de perda de informações")
+1. Tratar o Obsidian como **backup redundante**, não como fonte de verdade — a fonte de verdade continua sendo
+   este `CLAUDE.md` + `command-center-data.json` (versionados no git). O Obsidian existe pra sobreviver a uma
+   perda desses dois.
+2. Sempre que este `CLAUDE.md` ganhar uma seção datada nova (bug corrigido, decisão de produto, feature) ou o
+   `command-center-data.json` ganhar uma entrada de changelog, espelhar o resumo em `⚖️ Pandecta.md` → tabela
+   "Log de decisões e marcos" (uma linha por marco, não o texto completo).
+3. Atualizar `Status atual` e `Próximos passos` do `⚖️ Pandecta.md` quando o contexto mudar de verdade — não
+   duplicar detalhe técnico fino, que já mora no CLAUDE.md.
+4. Mudança de stack, banco de dados ou arquitetura → refletir em `Pandecta — CONTEXTO.md`.
+5. Novo concorrente mapeado → adicionar na tabela de Concorrentes do `⚖️ Pandecta.md` (mesmo padrão do
+   `command-center-data.json`).
+6. Sempre checar `mtime` dos arquivos no vault antes de sobrescrever (via `device_list_dir`) — o Maurício edita
+   essas notas manualmente às vezes.
 
 ---
 
 ## Próximos passos
 
+### Proposta da agência Gene Digital — DECIDIDO: recusada (25/08/2026)
+Histórico: Plano GOLD R$1.997/mês (ou 3x R$1.995 no trimestral) — gestão de tráfego pago (Meta/Google/LinkedIn
+Ads) + equipe criativa (edição de vídeo + design gráfico) + gravação de vídeo com modelos no estúdio deles.
+Verba de anúncio à parte. Discutimos em 24/08 se fazia sentido como "sócio de marketing pago por mensalidade"
+pra compensar a falta de tempo do Maurício — e em 28/08 avançamos que o canal certo seria Meta/Instagram (não
+LinkedIn — conflito de imagem com o emprego atual dele + CPC ~10x mais barato) e que ele gravaria os próprios
+vídeos, o que já reduzia o escopo que precisaria da agência. **Em 25/08, numa sessão separada, Maurício
+avaliou e recusou a proposta de vez** — motivos registrados por ele: sem KPI/garantia de performance, sem
+case em serviços profissionais/B2B de ticket baixo (perfil de cliente diferente do deles), e condicionada a
+um checkout que hoje está desativado (não tem como converter o tráfego pago ainda). Decisão final: **não
+contratar agora.** Compromisso que ele assumiu no lugar: abordar manualmente 8 a 10 advogados novos usando o
+caso do Fabiano (peça protocolada em juízo, sem edição) como prova de abertura, **antes de qualquer novo
+gasto em aquisição** — paga ou com agência.
+
 ### Imediato
+- [ ] Abordar manualmente 8-10 advogados novos usando o caso do Fabiano como prova (compromisso de 25/08, antes de qualquer novo gasto em aquisição)
 - [ ] Mostrar Sistema de Modelos para o Fabiano (não sabe que existe — é o diferencial que ele mais pediu)
-- [ ] Aguardar resultado do impulsionamento Instagram
+- [ ] Reformar perfil do Instagram (@pandecta.ai) antes do 1º vídeo — ver seção Instagram acima
+- [ ] Acompanhar retorno do Fabiano e do Victor ao check-in enviado (sumiram após férias, ver Pessoas)
+
+### Roadmap de produto priorizado (definido 25/08 — motivado pelo sumiço do Fabiano/Victor + objeções de venda)
+Ordem de prioridade, detalhe completo no `command-center-data.json` (domínio Produto):
+1. **Rastreio de prazo/andamento processual com alerta** — hoje não existe nenhum gatilho de retorno; hipótese mais provável por trás do sumiço do Fabiano e do Victor.
+2. **Reativação do pagamento/assinatura self-service** — bloqueado, mas pré-requisito pra qualquer lead virar cliente pagante.
+3. **Memória de processo** (acervo por caso, não só por escritório) — valor acumula com o uso em vez de resetar a cada peça nova.
+4. **Comparação lado a lado embutida no produto** (peça genérica vs. estilo do escritório) — responde à objeção recorrente em prospecção: "isso eu já faço com ChatGPT/ChatADV".
+5. **Verificação/citação de jurisprudência com confiança auditável** — responde ao medo do "ChatGPT que alucina jurisprudência", sem prometer busca ao vivo antes de ter fonte confiável. Mesmo item identificado de forma independente no Radar Pandecta de 24/08 (ver análise do módulo de verificação).
 
 ### Sem prazo — dependem de validação
 - [ ] Histórico com visualizador papel (igual ao pós-geração)
@@ -477,3 +560,32 @@ carries a report" — permissão explícita pra isso, não gosto pessoal de novo
   documentado (barra que anima uma vez, não continuamente). `node validate.js` OK. Conferido com captura
   real desktop e mobile 390px — os dois gráficos renderizam corretos, proporcionais, coloridos.
 
+---
+
+## 02/09/2026 — Cadastro: telefone acionável no admin + checkbox de termos obrigatório
+
+Maurício reportou dois problemas depois de uma advogada se cadastrar sozinha, gerar duas peças e ele não
+ter como identificá-la ou contatá-la: (1) achava que o cadastro não capturava telefone; (2) não existe
+checkbox de aceite dos Termos de Uso / Política de Privacidade em `/cadastro`.
+
+**Investigação do (1):** o telefone **já era** capturado — campo `phone` obrigatório em `public/cadastro.html`,
+validado em `/api/cadastro` (`server.js`) e salvo na tabela `users`. O problema real não era a captura, era a
+consulta: a tabela de usuários no Admin (`#screen-admin`) mostrava o telefone sob a coluna "Contato", mas como
+texto simples — fácil de não notar, e sem ação nenhuma (não dava pra clicar e chamar no WhatsApp). Corrigido:
+- Coluna renomeada de "Contato" pra "Telefone" (mais claro).
+- Número agora é um link `wa.me/55<DDD+número>` (mesmo padrão já usado na aprovação de pioneiros) — clica e abre
+  o WhatsApp direto com aquele usuário. `phoneHtml` calculado em `loadUsers()`, `public/index.html`.
+
+**Feature (2) implementada — checkbox de termos obrigatório no cadastro:**
+- `public/cadastro.html`: checkbox "Li e concordo com os Termos de Uso e a Política de Privacidade" (linka pra
+  `/termos-de-uso` e `/politica-de-privacidade`, abre em nova aba) antes do botão "Criar conta e começar".
+  Bloqueia o submit (client-side) se não marcado, mesmo padrão de `showError()` já usado pras outras validações.
+- `server.js` (`/api/cadastro`): valida `terms_accepted` no corpo da requisição — 400 se ausente. Grava o
+  aceite no banco com timestamp do servidor (não confia no relógio do cliente) e IP de origem, pra ter prova
+  em caso de disputa: colunas novas `terms_accepted_at DATETIME` e `terms_ip TEXT` em `users` (migração
+  `ALTER TABLE`, mesmo padrão das outras colunas adicionadas depois do schema inicial).
+- `GET /api/users` agora também retorna `terms_accepted_at` (útil pra auditoria futura, sem UI nova pra isso
+  ainda — não pedido).
+- Verificado: `node -c server.js` OK, `node validate.js` OK (index.html), `node --check` no script extraído
+  de `cadastro.html` OK. Sem acesso ao banco de produção (roda só no Railway) — não deu pra testar end-to-end
+  com dado real; revisão foi por leitura de código + validação de sintaxe.

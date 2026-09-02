@@ -148,6 +148,11 @@ select{
 .btn-submit:active:not(:disabled){transform:translateY(0);}
 .btn-submit:disabled{background:var(--ink-3);cursor:progress;box-shadow:none;transform:none;}
 .btn-note{margin-top:14px;text-align:center;font-size:13.5px;color:var(--ink-3);}
+.terms-row{display:flex;align-items:flex-start;gap:9px;margin-top:18px;cursor:pointer;}
+.terms-row input[type=checkbox]{margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--gold);cursor:pointer;}
+.terms-row span{font-size:13.5px;line-height:1.5;color:var(--ink-2);}
+.terms-row a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;}
+.terms-row a:hover{color:var(--ink);}
 
 /* ── overlay de sucesso ──────────────────────────────── */
 #success-screen{
@@ -366,6 +371,11 @@ select{
         </div>
       </div>
 
+      <label class="terms-row" for="terms-check">
+        <input type="checkbox" id="terms-check" required>
+        <span>Li e concordo com os <a href="/termos-de-uso" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="/politica-de-privacidade" target="_blank" rel="noopener">Política de Privacidade</a> da Pandecta.</span>
+      </label>
+
       <button type="submit" class="btn-submit" id="btn-submit">Criar conta e começar</button>
       <p class="btn-note">Acesso gratuito durante a fase de validação · Sem cartão de crédito</p>
     </form>
@@ -422,8 +432,10 @@ select{
 
     if (password !== password2) return showError('As senhas não conferem.');
     if (password.length < 8)    return showError('A senha deve ter no mínimo 8 caracteres.');
+    const termsAccepted = document.getElementById('terms-check').checked;
+    if (!termsAccepted) return showError('Você precisa aceitar os Termos de Uso e a Política de Privacidade para continuar.');
 
-    const body = { nome, sobrenome, email, phone, password, plan: currentPlan, profile_type: currentPerfil };
+    const body = { nome, sobrenome, email, phone, password, plan: currentPlan, profile_type: currentPerfil, terms_accepted: termsAccepted };
 
     if (currentPerfil === 'advogado') {
       const oab_number = document.getElementById('oab_number').value.trim();
