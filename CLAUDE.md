@@ -725,3 +725,27 @@ sido definida em nenhum lugar do arquivo. Era um handler morto (bug pré-existen
   que chama o endpoint certo, mostra o toast certo e recarrega a lista, sem erros no console — antes
   de portar pro código real.
 - Validado: `node --check` no JS inline do `index.html`, sem erro de sintaxe.
+
+---
+
+## 03/09/2026 — Google Analytics (GA4) na landing page, com consentimento LGPD
+
+Maurício pediu uma forma de analisar o fluxo de visitantes no site (tipo Google Analytics). Ele
+escolheu GA4 (serviço pronto, escopo: só o site por enquanto — não o app). Como GA4 usa cookies,
+o carregamento do gtag.js é condicionado a um banner de consentimento (LGPD): o script só é
+injetado depois que a pessoa clica em "Aceitar".
+
+- Criei a conta e a propriedade no Google Analytics do próprio Maurício (conta "Pandecta", fuso
+  São Paulo, moeda BRL, setor "Lei e governo") e o fluxo de dados Web para `https://pandecta.com.br`.
+  Measurement ID: `G-7J5J1CGRR2`.
+- `public/landing.html`: adicionei um banner fixo no rodapé (`#pdc-cookie-banner`) com texto sobre
+  cookies de análise, link "Saiba mais" pra `/privacidade` e botões Aceitar/Recusar. A escolha fica
+  em `localStorage` (`pandecta_cookie_consent`). Só depois de "Aceitar" (ou se já tinha aceitado
+  antes) o `gtag.js` é carregado e configurado com o Measurement ID acima. Recusar não afeta o uso
+  do site. Adicionei também um link "Gerenciar cookies" no rodapé pra reabrir o banner depois.
+- Nenhuma outra parte da landing page foi alterada.
+- Processo seguido: maquete numa cópia isolada primeiro (capturas desktop e mobile aprovadas antes
+  de portar), checado no detector de anti-padrões (zero encontrados), `node --check` no JS inline
+  sem erro de sintaxe, antes de portar pro código real.
+- Pendente: confirmar se a página `/privacidade` (link do "Saiba mais") já existe no site — se não
+  existir, o link fica quebrado.

@@ -709,7 +709,7 @@ footer a:hover{color:var(--ink);}
     </div>
     <div class="foot-bot">
       <span>© 2026 Pandecta AI · Todos os direitos reservados</span>
-      <span>Desenvolvido no Brasil</span>
+      <span>Desenvolvido no Brasil · <a href="#" onclick="pandectaAbrirCookieBanner();return false;" style="text-decoration:underline;">Gerenciar cookies</a></span>
     </div>
   </div>
 </footer>
@@ -757,6 +757,49 @@ footer a:hover{color:var(--ink);}
       });
     }, {rootMargin:'0px 0px -12% 0px', threshold:0.05});
     targets.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+<div id="pdc-cookie-banner" style="display:none;position:fixed;left:16px;right:16px;bottom:16px;z-index:500;max-width:560px;margin:0 auto;background:var(--navy);color:#fff;border-radius:12px;box-shadow:var(--shadow-lg);padding:20px 22px;">
+  <div style="font-size:14px;line-height:1.55;margin-bottom:14px;">
+    Usamos cookies de análise (Google Analytics) para entender como os visitantes usam este site. Você pode aceitar ou recusar — isso não afeta o uso do Pandecta AI.
+    <a href="/privacidade" style="color:var(--gold-on-navy);text-decoration:underline;">Saiba mais</a>
+  </div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;">
+    <button onclick="pandectaCookieChoice(false)" style="padding:9px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer;">Recusar</button>
+    <button onclick="pandectaCookieChoice(true)" style="padding:9px 16px;border-radius:8px;border:none;background:var(--gold-on-navy);color:var(--navy);font-size:13.5px;font-weight:700;cursor:pointer;">Aceitar</button>
+  </div>
+</div>
+<script>
+(function(){
+  var GA_ID = 'G-7J5J1CGRR2';
+  function loadGA(){
+    if (window._gaLoaded) return;
+    window._gaLoaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+  }
+  window.pandectaCookieChoice = function(accepted){
+    localStorage.setItem('pandecta_cookie_consent', accepted ? 'granted' : 'denied');
+    document.getElementById('pdc-cookie-banner').style.display = 'none';
+    if (accepted) loadGA();
+  };
+  window.pandectaAbrirCookieBanner = function(){
+    document.getElementById('pdc-cookie-banner').style.display = 'block';
+  };
+  var choice = localStorage.getItem('pandecta_cookie_consent');
+  if (choice === 'granted') { loadGA(); }
+  else if (choice !== 'denied') {
+    document.addEventListener('DOMContentLoaded', function(){
+      document.getElementById('pdc-cookie-banner').style.display = 'block';
+    });
   }
 })();
 </script>
