@@ -749,3 +749,24 @@ injetado depois que a pessoa clica em "Aceitar".
   sem erro de sintaxe, antes de portar pro código real.
 - Pendente: confirmar se a página `/privacidade` (link do "Saiba mais") já existe no site — se não
   existir, o link fica quebrado.
+
+---
+
+## 03/09/2026 — Correção do link de privacidade + atualização da Política
+
+Depois de implementar o banner de cookies (GA4), o Maurício apontou que o link "Saiba mais" ia
+para `/privacidade`, uma URL que não existe. Investigando, descobri que já existe uma página real
+de política de privacidade em `/politica-de-privacidade` (rota já configurada no `server.js`) — só
+usei a URL errada. Além disso, o texto atual dessa política dizia explicitamente que a Pandecta
+"não utiliza... Google Analytics ou similares", o que ficou desatualizado com o GA4 recém-implementado.
+
+- `public/landing.html`: corrigido o link do banner de `/privacidade` para `/politica-de-privacidade`.
+- `public/politica-de-privacidade.html`:
+  - Seção 11 (Cookies) reescrita para mencionar o cookie de análise do Google Analytics — usado só
+    no site institucional (não na área logada), carregado apenas mediante consentimento, com opção
+    de recusar/alterar a escolha pelo link "Gerenciar cookies".
+  - Versão do documento atualizada de 1.0 para 1.1, e a data de "última atualização"/"vigência" de
+    23/06/2025 para 03/09/2026 (nos dois lugares em que aparece: cabeçalho e seção 14).
+- Processo seguido: preparei o texto novo e mostrei ao Maurício antes de aplicar (é a política de
+  privacidade, texto quase-legal), aplicado só depois da aprovação dele. Validado com `node --check`
+  no JS inline de ambos os arquivos, sem erro de sintaxe.
