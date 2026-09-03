@@ -191,6 +191,28 @@ html.has-session #screen-login{visibility:hidden;}
 .sb-support{display:flex;align-items:center;gap:10px;width:100%;padding:7px 6px;border-radius:8px;background:transparent;border:none;font-family:inherit;cursor:pointer;transition:background .12s;text-align:left;}
 .sb-support:hover{background:var(--sb-hov);}
 .sb-support-ico{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--sb-t);}
+
+/* SIDEBAR — modo reduzido (somente ícones, com tooltip ao passar o mouse) */
+.sidebar{position:relative;transition:width .18s ease;}
+.sidebar.collapsed{width:68px;}
+.sidebar.collapsed .sb-logo{justify-content:center;}
+.sidebar.collapsed .sb-logo-name{display:none;}
+.sidebar.collapsed .sb-top{padding:20px 10px 16px;}
+.sidebar.collapsed .sb-novo,.sidebar.collapsed .sb-item{justify-content:center;padding:10px 0;gap:0;}
+.sidebar.collapsed .sb-item-lbl,.sidebar.collapsed .sb-chip{display:none;}
+.sidebar.collapsed .sb-support{justify-content:center;padding:7px 0;}
+.sidebar.collapsed .sb-s-t,.sidebar.collapsed .sb-s-s{display:none;}
+.sidebar.collapsed .sb-tour-btn{justify-content:center;padding:9px 0;}
+.sidebar.collapsed .sb-trial{display:none;}
+.sidebar.collapsed .sb-collapse-btn svg{transform:rotate(180deg);}
+
+.sb-collapse-btn{position:absolute;top:60px;right:-11px;width:22px;height:22px;border-radius:50%;background:var(--sb-2);border:1px solid var(--sb-bd);color:var(--sb-t-2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,color .15s;z-index:6;padding:0;}
+.sb-collapse-btn:hover{background:var(--sb-hov);color:#fff;}
+.sb-collapse-btn svg{transition:transform .18s ease;}
+
+/* tooltip do modo reduzido — elemento único, fixed, fora do .sb-nav (que tem overflow-y:auto e cortaria um ::after) */
+#sb-tooltip{position:fixed;background:#1D2127;color:#F2F3F5;font-size:12.5px;font-weight:500;white-space:nowrap;line-height:1;padding:7px 12px;border-radius:6px;box-shadow:0 6px 20px rgba(0,0,0,.32);pointer-events:none;z-index:900;opacity:0;transform:translateY(-50%) translateX(-4px);transition:opacity .12s ease,transform .12s ease;}
+#sb-tooltip.show{opacity:1;transform:translateY(-50%) translateX(0);}
 .sb-s-t{font-size:12.5px;font-weight:500;color:rgba(255,255,255,.72);line-height:1.3;}
 .sb-s-s{font-size:11.5px;color:var(--sb-t-2);}
 
@@ -939,6 +961,14 @@ html.has-session #screen-login{visibility:hidden;}
     min-height:100%;
   }
   .sidebar.mob-open{transform:translateX(0);}
+  /* no mobile o menu é uma gaveta — sempre expandido, mesmo se "reduzido" estiver ativo no desktop */
+  .sidebar.collapsed{width:var(--sb-w)!important;}
+  .sidebar.collapsed .sb-logo-name,.sidebar.collapsed .sb-item-lbl,.sidebar.collapsed .sb-chip{display:inline;}
+  .sidebar.collapsed .sb-s-t,.sidebar.collapsed .sb-s-s{display:block;}
+  .sidebar.collapsed .sb-logo{justify-content:flex-start;}
+  .sidebar.collapsed .sb-novo,.sidebar.collapsed .sb-item,.sidebar.collapsed .sb-support,.sidebar.collapsed .sb-tour-btn{justify-content:flex-start;padding:9px 10px;gap:10px;}
+  .sidebar.collapsed .sb-trial{display:block;}
+  .sb-collapse-btn{display:none;}
 
   /* ── APP SHELL: main preenche tudo ── */
   .app-shell{overflow:hidden;}
@@ -2259,6 +2289,7 @@ html.has-session #screen-login{visibility:hidden;}
 </div>
 
 <div class="toast" id="toast"></div>
+<div id="sb-tooltip"></div>
 
 
 <!-- ══ TOUR GUIADO ══ -->
@@ -2324,6 +2355,7 @@ if(typeof pdfjsLib!=='undefined') pdfjsLib.GlobalWorkerOptions.workerSrc='https:
 
 let authToken=localStorage.getItem('pandecta_token')||null;
 let usuario=localStorage.getItem('pandecta_user')||null;
+let sbCollapsed=localStorage.getItem('pandecta_sb_collapsed')==='1';
 let userRole=localStorage.getItem('pandecta_role')||'user';
 let isPioneer=localStorage.getItem('pandecta_pioneer')==='1';
 if(authToken) document.documentElement.classList.add('has-session');
@@ -2430,31 +2462,34 @@ function mkSidebar(active){
     ...(isPioneer||userRole==='admin'?[{id:'pioneer', label:'Canal Pioneiro', icon:'<path d="M9 2l2.1 4.3 4.7.7-3.4 3.3.8 4.7L9 12.5l-4.2 2.5.8-4.7L2.2 7l4.7-.7z"/>',action:"go('pioneer')"}]:[]),
     ...(userRole==='admin'?[{id:'admin', label:'Admin', icon:'<circle cx="9" cy="6" r="3"/><path d="M2 17c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><path d="M13 3l1.5 1.5L17 2"/>',action:"go('admin')"}]:[]),
   ];
-  return `<nav class="sidebar">
+  return `<nav class="sidebar${sbCollapsed?' collapsed':''}">
     <div class="sb-top">
       <div class="sb-logo">
         <div class="sb-logo-ico"><img src="/pandecta-icone.png" alt="P" onerror="this.style.display='none'"></div>
         <span class="sb-logo-name">PANDECTA <span class="sb-logo-ai">AI</span></span>
       </div>
     </div>
+    <button class="sb-collapse-btn" onclick="toggleSidebarCollapse()" title="${sbCollapsed?'Expandir menu':'Reduzir menu'}">
+      <svg width="12" height="12" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4l-5 5 5 5"/></svg>
+    </button>
     <div class="sb-nav">
-      <button class="sb-novo" onclick="novaConversa()">
+      <button class="sb-novo" onclick="novaConversa()" data-tip="Novo">
         <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6.5" y1="11" x2="6.5" y2="2"/><line x1="2" y1="6.5" x2="11" y2="6.5"/></svg>
-        Novo
+        <span class="sb-item-lbl">Novo</span>
       </button>
       ${nav.map(it=>{
-        if(it.dim) return `<button class="sb-item dim"><svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg>${it.label}<span class="sb-chip">Em breve</span></button>`;
+        if(it.dim) return `<button class="sb-item dim" data-tip="${it.label}"><svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg><span class="sb-item-lbl">${it.label}</span><span class="sb-chip">Em breve</span></button>`;
         const isActive=it.id===active||(it.id==='gen'&&active==='gen');
-        return `<button class="sb-item${isActive?' active':''}" onclick="${it.action}"><svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg>${it.label}</button>`;
+        return `<button class="sb-item${isActive?' active':''}" onclick="${it.action}" data-tip="${it.label}"><svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg><span class="sb-item-lbl">${it.label}</span></button>`;
       }).join('')}
     </div>
     ${_sbTrialBlock()}
     <div class="sb-bot">
-      <button class="sb-tour-btn" onclick="mostrarTourPopup()" title="Tour guiado">
+      <button class="sb-tour-btn" onclick="mostrarTourPopup()" data-tip="Tour guiado">
         <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="7"/><path d="M9 12v-1.5c0-.8.6-1.3 1.2-1.8C11 8 11.2 7 10.5 6.3A2.5 2.5 0 006.5 7.5"/><circle cx="9" cy="14" r=".7" fill="currentColor"/></svg>
-        Tour guiado
+        <span class="sb-item-lbl">Tour guiado</span>
       </button>
-      <button class="sb-support${active==='suporte'?' active':''}" onclick="go('suporte')">
+      <button class="sb-support${active==='suporte'?' active':''}" onclick="go('suporte')" data-tip="Assistente">
         <div class="sb-support-ico">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M5.5 8a2.5 2.5 0 005 0 2.5 2.5 0 00-5 0"/><path d="M3 5.5c0-2 1.5-3.5 5-3.5s5 1.5 5 3.5"/><path d="M5.5 8H3M10.5 8H13"/></svg>
         </div>
@@ -2481,6 +2516,31 @@ function toggleSidebar(){
   const sb=_activeSidebar();
   if(sb?.classList.contains('mob-open')) closeSidebar();
   else openSidebar();
+}
+document.addEventListener('mouseover',e=>{
+  const el=e.target.closest('.sidebar.collapsed [data-tip]');
+  if(!el) return;
+  const tip=document.getElementById('sb-tooltip');
+  if(!tip) return;
+  const r=el.getBoundingClientRect();
+  tip.textContent=el.getAttribute('data-tip');
+  tip.style.left=(r.right+14)+'px';
+  tip.style.top=(r.top+r.height/2)+'px';
+  tip.classList.add('show');
+});
+document.addEventListener('mouseout',e=>{
+  const el=e.target.closest('.sidebar.collapsed [data-tip]');
+  if(!el) return;
+  if(e.relatedTarget&&el.contains(e.relatedTarget)) return;
+  document.getElementById('sb-tooltip')?.classList.remove('show');
+});
+function toggleSidebarCollapse(){
+  sbCollapsed=!sbCollapsed;
+  localStorage.setItem('pandecta_sb_collapsed',sbCollapsed?'1':'0');
+  ['home','gen','hist','ac','config','equipe','sup','admin','modelos','tk','pio'].forEach(sfx=>{
+    const el=document.getElementById('sb-'+sfx);
+    if(el) el.innerHTML=mkSidebar(_currentScreen);
+  });
 }
 
 
