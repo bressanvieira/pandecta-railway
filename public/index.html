@@ -4769,6 +4769,17 @@ async function loadBackups(){
   }catch(e){const el=document.getElementById('backups-list');if(el)el.innerHTML='<span style="color:var(--t3)">Erro ao carregar backups.</span>';}
 }
 
+async function fazerBackup(){
+  const btn=document.getElementById('btn-backup');
+  if(btn){btn.disabled=true;btn.textContent='Gerando...';}
+  try{
+    await api('POST','/api/admin/backup');
+    toast('Backup gerado com sucesso!','ok');
+    loadBackups();
+  }catch(e){ toast('Erro ao gerar backup: '+e.message,'err'); }
+  finally{ if(btn){btn.disabled=false;btn.textContent='Fazer backup agora';} }
+}
+
 // ════ ADMIN — USERS ════
 async function loadUsers(){
   try{

@@ -705,3 +705,23 @@ quando sua aba está ativa.
 - Processo seguido: maquete numa cópia isolada, 3 capturas mostrando a troca de aba, aprovadas antes de
   portar pro código real.
 - Validado: `node --check` no JS inline do `index.html`, sem erro de sintaxe.
+
+---
+
+## 03/09/2026 — Correção: botão "Fazer backup agora" não funcionava
+
+Maurício reportou que o botão de backup do banco (aba Backups do Admin) não fazia nada ao clicar.
+Investigando o código, o botão já tinha `onclick="fazerBackup()"` e o endpoint do servidor
+(`POST /api/admin/backup`) já existia e funcionava — mas a função JS `fazerBackup()` nunca tinha
+sido definida em nenhum lugar do arquivo. Era um handler morto (bug pré-existente, não relacionado
+às abas do admin adicionadas antes).
+
+- Adicionei `async function fazerBackup()` logo após `loadBackups()`: desabilita o botão, chama
+  `POST /api/admin/backup`, mostra toast de sucesso/erro, recarrega a lista (`loadBackups()`) e
+  reabilita o botão — seguindo o mesmo padrão já usado em `aprovarPioneiro`/`reprovarPioneiro`.
+- Nenhuma outra função ou endpoint foi alterado.
+- Processo seguido: reprodução do bug e correção testada primeiro numa cópia isolada (mockando
+  `api()`/`toast()` via Playwright para simular o clique sem precisar do backend real) — confirmado
+  que chama o endpoint certo, mostra o toast certo e recarrega a lista, sem erros no console — antes
+  de portar pro código real.
+- Validado: `node --check` no JS inline do `index.html`, sem erro de sintaxe.
