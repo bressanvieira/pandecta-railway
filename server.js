@@ -158,6 +158,8 @@ try {
   try { db.exec(`ALTER TABLE office ADD COLUMN logo TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE office ADD COLUMN doc_template TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE history ADD COLUMN user_id INTEGER`); } catch(e) {}
+  try { db.exec(`ALTER TABLE history ADD COLUMN reu TEXT DEFAULT ''`); } catch(e) {}
+  try { db.exec(`ALTER TABLE history ADD COLUMN vara TEXT DEFAULT ''`); } catch(e) {}
   try { db.exec(`ALTER TABLE acervo ADD COLUMN user_id INTEGER`); } catch(e) {}
   // migrations cadastro v2
   try { db.exec(`ALTER TABLE users ADD COLUMN phone TEXT DEFAULT ''`); } catch(e) {}
@@ -561,19 +563,19 @@ app.get('/api/history', requireAuth, (req, res) => {
   try {
     const isAdmin = req.user.role === 'admin';
     const rows = isAdmin
-      ? db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto,created_at FROM history ORDER BY created_at DESC LIMIT 100').all()
-      : db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto,created_at FROM history WHERE user_id=? ORDER BY created_at DESC LIMIT 100').all(req.user.userId);
+      ? db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,reu,vara,texto,created_at FROM history ORDER BY created_at DESC LIMIT 100').all()
+      : db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,reu,vara,texto,created_at FROM history WHERE user_id=? ORDER BY created_at DESC LIMIT 100').all(req.user.userId);
     res.json(rows);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.post('/api/history', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponÃ­vel.' });
-  const { usuario='',tipo='',tipo_label='',area_label='',autor='',responsavel_id=null,texto='' } = req.body;
+  const { usuario='',tipo='',tipo_label='',area_label='',autor='',responsavel_id=null,reu='',vara='',texto='' } = req.body;
   try {
     const r = db.prepare(
-      'INSERT INTO history (usuario,tipo,tipo_label,area_label,autor,responsavel_id,texto,user_id) VALUES (?,?,?,?,?,?,?,?)'
-    ).run(usuario, tipo, tipo_label, area_label, autor, responsavel_id || null, texto, req.user.userId);
+      'INSERT INTO history (usuario,tipo,tipo_label,area_label,autor,responsavel_id,reu,vara,texto,user_id) VALUES (?,?,?,?,?,?,?,?,?,?)'
+    ).run(usuario, tipo, tipo_label, area_label, autor, responsavel_id || null, reu, vara, texto, req.user.userId);
     res.json(db.prepare('SELECT * FROM history WHERE id=?').get(r.lastInsertRowid));
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

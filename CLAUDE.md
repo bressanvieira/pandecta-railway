@@ -651,3 +651,38 @@ impeccable recusa como default de categoria) que precisam virar algo na linha "m
 dado que não existe (ex.: não posso fingir ordenação por prazo processual — isso é feature futura, item #1
 do roadmap). Próximo passo: montar a maquete da home também, mostrar as duas telas juntas pro Maurício, e só
 então portar pro código real com aprovação explícita.
+
+---
+
+## 03/09/2026 — Sidebar reduzida (modo ícone) + colunas novas no Histórico de peças
+
+**Sidebar (`public/index.html`, `mkSidebar()`):** menu lateral agora tem um modo reduzido — só ícones,
+com tooltip ao passar o mouse mostrando o nome de cada item. Botão circular no topo da sidebar alterna
+entre reduzido/expandido; a preferência fica salva (`localStorage`, chave `pandecta_sb_collapsed`) e persiste
+entre sessões. No mobile a sidebar continua sempre expandida (é uma gaveta, não faz sentido reduzir).
+Processo seguido: maquete numa cópia isolada, 4 capturas de tela (reduzido, reduzido com tooltip, expandido,
+gaveta mobile) revisadas e aprovadas antes de portar pro código real. O tooltip usa um elemento único
+`#sb-tooltip` com `position:fixed` posicionado via `getBoundingClientRect()` — a primeira tentativa (um
+`::after` por item) ficava cortada pelo `overflow-y:auto` do `.sb-nav`, então foi trocado pelo padrão que o
+próprio craft-floor da `impeccable` recomenda pra overlay escapar de um ancestral com overflow.
+
+**Histórico de peças — Advogado, Réu, Vara/Juízo (`public/index.html` + `server.js`):** Maurício notou que a
+tabela de histórico só mostrava Documento/Autor/Data e sentiu falta de mais contexto do processo. Investigação
+mostrou que o assistente de geração já pergunta Réu e Vara/Juízo (campos `reu`/`vara` no `WizardEngine`), mas
+esses dados eram usados só pra redigir o texto da peça — nunca ficavam salvos como dado estruturado. Advogado
+responsável já existia no banco (`responsavel_id`), só não era exibido.
+
+- `server.js`: duas colunas novas na tabela `history` (`reu`, `vara`) via `ALTER TABLE ... ADD COLUMN`, no
+  mesmo padrão de migração já usado no arquivo (linha ~160). `GET/POST /api/history` passam a
+  ler/gravar esses dois campos.
+- `public/index.html`: `salvarHistorico()` agora envia `reu` e `vara` pro backend. Tabela do histórico ganhou
+  3 colunas — Advogado (iniciais + primeiro nome, buscando o advogado pelo `responsavel_id`), Réu e
+  Vara/Juízo — com breakpoints progressivos (Vara some ≤1180px, Advogado ≤980px, e no mobile ≤768px some
+  Advogado/Autor/Réu também, mesmo padrão que já escondia Autor).
+- **Decisão de produto (Maurício, 03/09):** peças geradas antes dessa mudança não têm réu/vara salvos
+  separadamente — ficam com "—" nessas colunas em vez de tentar extrair do texto já gerado (impreciso).
+  Peças novas passam a salvar os três campos corretamente a partir de agora.
+- Validado: `node --check` no `server.js` e no JS inline do `index.html`, sem erro de sintaxe. Sem acesso ao
+  banco de produção pra teste end-to-end (mesma limitação já registrada nas entradas anteriores) — revisão
+  foi por leitura de código + validação de sintaxe, seguindo o padrão de migração `ALTER TABLE` já
+  estabelecido no arquivo.

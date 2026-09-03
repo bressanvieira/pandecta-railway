@@ -523,6 +523,12 @@ html.has-session #screen-login{visibility:hidden;}
 .gwiz-card.sel .gwiz-card-icon{color:var(--gold);}
 .gwiz-inp-ta{resize:vertical;min-height:90px;line-height:1.65;}
 
+@media(max-width:1180px){
+  .hist-th.th-vara,.hist-row-vara{display:none;}
+}
+@media(max-width:980px){
+  .hist-th.th-adv,.hist-row-adv{display:none;}
+}
 @media(max-width:900px){
   .gwiz-scroll{padding:32px 24px 0;}
   .gwiz-foot{padding:14px 24px;}
@@ -672,7 +678,10 @@ html.has-session #screen-login{visibility:hidden;}
 .hist-thead{display:flex;align-items:center;gap:14px;padding:9px 18px;border-bottom:1px solid var(--bd);background:var(--surface);}
 .hist-th{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--t3);text-transform:uppercase;}
 .hist-th.th-doc{flex:1;min-width:0;}
-.hist-th.th-autor{width:190px;flex-shrink:0;}
+.hist-th.th-adv{width:118px;flex-shrink:0;}
+.hist-th.th-autor{width:150px;flex-shrink:0;}
+.hist-th.th-reu{width:150px;flex-shrink:0;}
+.hist-th.th-vara{width:128px;flex-shrink:0;}
 .hist-th.th-data{width:88px;flex-shrink:0;}
 .hist-th.th-acts{width:112px;flex-shrink:0;}
 .hist-row{display:flex;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .12s;}
@@ -683,7 +692,12 @@ html.has-session #screen-login{visibility:hidden;}
 .hist-row-txt{min-width:0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
 .hist-row-tipo{font-size:13.5px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hist-row-area{font-size:11.5px;color:var(--t3);white-space:nowrap;}
-.hist-row-autor{width:190px;flex-shrink:0;font-size:12.5px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-row-adv{width:118px;flex-shrink:0;display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--t2);overflow:hidden;}
+.hist-row-adv-av{width:18px;height:18px;border-radius:50%;background:var(--bg2);color:var(--t2);font-size:8.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hist-row-adv-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-row-autor{width:150px;flex-shrink:0;font-size:12.5px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-row-reu{width:150px;flex-shrink:0;font-size:12.5px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-row-vara{width:128px;flex-shrink:0;font-size:12px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hist-row-data{width:88px;flex-shrink:0;font-size:12px;color:var(--t3);}
 .hist-row-acts{width:112px;flex-shrink:0;display:flex;gap:4px;justify-content:flex-end;opacity:0;transition:opacity .12s;}
 .hist-row:hover .hist-row-acts,.hist-row:focus-within .hist-row-acts{opacity:1;}
@@ -1007,7 +1021,7 @@ html.has-session #screen-login{visibility:hidden;}
   .hist-toolbar{flex-direction:column;gap:8px;}
   .hist-area-pills{flex-wrap:wrap;}
   .hist-viewer-hd{flex-wrap:wrap;gap:8px;}
-  .hist-th.th-autor,.hist-row-autor{display:none;}
+  .hist-th.th-autor,.hist-row-autor,.hist-th.th-adv,.hist-row-adv,.hist-th.th-reu,.hist-row-reu{display:none;}
   .hist-row-acts{opacity:1;}
   .hist-row{flex-wrap:wrap;row-gap:4px;}
   .hist-row-doc{flex-basis:100%;}
@@ -1447,7 +1461,10 @@ html.has-session #screen-login{visibility:hidden;}
         <div class="hist-table" id="hist-table">
           <div class="hist-thead">
             <span class="hist-th th-doc">Documento</span>
+            <span class="hist-th th-adv">Advogado</span>
             <span class="hist-th th-autor">Autor</span>
+            <span class="hist-th th-reu">Réu</span>
+            <span class="hist-th th-vara">Vara/Juízo</span>
             <span class="hist-th th-data">Data</span>
             <span class="hist-th th-acts" aria-hidden="true"></span>
           </div>
@@ -3678,7 +3695,8 @@ async function salvarHistorico(data,texto,tipoL,areaL){
     const item=await api('POST','/api/history',{
       usuario:usuario||'',tipo:data.tipo,tipo_label:tipoL,area_label:areaL,
       autor:(data.autor||'').split(',')[0].trim(),
-      responsavel_id:data.responsavel?Number(data.responsavel):null,texto
+      responsavel_id:data.responsavel?Number(data.responsavel):null,
+      reu:(data.reu||'').split(',')[0].trim(),vara:data.vara||'',texto
     });
     sessionHistory.unshift(item);
   }catch(e){console.error('Erro ao salvar histórico:',e);}
@@ -3723,7 +3741,10 @@ function renderHistorico(){
           <span class="hist-row-area">${esc(item.area_label||'')}</span>
         </span>
       </div>
+      <div class="hist-row-adv">${(()=>{const adv=lawyers.find(l=>String(l.id)===String(item.responsavel_id));if(!adv)return'<span style="color:var(--t3)">—</span>';const ini=(adv.nome.split(' ').slice(0,2).map(w=>w[0]||'').join('')).toUpperCase();return`<span class="hist-row-adv-av">${esc(ini)}</span><span class="hist-row-adv-name">${esc(adv.nome.split(' ')[0])}</span>`;})()}</div>
       <div class="hist-row-autor">${esc(item.autor||item.usuario||'—')}</div>
+      <div class="hist-row-reu">${esc(item.reu||'—')}</div>
+      <div class="hist-row-vara">${esc(item.vara||'—')}</div>
       <div class="hist-row-data">${esc(dataFmt)}</div>
       <div class="hist-row-acts">
         <button class="hca-btn" onclick="event.stopPropagation();copiarHistById(${item.id})" title="Copiar texto" aria-label="Copiar texto"><svg width="14" height="14" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.6" y="7.6" width="11" height="11" rx="1.8"/><path d="M4.4 14.4h-.6a1.8 1.8 0 0 1-1.8-1.8V3.8A1.8 1.8 0 0 1 3.8 2h8.8a1.8 1.8 0 0 1 1.8 1.8v.6"/></svg></button>
