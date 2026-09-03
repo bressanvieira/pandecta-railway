@@ -1,8 +1,8 @@
 {
   "meta": {
     "nome": "Pandecta Executive Command Center",
-    "versao": 12,
-    "atualizado_em": "2026-08-24",
+    "versao": 15,
+    "atualizado_em": "2026-08-28",
     "changelog": [
       {
         "data": "2026-07-13",
@@ -63,6 +63,21 @@
         "data": "2026-08-24",
         "versao": 12,
         "mudancas": "Maurício viu a primeira versão simplificada do dashboard e apontou o limite certo: \"não mudou praticamente nada além das exclusões... não chama a atenção do advogado trazendo informações relevantes. Algum gráfico por exemplo... acho que temos oportunidades ainda\". Tinha razão — o passe anterior só removeu redundância (distill), e o resultado ficou honesto mas achatado, sem nenhum momento de leitura rápida. Segunda rodada, ainda seguindo o guia da skill (não gosto pessoal): o próprio guia de modo Operate permite explicitamente uma superfície \"comprometida\" com cor quando ela carrega um relatório de verdade — não é decoração, é a exceção documentada pra esse tipo de tela. \"Peças por área\", que antes era só a área principal com uma barra única, virou um gráfico de barras com todas as áreas, cada uma na mesma cor que já existe no histórico (as duas telas agora falam a mesma linguagem visual de área). Um painel \"Atividade\" novo mostra os últimos 14 dias em barras, contagem real por dia a partir da data de cada peça — nada inventado, com uma legenda dinâmica comparando essa semana com a anterior. No processo, achei e corrigi um bug real: as barras coloridas do gráfico de área não apareciam (só a trilha cinza de fundo) porque eram elementos <span>, que por padrão CSS ignoram largura/altura — a barra colorida sempre renderizava com 0 pixels, escondida atrás do fundo. Achado com medição real de retângulo via Playwright, não só olhando a tela."
+      },
+      {
+        "data": "2026-08-24",
+        "versao": 13,
+        "mudancas": "Maurício achou um site que ele achava muito parecido com a Pandecta — torix.com.br — e pediu análise. Não estava indexado em nenhuma busca (nem o site, nem perfil em rede social), só acessível via link direto. Leitura do conteúdo mostrou que é adjacente, não concorrente direto: o núcleo da Torix é gestão de escritório (prazos, intimações do DJEN, agenda, financeiro, portal do cliente white-label), não redação de peça por IA — o gerador de documentos deles é explicitamente algorítmico, sem IA. A IA deles entra só em dois pontos: transcrever audiência em ata estruturada e resumir o caso em linguagem simples pro cliente. Zero sobreposição com o núcleo da Pandecta (fatos → peça redigida no estilo do escritório). A semelhança que o Maurício sentiu é de categoria e tom (\"feito por advogado, pra advogados\", segurança/LGPD em destaque), não de produto. Dado de mercado real: eles já cobram, por escritório e não por usuário, mais barato que os planos (ainda não ativos) da Pandecta e sem limite de usuário mesmo no tier de entrada de equipe."
+      },
+      {
+        "data": "2026-08-25",
+        "versao": 14,
+        "mudancas": "Sessão de diagnóstico comercial com Claude, puxada por um insight do próprio Maurício. Ponto de partida: contra-argumentação de uma resposta do ChatGPT sobre oportunidades de negócio pós-IA, checando as estatísticas citadas (conferem) e mapeando concorrentes diretos não citados por ele — ChatADV (200 mil usuários alegados, convênios OAB, WhatsApp, 19M jurisprudências), Judex, Jurídico AI, Jus IA/Jusbrasil — que tornam o moat de 'peça no estilo do escritório' mais frágil do que a resposta original sugeria. Daí Maurício trouxe o dado real da semana: Fabiano e Victor, os dois contatos mais próximos, sumiram logo após retornarem de férias — mesmo padrão de tempo em duas relações sem relação entre si. Hipótese de Maurício, tratada como intuição forte e não confirmada: o tempo livre deu espaço pra conversarem com alguém (ex.: o amigo diretor de TI do Fabiano) que ofereceu construir algo parecido. Mensagem de check-in sem cobrança já enviada a ambos por Maurício; resposta pendente. Avaliada e recusada proposta da agência Gene Digital (Plano GOLD, R$1.997/mês só de taxa de serviço, verba de mídia à parte, sem KPI/garantia de performance, sem case em serviços profissionais/B2B de ticket baixo, condicionada a um checkout que hoje está desativado) — decisão de Maurício: não contratar agora. Compromisso assumido: abordar manualmente 8 a 10 advogados novos usando o caso do Fabiano (peça protocolada em juízo, sem edição) como prova de abertura, antes de qualquer novo gasto em aquisição. Pedido de Maurício: registrar as próximas funcionalidades por ordem de prioridade — 5 itens adicionados ao domínio Produto (ver iniciativas), liderados por rastreio de prazo/andamento processual, mecanismo de reengajamento que, pelo padrão observado essa semana, é o que provavelmente teria trazido Fabiano e Victor de volta depois das férias — e que, pelo que foi possível mapear, nenhum concorrente direto (ChatADV, Judex, Jurídico AI) combina com geração de peça por IA; a Torix tem o rastreio mas não tem IA na redação."
+      },
+      {
+        "versao": 15,
+        "data": "2026-08-28",
+        "mudancas": "Continuação da sessão de marketing com Claude (chat separado da sessão de diagnóstico comercial de 25/08 — reconciliado aqui). Radar Pandecta AI (primeira edição, 24/08) analisado: maior achado é que o badge \"Verificado pela Pandecta\" no rodapé do visualizador não tem verificação real por trás (o system prompt só instrui o modelo a não inventar jurisprudência — não existe checagem independente), o que confirma e reforça a Prioridade 5 do roadmap de produto (verificação/citação auditável) já definida na sessão de 25/08. Também confirmado: a garantia de não-uso de dados de cliente pra treinar modelo já existe, escrita, no lgpd.html/política de privacidade/termos — só precisa subir pra seção de segurança da landing, que hoje não menciona isso. Proposta da Gene Digital foi discutida em detalhe antes de saber que já tinha sido recusada em sessão separada (25/08) — direcionamento chegou à mesma conclusão por caminho diferente: Maurício decidiu gravar os próprios vídeos (já fez conteúdo em vídeo antes, no perfil de NFT) em vez de usar modelos contratados da agência, e canal pago prioritário é Meta/Instagram, não LinkedIn — dois motivos concretos, não só preferência: conflito de imagem com o emprego atual dele (não pode aparecer em vídeo pessoal no LinkedIn) e custo (CPC Meta ~10x mais barato que LinkedIn; o corte de mercado geral — Meta pra ticket baixo <€5k, LinkedIn pra enterprise — bate com o preço dos planos da Pandecta, R$79-379/mês). Narrativa de posicionamento proposta por Maurício pro vídeo: como ele não é advogado, não pode usar a linha da Torix (\"feito por advogado, pra advogados\") — vai com \"30 anos de engenharia; o advogado tem que ser o advogado\", apoiado na validação jurídica real (Kiko, Fabiano). Perfil do Instagram (@pandecta.ai) auditado: só 2 seguidores, 3 posts, zero vídeo, e o mais importante — os 3 posts ainda usam o sistema visual antigo (navy+dourado) que o produto abandonou no redesign de 23-24/08, e a bio usa emoji como marcador, violando a recusa permanente #3 do DESIGN.md. Plano de reforma do perfil entregue (avatar, nome, bio em duas opções, o que fazer com os posts antigos) antes do primeiro vídeo — Maurício vai executar manualmente, Claude não tem acesso de escrita ao Instagram."
       }
     ]
   },
@@ -88,14 +103,16 @@
       "Ainda um único beta validado — Fabiano, desde 03/07. Nenhum segundo advogado confirmado",
       "Meta 30/09: faltam 2 advogados em 5 semanas, partindo de um funil sem número conhecido",
       "Sessão inteira gasta em produto e marca enquanto o funil segue parado — padrão sabotador conhecido, em curso",
-      "Risco de contratar agência para resolver um problema de conversão que ainda não foi medido",
-      "Sistema de Modelos continua não demonstrado ao Fabiano, sete semanas depois"
+      "Sistema de Modelos continua não demonstrado ao Fabiano, sete semanas depois",
+      "Fabiano e Victor sumiram após retornarem de férias — causa não confirmada (motivo pessoal comum vs. possível alternativa encontrada por eles); check-in sem cobrança enviado, resposta pendente",
+      "Checkout/assinatura self-service segue desativado — nenhum lead, pago ou orgânico, converte em cliente pagante sozinho hoje"
     ],
     "oportunidades": [
       "Landing nova pronta e não publicada — publicar junto com a ferramenta dá um relançamento com material novo",
       "As capturas reais da ferramenta viram material de prospecção imediato, mesmo antes de publicar o site",
       "Base de ~450 prospects do Waalaxy nunca teve follow-up humano",
-      "A agência força a organização dos números do funil — útil mesmo que não seja contratada"
+      "Proposta da Gene Digital avaliada e recusada (25/08): sem KPI, sem case em serviços profissionais, dependente de checkout inativo — decisão evitou gasto de R$1.997/mês + mídia sem funil validado",
+      "Caso do Fabiano (peça protocolada em juízo, sem edição) ainda não é usado como abertura de prospecção — é a prova mais forte disponível e está sendo subutilizada"
     ],
     "prioridades_semana": [
       {
@@ -191,11 +208,11 @@
         },
         {
           "nome": "Monitoramento de concorrentes",
-          "objetivo": "Acompanhar Exordial AI e Enter AI",
+          "objetivo": "Acompanhar Exordial AI, Enter AI e Torix",
           "status": "continuo",
           "responsavel": "Maurício + Claude",
           "dependencias": "—",
-          "proxima_acao": "Revisar features/tração da Exordial mensalmente",
+          "proxima_acao": "Revisar features/tração da Exordial mensalmente; observar se a Torix expande pra redação de peça por IA",
           "prazo": "—",
           "prioridade": "media"
         }
@@ -307,6 +324,56 @@
           "proxima_acao": "—",
           "prazo": "—",
           "prioridade": "baixa"
+        },
+        {
+          "nome": "[Prioridade 1] Rastreio de prazo/andamento processual com alerta",
+          "objetivo": "Dar ao advogado um motivo automático pra reabrir a Pandecta. Hoje não existe nenhum gatilho de retorno — é a hipótese mais provável por trás do sumiço do Fabiano e do Victor depois das respectivas férias, e é o tipo de integração no fluxo de trabalho que um concorrente não replica em uma semana só copiando a geração de texto",
+          "status": "futuro",
+          "responsavel": "Maurício + Claude",
+          "dependencias": "Fonte de intimação/andamento (Datajud, DJEN) para versão automática — mas a versão manual não depende disso",
+          "proxima_acao": "Versão mínima: usuário registra a data do prazo ao gerar a peça; sistema notifica X dias antes por e-mail/WhatsApp",
+          "prazo": "Sem data — priorizada, não iniciada",
+          "prioridade": "alta"
+        },
+        {
+          "nome": "[Prioridade 2] Reativação do pagamento/assinatura self-service",
+          "objetivo": "Pré-requisito pra qualquer aquisição, paga ou orgânica, virar cliente pagante — hoje nenhum lead consegue converter sozinho",
+          "status": "bloqueado",
+          "responsavel": "Maurício",
+          "dependencias": "Critério de 'mais validação' definido antes — reavaliar à luz do teste de 8-10 advogados em andamento",
+          "proxima_acao": "Definir gatilho concreto pra reativar (ex.: N respostas positivas no teste de prospecção)",
+          "prazo": "Sem data",
+          "prioridade": "alta"
+        },
+        {
+          "nome": "[Prioridade 3] Memória de processo (acervo por caso, não só por escritório)",
+          "objetivo": "Hoje cada peça nova recomeça do zero; se o histórico de um processo específico alimentasse a próxima peça daquele mesmo caso, o valor acumula com o uso em vez de resetar — aumenta custo de troca",
+          "status": "futuro",
+          "responsavel": "Maurício",
+          "dependencias": "Modelar entidade 'Processo' vinculando peças, fatos e documentos de um mesmo caso — hoje o acervo é só por escritório",
+          "proxima_acao": "Desenhar o modelo de dados de Processo",
+          "prazo": "Sem data",
+          "prioridade": "media"
+        },
+        {
+          "nome": "[Prioridade 4] Comparação lado a lado embutida no produto (peça genérica vs. estilo do escritório)",
+          "objetivo": "Provar o diferencial dentro da própria ferramenta, no primeiro uso. A reação recorrente em prospecção — 'isso eu já faço com ChatGPT/ChatADV' — é sinal de que a prova não está chegando antes da objeção, na landing nem na conversa",
+          "status": "futuro",
+          "responsavel": "Maurício + Claude",
+          "dependencias": "—",
+          "proxima_acao": "No onboarding ou na primeira geração, mostrar a mesma peça em texto genérico ao lado da versão no Style Profile do usuário",
+          "prazo": "Sem data",
+          "prioridade": "media"
+        },
+        {
+          "nome": "[Prioridade 5] Verificação/citação de jurisprudência com confiança auditável",
+          "objetivo": "Responder ao medo central do comprador cético ('ChatGPT que alucina jurisprudência') sem prometer busca ao vivo antes de ter fonte confiável — passo anterior ao item 'Busca ao vivo em jurisprudência' já registrado acima",
+          "status": "futuro",
+          "responsavel": "Maurício + Claude",
+          "dependencias": "Mesma fonte em avaliação para busca ao vivo (Datajud/Jusbrasil) — mas dá pra sinalizar confiança mesmo sem busca ao vivo",
+          "proxima_acao": "Definir critério de confiança e sinalização visual na peça gerada",
+          "prazo": "Sem data",
+          "prioridade": "media"
         }
       ]
     },
@@ -675,6 +742,31 @@
       "nome": "Enter AI",
       "site": "getenter.ai",
       "nota": "Mapeado anteriormente."
+    },
+    {
+      "nome": "Torix",
+      "site": "torix.com.br",
+      "nota": "Gestão de escritório (prazos, intimações DJEN, agenda, financeiro, portal do cliente), não redação de peça por IA — gerador de documento deles é algorítmico, sem IA. IA só em ATA (transcrição de audiência) e resumo pro cliente. Adjacente, não concorrente direto do núcleo da Pandecta. Já cobrando: Solo R$49,99 · Escritório R$99,99 (ilimitado) · Banca R$149 (ilimitado), mais barato e sem limite de usuário vs. os planos da Pandecta. Tema visual escuro navy — o look que a Pandecta abandonou na migração pra claro. Sem presença em busca/redes sociais encontrada."
+    },
+    {
+      "nome": "ChatADV",
+      "site": "",
+      "nota": "200 mil usuários alegados, convênios OAB, WhatsApp, 19M jurisprudências indexadas. Não combina rastreio de prazo/andamento com geração de peça por IA no estilo do escritório."
+    },
+    {
+      "nome": "Judex",
+      "site": "",
+      "nota": "Mapeado 25/08, detalhe ainda não aprofundado."
+    },
+    {
+      "nome": "Jurídico AI",
+      "site": "",
+      "nota": "Mapeado 25/08. Não combina rastreio de prazo/andamento com geração de peça por IA no estilo do escritório."
+    },
+    {
+      "nome": "Jus IA / Jusbrasil",
+      "site": "",
+      "nota": "Mapeado 25/08, detalhe ainda não aprofundado."
     }
   ]
 }

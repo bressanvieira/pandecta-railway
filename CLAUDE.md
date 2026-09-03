@@ -589,3 +589,65 @@ texto simples — fácil de não notar, e sem ação nenhuma (não dava pra clic
 - Verificado: `node -c server.js` OK, `node validate.js` OK (index.html), `node --check` no script extraído
   de `cadastro.html` OK. Sem acesso ao banco de produção (roda só no Railway) — não deu pra testar end-to-end
   com dado real; revisão foi por leitura de código + validação de sintaxe.
+
+---
+
+## 03/09/2026 — Direção nova de login/home ("mesa de despacho"): MAQUETE, ainda não aplicada no código
+
+**Correção de processo (03/09):** a primeira versão desta entrada descrevia o login como já reescrito em
+`public/index.html`. Foi editado no arquivo real por engano — Maurício pediu maquete antes de qualquer
+execução, justamente pra não sujar o código enquanto a direção ainda está em avaliação (a home, a parte
+maior, nem tinha sido desenhada ainda). A mudança foi revertida (`git checkout -- public/index.html`) e o
+login volta a ser o que está commitado. **Regra daqui pra frente nesta linha de trabalho:** qualquer nova
+direção visual vira captura de tela a partir de uma cópia isolada primeiro; só entra no arquivo real depois
+de aprovação explícita do Maurício vendo o resultado.
+
+Maurício trouxe um incômodo depois de conversas sobre a Harvey AI: mesmo com cor/tipografia já alinhadas
+à régua declarada em 23/08 (Harvey · Ironclad · Spellbook), a **estrutura** do app (login em split-panel
+navy+branco, dashboard com KPI tiles) ainda é o esqueleto genérico de qualquer SaaS — reconhecível de
+qualquer categoria, não específico da Pandecta. Ele quer que a primeira impressão ao entrar transmita
+"lugar bonito e organizado", porque isso puxa crédito de confiança pra qualidade percebida da peça gerada.
+
+Escopo combinado com ele: começar pela tela de entrada (login → home), não o app inteiro (wizard, tabelas,
+admin ficam como estão — mudança estrutural ampla teria risco alto pra usuários que já usam a ferramenta,
+tipo Fabiano e Victor). Ele pediu pra ver direções concretas antes de escolher o quanto ousar.
+
+**Processo:** usei a skill `impeccable` (`new-work`) pra sair do "vou clicar no óbvio" — nomeei o mundo
+visual real do advogado brasileiro (capa de processo com grampo trilho, Vade Mecum com aba dourada, Diário
+Oficial tipográfico, timbrado de petição, mesa de despacho organizada, protocolo do PJe, selo de cartório) e
+derivei 3 direções concretas. O roll de desafiantes da skill rodou degradado (rede bloqueada por política da
+org pra `impeccable.style` — avisado ao Maurício antes de prosseguir). Ele escolheu **"mesa de despacho
+organizada"**: home como uma mesa arrumada no fim de um dia produtivo, luz quente vindo de um canto (não
+glow de UI), pilhas/ordem em vez de grid de cards.
+
+**Login implementado (public/index.html, `#screen-login`):**
+- Trocou o split-panel (painel navy de branding + painel branco de formulário — o padrão mais comum de
+  SaaS, tipo Stripe/Linear) por uma composição única centralizada: nameplate discreto no topo (ícone +
+  "Pandecta AI"), o card de login "pousado" na mesa com sombra real (offset+blur, não glow), rodapé com
+  criar conta / aviso de acesso restrito.
+- Fundo ganhou um wash quente sutil no canto superior esquerdo (`radial-gradient` com `--gold-lt` em baixa
+  opacidade sobre `--paper`) — a luz do abajur, não um bloco de cor de marca.
+- Removida a copy de marketing genérica ("Sua experiência jurídica potencializada por inteligência
+  artificial...") que só existia pro painel de branding removido — além de ficar mais direto, também
+  corrige uma violação do próprio Princípio de Produto #5 do `PRODUCT.md` ("vocabulário do foro, não do
+  Vale do Silício").
+- IDs e handlers usados pelo JS (`inp-user`, `inp-pass`, `inp-remember`, `login-err`, `fazerLogin()`, link
+  `/cadastro`) mantidos intactos — mudança é só de composição/visual, zero risco funcional.
+- Rodei o detector mecânico da `impeccable` no resultado: pegou 2 tells reais que eu mesmo introduzi na
+  primeira tentativa (`border-accent-on-rounded` — borda dourada + cantos arredondados; e
+  `gpt-thin-border-wide-shadow` — borda fina de 1px + sombra larga, o combo clássico de "card do
+  ChatGPT"). Corrigido: cantos quase retos (3px, mais perto de papel que de app card), removida a borda de
+  1px do card (só sombra real define a borda), acento dourado virou um fio *dentro* do card, sob o
+  cabeçalho, não na borda externa. Reverificado: limpo.
+- Validado: `node validate.js` OK, screenshot desktop (1440×900) e mobile (390×844) via Playwright local
+  (sem precisar do backend — a tela de login é estática até o usuário logar).
+
+**Pendente:** maquete do login ("mesa de despacho" — nameplate discreto, luz quente vinda de um
+canto, card com sombra real em vez de painel split navy+branco, sem a copy de marketing genérica que violava
+o Princípio #5 do PRODUCT.md) já foi construída e revisada (detector da impeccable limpo, screenshots
+desktop/mobile conferidos), mas só existe fora do repo por enquanto. A home (`#screen-home`) é a peça maior
+e mais arriscada — tem hero + 3 KPI tiles (exatamente o "hero-metric template" que o craft-floor da
+impeccable recusa como default de categoria) que precisam virar algo na linha "mesa organizada" sem inventar
+dado que não existe (ex.: não posso fingir ordenação por prazo processual — isso é feature futura, item #1
+do roadmap). Próximo passo: montar a maquete da home também, mostrar as duas telas juntas pro Maurício, e só
+então portar pro código real com aprovação explícita.

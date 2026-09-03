@@ -1,7 +1,11 @@
 # Design — Pandecta AI
 
-<!-- Escrito a partir do build, não antes dele. Vale para public/landing.html.
-     A SPA (public/index.html) ainda roda o sistema antigo. -->
+<!-- Escrito a partir do build, não antes dele. Cobre public/landing.html e,
+     desde 23/08/2026, os tokens de cor/tipografia da SPA (public/index.html) também —
+     comentário anterior estava desatualizado. Composição de tela (estrutura, não
+     tokens) é tratada surface a surface: nova direção pra login/home ("mesa de
+     despacho") em avaliação como maquete desde 03/09/2026, ainda não aplicada no
+     código — ver CLAUDE.md antes de reaplicar qualquer coisa nessa linha. -->
 
 **Régua declarada:** Harvey · Ironclad · Spellbook. Legaltech premium, executado em fidelidade total. Sobriedade cara, densidade alta, zero infantilidade.
 
