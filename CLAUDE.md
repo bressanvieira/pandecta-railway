@@ -686,3 +686,22 @@ responsável já existia no banco (`responsavel_id`), só não era exibido.
   banco de produção pra teste end-to-end (mesma limitação já registrada nas entradas anteriores) — revisão
   foi por leitura de código + validação de sintaxe, seguindo o padrão de migração `ALTER TABLE` já
   estabelecido no arquivo.
+
+---
+
+## 03/09/2026 — Painel Admin dividido em abas
+
+Maurício sentiu que a tela de Admin estava "muito cheia" — 5 seções empilhadas (Usuários, Backups, Canal
+Pioneiro, Tickets, Advogados Pioneiros) todas visíveis ao mesmo tempo, exigindo scroll grande. Adicionei uma
+barra de abas (`.admin-tabs`) logo abaixo dos 4 cards de KPI (que continuam sempre visíveis, funcionando como
+resumo geral), e cada seção existente virou um painel (`.admin-tab-panel[data-tab-panel]`) que só aparece
+quando sua aba está ativa.
+
+- Puramente visual/estrutural: nenhum id, função de carregamento (`loadUsers`, `loadBackups`,
+  `loadAdminStats`, `loadPioneiros`, `loadTicketsAdmin`, `loadPioneerMsgsAdmin`) ou lógica de dados foi
+  alterada — todas continuam disparando juntas ao entrar em `admin` (como já faziam), só a exibição que agora
+  é controlada por `showAdminTab(name)`.
+- Abas: Usuários (padrão/ativa ao entrar) · Advogados Pioneiros · Canal Pioneiro · Tickets · Backups.
+- Processo seguido: maquete numa cópia isolada, 3 capturas mostrando a troca de aba, aprovadas antes de
+  portar pro código real.
+- Validado: `node --check` no JS inline do `index.html`, sem erro de sintaxe.

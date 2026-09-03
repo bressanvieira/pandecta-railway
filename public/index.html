@@ -610,6 +610,12 @@ html.has-session #screen-login{visibility:hidden;}
 .admin-stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07);}
 .admin-stat-val{font-size:32px;font-weight:800;color:var(--t1);line-height:1;}
 .admin-stat-lbl{font-size:12px;color:var(--t3);margin-top:5px;text-transform:uppercase;letter-spacing:.8px;}
+.admin-tabs{display:flex;gap:22px;border-bottom:1px solid var(--bd);margin-bottom:24px;overflow-x:auto;}
+.admin-tab{padding:0 0 11px;font-size:13.5px;font-weight:600;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap;display:flex;align-items:center;gap:7px;}
+.admin-tab:hover{color:var(--t1);}
+.admin-tab.active{color:var(--t1);border-bottom-color:var(--gold);}
+.admin-tab-panel{display:none;}
+.admin-tab-panel.active{display:block;}
 /* tabela usuários */
 .td-sub{font-size:12px;color:var(--t2)!important;}
 .usr-av{width:32px;height:32px;border-radius:50%;background:var(--t1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;}
@@ -2201,6 +2207,15 @@ html.has-session #screen-login{visibility:hidden;}
           <div class="admin-stat-card"><div class="admin-stat-val" id="stat-docs">–</div><div class="admin-stat-lbl">Docs no acervo</div></div>
         </div>
 
+        <div class="admin-tabs" id="admin-tabs">
+          <div class="admin-tab active" data-tab="usuarios" onclick="showAdminTab('usuarios')">Usuários</div>
+          <div class="admin-tab" data-tab="pioneiros" onclick="showAdminTab('pioneiros')">Advogados Pioneiros</div>
+          <div class="admin-tab" data-tab="canal" onclick="showAdminTab('canal')">Canal Pioneiro</div>
+          <div class="admin-tab" data-tab="tickets" onclick="showAdminTab('tickets')">Tickets</div>
+          <div class="admin-tab" data-tab="backups" onclick="showAdminTab('backups')">Backups</div>
+        </div>
+
+        <div class="admin-tab-panel active" data-tab-panel="usuarios">
         <!-- USERS TABLE -->
         <div class="admin-section">
           <div class="admin-section-hdr">
@@ -2227,7 +2242,9 @@ html.has-session #screen-login{visibility:hidden;}
             </table>
           </div>
         </div>
+        </div>
 
+        <div class="admin-tab-panel" data-tab-panel="backups">
         <!-- BACKUPS -->
         <div class="admin-section">
           <div class="admin-section-hdr">
@@ -2236,9 +2253,10 @@ html.has-session #screen-login{visibility:hidden;}
           </div>
           <div id="backups-list" style="padding:16px 20px;font-size:13px;color:var(--t3);">Carregando...</div>
         </div>
+        </div>
 
-        
-          <div class="admin-section" style="margin-top:32px;">
+        <div class="admin-tab-panel" data-tab-panel="canal">
+          <div class="admin-section" style="margin-top:0;">
             <div class="admin-section-hdr">
               <div class="admin-section-title" style="display:flex;align-items:center;gap:8px;"><svg width="17" height="17" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 13.4a1.8 1.8 0 0 1-1.8 1.8H6.4L2.8 18.8V4.6a1.8 1.8 0 0 1 1.8-1.8h12.6A1.8 1.8 0 0 1 19 4.6z"/></svg>Canal Pioneiro — Mensagens</div>
               <span id="pio-msgs-count" style="font-size:12px;color:var(--gold);font-weight:600;"></span>
@@ -2247,14 +2265,19 @@ html.has-session #screen-login{visibility:hidden;}
               <div style="padding:20px;color:var(--t3);font-size:13px;">Carregando...</div>
             </div>
           </div>
-<div class="admin-section">
+        </div>
+
+        <div class="admin-tab-panel" data-tab-panel="tickets">
+        <div class="admin-section">
           <div class="admin-section-hdr">
             <div class="admin-section-title" style="display:flex;align-items:center;gap:8px;"><svg width="17" height="17" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 13.4a1.8 1.8 0 0 1-1.8 1.8H6.4L2.8 18.8V4.6a1.8 1.8 0 0 1 1.8-1.8h12.6A1.8 1.8 0 0 1 19 4.6z"/></svg>Tickets de Suporte</div>
             <span id="tickets-count" style="font-size:12px;color:var(--gold);font-weight:600;"></span>
           </div>
           <div id="tickets-admin-list" style="padding:8px 0;"><div style="color:var(--t3);font-size:13px;padding:16px 20px;">Carregando...</div></div>
         </div>
+        </div>
 
+        <div class="admin-tab-panel" data-tab-panel="pioneiros">
         <div class="admin-section">
           <div class="admin-section-hdr">
             <div class="admin-section-title" style="display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2.6l1.9 5.3 5.5 1.9-5.5 1.9L11 17l-1.9-5.3-5.5-1.9 5.5-1.9z"/></svg>Advogados Pioneiros</div>
@@ -2279,6 +2302,7 @@ html.has-session #screen-login{visibility:hidden;}
               </tbody>
             </table>
           </div>
+        </div>
         </div>
 
       </div>
@@ -2551,6 +2575,10 @@ document.addEventListener('mouseout',e=>{
   if(e.relatedTarget&&el.contains(e.relatedTarget)) return;
   document.getElementById('sb-tooltip')?.classList.remove('show');
 });
+function showAdminTab(name){
+  document.querySelectorAll('#admin-tabs .admin-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===name));
+  document.querySelectorAll('.admin-tab-panel').forEach(p=>p.classList.toggle('active',p.dataset.tabPanel===name));
+}
 function toggleSidebarCollapse(){
   sbCollapsed=!sbCollapsed;
   localStorage.setItem('pandecta_sb_collapsed',sbCollapsed?'1':'0');
