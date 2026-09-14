@@ -770,3 +770,80 @@ usei a URL errada. Além disso, o texto atual dessa política dizia explicitamen
 - Processo seguido: preparei o texto novo e mostrei ao Maurício antes de aplicar (é a política de
   privacidade, texto quase-legal), aplicado só depois da aprovação dele. Validado com `node --check`
   no JS inline de ambos os arquivos, sem erro de sintaxe.
+
+## 04/09/2026 — Verificação: tag do GA4 está no ar?
+
+Maurício perguntou se a tag do Google Analytics já estava incluída no site pro Analytics ler. Fiz uma
+verificação ao vivo em pandecta.com.br (script do site real, não a maquete) via automação de navegador:
+
+- Confirmado: o script `gtag.js` carrega corretamente com o Measurement ID certo (`G-7J5J1CGRR2`), o
+  consentimento de cookies (LGPD) está funcionando como esperado, e o evento de pageview é disparado com
+  os dados corretos (URL, título da página etc.).
+- Ao inspecionar a rede em tempo real, a requisição que efetivamente envia o dado pro Google
+  (`google-analytics.com/g/collect`) voltou com erro 503 em vários testes consecutivos feitos a partir do
+  navegador de automação.
+- Porém, o relatório "Tempo real" do GA4 (propriedade "Pandecta AI - Site") mostrou atividade de minutos
+  anteriores no gráfico "Usuários ativos por minuto" — ou seja, hits anteriores chegaram normalmente ao
+  GA4. A leitura mais provável é que o 503 seja específico do ambiente de automação usado no teste (ex.:
+  extensão de navegador interferindo), e não um problema na implementação do Pandecta.
+- Conclusão passada ao Maurício: a tag está corretamente instalada e configurada; recomendei ele mesmo
+  checar o Tempo real do GA4 navegando pelo site normalmente (fora da automação) para confirmar de forma
+  definitiva, e lembrei que dados fora do Tempo real podem levar até 48h para consolidar no GA4.
+- Nenhum código foi alterado nesta verificação — é só uma checagem de status, documentada aqui para
+  histórico.
+
+---
+
+## 14/09/2026 — Modal "Novo modelo": input `accept=".docx"` escondia arquivo válido + reforma visual
+
+Advogada indicada pelo Fabiano reportou que não conseguia subir o modelo `.docx` dela — o arquivo não
+aparecia no seletor nativo do Windows, só depois de trocar o filtro pra "Todos os arquivos (*)". Duas
+hipóteses descartadas com dado real antes de mexer em código: não era `.doc` vs `.docx` (ela confirmou que
+o arquivo era `.docx`) nem tamanho (arquivos de 1.551KB e 135KB, bem abaixo do limite de 10MB do
+`express.json` em `server.js`). Causa real: o `<input accept=".docx">` depende do registro de tipo de
+arquivo do Windows pra filtrar a lista do seletor nativo — se essa associação estiver incompleta/quebrada
+na máquina da pessoa (comum sem Word instalado, ou com outro editor como padrão), o filtro esconde arquivos
+`.docx` genuínos. "Todos os arquivos" ignora esse registro e sempre funciona.
+
+**Fix (não depender mais do filtro nativo do SO):**
+- `public/index.html`, modal `#modal-modelo`: removido `accept=".docx"` do `<input id="mod-file-in">` —
+  agora o seletor mostra todos os arquivos. Validação de extensão passou pro JS
+  (`onModeloFileSelect()`): se o nome não terminar em `.docx` (case-insensitive), toast de erro e a zona
+  volta pro estado inicial.
+- Não mexido: o outro input com filtro parecido (`accept=".pdf,.docx,.txt"` no Acervo, ~linha 1580) — fora
+  do escopo reportado, mas mesmo padrão de risco caso o mesmo sintoma apareça lá.
+
+**Reforma da tela (a pedido do Maurício: "está fora do padrão Pandecta" + feedback de sucesso "muito
+discreto"):**
+- Borda tracejada da zona de upload → borda sólida 1px `var(--bd-md)`, mesmo componente visual já usado no
+  `drop-z` do Acervo (`Fio de 1px é a única moldura`, regra do `DESIGN.md`) — parou de reinventar um padrão
+  novo.
+- Painel do modal não tinha nenhuma borda (só sombra) e o overlay usava opacidade/blur diferentes do resto
+  do app — alinhado ao `#pdc-modal` (modal de confirmação, o mais atual em uso): overlay
+  `rgba(0,0,0,.45)` + `backdrop-filter:blur(3px)`, painel com fio de 1.5px `var(--bd-md)`. Sombra em duas
+  camadas mantida (já estava correta, no padrão adotado em 23/08).
+- Cabeçalho ganhou ícone (mesmo path SVG do item "Modelos" da sidebar) + separador — mesmo padrão do
+  `.pdc-modal-header`.
+- **Feedback de sucesso reforçado:** antes só trocava a cor do texto do nome do arquivo com um "✓" discreto.
+  Agora, ao selecionar um `.docx` válido, a zona inteira vira um cartão: ícone azul de documento (mesma cor
+  do badge `.docx` no Acervo, `#2563EB`), nome do arquivo, tamanho formatado (`fmtTamanho()`, já existente)
+  e um selo circular verde de check (`var(--ok)`) — visualmente impossível de não perceber. Zona também
+  ganhou tinta verde sutil de fundo/borda nesse estado.
+- JS: `resetModUploadZone()` novo (idempotente, chamado ao abrir o modal e em caso de erro de leitura do
+  arquivo) — evita duplicar o HTML do estado vazio em dois lugares.
+- `server.js` não foi alterado — o limite de 10MB do `express.json` não teve nenhuma relação com o caso
+  reportado.
+- Processo seguido: edição direto no `index.html`, `node validate.js` OK, 3 capturas via Playwright (vazio,
+  arquivo aceito, extensão errada simulando um `.pdf`) — confirmado que a validação de extensão dispara o
+  toast certo e volta a zona pro estado inicial sem travar. Aprovado pelo Maurício antes de gravar no
+  arquivo real. **Pendente: `git add / commit / push` via PowerShell** — o acesso do sandbox ao computador
+  dele (`device_bash`) estava fora do ar nesta sessão (ver nota abaixo), então a gravação foi feita direto
+  no arquivo via `device_commit_files`, sem passar pelo fluxo normal de commit automático.
+
+**Nota operacional:** nesta sessão, o `device_bash` (shell do sandbox no Windows do Maurício) esteve
+indisponível o tempo todo — erro "no Plan9 drive shares mounted", atribuído pelo próprio ambiente a uma
+atualização do Windows de 08/09/2026. `device_list_dir`/`device_stage_files`/`device_commit_files`
+continuaram funcionando normalmente (não dependem do mesmo mount). Enquanto isso persistir, qualquer
+edição em arquivo do repo passa por stage → edita cópia local → `node validate.js` → screenshot Playwright
+→ aprovação → `device_commit_files` de volta pro caminho original — e o `git commit/push` fica manual, pelo
+PowerShell do Maurício, até o `device_bash` voltar.

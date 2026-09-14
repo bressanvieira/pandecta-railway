@@ -1,8 +1,8 @@
 {
   "meta": {
     "nome": "Pandecta Executive Command Center",
-    "versao": 15,
-    "atualizado_em": "2026-08-28",
+    "versao": 16,
+    "atualizado_em": "2026-09-12",
     "changelog": [
       {
         "data": "2026-07-13",
@@ -78,11 +78,23 @@
         "versao": 15,
         "data": "2026-08-28",
         "mudancas": "Continuação da sessão de marketing com Claude (chat separado da sessão de diagnóstico comercial de 25/08 — reconciliado aqui). Radar Pandecta AI (primeira edição, 24/08) analisado: maior achado é que o badge \"Verificado pela Pandecta\" no rodapé do visualizador não tem verificação real por trás (o system prompt só instrui o modelo a não inventar jurisprudência — não existe checagem independente), o que confirma e reforça a Prioridade 5 do roadmap de produto (verificação/citação auditável) já definida na sessão de 25/08. Também confirmado: a garantia de não-uso de dados de cliente pra treinar modelo já existe, escrita, no lgpd.html/política de privacidade/termos — só precisa subir pra seção de segurança da landing, que hoje não menciona isso. Proposta da Gene Digital foi discutida em detalhe antes de saber que já tinha sido recusada em sessão separada (25/08) — direcionamento chegou à mesma conclusão por caminho diferente: Maurício decidiu gravar os próprios vídeos (já fez conteúdo em vídeo antes, no perfil de NFT) em vez de usar modelos contratados da agência, e canal pago prioritário é Meta/Instagram, não LinkedIn — dois motivos concretos, não só preferência: conflito de imagem com o emprego atual dele (não pode aparecer em vídeo pessoal no LinkedIn) e custo (CPC Meta ~10x mais barato que LinkedIn; o corte de mercado geral — Meta pra ticket baixo <€5k, LinkedIn pra enterprise — bate com o preço dos planos da Pandecta, R$79-379/mês). Narrativa de posicionamento proposta por Maurício pro vídeo: como ele não é advogado, não pode usar a linha da Torix (\"feito por advogado, pra advogados\") — vai com \"30 anos de engenharia; o advogado tem que ser o advogado\", apoiado na validação jurídica real (Kiko, Fabiano). Perfil do Instagram (@pandecta.ai) auditado: só 2 seguidores, 3 posts, zero vídeo, e o mais importante — os 3 posts ainda usam o sistema visual antigo (navy+dourado) que o produto abandonou no redesign de 23-24/08, e a bio usa emoji como marcador, violando a recusa permanente #3 do DESIGN.md. Plano de reforma do perfil entregue (avatar, nome, bio em duas opções, o que fazer com os posts antigos) antes do primeiro vídeo — Maurício vai executar manualmente, Claude não tem acesso de escrita ao Instagram."
+      },
+      {
+        "versao": 16,
+        "data": "2026-09-12",
+        "mudancas": "Check-in comercial automático de sexta (executado sábado 12/09, sem Maurício presente para responder — tarefa agendada, sem sessão ativa). As três perguntas obrigatórias (advogados abordados, leads do LinkedIn respondidos em <24h, novidades) ficam pendentes de resposta dele; nenhum número foi inventado. Fechadas sem dado três semanas consecutivas de protocolo_vendas (24/08, 31/08, 07/09) — a mesma lacuna que já vinha desde 13/07 simplesmente continuou, agora são ~9 semanas seguidas sem um único número de prospecção confirmado. Em paralelo, o CLAUDE.md do repo registra trabalho de produto real e contínuo nesse mesmo período (02-04/09): checkbox de termos obrigatório + telefone acionável (wa.me) no admin do cadastro; sidebar do app com modo reduzido (só ícones); três colunas novas no histórico (Advogado/Réu/Vara-Juízo); painel Admin dividido em abas; bug real corrigido (botão 'Fazer backup agora' sem handler); Google Analytics (GA4) instalado na landing com banner de consentimento LGPD e política de privacidade atualizada — confirmado ao vivo em pandecta.com.br em 04/09, o que também confirma que o redesign (landing + app + páginas órfãs) já foi publicado em algum momento entre 28/08 e 02/09. Nenhuma dessas entregas é sobre o funil comercial. Registrado como achado do check-in, não como crítica: é o padrão sabotador já documentado no CLAUDE.md (refúgio em produto quando a métrica que decide a janela de independência financeira é vendas) se repetindo por mais um ciclo, agora com a meta de 30/09 a 18 dias de distância e ainda só 1 de 3 advogados confirmados com peça protocolada."
       }
     ]
   },
   "dashboard": {
     "avancou": [
+      "Redesign publicado: landing + app + 4 páginas órfãs no ar em pandecta.com.br (confirmado indiretamente em 04/09, ao verificar a tag do GA4 rodando no site real)",
+      "Google Analytics (GA4) instalado na landing com banner de consentimento LGPD; política de privacidade atualizada para mencionar o uso — tag confirmada ativa no site real em 04/09",
+      "Cadastro: checkbox obrigatório de aceite dos Termos/Política de Privacidade + telefone do usuário virou link clicável (wa.me) na tabela de usuários do admin — motivado por Maurício não conseguir identificar/contatar uma advogada que se cadastrou sozinha",
+      "Sidebar do app ganhou modo reduzido (só ícones, com tooltip) com preferência persistida; histórico de peças ganhou 3 colunas novas (Advogado responsável, Réu, Vara/Juízo)",
+      "Painel Admin dividido em abas (Usuários/Pioneiros/Canal Pioneiro/Tickets/Backups) — reduz o scroll que Maurício reportou como \"muito cheio\"",
+      "Bug real corrigido: botão \"Fazer backup agora\" no admin não tinha handler JS nenhum — corrigido",
+      "Maquete da tela de login (\"mesa de despacho\") aprovada e portada pro código real — split-panel navy+branco genérico trocado por composição centralizada com luz quente; home ainda como maquete, não portada",
       "Ferramenta: dashboard de início ganhou dois gráficos reais (peças por área, atividade dos últimos 14 dias) depois que Maurício apontou que só remover redundância deixou a tela achatada — e um bug real junto (barras de gráfico com 0px de largura por causa de <span> inline)",
       "Ferramenta: dashboard de início e histórico simplificados (skill impeccable, modo Operate + distill) — removida navegação e estatísticas duplicadas na home, histórico virou tabela densa em vez de grade de cards (não escalava), e corrigido bug real que fazia todo card do histórico exibir a palavra \"documento\" (lookup de ícone/cor por área que nunca recebia dado da API)",
       "Segurança: sessão de login reduzida de 7 dias fixos para 1 dia por padrão — só vira 7 dias com checkbox 'Manter-me conectado' explícito. Decisão do Maurício por lidar com dados de advogado/cliente",
@@ -99,10 +111,10 @@
       "Skills de design instaladas e rodando (impeccable + taste-skill)"
     ],
     "riscos": [
-      "Seis semanas sem um único número de pipeline reportado (13/07 a 23/08)",
+      "~9 semanas seguidas sem um único número de pipeline reportado (13/07 a 12/09) — check-in de sexta automático de 12/09 rodou sem Maurício presente, três semanas a mais (24/08, 31/08, 07/09) fechadas sem dado",
       "Ainda um único beta validado — Fabiano, desde 03/07. Nenhum segundo advogado confirmado",
-      "Meta 30/09: faltam 2 advogados em 5 semanas, partindo de um funil sem número conhecido",
-      "Sessão inteira gasta em produto e marca enquanto o funil segue parado — padrão sabotador conhecido, em curso",
+      "Meta 30/09 agora a 18 dias de distância: faltam 2 advogados, partindo de um funil sem número conhecido há mais de dois meses — é o prazo mais apertado desde que a meta foi criada",
+      "Duas semanas de trabalho real (02-04/09: termos+telefone no cadastro, sidebar reduzida, colunas do histórico, abas do admin, fix de backup, GA4) foram inteiras em produto/marca, zero em vendas — mesmo padrão sabotador do CLAUDE.md se repetindo, não uma exceção pontual",
       "Sistema de Modelos continua não demonstrado ao Fabiano, sete semanas depois",
       "Fabiano e Victor sumiram após retornarem de férias — causa não confirmada (motivo pessoal comum vs. possível alternativa encontrada por eles); check-in sem cobrança enviado, resposta pendente",
       "Checkout/assinatura self-service segue desativado — nenhum lead, pago ou orgânico, converte em cliente pagante sozinho hoje"
@@ -116,8 +128,12 @@
     ],
     "prioridades_semana": [
       {
+        "titulo": "Responder ao check-in de sexta que ficou sem resposta",
+        "motivo": "Rodou automático em 12/09 sem Maurício presente. As 3 perguntas (abordagens da semana, leads do LinkedIn respondidos em <24h, novidades) seguem pendentes — é o primeiro passo antes de qualquer outra prioridade abaixo."
+      },
+      {
         "titulo": "Fechar o número do funil",
-        "motivo": "Quatro perguntas em pendente_confirmacao. E agora existe relógio: a meta de 30/09 dá 5 semanas para sair de 1 para 3 advogados com peça protocolada."
+        "motivo": "Quatro perguntas em pendente_confirmacao, agora com 18 dias até a meta de 30/09 — restam 2 advogados a confirmar e o funil segue sem um número fechado desde julho."
       },
       {
         "titulo": "Mostrar o Sistema de Modelos ao Fabiano",
@@ -132,10 +148,10 @@
   "protocolo_vendas": {
     "meta_semanal_mensagens": 5,
     "abordados_esta_semana": 0,
-    "semana_referencia": "2026-08-24",
+    "semana_referencia": "2026-09-14",
     "followup_horas": 24,
     "pergunta_sexta": "Quantos advogados abordei essa semana?",
-    "ancora": "51 anos. Filha 14, filho 9. Independência antes dos 60. Sem a ExpoLaw como prazo externo, o único relógio que resta é esse.",
+    "ancora": "51 anos. Filha 14, filho 9. Independência antes dos 60. Meta 30/09 a 18 dias — sem a ExpoLaw como prazo externo, o único relógio que resta é esse.",
     "canal_ativo": "Waalaxy — LinkedIn automation (100 convites/semana)",
     "historico_semanas": [
       {
@@ -158,14 +174,37 @@
         "meta": 5,
         "nota": "Sem número reportado. Maurício confirmou ter contatado advogados no período e relatou dificuldade de conversão, mas não fechou a contagem.",
         "fechada_em": "2026-08-23"
+      },
+      {
+        "semana_referencia": "2026-08-24",
+        "abordados": null,
+        "meta": 5,
+        "nota": "Sem número reportado. Sessão do período (25/08) registrou compromisso de abordar 8-10 advogados usando o caso do Fabiano, mas sem contagem fechada.",
+        "fechada_em": "2026-09-12"
+      },
+      {
+        "semana_referencia": "2026-08-31",
+        "abordados": null,
+        "meta": 5,
+        "nota": "Sem número reportado. CLAUDE.md do período (02-04/09) só registra trabalho de produto (cadastro, sidebar, admin, GA4) — nenhuma menção a prospecção.",
+        "fechada_em": "2026-09-12"
+      },
+      {
+        "semana_referencia": "2026-09-07",
+        "abordados": null,
+        "meta": 5,
+        "nota": "Sem número reportado. Check-in de sexta (11/09) rodou automático em 12/09 sem Maurício presente para responder.",
+        "fechada_em": "2026-09-12"
       }
     ],
-    "ultimo_checkin": "2026-08-23 (sessão de redesign — número ainda não fechado)",
+    "ultimo_checkin": "2026-09-12 (execução automática da tarefa agendada — sem Maurício presente, perguntas ainda sem resposta)",
     "pendente_confirmacao": [
       "Quantos advogados foram abordados de fato desde 13/07",
       "Quantos aceitaram conexão e quantos responderam",
       "Quantos chegaram a ver a ferramenta funcionando",
-      "Quantos disseram não DEPOIS de ver (é o único número que justifica contratar agência)"
+      "Quantos disseram não DEPOIS de ver (é o único número que justifica contratar agência)",
+      "Quantos leads chegaram da campanha do LinkedIn essa semana e quantos foram respondidos em <24h",
+      "Novidades de produto/beta/marketing/financeiro que ainda não estão neste documento"
     ]
   },
   "dominios": [
@@ -316,6 +355,46 @@
           "prioridade": "media"
         },
         {
+          "nome": "Cadastro: checkbox de termos obrigatório + telefone acionável no admin",
+          "objetivo": "Motivado por Maurício não conseguir identificar/contatar uma advogada que se cadastrou sozinha: telefone virou link wa.me na tabela do admin, e o cadastro passou a exigir aceite explícito dos Termos/Política de Privacidade (gravado com timestamp de servidor + IP)",
+          "status": "concluido",
+          "responsavel": "Maurício + Claude",
+          "dependencias": "—",
+          "proxima_acao": "—",
+          "prazo": "02/09/2026",
+          "prioridade": "media"
+        },
+        {
+          "nome": "Sidebar reduzida (modo ícone) + colunas Advogado/Réu/Vara no histórico",
+          "objetivo": "Sidebar com modo só-ícones (preferência persistida); histórico ganhou contexto do processo (advogado responsável, réu, vara/juízo) que já era coletado no wizard mas não ficava salvo como dado estruturado",
+          "status": "concluido",
+          "responsavel": "Maurício + Claude",
+          "dependencias": "—",
+          "proxima_acao": "—",
+          "prazo": "03/09/2026",
+          "prioridade": "media"
+        },
+        {
+          "nome": "Admin dividido em abas + correção do botão de backup",
+          "objetivo": "Reduzir a poluição visual do painel Admin (5 seções empilhadas viraram abas) e corrigir bug real: botão 'Fazer backup agora' não tinha handler JS",
+          "status": "concluido",
+          "responsavel": "Maurício + Claude",
+          "dependencias": "—",
+          "proxima_acao": "—",
+          "prazo": "03/09/2026",
+          "prioridade": "baixa"
+        },
+        {
+          "nome": "Nova direção visual de login/home (\"mesa de despacho\")",
+          "objetivo": "Substituir o esqueleto genérico de SaaS (split-panel navy+branco, KPI tiles) por uma composição específica da Pandecta — mesa arrumada, luz quente, sem glow de UI",
+          "status": "em_andamento",
+          "responsavel": "Maurício + Claude",
+          "dependencias": "Aprovação do Maurício vendo a maquete da home ao lado do login já portado",
+          "proxima_acao": "Montar a maquete da home (hero + KPIs de despacho) e mostrar as duas telas juntas antes de portar pro código real",
+          "prazo": "Sem data",
+          "prioridade": "media"
+        },
+        {
           "nome": "Login com Google (OAuth 2.0)",
           "objetivo": "Reduzir fricção no cadastro",
           "status": "futuro",
@@ -433,6 +512,16 @@
           "proxima_acao": "—",
           "prazo": "—",
           "prioridade": "baixa"
+        },
+        {
+          "nome": "Google Analytics (GA4) na landing, com consentimento LGPD",
+          "objetivo": "Medir fluxo de visitantes do site institucional (só landing, não a área logada)",
+          "status": "concluido",
+          "responsavel": "Maurício + Claude",
+          "dependencias": "—",
+          "proxima_acao": "Maurício acompanhar o relatório Tempo Real / conversão de cadastro no GA4",
+          "prazo": "04/09/2026",
+          "prioridade": "media"
         },
         {
           "nome": "Agência de marketing para SaaS — em avaliação",
@@ -683,9 +772,9 @@
   ],
   "roadmap": {
     "em_andamento": [
-      "META 30/09/2026 — 3 advogados com peça protocolada (Fabiano = 1 de 3)",
-      "Publicar landing + app + 4 páginas órfãs juntos — redesign concluído, falta só o git push + deploy",
-      "Waalaxy: 450 prospects, campanha rodando há ~4 semanas — resultado não medido",
+      "META 30/09/2026 — 3 advogados com peça protocolada (Fabiano = 1 de 3) — 18 dias restantes",
+      "Maquete 'mesa de despacho' para a home — login já portado, home ainda em maquete",
+      "Waalaxy: 450 prospects, campanha rodando há semanas — resultado não medido",
       "Auditoria do inbox LinkedIn (aceites/respostas desde 13/07)",
       "Relacionamento com Fabiano (beta principal — retomar pós-férias)",
       "Campanha Instagram — resultado do impulsionamento ainda não consolidado",
@@ -706,8 +795,7 @@
     "bloqueios": [
       "Monetização pausada até validar com mais advogados (3+ betas)",
       "Decisão de canal de marketing depende do resultado do impulsionamento Instagram",
-      "Publicação da landing nova segurada até a ferramenta estar redesenhada (para as capturas baterem)",
-      "ExpoLaw descartada em 23/08; prazo externo agora é a meta interna de 30/09 — 5 semanas"
+      "ExpoLaw descartada em 23/08; prazo externo agora é a meta interna de 30/09 — 18 dias restantes (12/09)"
     ]
   },
   "pessoas": [
