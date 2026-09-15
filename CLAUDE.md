@@ -911,3 +911,62 @@ pós-geração, e telas mobile (390px) da lista de processos, detalhe e Home —
 Gravado direto nos arquivos reais via `device_commit_files` assim que a conexão com o computador do
 Maurício voltou (o `device_bash` também já estava de volta nesse momento — ver nota de 14/09 sobre a
 indisponibilidade). **Pendente: `git add / commit / push` via PowerShell.**
+
+
+---
+
+## 15/09/2026 — Processo (detalhe): abas + "Vincular peça" com busca e multi-seleção
+
+Maurício mandou print da tela de detalhe do processo (Prazos/Custas/Peças vinculadas ainda vazios num
+processo de teste) e trouxe duas observações: (1) não existia nenhum jeito de vincular uma peça **já
+gerada** no Histórico a um processo — só dava pra linkar no momento da geração, via "Protocolar"; (2) sugeriu
+trocar as 3 seções empilhadas por uma tela com guias ("um wizard sabe?").
+
+**v1 (mockup aprovado por ele com uma ressalva de UX — ver abaixo):**
+- 3 seções (Prazos/Custas/Peças vinculadas) viraram abas — `.proc-tabs`/`.proc-tab`/`.proc-tab-panel`,
+  com badge de contagem por aba. Classes novas e dedicadas, **não** reaproveitando `.admin-tab*`: o
+  `showAdminTab()` do Admin troca de aba com `document.querySelectorAll('.admin-tab-panel')` sem escopo —
+  se a tela de Processo usasse as mesmas classes, abrir o Admin em outra aba do navegador (ou qualquer
+  reentrância) poderia comer os painéis do Processo por engano. `showProcTab(name)` fica escopado ao
+  `#proc-detalhe`.
+- Botão "+ Vincular peça" na aba Peças abre `#modal-vincular-peca`, que lista (via `GET /api/history`
+  filtrando `processo_id` nulo) as peças do Histórico ainda sem vínculo. Nenhuma rota nova no `server.js` —
+  o `PUT /api/history/:id` já aceitava `processo_id` no corpo desde a feature original.
+
+**Pergunta de UX do Maurício antes de aprovar o resto:** a v1 usava um `<select>` nativo. Ele perguntou se
+não seria melhor uma "grid", e apontou o requisito real — quando o advogado já tiver muitas peças geradas,
+precisa ser fácil achar a peça certa, e devia dar pra vincular mais de uma de uma vez. Recomendei (e ele
+aprovou) uma terceira opção, nem dropdown nem grid de cards: campo de busca (filtra por tipo/área/réu) +
+lista rolável com checkbox por linha + botão de rodapé com contagem ao vivo ("Vincular 3 peças") — mesma
+linguagem densa do `.hist-table` do Histórico, que já é o padrão certo pra esse tipo de conteúdo (registro
+textual e escaneável), não o `.hist-grid` de cards que a própria distill de 24/08 aposentou por não escalar.
+
+**v2 implementada — `.vinc-peca-search`/`.vinc-peca-list`/`.vinc-peca-row`:**
+- `abrirModalVincularPeca()` guarda os candidatos (`vincCandidatos`) e a seleção (`vincSelecionados`, um
+  `Set`) em variáveis de módulo; `filtrarVincularPeca()` refiltra em cima do array já carregado (sem nova
+  chamada à API a cada tecla); `renderVincList()` desenha a lista e distingue os dois estados vazios —
+  "nenhuma peça sem vínculo" (zero candidatos no Histórico) de "nenhuma peça encontrada" (busca sem
+  resultado, mas existem candidatos). `salvarVincularPeca()` dispara um `PUT /api/history/:id` por peça
+  selecionada via `Promise.all` — vincula todas de uma vez, um único toast ("N peças vinculadas.").
+
+**Bug real encontrado e corrigido na verificação (não veio da lógica de seleção, veio do handler duplo):**
+a primeira versão do checkbox tinha `onclick="event.stopPropagation();toggleVincPeca(id)"` **e**
+`onchange="toggleVincPeca(id)"` no mesmo elemento — um clique dispara os dois eventos, então
+`toggleVincPeca` rodava duas vezes por clique e desfazia a si mesma (adiciona no Set, remove no Set): a
+caixa marcava visualmente mas a seleção real ficava sempre vazia, e o botão "Vincular" continuava
+desabilitado pra sempre. Achado rodando o fluxo de ponta a ponta via Playwright (clique programático nos
+checkboxes, botão nunca habilitava) — não seria óbvio só de olhar a tela. Corrigido removendo o `onclick`
+duplicado; só `onchange` (que já reflete o estado real do checkbox, tanto por clique direto quanto pelo
+clique na `<label>` que o envolve).
+
+**Verificação:** banco de teste local reseedado com 1 processo + 7 peças de Histórico sem vínculo,
+variadas em tipo/área/réu (pra estressar busca e seleção múltipla de verdade, não só 2-3 itens). Playwright
+cobriu: lista cheia, busca filtrando (por réu), 3 selecionadas com o botão mostrando a contagem certa, busca
+sem resultado, o `salvarVincularPeca()` real vinculando as 3 de uma vez (badge da aba foi de 1→4, toast
+certo), reabertura do modal já só com as 4 peças restantes (sem estado de seleção vazando entre aberturas),
+estado "nenhuma peça sem vínculo" (zerando as candidatas antes de abrir), e mobile 390px. `node validate.js`
+OK. Sem erro de JS relevante no console em nenhum fluxo (só ruído de rede do próprio ambiente de
+automação, não do app). Aprovado por Maurício ("otimo... vamos executar") antes de gravar nos arquivos
+reais via `device_commit_files`.
+
+**Pendente:** `git add / commit / push` via PowerShell.
