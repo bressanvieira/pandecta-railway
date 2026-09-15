@@ -55,7 +55,13 @@ SaaS de inteligência jurídica para advogados brasileiros. Gera petições, con
 - Sempre verificar integridade após salvar
 
 ### Git
-- **Nunca operar git pelo sandbox Linux** — o index.lock do Windows não é visível pelo sandbox e corrompe o repo
+- **Nunca operar git pelo sandbox Linux — isso inclui `git status`, não só add/commit/push.** O index.lock
+  criado pelo sandbox não é visível/removível pelo Windows (e vice-versa) e trava o repo até alguém apagar
+  o arquivo manualmente. Aconteceu de verdade em 15/09/2026: um `git status` rodado do sandbox só pra
+  conferir os arquivos gravados deixou um `.git/index.lock` de 0 bytes travado, e o próximo `git push` do
+  Maurício no PowerShell falhou com "Unable to create .git/index.lock: File exists" até ele apagar o
+  arquivo manualmente (`Remove-Item .git\index.lock`). Pra conferir estado de arquivos no repo do sandbox,
+  usar `ls`/`wc -c`/`md5sum`/`node --check` — nunca nenhum comando `git`.
 - Sempre usar PowerShell para `git add / commit / push`
 - Workflow: sandbox edita arquivos montados → PowerShell faz o commit
 
@@ -847,3 +853,61 @@ continuaram funcionando normalmente (não dependem do mesmo mount). Enquanto iss
 edição em arquivo do repo passa por stage → edita cópia local → `node validate.js` → screenshot Playwright
 → aprovação → `device_commit_files` de volta pro caminho original — e o `git commit/push` fica manual, pelo
 PowerShell do Maurício, até o `device_bash` voltar.
+
+
+---
+
+## 15/09/2026 — Gestão de Prazos, Processos e Custas (Fase 1 do roadmap, item #1)
+
+Feature planejada em `claude/plano-gestao-prazos-processos.md` (projeto Pandecta) e aprovada por Maurício
+("está aprovado. qualquer ajuste fazemos depois") a partir de um protótipo Claude Design (4 telas). Motivada
+pelo roadmap de produto de 25/08 — hipótese de que a falta de qualquer gatilho de retorno (prazo/andamento)
+é a causa mais provável do sumiço do Fabiano e do Victor após as férias.
+
+**Escopo (MVP — sem captura automática de intimação, isso é Fase 2/roadmap #1 completo, dependente de
+provedor pago como Judit.io/Escavador/Codilo — cadastro manual por enquanto):**
+
+- **3 tabelas novas no `server.js`** (mesmo padrão multitenancy `user_id` de todas as outras): `processos`
+  (numero_cnj, reu, vara, area_label, status), `prazos` (processo_id, descricao, data_inicio, tipo_data,
+  tipo_contagem, dias, data_vencimento calculada, status, responsavel_id), `custas` (processo_id, descricao,
+  valor_previsto, valor_pago, data). Coluna nova `processo_id` em `history` (nullable) pra linkar peça
+  gerada → processo.
+- **Cálculo de vencimento em dias úteis conforme CPC** (`calcularVencimentoPrazo()`): pula fins de semana,
+  feriados forenses fixos e móveis (Páscoa via algoritmo de Gauss/Meeus — Carnaval, Sexta-feira Santa,
+  Corpus Christi) e o recesso forense de 20/dez a 20/jan (art. 220 CPC). Contagem exclui o dia de início,
+  inclui o de vencimento, prorroga se cair em dia não útil (art. 224 CPC). Testado manualmente com 3 casos,
+  incluindo um que atravessa o recesso.
+- **Tela "Processos"** (nova entrada na sidebar): lista densa (`.proc-table`, mesmo padrão do
+  `.hist-table`) com número CNJ/réu/área, vara, chip de próximo prazo (cores: verde=ok, amarelo=vence em
+  ≤3 dias, vermelho=vencido), status (pill ativo/suspenso/encerrado), custas pago/previsto.
+- **Tela "Processo" (detalhe)**: timeline de prazos, tabela de custas (reusa `.ac-table` do Acervo), lista
+  de peças vinculadas — tudo com botão "+ Novo/Nova" e exclusão com confirmação (`pandectaConfirm`).
+- **Painel "Prazos" na Home** (`.hd-panel`, mesmo padrão de "Atividade"): duas colunas Vencidos/Esta semana,
+  com link "Ver processos".
+- **Botão "Protocolar"** no visualizador de documento pós-geração (entre Editar e Copiar): abre modal pra
+  vincular a peça recém-gerada a um processo (existente ou novo, pré-preenchendo réu/vara/área capturados
+  pelo wizard) e, opcionalmente, já cadastrar o primeiro prazo.
+
+**Bug real encontrado e corrigido durante a verificação visual (não relacionado à lógica, só CSS):**
+`.chip-prazo` usava `display:inline-flex`, que impede `text-overflow:ellipsis` de funcionar (a propriedade
+só se aplica a contêineres de bloco, não flex) — descrições de prazo longas cortavam o texto sem reticências
+e chegavam a sobrepor a coluna seguinte em telas estreitas. Trocado para `inline-block`. Também faltava um
+breakpoint mobile dedicado pra tabela de processos: em telas ≤768px a coluna "Próximo prazo" (170px fixos)
+não cabia ao lado de Status/Ações, e o item flexível "Processo" colapsava pra 0px de largura, fazendo o
+texto do cabeçalho sobrepor visualmente ("Processo" atrás de "Próximo Prazo"). Corrigido escondendo a
+coluna Status e estreitando a de Prazo nesse breakpoint (mesmo padrão já usado pelo `.hist-table` pra
+Advogado/Réu/Vara), com ações sempre visíveis (sem hover em touch).
+
+**Verificação:** ambiente de teste local montado no sandbox com um shim `node:sqlite` → `better-sqlite3`
+(só para rodar localmente ali, já que o build nativo do `better-sqlite3` fica bloqueado pela política de
+rede do sandbox — nunca commitado, `package.json` real com a dependência nativa restaurado antes da
+gravação). Banco seedado com 3 processos, 4 prazos (um vencido, um vencendo essa semana, dois futuros) e 3
+custas via as próprias rotas novas da API, mais uma peça de histórico vinculada via `/api/history/:id`.
+`node validate.js` e `node --check server.js` OK. Conferido com captura real via Playwright: lista de
+processos, detalhe do processo, painel de prazos na Home, os 4 modais (novo processo, novo prazo, nova
+custa, protocolar — fluxo de processo novo e de processo existente), botão Protocolar no visualizador
+pós-geração, e telas mobile (390px) da lista de processos, detalhe e Home — sem erro de JS no console.
+
+Gravado direto nos arquivos reais via `device_commit_files` assim que a conexão com o computador do
+Maurício voltou (o `device_bash` também já estava de volta nesse momento — ver nota de 14/09 sobre a
+indisponibilidade). **Pendente: `git add / commit / push` via PowerShell.**

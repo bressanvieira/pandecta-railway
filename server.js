@@ -197,6 +197,48 @@ try {
     db.exec("ALTER TABLE pioneer_messages ADD COLUMN pioneiro_leu INTEGER DEFAULT 0");
   } catch(e) { /* coluna já existe */ }
 
+  // ── Gestão de Prazos, Processos e Custas (14/09/2026) ──────────────────────
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS processos (
+      id            INTEGER PRIMARY KEY AUTOINCREMENT,
+      numero_cnj    TEXT DEFAULT '',
+      reu           TEXT DEFAULT '',
+      vara          TEXT DEFAULT '',
+      area_label    TEXT DEFAULT '',
+      status        TEXT DEFAULT 'ativo',
+      user_id       INTEGER,
+      created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS prazos (
+      id              INTEGER PRIMARY KEY AUTOINCREMENT,
+      processo_id     INTEGER NOT NULL,
+      descricao       TEXT DEFAULT '',
+      data_inicio     TEXT DEFAULT '',
+      tipo_data       TEXT DEFAULT 'disponibilizacao',
+      tipo_contagem   TEXT DEFAULT 'uteis',
+      dias            INTEGER DEFAULT 0,
+      data_vencimento TEXT DEFAULT '',
+      status          TEXT DEFAULT 'pendente',
+      responsavel_id  INTEGER,
+      user_id         INTEGER,
+      created_at      DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS custas (
+      id             INTEGER PRIMARY KEY AUTOINCREMENT,
+      processo_id    INTEGER NOT NULL,
+      descricao      TEXT DEFAULT '',
+      valor_previsto REAL DEFAULT 0,
+      valor_pago     REAL DEFAULT 0,
+      data           TEXT DEFAULT '',
+      user_id        INTEGER,
+      created_at     DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+  // vincula uma peça do histórico a um processo (opcional)
+  try { db.exec(`ALTER TABLE history ADD COLUMN processo_id INTEGER`); } catch(e) {}
+
     // seed — garante admin sempre acessível
   const adminRow = db.prepare('SELECT id FROM users WHERE email=?').get('admin@pandecta.ai');
   if (!adminRow) {
@@ -242,6 +284,90 @@ app.use(express.static(path.join(__dirname, 'public'), {
 app.use('/brand', express.static(path.join(__dirname, 'brand'), { maxAge: '30d', etag: true }));
 
 // ââ AUTH MIDDLEWARE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+
+// ── PRAZOS: cálculo de vencimento em dias úteis (regra CPC) ─────────────────
+// Referências: CPC art. 219 (só dias úteis), art. 220 (recesso forense
+// 20/dez–20/jan), art. 224 (contagem exclui o dia do começo, inclui o do
+// fim; se o fim cair em dia não útil, prorroga-se para o próximo dia útil).
+// Cobre feriados nacionais fixos e móveis (Páscoa-based). Não cobre feriados
+// municipais/estaduais nem forais específicos de cada tribunal — é uma
+// aproximação deliberada para a Fase 1 (100% cadastro manual), documentada
+// no plano de gestão de prazos.
+function pandectaEasterUTC(year) {
+  const a = year % 19, b = Math.floor(year / 100), c = year % 100;
+  const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4), k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(Date.UTC(year, month - 1, day));
+}
+const _feriadosForensesCache = {};
+function feriadosForensesDoAno(year) {
+  if (_feriadosForensesCache[year]) return _feriadosForensesCache[year];
+  const pascoa = pandectaEasterUTC(year);
+  const addDays = (d, n) => { const r = new Date(d); r.setUTCDate(r.getUTCDate() + n); return r; };
+  const toStr = (d) => d.toISOString().slice(0, 10);
+  const fixos = [[1,1],[4,21],[5,1],[9,7],[10,12],[11,2],[11,15],[12,25]]; // [mês,dia] — Confraternização, Tiradentes, Trabalho, Independência, N. Sra Aparecida, Finados, Proclamação, Natal
+  const set = new Set(fixos.map(([m, d]) => `${year}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`));
+  // móveis: segunda e terça de carnaval, sexta-feira santa, corpus christi
+  [-48, -47, -2, 60].forEach(off => set.add(toStr(addDays(pascoa, off))));
+  _feriadosForensesCache[year] = set;
+  return set;
+}
+function isFeriadoForense(dateStr) {
+  const year = parseInt(dateStr.slice(0, 4), 10);
+  return feriadosForensesDoAno(year).has(dateStr);
+}
+function isRecessoForense(dateStr) {
+  // CPC art. 220 — suspende o curso do prazo de 20/dez a 20/jan, inclusive
+  const [, m, d] = dateStr.split('-').map(Number);
+  if (m === 12 && d >= 20) return true;
+  if (m === 1 && d <= 20) return true;
+  return false;
+}
+function fmtDataISO(dateObj) { return dateObj.toISOString().slice(0, 10); }
+function parseDataISO(dataStr) {
+  const [y, m, d] = dataStr.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d));
+}
+function isDiaUtil(dateObj) {
+  const dow = dateObj.getUTCDay(); // 0=domingo, 6=sábado
+  if (dow === 0 || dow === 6) return false;
+  const s = fmtDataISO(dateObj);
+  if (isFeriadoForense(s) || isRecessoForense(s)) return false;
+  return true;
+}
+function proximoDiaUtil(dateObj) {
+  const d = new Date(dateObj);
+  while (!isDiaUtil(d)) d.setUTCDate(d.getUTCDate() + 1);
+  return d;
+}
+// calcula a data de vencimento a partir da data de início (disponibilização
+// ou publicação), quantidade de dias e tipo de contagem ('uteis'|'corridos')
+function calcularVencimentoPrazo(dataInicioStr, dias, tipoContagem) {
+  if (!dataInicioStr || !dias) return '';
+  dias = parseInt(dias, 10);
+  if (!dias || dias < 1) return '';
+  let d = parseDataISO(dataInicioStr);
+  // o prazo começa a correr no primeiro dia útil seguinte à intimação/publicação
+  d.setUTCDate(d.getUTCDate() + 1);
+  d = proximoDiaUtil(d);
+  if (tipoContagem === 'corridos') {
+    d.setUTCDate(d.getUTCDate() + (dias - 1));
+    d = proximoDiaUtil(d); // se cair em dia não útil, prorroga (art. 224 §3)
+  } else {
+    let contados = 1; // já estamos no 1º dia útil
+    while (contados < dias) {
+      d.setUTCDate(d.getUTCDate() + 1);
+      if (isDiaUtil(d)) contados++;
+    }
+  }
+  return fmtDataISO(d);
+}
 
 function requireAuth(req, res, next) {
   const auth = req.headers.authorization;
@@ -563,8 +689,8 @@ app.get('/api/history', requireAuth, (req, res) => {
   try {
     const isAdmin = req.user.role === 'admin';
     const rows = isAdmin
-      ? db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,reu,vara,texto,created_at FROM history ORDER BY created_at DESC LIMIT 100').all()
-      : db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,reu,vara,texto,created_at FROM history WHERE user_id=? ORDER BY created_at DESC LIMIT 100').all(req.user.userId);
+      ? db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,reu,vara,processo_id,texto,created_at FROM history ORDER BY created_at DESC LIMIT 100').all()
+      : db.prepare('SELECT id,usuario,tipo,tipo_label,area_label,autor,responsavel_id,reu,vara,processo_id,texto,created_at FROM history WHERE user_id=? ORDER BY created_at DESC LIMIT 100').all(req.user.userId);
     res.json(rows);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -582,13 +708,14 @@ app.post('/api/history', requireAuth, (req, res) => {
 
 app.put('/api/history/:id', requireAuth, (req, res) => {
   if (!db) return res.status(503).json({ error: 'DB indisponÃ­vel.' });
-  const { texto = '' } = req.body;
+  const { texto, processo_id } = req.body;
   try {
     const row = db.prepare('SELECT user_id FROM history WHERE id=?').get(req.params.id);
     if (!row) return res.status(404).json({ error: 'NÃ£o encontrado.' });
     if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
       return res.status(403).json({ error: 'Sem permissÃ£o.' });
-    db.prepare('UPDATE history SET texto=? WHERE id=?').run(texto, req.params.id);
+    if (texto !== undefined) db.prepare('UPDATE history SET texto=? WHERE id=?').run(texto, req.params.id);
+    if (processo_id !== undefined) db.prepare('UPDATE history SET processo_id=? WHERE id=?').run(processo_id || null, req.params.id);
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -601,6 +728,204 @@ app.delete('/api/history/:id', requireAuth, (req, res) => {
     if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
       return res.status(403).json({ error: 'Sem permissÃ£o.' });
     db.prepare('DELETE FROM history WHERE id=?').run(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── PROCESSOS, PRAZOS E CUSTAS (Gestão de Prazos, 14/09/2026) ──────────────
+
+function hojeISO() { return fmtDataISO(new Date()); }
+
+function processoResumo(row) {
+  if (!db) return row;
+  const prox = db.prepare(
+    `SELECT id, descricao, data_vencimento, status FROM prazos
+     WHERE processo_id=? AND status='pendente' AND data_vencimento<>''
+     ORDER BY data_vencimento ASC LIMIT 1`
+  ).get(row.id);
+  const custasRow = db.prepare(
+    `SELECT COALESCE(SUM(valor_previsto),0) as previsto, COALESCE(SUM(valor_pago),0) as pago
+     FROM custas WHERE processo_id=?`
+  ).get(row.id);
+  return {
+    ...row,
+    proximo_prazo: prox || null,
+    custas_previsto: custasRow.previsto,
+    custas_pago: custasRow.pago,
+  };
+}
+
+app.get('/api/processos', requireAuth, (req, res) => {
+  if (!db) return res.json([]);
+  try {
+    const isAdmin = req.user.role === 'admin';
+    const rows = isAdmin
+      ? db.prepare('SELECT * FROM processos ORDER BY created_at DESC').all()
+      : db.prepare('SELECT * FROM processos WHERE user_id=? ORDER BY created_at DESC').all(req.user.userId);
+    res.json(rows.map(processoResumo));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/processos/:id', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const row = db.prepare('SELECT * FROM processos WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
+    const prazos = db.prepare('SELECT * FROM prazos WHERE processo_id=? ORDER BY data_vencimento ASC').all(row.id);
+    const custas = db.prepare('SELECT * FROM custas WHERE processo_id=? ORDER BY data DESC, id DESC').all(row.id);
+    const pecas = db.prepare('SELECT id,tipo_label,area_label,autor,created_at FROM history WHERE processo_id=? ORDER BY created_at DESC').all(row.id);
+    res.json({ ...processoResumo(row), prazos, custas, pecas });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/processos', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { numero_cnj = '', reu = '', vara = '', area_label = '', status = 'ativo' } = req.body;
+  try {
+    const r = db.prepare(
+      'INSERT INTO processos (numero_cnj,reu,vara,area_label,status,user_id) VALUES (?,?,?,?,?,?)'
+    ).run(numero_cnj.trim(), reu.trim(), vara.trim(), area_label, status, req.user.userId);
+    res.json(processoResumo(db.prepare('SELECT * FROM processos WHERE id=?').get(r.lastInsertRowid)));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/processos/:id', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const row = db.prepare('SELECT user_id FROM processos WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
+    const { numero_cnj, reu, vara, area_label, status } = req.body;
+    db.prepare(
+      'UPDATE processos SET numero_cnj=COALESCE(?,numero_cnj), reu=COALESCE(?,reu), vara=COALESCE(?,vara), area_label=COALESCE(?,area_label), status=COALESCE(?,status) WHERE id=?'
+    ).run(numero_cnj, reu, vara, area_label, status, req.params.id);
+    res.json(processoResumo(db.prepare('SELECT * FROM processos WHERE id=?').get(req.params.id)));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/processos/:id', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const row = db.prepare('SELECT user_id FROM processos WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
+    db.prepare('DELETE FROM prazos WHERE processo_id=?').run(req.params.id);
+    db.prepare('DELETE FROM custas WHERE processo_id=?').run(req.params.id);
+    db.prepare('UPDATE history SET processo_id=NULL WHERE processo_id=?').run(req.params.id);
+    db.prepare('DELETE FROM processos WHERE id=?').run(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── PRAZOS ───────────────────────────────────────────────────────────────
+app.get('/api/prazos', requireAuth, (req, res) => {
+  if (!db) return res.json([]);
+  try {
+    const isAdmin = req.user.role === 'admin';
+    const base = `SELECT p.*, pr.numero_cnj, pr.reu, pr.vara
+                  FROM prazos p JOIN processos pr ON pr.id = p.processo_id`;
+    const rows = isAdmin
+      ? db.prepare(`${base} ORDER BY p.data_vencimento ASC`).all()
+      : db.prepare(`${base} WHERE p.user_id=? ORDER BY p.data_vencimento ASC`).all(req.user.userId);
+    res.json(rows);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/prazos', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { processo_id, descricao = '', data_inicio = '', tipo_data = 'disponibilizacao', tipo_contagem = 'uteis', dias = 0, responsavel_id = null } = req.body;
+  if (!processo_id) return res.status(400).json({ error: 'Processo obrigatório.' });
+  try {
+    const proc = db.prepare('SELECT user_id FROM processos WHERE id=?').get(processo_id);
+    if (!proc) return res.status(404).json({ error: 'Processo não encontrado.' });
+    if (req.user.role !== 'admin' && proc.user_id && proc.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
+    const data_vencimento = calcularVencimentoPrazo(data_inicio, dias, tipo_contagem);
+    const r = db.prepare(
+      'INSERT INTO prazos (processo_id,descricao,data_inicio,tipo_data,tipo_contagem,dias,data_vencimento,responsavel_id,user_id) VALUES (?,?,?,?,?,?,?,?,?)'
+    ).run(processo_id, descricao.trim(), data_inicio, tipo_data, tipo_contagem, dias, data_vencimento, responsavel_id || null, req.user.userId);
+    res.json(db.prepare('SELECT * FROM prazos WHERE id=?').get(r.lastInsertRowid));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/prazos/:id', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const row = db.prepare('SELECT * FROM prazos WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
+    const { descricao, data_inicio, tipo_data, tipo_contagem, dias, status, responsavel_id } = req.body;
+    const novoInicio = data_inicio !== undefined ? data_inicio : row.data_inicio;
+    const novoDias = dias !== undefined ? dias : row.dias;
+    const novaContagem = tipo_contagem !== undefined ? tipo_contagem : row.tipo_contagem;
+    const recalcula = data_inicio !== undefined || dias !== undefined || tipo_contagem !== undefined;
+    const data_vencimento = recalcula ? calcularVencimentoPrazo(novoInicio, novoDias, novaContagem) : row.data_vencimento;
+    db.prepare(
+      `UPDATE prazos SET descricao=COALESCE(?,descricao), data_inicio=COALESCE(?,data_inicio),
+       tipo_data=COALESCE(?,tipo_data), tipo_contagem=COALESCE(?,tipo_contagem), dias=COALESCE(?,dias),
+       data_vencimento=?, status=COALESCE(?,status), responsavel_id=COALESCE(?,responsavel_id) WHERE id=?`
+    ).run(descricao, data_inicio, tipo_data, tipo_contagem, dias, data_vencimento, status, responsavel_id, req.params.id);
+    res.json(db.prepare('SELECT * FROM prazos WHERE id=?').get(req.params.id));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/prazos/:id', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const row = db.prepare('SELECT user_id FROM prazos WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
+    db.prepare('DELETE FROM prazos WHERE id=?').run(req.params.id);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── CUSTAS ───────────────────────────────────────────────────────────────
+app.post('/api/custas', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  const { processo_id, descricao = '', valor_previsto = 0, valor_pago = 0, data = '' } = req.body;
+  if (!processo_id) return res.status(400).json({ error: 'Processo obrigatório.' });
+  try {
+    const proc = db.prepare('SELECT user_id FROM processos WHERE id=?').get(processo_id);
+    if (!proc) return res.status(404).json({ error: 'Processo não encontrado.' });
+    if (req.user.role !== 'admin' && proc.user_id && proc.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
+    const r = db.prepare(
+      'INSERT INTO custas (processo_id,descricao,valor_previsto,valor_pago,data,user_id) VALUES (?,?,?,?,?,?)'
+    ).run(processo_id, descricao.trim(), Number(valor_previsto) || 0, Number(valor_pago) || 0, data, req.user.userId);
+    res.json(db.prepare('SELECT * FROM custas WHERE id=?').get(r.lastInsertRowid));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/custas/:id', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const row = db.prepare('SELECT user_id FROM custas WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
+    const { descricao, valor_previsto, valor_pago, data } = req.body;
+    db.prepare(
+      'UPDATE custas SET descricao=COALESCE(?,descricao), valor_previsto=COALESCE(?,valor_previsto), valor_pago=COALESCE(?,valor_pago), data=COALESCE(?,data) WHERE id=?'
+    ).run(descricao, valor_previsto, valor_pago, data, req.params.id);
+    res.json(db.prepare('SELECT * FROM custas WHERE id=?').get(req.params.id));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.delete('/api/custas/:id', requireAuth, (req, res) => {
+  if (!db) return res.status(503).json({ error: 'DB indisponível.' });
+  try {
+    const row = db.prepare('SELECT user_id FROM custas WHERE id=?').get(req.params.id);
+    if (!row) return res.status(404).json({ error: 'Não encontrado.' });
+    if (req.user.role !== 'admin' && row.user_id && row.user_id !== req.user.userId)
+      return res.status(403).json({ error: 'Sem permissão.' });
+    db.prepare('DELETE FROM custas WHERE id=?').run(req.params.id);
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

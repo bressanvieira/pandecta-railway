@@ -712,6 +712,73 @@ html.has-session #screen-login{visibility:hidden;}
 .hca-btn.danger:hover{border-color:var(--err);color:var(--err);background:rgba(220,38,38,.06);}
 .hist-empty{text-align:center;padding:56px 40px;color:var(--t3);font-size:13px;line-height:1.7;}
 
+/* ════ PROCESSOS ════ */
+.proc-table{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.proc-thead{display:flex;align-items:center;gap:14px;padding:9px 18px;border-bottom:1px solid var(--bd);background:var(--surface);}
+.proc-th{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--t3);text-transform:uppercase;}
+.proc-th.th-proc{flex:1;min-width:0;}
+.proc-th.th-vara{width:150px;flex-shrink:0;}
+.proc-th.th-prazo{width:170px;flex-shrink:0;}
+.proc-th.th-status{width:100px;flex-shrink:0;}
+.proc-th.th-custas{width:150px;flex-shrink:0;}
+.proc-th.th-acts{width:44px;flex-shrink:0;}
+.proc-row{display:flex;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .12s;}
+.proc-row:last-child{border-bottom:none;}
+.proc-row:hover{background:var(--bg);}
+.proc-row-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.proc-row-num{font-size:13.5px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.proc-row-reu{font-size:11.5px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.proc-row-vara{width:150px;flex-shrink:0;font-size:12.5px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.proc-row-prazo{width:170px;flex-shrink:0;}
+.proc-row-status{width:100px;flex-shrink:0;}
+.proc-row-custas{width:150px;flex-shrink:0;font-size:12px;color:var(--t2);}
+.proc-row-acts{width:44px;flex-shrink:0;display:flex;justify-content:flex-end;opacity:0;transition:opacity .12s;}
+.proc-row:hover .proc-row-acts,.proc-row:focus-within .proc-row-acts{opacity:1;}
+.proc-empty{text-align:center;padding:56px 40px;color:var(--t3);font-size:13px;line-height:1.7;}
+.chip-prazo{display:inline-block;vertical-align:middle;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
+.chip-prazo.venceu{background:rgba(220,38,38,.1);color:var(--err);}
+.chip-prazo.urgente{background:rgba(200,164,106,.16);color:#946A0F;}
+.chip-prazo.ok{background:rgba(76,175,122,.12);color:#2F7A54;}
+.chip-prazo.neutro{background:var(--bg2);color:var(--t3);}
+.status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap;background:var(--bg2);color:var(--t2);}
+.status-pill.ativo{background:rgba(59,111,214,.1);color:#3b6fd6;}
+.status-pill.suspenso{background:rgba(200,164,106,.16);color:#946A0F;}
+.status-pill.encerrado{background:var(--bg2);color:var(--t3);}
+
+/* Processo — detalhe */
+.proc-detalhe{display:none;flex-direction:column;flex:1;overflow-y:auto;}
+.proc-detalhe.open{display:flex;}
+.proc-det-hd{padding:18px 24px;border-bottom:1px solid var(--bd);background:var(--card);flex-shrink:0;}
+.proc-det-num{font-size:18px;font-weight:700;color:var(--t1);}
+.proc-det-sub{font-size:12.5px;color:var(--t2);margin-top:3px;}
+.proc-det-body{padding:24px;display:flex;flex-direction:column;gap:22px;max-width:900px;}
+.proc-sec-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.proc-sec-title h3{font-size:13.5px;font-weight:700;color:var(--t1);margin:0;}
+.proc-timeline{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.proc-tl-item{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--bd);}
+.proc-tl-item:last-child{border-bottom:none;}
+.proc-tl-desc{flex:1;min-width:0;}
+.proc-tl-desc-txt{font-size:13px;font-weight:600;color:var(--t1);}
+.proc-tl-desc-sub{font-size:11.5px;color:var(--t3);margin-top:2px;}
+.proc-tl-venc{width:130px;flex-shrink:0;}
+.proc-tl-acts{display:flex;gap:6px;flex-shrink:0;}
+.proc-empty-sec{padding:22px;text-align:center;color:var(--t3);font-size:12.5px;background:var(--card);border:1px solid var(--bd);border-radius:12px;}
+.proc-pecas-list{display:flex;flex-direction:column;gap:6px;}
+.proc-peca-item{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--card);border:1px solid var(--bd);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--t2);transition:background .12s;}
+.proc-peca-item:hover{background:var(--bg);}
+
+/* Prazos — painel na Home */
+.hd-prazos-body{padding:12px 16px 16px;}
+.hd-prazos-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.hd-prazos-col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--t3);margin-bottom:6px;}
+.hd-prazo-item{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-bottom:1px solid var(--bd);cursor:pointer;}
+.hd-prazo-item:last-child{border-bottom:none;}
+.hd-prazo-item-desc{font-size:12.5px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hd-prazo-item-sub{font-size:11px;color:var(--t3);}
+@media (max-width:768px){.hd-prazos-cols{grid-template-columns:1fr;}}
+@media (max-width:1180px){.proc-th.th-vara,.proc-row-vara{display:none;}}
+@media (max-width:980px){.proc-th.th-custas,.proc-row-custas{display:none;}}
+
 /* Viewer / Editor — layout correto */
 .hist-viewer{display:none;flex-direction:column;flex:1;overflow:hidden;}
 .hist-viewer.open{display:flex;}
@@ -1037,6 +1104,12 @@ html.has-session #screen-login{visibility:hidden;}
   .ac-table-wrap{overflow-x:auto;}
   .ac-table{min-width:560px;}
 
+  /* ── PROCESSOS ── */
+  .proc-th.th-status,.proc-row-status{display:none;}
+  .proc-th.th-prazo{width:120px;}
+  .proc-row-prazo{width:120px;}
+  .proc-row-acts{opacity:1;}
+
   /* ── ADMIN ── */
   .admin-stat-grid{grid-template-columns:repeat(2,1fr)!important;}
   .admin-section{overflow-x:auto;}
@@ -1311,6 +1384,26 @@ html.has-session #screen-login{visibility:hidden;}
             </div>
           </div>
 
+          <!-- Prazos — gatilho de retorno diário -->
+          <div class="hd-panel" id="hd-prazos-panel">
+            <div class="hd-panel-head">
+              <span class="hd-panel-title">Prazos</span>
+              <button class="hd-panel-link" onclick="go('processos')">Ver processos</button>
+            </div>
+            <div class="hd-prazos-body">
+              <div class="hd-prazos-cols">
+                <div>
+                  <div class="hd-prazos-col-title">Vencidos</div>
+                  <div id="hd-prazos-vencidos"><div class="hd-empty">Nenhum prazo vencido.</div></div>
+                </div>
+                <div>
+                  <div class="hd-prazos-col-title">Esta semana</div>
+                  <div id="hd-prazos-semana"><div class="hd-empty">Nenhum prazo nesta semana.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Atividade — volume real dos últimos 14 dias, não estático -->
           <div class="hd-activity">
             <div class="hd-activity-head">
@@ -1412,6 +1505,9 @@ html.has-session #screen-login{visibility:hidden;}
                 <button class="gab gab-sec" onclick="wizard.voltarWizard()">
                   <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:5px;"><path d="M7 2L3 5.5 7 9"/></svg>Editar
                 </button>
+                <button class="gab gab-sec" onclick="abrirModalProtocolar()">
+                  <svg width="11" height="11" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;"><path d="M11 2.6 3.8 5.5v5c0 4.1 3 7.7 7.2 8.8 4.2-1.1 7.2-4.7 7.2-8.8v-5z"/><path d="M8.2 10.8 10.3 12.9 14 9.2"/></svg>Protocolar
+                </button>
                 <button class="gab gab-sec" onclick="copiarDoc()">
                   <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:5px;"><rect x="4" y="4" width="9" height="9" rx="1.5"/><path d="M1 10V2a1 1 0 011-1h8"/></svg>Copiar
                 </button>
@@ -1509,6 +1605,94 @@ html.has-session #screen-login{visibility:hidden;}
           <textarea class="hist-textarea" id="hist-ta" spellcheck="false" placeholder="Carregando..."></textarea>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PROCESSOS ════ -->
+<div id="screen-processos" class="screen">
+  <div class="app-shell">
+    <div id="sb-proc"></div>
+    <div class="main-area">
+
+      <div class="topbar">
+        <div class="tb-left"><span class="tb-crumb" onclick="go('home')">Início</span><span class="tb-sep">/</span><span class="tb-page">Processos</span></div>
+        <div class="tb-right"><div class="tb-user" onclick="toggleDD('dd-proc')"><div class="tb-av" id="av-proc">A</div><div><div class="tb-uname" id="nm-proc">–</div><div class="tb-usess">Sessão atual</div></div></div><div class="tb-dropdown" id="dd-proc"><div class="dd-item" onclick="go('config')"><svg width="16" height="16" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="2.9"/><path d="M11 1.8v2.4M11 17.8v2.4M4.5 4.5l1.7 1.7M15.8 15.8l1.7 1.7M1.8 11h2.4M17.8 11h2.4M4.5 17.5l1.7-1.7M15.8 6.2l1.7-1.7"/></svg><span>Configurações</span></div><div class="dd-item" onclick="go('equipe')"><svg width="16" height="16" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8.2" cy="7.2" r="2.9"/><path d="M2.8 17.6a5.4 5.4 0 0 1 10.8 0"/><path d="M14.8 4.6a2.9 2.9 0 0 1 0 5.6M15.9 12.9a4.9 4.9 0 0 1 3.3 4.7"/></svg><span>Equipe</span></div><div class="dd-sep"></div><div class="dd-item" onclick="fazerLogout()"><svg width="16" height="16" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.4 18.6H4.8a1.8 1.8 0 0 1-1.8-1.8V5.2a1.8 1.8 0 0 1 1.8-1.8h3.6"/><path d="M14 15.2 18.6 11 14 6.8"/><path d="M18.6 11H8.2"/></svg><span>Sair</span></div></div></div>
+      </div>
+
+      <!-- Lista -->
+      <div class="page-body" id="proc-list-body">
+        <div class="page-h" style="display:flex;align-items:center;justify-content:space-between;">
+          <span>Processos</span>
+          <button class="btn-primary" onclick="abrirModalProcesso()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;font-size:13px;">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="10" y1="17" x2="10" y2="3"/><line x1="3" y1="10" x2="17" y2="10"/></svg>
+            Novo processo
+          </button>
+        </div>
+
+        <div class="hist-toolbar">
+          <span class="hist-count" id="proc-count"></span>
+        </div>
+
+        <div class="proc-table">
+          <div class="proc-thead">
+            <span class="proc-th th-proc">Processo</span>
+            <span class="proc-th th-vara">Vara/Juízo</span>
+            <span class="proc-th th-prazo">Próximo prazo</span>
+            <span class="proc-th th-status">Status</span>
+            <span class="proc-th th-custas">Custas (pago/prev.)</span>
+            <span class="proc-th th-acts" aria-hidden="true"></span>
+          </div>
+          <div id="proc-grid"></div>
+        </div>
+        <div class="proc-empty" id="proc-empty">Nenhum processo cadastrado ainda.<br>Clique em <strong>Novo processo</strong> ou use o botão <strong>Protocolar</strong> na peça recém-gerada.</div>
+      </div>
+
+      <!-- Detalhe -->
+      <div class="proc-detalhe" id="proc-detalhe">
+        <div class="proc-det-hd" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <div>
+            <div class="proc-det-num" id="proc-det-num">–</div>
+            <div class="proc-det-sub" id="proc-det-sub">–</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span id="proc-det-status"></span>
+            <button class="dbtn" onclick="fecharProcessoDetalhe()">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:4px;"><path d="M8 2L4 6l4 4"/></svg>Voltar
+            </button>
+            <button class="dbtn dbtn-danger" onclick="confirmarExcluirProcesso(processoAtual&&processoAtual.id)">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="margin-right:4px;"><polyline points="1,3 13,3"/><path d="M4,3V2a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v1"/><path d="M5.5,6v4.5M8.5,6v4.5"/><rect x="2" y="3" width="10" height="10" rx="1.5"/></svg>Excluir
+            </button>
+          </div>
+        </div>
+        <div class="proc-det-body">
+
+          <div>
+            <div class="proc-sec-title"><h3>Prazos</h3><button class="hd-tip-link" onclick="abrirModalPrazo()">+ Novo prazo</button></div>
+            <div class="proc-timeline" id="proc-tl-wrap" style="display:none"><div id="proc-tl-list"></div></div>
+            <div class="proc-empty-sec" id="proc-tl-empty">Nenhum prazo cadastrado para este processo ainda.</div>
+          </div>
+
+          <div>
+            <div class="proc-sec-title"><h3>Custas</h3><button class="hd-tip-link" onclick="abrirModalCusta()">+ Nova custa</button></div>
+            <div class="ac-table-wrap" id="proc-custas-wrap" style="display:none">
+              <table class="ac-table">
+                <thead><tr><th>Descrição</th><th>Previsto</th><th>Pago</th><th>Data</th><th></th></tr></thead>
+                <tbody id="proc-custas-body"></tbody>
+              </table>
+            </div>
+            <div class="proc-empty-sec" id="proc-custas-empty">Nenhuma custa lançada para este processo ainda.</div>
+          </div>
+
+          <div>
+            <div class="proc-sec-title"><h3>Peças vinculadas</h3></div>
+            <div class="proc-pecas-list" id="proc-pecas-list"></div>
+            <div class="proc-empty-sec" id="proc-pecas-empty">Nenhuma peça vinculada a este processo ainda.</div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1838,6 +2022,212 @@ html.has-session #screen-login{visibility:hidden;}
     <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
       <button onclick="fecharModalModelo()" style="padding:9px 18px;border:1px solid var(--bd-md);border-radius:8px;background:transparent;color:var(--t2);cursor:pointer;font-size:13px;">Cancelar</button>
       <button onclick="salvarModelo()" class="btn-primary" style="padding:9px 18px;font-size:13px;">Salvar modelo</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ MODAL: NOVO/EDITAR PROCESSO ════ -->
+<div id="modal-processo" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:900;align-items:center;justify-content:center;">
+  <div style="background:var(--card);border:1.5px solid var(--bd-md);border-radius:14px;padding:22px 28px 28px;width:min(480px,92vw);box-shadow:0 2px 6px rgba(16,26,36,.09),0 12px 22px -10px rgba(16,26,36,.24);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--bd);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:30px;height:30px;border-radius:7px;background:rgba(138,106,34,.10);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="15" height="15" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="12" height="13" rx="1.5"/><path d="M6 3V2a1 1 0 011-1h4a1 1 0 011 1v1"/><circle cx="9" cy="11" r="3"/><path d="M9 9.5V11l1.1.7"/></svg>
+        </div>
+        <div style="font-size:16px;font-weight:600;color:var(--t1);" id="modal-processo-titulo">Novo processo</div>
+      </div>
+      <button onclick="fecharModalProcesso()" style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:20px;line-height:1;">×</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="lf" style="margin-bottom:0;">
+        <label>Número do processo (CNJ) — opcional</label>
+        <input id="proc-form-numero" type="text" class="cfg-inp" placeholder="0000000-00.0000.0.00.0000">
+      </div>
+      <div class="lf" style="margin-bottom:0;">
+        <label>Réu</label>
+        <input id="proc-form-reu" type="text" class="cfg-inp" placeholder="Nome do réu">
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Vara/Juízo</label>
+          <input id="proc-form-vara" type="text" class="cfg-inp" placeholder="Ex: 2ª Vara Cível">
+        </div>
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Área</label>
+          <select id="proc-form-area" class="cfg-inp" style="cursor:pointer;">
+            <option value="Direito do Consumidor">Consumidor</option>
+            <option value="Direito Civil">Civil</option>
+            <option value="Direito Trabalhista">Trabalhista</option>
+            <option value="Direito de Família">Família</option>
+            <option value="Direito Imobiliário">Imobiliário</option>
+            <option value="Direito Previdenciário">Previdenciário</option>
+          </select>
+        </div>
+      </div>
+      <div class="lf" style="margin-bottom:0;">
+        <label>Status</label>
+        <select id="proc-form-status" class="cfg-inp" style="cursor:pointer;">
+          <option value="ativo">Ativo</option>
+          <option value="suspenso">Suspenso</option>
+          <option value="encerrado">Encerrado</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+      <button onclick="fecharModalProcesso()" style="padding:9px 18px;border:1px solid var(--bd-md);border-radius:8px;background:transparent;color:var(--t2);cursor:pointer;font-size:13px;">Cancelar</button>
+      <button onclick="salvarProcesso()" class="btn-primary" style="padding:9px 18px;font-size:13px;">Salvar processo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: NOVO PRAZO ════ -->
+<div id="modal-prazo" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:900;align-items:center;justify-content:center;">
+  <div style="background:var(--card);border:1.5px solid var(--bd-md);border-radius:14px;padding:22px 28px 28px;width:min(480px,92vw);box-shadow:0 2px 6px rgba(16,26,36,.09),0 12px 22px -10px rgba(16,26,36,.24);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--bd);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:30px;height:30px;border-radius:7px;background:rgba(138,106,34,.10);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="15" height="15" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8.2"/><path d="M11 6.2V11l3 1.8"/></svg>
+        </div>
+        <div style="font-size:16px;font-weight:600;color:var(--t1);">Novo prazo</div>
+      </div>
+      <button onclick="fecharModalPrazo()" style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:20px;line-height:1;">×</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="lf" style="margin-bottom:0;">
+        <label>Descrição</label>
+        <input id="prazo-form-desc" type="text" class="cfg-inp" placeholder="Ex: Contestação">
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Data da intimação/publicação</label>
+          <input id="prazo-form-data" type="date" class="cfg-inp">
+        </div>
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Tipo de data</label>
+          <select id="prazo-form-tipodata" class="cfg-inp" style="cursor:pointer;">
+            <option value="disponibilizacao">Disponibilização</option>
+            <option value="publicacao">Publicação</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Dias</label>
+          <input id="prazo-form-dias" type="number" min="1" class="cfg-inp" placeholder="15">
+        </div>
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Contagem</label>
+          <select id="prazo-form-contagem" class="cfg-inp" style="cursor:pointer;">
+            <option value="uteis">Dias úteis</option>
+            <option value="corridos">Dias corridos</option>
+          </select>
+        </div>
+      </div>
+      <div style="font-size:11.5px;color:var(--t3);line-height:1.5;">O vencimento é calculado automaticamente pela regra do CPC (pula fim de semana, feriado forense e o recesso de 20/dez a 20/jan).</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+      <button onclick="fecharModalPrazo()" style="padding:9px 18px;border:1px solid var(--bd-md);border-radius:8px;background:transparent;color:var(--t2);cursor:pointer;font-size:13px;">Cancelar</button>
+      <button onclick="salvarPrazo()" class="btn-primary" style="padding:9px 18px;font-size:13px;">Salvar prazo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: NOVA CUSTA ════ -->
+<div id="modal-custa" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:900;align-items:center;justify-content:center;">
+  <div style="background:var(--card);border:1.5px solid var(--bd-md);border-radius:14px;padding:22px 28px 28px;width:min(420px,92vw);box-shadow:0 2px 6px rgba(16,26,36,.09),0 12px 22px -10px rgba(16,26,36,.24);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--bd);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:30px;height:30px;border-radius:7px;background:rgba(138,106,34,.10);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="15" height="15" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8.2"/><path d="M11 6.4v9.2"/><path d="M13.4 8.4a2.6 2.6 0 0 0-2.4-1.4c-1.5 0-2.6.9-2.6 2.1s1 1.8 2.6 2.1c1.6.3 2.6.9 2.6 2.1s-1.1 2.1-2.6 2.1a2.6 2.6 0 0 1-2.4-1.4"/></svg>
+        </div>
+        <div style="font-size:16px;font-weight:600;color:var(--t1);">Nova custa</div>
+      </div>
+      <button onclick="fecharModalCusta()" style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:20px;line-height:1;">×</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="lf" style="margin-bottom:0;">
+        <label>Descrição</label>
+        <input id="custa-form-desc" type="text" class="cfg-inp" placeholder="Ex: Custas iniciais">
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Valor previsto (R$)</label>
+          <input id="custa-form-previsto" type="number" step="0.01" min="0" class="cfg-inp" placeholder="0,00">
+        </div>
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Valor pago (R$)</label>
+          <input id="custa-form-pago" type="number" step="0.01" min="0" class="cfg-inp" placeholder="0,00">
+        </div>
+      </div>
+      <div class="lf" style="margin-bottom:0;">
+        <label>Data</label>
+        <input id="custa-form-data" type="date" class="cfg-inp">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+      <button onclick="fecharModalCusta()" style="padding:9px 18px;border:1px solid var(--bd-md);border-radius:8px;background:transparent;color:var(--t2);cursor:pointer;font-size:13px;">Cancelar</button>
+      <button onclick="salvarCusta()" class="btn-primary" style="padding:9px 18px;font-size:13px;">Salvar custa</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: PROTOCOLAR (a partir da peça recém-gerada) ════ -->
+<div id="modal-protocolar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:900;align-items:center;justify-content:center;">
+  <div style="background:var(--card);border:1.5px solid var(--bd-md);border-radius:14px;padding:22px 28px 28px;width:min(480px,92vw);max-height:88vh;overflow-y:auto;box-shadow:0 2px 6px rgba(16,26,36,.09),0 12px 22px -10px rgba(16,26,36,.24);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--bd);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:30px;height:30px;border-radius:7px;background:rgba(138,106,34,.10);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="15" height="15" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2.6 3.8 5.5v5c0 4.1 3 7.7 7.2 8.8 4.2-1.1 7.2-4.7 7.2-8.8v-5z"/><path d="M8.2 10.8 10.3 12.9 14 9.2"/></svg>
+        </div>
+        <div style="font-size:16px;font-weight:600;color:var(--t1);">Protocolar</div>
+      </div>
+      <button onclick="fecharModalProtocolar()" style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:20px;line-height:1;">×</button>
+    </div>
+    <div style="font-size:12.5px;color:var(--t2);margin-bottom:14px;line-height:1.5;">Vincule esta peça a um processo e, se já souber, cadastre o primeiro prazo — a Pandecta calcula o vencimento automaticamente.</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="lf" style="margin-bottom:0;">
+        <label>Processo</label>
+        <select id="proto-processo-sel" class="cfg-inp" style="cursor:pointer;" onchange="onProtoProcessoChange()">
+          <option value="">+ Criar novo processo</option>
+        </select>
+      </div>
+      <div id="proto-novo-wrap" style="display:flex;flex-direction:column;gap:14px;">
+        <div class="lf" style="margin-bottom:0;">
+          <label>Número do processo (CNJ) — opcional</label>
+          <input id="proto-numero" type="text" class="cfg-inp" placeholder="0000000-00.0000.0.00.0000">
+        </div>
+        <div style="display:flex;gap:12px;">
+          <div class="lf" style="margin-bottom:0;flex:1;">
+            <label>Réu</label>
+            <input id="proto-reu" type="text" class="cfg-inp">
+          </div>
+          <div class="lf" style="margin-bottom:0;flex:1;">
+            <label>Vara/Juízo</label>
+            <input id="proto-vara" type="text" class="cfg-inp">
+          </div>
+        </div>
+      </div>
+      <div class="hd-divider"></div>
+      <div style="font-size:12.5px;font-weight:600;color:var(--t1);">Primeiro prazo (opcional)</div>
+      <div class="lf" style="margin-bottom:0;">
+        <label>Descrição</label>
+        <input id="proto-prazo-desc" type="text" class="cfg-inp" placeholder="Ex: Contestação">
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Data da intimação/publicação</label>
+          <input id="proto-prazo-data" type="date" class="cfg-inp">
+        </div>
+        <div class="lf" style="margin-bottom:0;flex:1;">
+          <label>Dias (úteis)</label>
+          <input id="proto-prazo-dias" type="number" min="1" class="cfg-inp" placeholder="15">
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+      <button onclick="fecharModalProtocolar()" style="padding:9px 18px;border:1px solid var(--bd-md);border-radius:8px;background:transparent;color:var(--t2);cursor:pointer;font-size:13px;">Cancelar</button>
+      <button onclick="salvarProtocolar()" class="btn-primary" style="padding:9px 18px;font-size:13px;">Protocolar</button>
     </div>
   </div>
 </div>
@@ -2499,6 +2889,7 @@ function mkSidebar(active){
   const nav=[
     {id:'home',     label:'Início',        icon:'<path d="M2 8.5L9 2l7 6.5V16a1 1 0 01-1 1H3a1 1 0 01-1-1z"/><path d="M6.5 17v-6h5v6"/>',       action:"go('home')"},
     {id:'historico',label:'Histórico',     icon:'<circle cx="9" cy="9" r="6.5"/><path d="M9 6v3.5l2 1.5"/>',                                      action:"go('historico')"},
+    {id:'processos', label:'Processos',    icon:'<rect x="3" y="3" width="12" height="13" rx="1.5"/><path d="M6 3V2a1 1 0 011-1h4a1 1 0 011 1v1"/><circle cx="9" cy="11" r="3"/><path d="M9 9.5V11l1.1.7"/>',action:"go('processos')"},
     {id:'acervo',   label:'Acervo',        icon:'<path d="M2 6a2 2 0 012-2h3.5l2 2H14a2 2 0 012 2v5a2 2 0 01-2 2H4a2 2 0 01-2-2z"/>',            action:"go('acervo')"},
     {id:'modelos',  label:'Modelos',       icon:'<rect x="3" y="2" width="12" height="16" rx="2"/><path d="M6 7h6M6 10h6M6 13h4"/>',              action:"go('modelos')"},
     {id:'equipe',   label:'Equipe',        icon:'<circle cx="7" cy="6" r="3"/><path d="M2 17c0-3 2.5-5 5-5s5 2 5 5"/><circle cx="14" cy="6" r="2.5"/><path d="M15.5 17c0-2 1.5-3.5 3-3.5"/>',action:"go('equipe')"},
@@ -2586,7 +2977,7 @@ function showAdminTab(name){
 function toggleSidebarCollapse(){
   sbCollapsed=!sbCollapsed;
   localStorage.setItem('pandecta_sb_collapsed',sbCollapsed?'1':'0');
-  ['home','gen','hist','ac','config','equipe','sup','admin','modelos','tk','pio'].forEach(sfx=>{
+  ['home','gen','hist','ac','config','equipe','sup','admin','modelos','tk','pio','proc'].forEach(sfx=>{
     const el=document.getElementById('sb-'+sfx);
     if(el) el.innerHTML=mkSidebar(_currentScreen);
   });
@@ -2703,6 +3094,7 @@ async function loadHomeDash(){
       }).join('');
     }
   }
+  loadHomePrazosPanel();
 }
 
 
@@ -2787,7 +3179,7 @@ function go(s,_fromPop=false){
   _currentScreen=s;
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
-  ['home','gen','hist','ac','config','equipe','sup','admin','modelos','tk','pio'].forEach(sfx=>{
+  ['home','gen','hist','ac','config','equipe','sup','admin','modelos','tk','pio','proc'].forEach(sfx=>{
     const el=document.getElementById('sb-'+sfx);
     if(el) el.innerHTML=mkSidebar(s);
   });
@@ -2797,6 +3189,7 @@ function go(s,_fromPop=false){
   renderPioNotifBadges();
   if(s==='acervo') loadAcervo();
   if(s==='historico'){fecharViewer();loadHistorico();}
+  if(s==='processos'){document.getElementById('proc-detalhe').classList.remove('open');document.getElementById('proc-list-body').style.display='';loadProcessos();}
   if(s==='config') carregarConfig();
   if(s==='equipe') renderLawyers();
   if(s==='suporte'){ initSuporte(); }
@@ -3731,6 +4124,10 @@ async function salvarHistorico(data,texto,tipoL,areaL){
       reu:(data.reu||'').split(',')[0].trim(),vara:data.vara||'',texto
     });
     sessionHistory.unshift(item);
+    window._ultimoHistId=item.id;
+    window._ultimoWizardReu=(data.reu||'').split(',')[0].trim();
+    window._ultimoWizardVara=data.vara||'';
+    window._ultimoWizardArea=areaL||'';
   }catch(e){console.error('Erro ao salvar histórico:',e);}
 }
 async function loadHistorico(){
@@ -3850,6 +4247,327 @@ async function deletarHist(){
     fecharViewer();renderHistorico();toast('Excluído.','ok');
   }catch(e){toast('Erro: '+e.message,'err');}
 }
+
+// ════ PROCESSOS / PRAZOS / CUSTAS ════
+let processosList=[], processoAtual=null;
+
+function fmtDataBR(iso){ if(!iso) return '—'; const p=iso.split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : iso; }
+function fmtMoeda(v){ return (Number(v)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function fmtISOLocal(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function diasParaVencer(dataStr){
+  if(!dataStr) return null;
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  const [y,m,d]=dataStr.split('-').map(Number);
+  const venc=new Date(y,m-1,d);
+  return Math.round((venc-hoje)/86400000);
+}
+function statusLabel(s){ return {ativo:'Ativo',suspenso:'Suspenso',encerrado:'Encerrado'}[s]||s; }
+function chipPrazo(prazo){
+  if(!prazo||!prazo.data_vencimento) return '<span class="chip-prazo neutro">Sem prazo</span>';
+  const dias=diasParaVencer(prazo.data_vencimento);
+  let cls='ok', txt=fmtDataBR(prazo.data_vencimento);
+  if(dias<0){cls='venceu';txt='Venceu '+fmtDataBR(prazo.data_vencimento);}
+  else if(dias===0){cls='urgente';txt='Vence hoje';}
+  else if(dias<=3){cls='urgente';txt='Vence em '+dias+'d';}
+  const label=(prazo.descricao?prazo.descricao+' · ':'')+txt;
+  return '<span class="chip-prazo '+cls+'" title="'+esc(label)+'">'+esc(label)+'</span>';
+}
+
+async function loadProcessos(){
+  try{ processosList=await api('GET','/api/processos'); }catch(e){ processosList=[]; }
+  renderProcessos();
+}
+function renderProcessos(){
+  const grid=document.getElementById('proc-grid'), empty=document.getElementById('proc-empty');
+  if(!grid) return;
+  const items=processosList;
+  const countEl=document.getElementById('proc-count');
+  if(countEl) countEl.textContent=items.length+' processo'+(items.length!==1?'s':'');
+  empty.style.display=items.length?'none':'block';
+  grid.innerHTML=items.map(p=>{
+    const numTxt=p.numero_cnj||'Sem número CNJ';
+    return `<div class="proc-row" onclick="abrirProcessoDetalhe(${p.id})" tabindex="0" onkeydown="if(event.key==='Enter')abrirProcessoDetalhe(${p.id})">
+      <div class="proc-row-main">
+        <span class="proc-row-num">${esc(numTxt)}</span>
+        <span class="proc-row-reu">${esc(p.reu||'—')}${p.area_label?' · '+esc(p.area_label.replace(/^Direito (de |do |da )?/i,'')):''}</span>
+      </div>
+      <div class="proc-row-vara">${esc(p.vara||'—')}</div>
+      <div class="proc-row-prazo">${chipPrazo(p.proximo_prazo)}</div>
+      <div class="proc-row-status"><span class="status-pill ${esc(p.status)}">${esc(statusLabel(p.status))}</span></div>
+      <div class="proc-row-custas">${fmtMoeda(p.custas_pago)} / ${fmtMoeda(p.custas_previsto)}</div>
+      <div class="proc-row-acts">
+        <button class="hca-btn danger" onclick="event.stopPropagation();confirmarExcluirProcesso(${p.id})" title="Excluir processo" aria-label="Excluir processo"><svg width="14" height="14" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 5.8h14.8"/><path d="M8.2 5.8V4.4a1.5 1.5 0 0 1 1.5-1.5h2.6a1.5 1.5 0 0 1 1.5 1.5v1.4"/><path d="M5.4 5.8v12.1a1.5 1.5 0 0 0 1.5 1.5h8.2a1.5 1.5 0 0 0 1.5-1.5V5.8"/><path d="M9.2 9.6v6M12.8 9.6v6"/></svg></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function abrirProcessoDetalhe(id){
+  try{ processoAtual=await api('GET','/api/processos/'+id); }catch(e){ toast('Erro: '+e.message,'err'); return; }
+  document.getElementById('proc-list-body').style.display='none';
+  document.getElementById('proc-detalhe').classList.add('open');
+  renderProcessoDetalhe();
+}
+function fecharProcessoDetalhe(){
+  document.getElementById('proc-detalhe').classList.remove('open');
+  document.getElementById('proc-list-body').style.display='';
+  processoAtual=null;
+  loadProcessos();
+}
+function renderProcessoDetalhe(){
+  const p=processoAtual; if(!p) return;
+  document.getElementById('proc-det-num').textContent=p.numero_cnj||'Processo sem número CNJ';
+  document.getElementById('proc-det-sub').textContent=[p.reu,p.vara,p.area_label].filter(Boolean).join(' · ')||'—';
+  document.getElementById('proc-det-status').innerHTML='<span class="status-pill '+esc(p.status)+'">'+esc(statusLabel(p.status))+'</span>';
+
+  const prazos=p.prazos||[];
+  const tlWrap=document.getElementById('proc-tl-wrap'), tlEmpty=document.getElementById('proc-tl-empty'), tlList=document.getElementById('proc-tl-list');
+  if(!prazos.length){ tlWrap.style.display='none'; tlEmpty.style.display='block'; }
+  else{
+    tlWrap.style.display='block'; tlEmpty.style.display='none';
+    tlList.innerHTML=prazos.map(pr=>{
+      const dias=diasParaVencer(pr.data_vencimento);
+      let clsChip='ok';
+      if(pr.status==='cumprido') clsChip='neutro';
+      else if(pr.status==='perdido') clsChip='venceu';
+      else if(dias<0) clsChip='venceu';
+      else if(dias<=3) clsChip='urgente';
+      const statusTxt=pr.status==='cumprido'?'Cumprido':pr.status==='perdido'?'Perdido':fmtDataBR(pr.data_vencimento);
+      return `<div class="proc-tl-item">
+        <div class="proc-tl-desc">
+          <div class="proc-tl-desc-txt">${esc(pr.descricao||'Prazo')}</div>
+          <div class="proc-tl-desc-sub">${pr.dias} dias ${pr.tipo_contagem==='corridos'?'corridos':'úteis'} a partir de ${fmtDataBR(pr.data_inicio)}</div>
+        </div>
+        <div class="proc-tl-venc"><span class="chip-prazo ${clsChip}">${esc(statusTxt)}</span></div>
+        <div class="proc-tl-acts">
+          ${pr.status==='pendente'?`<button class="hca-btn" title="Marcar como cumprido" onclick="marcarPrazoStatus(${pr.id},'cumprido')"><svg width="14" height="14" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8.2"/><path d="M7.6 11.2 9.9 13.5 14.4 8.9"/></svg></button>`:''}
+          <button class="hca-btn danger" title="Excluir prazo" onclick="excluirPrazo(${pr.id})"><svg width="14" height="14" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 5.8h14.8"/><path d="M8.2 5.8V4.4a1.5 1.5 0 0 1 1.5-1.5h2.6a1.5 1.5 0 0 1 1.5 1.5v1.4"/><path d="M5.4 5.8v12.1a1.5 1.5 0 0 0 1.5 1.5h8.2a1.5 1.5 0 0 0 1.5-1.5V5.8"/><path d="M9.2 9.6v6M12.8 9.6v6"/></svg></button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  const custas=p.custas||[];
+  const cWrap=document.getElementById('proc-custas-wrap'), cEmpty=document.getElementById('proc-custas-empty'), cBody=document.getElementById('proc-custas-body');
+  if(!custas.length){ cWrap.style.display='none'; cEmpty.style.display='block'; }
+  else{
+    cWrap.style.display='block'; cEmpty.style.display='none';
+    cBody.innerHTML=custas.map(c=>`<tr>
+      <td>${esc(c.descricao||'—')}</td>
+      <td>${fmtMoeda(c.valor_previsto)}</td>
+      <td>${fmtMoeda(c.valor_pago)}</td>
+      <td>${c.data?fmtDataBR(c.data):'—'}</td>
+      <td style="text-align:right;"><button class="hca-btn danger" title="Excluir" onclick="excluirCusta(${c.id})"><svg width="14" height="14" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 5.8h14.8"/><path d="M8.2 5.8V4.4a1.5 1.5 0 0 1 1.5-1.5h2.6a1.5 1.5 0 0 1 1.5 1.5v1.4"/><path d="M5.4 5.8v12.1a1.5 1.5 0 0 0 1.5 1.5h8.2a1.5 1.5 0 0 0 1.5-1.5V5.8"/><path d="M9.2 9.6v6M12.8 9.6v6"/></svg></button></td>
+    </tr>`).join('');
+  }
+
+  const pecas=p.pecas||[];
+  const pecasList=document.getElementById('proc-pecas-list'), pecasEmpty=document.getElementById('proc-pecas-empty');
+  if(!pecas.length){ pecasList.style.display='none'; pecasEmpty.style.display='block'; }
+  else{
+    pecasList.style.display='flex'; pecasEmpty.style.display='none';
+    pecasList.innerHTML=pecas.map(x=>`<div class="proc-peca-item" onclick="go('historico')">
+      <span>${esc(x.tipo_label||'Peça')}</span><span style="color:var(--t3)">·</span><span style="color:var(--t3)">${esc(x.area_label||'')}</span>
+      <span style="margin-left:auto;color:var(--t3);">${esc(fmtDate(x.created_at).replace(/,.*$/,''))}</span>
+    </div>`).join('');
+  }
+}
+
+// -- Modal: Novo/editar processo --
+let processoEditandoId=null;
+function abrirModalProcesso(){
+  processoEditandoId=null;
+  document.getElementById('modal-processo-titulo').textContent='Novo processo';
+  document.getElementById('proc-form-numero').value='';
+  document.getElementById('proc-form-reu').value='';
+  document.getElementById('proc-form-vara').value='';
+  document.getElementById('proc-form-area').value='Direito do Consumidor';
+  document.getElementById('proc-form-status').value='ativo';
+  document.getElementById('modal-processo').style.display='flex';
+}
+function fecharModalProcesso(){ document.getElementById('modal-processo').style.display='none'; }
+async function salvarProcesso(){
+  const body={
+    numero_cnj:document.getElementById('proc-form-numero').value.trim(),
+    reu:document.getElementById('proc-form-reu').value.trim(),
+    vara:document.getElementById('proc-form-vara').value.trim(),
+    area_label:document.getElementById('proc-form-area').value,
+    status:document.getElementById('proc-form-status').value
+  };
+  try{
+    if(processoEditandoId) await api('PUT','/api/processos/'+processoEditandoId,body);
+    else await api('POST','/api/processos',body);
+    fecharModalProcesso();
+    await loadProcessos();
+    toast('Processo salvo!','ok');
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+}
+async function confirmarExcluirProcesso(id){
+  if(!id) return;
+  if(!await pandectaConfirm('Excluir este processo? Os prazos e custas vinculados também serão removidos. Esta ação não pode ser desfeita.',{icon:'lixeira',titulo:'Excluir processo',confirmar:'Excluir',danger:true})) return;
+  try{
+    await api('DELETE','/api/processos/'+id);
+    processosList=processosList.filter(p=>p.id!==id);
+    toast('Processo excluído.','ok');
+    if(processoAtual&&processoAtual.id===id) fecharProcessoDetalhe();
+    else renderProcessos();
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+}
+
+// -- Modal: Novo prazo --
+function abrirModalPrazo(){
+  if(!processoAtual) return;
+  document.getElementById('prazo-form-desc').value='';
+  document.getElementById('prazo-form-data').value='';
+  document.getElementById('prazo-form-tipodata').value='disponibilizacao';
+  document.getElementById('prazo-form-dias').value='';
+  document.getElementById('prazo-form-contagem').value='uteis';
+  document.getElementById('modal-prazo').style.display='flex';
+}
+function fecharModalPrazo(){ document.getElementById('modal-prazo').style.display='none'; }
+async function salvarPrazo(){
+  if(!processoAtual) return;
+  const body={
+    processo_id:processoAtual.id,
+    descricao:document.getElementById('prazo-form-desc').value.trim(),
+    data_inicio:document.getElementById('prazo-form-data').value,
+    tipo_data:document.getElementById('prazo-form-tipodata').value,
+    tipo_contagem:document.getElementById('prazo-form-contagem').value,
+    dias:Number(document.getElementById('prazo-form-dias').value)||0
+  };
+  if(!body.data_inicio||!body.dias){ toast('Informe a data e a quantidade de dias.','err'); return; }
+  try{
+    await api('POST','/api/prazos',body);
+    fecharModalPrazo();
+    processoAtual=await api('GET','/api/processos/'+processoAtual.id);
+    renderProcessoDetalhe();
+    toast('Prazo salvo!','ok');
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+}
+async function marcarPrazoStatus(id,status){
+  try{
+    await api('PUT','/api/prazos/'+id,{status});
+    processoAtual=await api('GET','/api/processos/'+processoAtual.id);
+    renderProcessoDetalhe();
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+}
+async function excluirPrazo(id){
+  if(!await pandectaConfirm('Excluir este prazo?',{icon:'lixeira',titulo:'Excluir prazo',confirmar:'Excluir',danger:true})) return;
+  try{
+    await api('DELETE','/api/prazos/'+id);
+    processoAtual=await api('GET','/api/processos/'+processoAtual.id);
+    renderProcessoDetalhe();
+    toast('Prazo excluído.','ok');
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+}
+
+// -- Modal: Nova custa --
+function abrirModalCusta(){
+  if(!processoAtual) return;
+  document.getElementById('custa-form-desc').value='';
+  document.getElementById('custa-form-previsto').value='';
+  document.getElementById('custa-form-pago').value='';
+  document.getElementById('custa-form-data').value='';
+  document.getElementById('modal-custa').style.display='flex';
+}
+function fecharModalCusta(){ document.getElementById('modal-custa').style.display='none'; }
+async function salvarCusta(){
+  if(!processoAtual) return;
+  const body={
+    processo_id:processoAtual.id,
+    descricao:document.getElementById('custa-form-desc').value.trim(),
+    valor_previsto:Number(document.getElementById('custa-form-previsto').value)||0,
+    valor_pago:Number(document.getElementById('custa-form-pago').value)||0,
+    data:document.getElementById('custa-form-data').value
+  };
+  try{
+    await api('POST','/api/custas',body);
+    fecharModalCusta();
+    processoAtual=await api('GET','/api/processos/'+processoAtual.id);
+    renderProcessoDetalhe();
+    toast('Custa salva!','ok');
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+}
+async function excluirCusta(id){
+  if(!await pandectaConfirm('Excluir esta custa?',{icon:'lixeira',titulo:'Excluir custa',confirmar:'Excluir',danger:true})) return;
+  try{
+    await api('DELETE','/api/custas/'+id);
+    processoAtual=await api('GET','/api/processos/'+processoAtual.id);
+    renderProcessoDetalhe();
+    toast('Custa excluída.','ok');
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+}
+
+// -- Modal: Protocolar (a partir da peça recém-gerada) --
+async function abrirModalProtocolar(){
+  if(!window._ultimoHistId){ toast('Aguarde a peça salvar antes de protocolar.','err'); return; }
+  try{ processosList=await api('GET','/api/processos'); }catch(e){}
+  const sel=document.getElementById('proto-processo-sel');
+  sel.innerHTML='<option value="">+ Criar novo processo</option>'+processosList.map(p=>`<option value="${p.id}">${esc(p.numero_cnj||('Sem número · '+(p.reu||'')))}</option>`).join('');
+  sel.value='';
+  document.getElementById('proto-novo-wrap').style.display='flex';
+  document.getElementById('proto-numero').value='';
+  document.getElementById('proto-reu').value=window._ultimoWizardReu||'';
+  document.getElementById('proto-vara').value=window._ultimoWizardVara||'';
+  document.getElementById('proto-prazo-desc').value='';
+  document.getElementById('proto-prazo-data').value='';
+  document.getElementById('proto-prazo-dias').value='';
+  document.getElementById('modal-protocolar').style.display='flex';
+}
+function fecharModalProtocolar(){ document.getElementById('modal-protocolar').style.display='none'; }
+function onProtoProcessoChange(){
+  const sel=document.getElementById('proto-processo-sel');
+  document.getElementById('proto-novo-wrap').style.display=sel.value?'none':'flex';
+}
+async function salvarProtocolar(){
+  try{
+    const sel=document.getElementById('proto-processo-sel');
+    let processoId=sel.value?Number(sel.value):null;
+    if(!processoId){
+      const novo=await api('POST','/api/processos',{
+        numero_cnj:document.getElementById('proto-numero').value.trim(),
+        reu:document.getElementById('proto-reu').value.trim(),
+        vara:document.getElementById('proto-vara').value.trim(),
+        area_label:window._ultimoWizardArea||''
+      });
+      processoId=novo.id;
+      processosList.unshift(novo);
+    }
+    await api('PUT','/api/history/'+window._ultimoHistId,{processo_id:processoId});
+    const desc=document.getElementById('proto-prazo-desc').value.trim();
+    const dataIni=document.getElementById('proto-prazo-data').value;
+    const dias=Number(document.getElementById('proto-prazo-dias').value)||0;
+    if(desc&&dataIni&&dias){
+      await api('POST','/api/prazos',{processo_id:processoId,descricao:desc,data_inicio:dataIni,tipo_data:'disponibilizacao',tipo_contagem:'uteis',dias});
+    }
+    fecharModalProtocolar();
+    toast('Peça protocolada!','ok');
+  }catch(e){ toast('Erro: '+e.message,'err'); }
+}
+
+// -- Painel "Prazos" na Home --
+async function loadHomePrazosPanel(){
+  let prazos=[];
+  try{ prazos=await api('GET','/api/prazos'); }catch(e){ prazos=[]; }
+  const pendentes=prazos.filter(p=>p.status==='pendente'&&p.data_vencimento);
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  const hojeStr=fmtISOLocal(hoje);
+  const em7=new Date(hoje); em7.setDate(em7.getDate()+7);
+  const em7Str=fmtISOLocal(em7);
+  const vencidos=pendentes.filter(p=>p.data_vencimento<hojeStr).sort((a,b)=>a.data_vencimento.localeCompare(b.data_vencimento));
+  const semana=pendentes.filter(p=>p.data_vencimento>=hojeStr&&p.data_vencimento<=em7Str).sort((a,b)=>a.data_vencimento.localeCompare(b.data_vencimento));
+  const renderList=(arr,elId,emptyTxt)=>{
+    const el=document.getElementById(elId); if(!el) return;
+    if(!arr.length){ el.innerHTML='<div class="hd-empty">'+emptyTxt+'</div>'; return; }
+    el.innerHTML=arr.slice(0,5).map(p=>'<div class="hd-prazo-item" onclick="go(\'processos\');setTimeout(function(){abrirProcessoDetalhe('+p.processo_id+');},80)">'
+      +'<span class="hd-prazo-item-desc">'+esc((p.descricao||'Prazo')+' — '+(p.numero_cnj||p.reu||''))+'</span>'
+      +'<span class="hd-prazo-item-sub">'+esc(fmtDataBR(p.data_vencimento))+'</span>'
+      +'</div>').join('');
+  };
+  renderList(vencidos,'hd-prazos-vencidos','Nenhum prazo vencido.');
+  renderList(semana,'hd-prazos-semana','Nenhum prazo nesta semana.');
+}
+
 function copiarHist(){if(!histItemAtual)return;navigator.clipboard.writeText(histItemAtual.texto||'').then(()=>toast('Copiado!','ok'));}
 async function exportarWordHist(){
   if(!histItemAtual)return;
