@@ -1,8 +1,8 @@
 {
   "meta": {
     "nome": "Pandecta Executive Command Center",
-    "versao": 16,
-    "atualizado_em": "2026-09-12",
+    "versao": 17,
+    "atualizado_em": "2026-09-16",
     "changelog": [
       {
         "data": "2026-07-13",
@@ -83,11 +83,17 @@
         "versao": 16,
         "data": "2026-09-12",
         "mudancas": "Check-in comercial automático de sexta (executado sábado 12/09, sem Maurício presente para responder — tarefa agendada, sem sessão ativa). As três perguntas obrigatórias (advogados abordados, leads do LinkedIn respondidos em <24h, novidades) ficam pendentes de resposta dele; nenhum número foi inventado. Fechadas sem dado três semanas consecutivas de protocolo_vendas (24/08, 31/08, 07/09) — a mesma lacuna que já vinha desde 13/07 simplesmente continuou, agora são ~9 semanas seguidas sem um único número de prospecção confirmado. Em paralelo, o CLAUDE.md do repo registra trabalho de produto real e contínuo nesse mesmo período (02-04/09): checkbox de termos obrigatório + telefone acionável (wa.me) no admin do cadastro; sidebar do app com modo reduzido (só ícones); três colunas novas no histórico (Advogado/Réu/Vara-Juízo); painel Admin dividido em abas; bug real corrigido (botão 'Fazer backup agora' sem handler); Google Analytics (GA4) instalado na landing com banner de consentimento LGPD e política de privacidade atualizada — confirmado ao vivo em pandecta.com.br em 04/09, o que também confirma que o redesign (landing + app + páginas órfãs) já foi publicado em algum momento entre 28/08 e 02/09. Nenhuma dessas entregas é sobre o funil comercial. Registrado como achado do check-in, não como crítica: é o padrão sabotador já documentado no CLAUDE.md (refúgio em produto quando a métrica que decide a janela de independência financeira é vendas) se repetindo por mais um ciclo, agora com a meta de 30/09 a 18 dias de distância e ainda só 1 de 3 advogados confirmados com peça protocolada."
+      },
+      {
+        "versao": 17,
+        "data": "2026-09-16",
+        "mudancas": "Mauricio trouxe tres pedidos novos numa unica mensagem. (1) Confirmou a ideia de uma tela/alerta explicito de \"pipeline de prazos\" (lista dos processos vencendo mostrada ativamente ao advogado, nao so passiva na home) e que o canal real que ele quer de fato e WhatsApp, nao e-mail como Claude tinha recomendado como primeiro passo mais barato -- atualizado o item de Prioridade 1 do roadmap de produto (rastreio de prazo/andamento) pra refletir que a versao manual (CRUD Processos/Prazos/Custas, calculo de vencimento, 4 telas, busca e filtros na lista) ja foi construida e majoritariamente implantada, e criado item novo dedicado so pra integracao de WhatsApp como canal de alerta. (2) Login com Google (OAuth) elevado de prioridade baixa pra alta a pedido dele (\"quero ja fazer\"), ainda sem data de inicio definida. (3) Pediu integracao com Stripe AINDA HOJE pra comecar a cobrar pela utilizacao -- reverte a decisao de 25/08 de pausar monetizacao ate validar com mais advogados (hoje ainda so 1 de 3 betas da meta de 30/09 confirmados, faltando 14 dias). Levantadas duas perguntas bloqueantes antes de comecar a implementar, ainda sem resposta dele: se ja existe conta/chaves de API Stripe prontas, e se \"cobrar pela utilizacao\" significa ativar os 3 planos fixos ja publicados na landing (Solo/Profissional/Escritorio) ou fazer billing por uso medido (ex.: por peca gerada) -- sao arquiteturas de Stripe diferentes. Tambem nesta sessao, ainda nao gravado nos arquivos reais (pendente de aprovacao final do Mauricio): correcao de espacamento/visibilidade dos botoes de acao na tela de detalhe do Processo, e busca + filtros por status/prazo na lista de Processos."
       }
     ]
   },
   "dashboard": {
     "avancou": [
+      "Duas melhorias na tela de Processos prontas e validadas em maquete (espacamento/visibilidade dos botoes de acao no detalhe do processo + busca e filtros por status/prazo na lista) -- aguardando aprovacao final do Mauricio antes de gravar no codigo real",
       "Redesign publicado: landing + app + 4 páginas órfãs no ar em pandecta.com.br (confirmado indiretamente em 04/09, ao verificar a tag do GA4 rodando no site real)",
       "Google Analytics (GA4) instalado na landing com banner de consentimento LGPD; política de privacidade atualizada para mencionar o uso — tag confirmada ativa no site real em 04/09",
       "Cadastro: checkbox obrigatório de aceite dos Termos/Política de Privacidade + telefone do usuário virou link clicável (wa.me) na tabela de usuários do admin — motivado por Maurício não conseguir identificar/contatar uma advogada que se cadastrou sozinha",
@@ -111,6 +117,7 @@
       "Skills de design instaladas e rodando (impeccable + taste-skill)"
     ],
     "riscos": [
+      "Pedido de reverter a pausa de monetizacao (Stripe, pedido para hoje 16/09) chega antes de fechar a meta de 30/09 (ainda 1 de 3 betas confirmados, faltam 14 dias) e sem nenhum numero novo de funil reportado -- mesmo padrao ja observado: decisao estrategica de peso tomada em cima de produto, nao de dado de vendas",
       "~9 semanas seguidas sem um único número de pipeline reportado (13/07 a 12/09) — check-in de sexta automático de 12/09 rodou sem Maurício presente, três semanas a mais (24/08, 31/08, 07/09) fechadas sem dado",
       "Ainda um único beta validado — Fabiano, desde 03/07. Nenhum segundo advogado confirmado",
       "Meta 30/09 agora a 18 dias de distância: faltam 2 advogados, partindo de um funil sem número conhecido há mais de dois meses — é o prazo mais apertado desde que a meta foi criada",
@@ -120,6 +127,7 @@
       "Checkout/assinatura self-service segue desativado — nenhum lead, pago ou orgânico, converte em cliente pagante sozinho hoje"
     ],
     "oportunidades": [
+      "Pipeline de alertas de prazo (tela dedicada) + WhatsApp como canal agora tem direcao explicita do Mauricio -- e exatamente a Prioridade 1 do roadmap de produto, motivada pelo sumico do Fabiano/Victor, ganhando forma concreta",
       "Landing nova pronta e não publicada — publicar junto com a ferramenta dá um relançamento com material novo",
       "As capturas reais da ferramenta viram material de prospecção imediato, mesmo antes de publicar o site",
       "Base de ~450 prospects do Waalaxy nunca teve follow-up humano",
@@ -127,6 +135,10 @@
       "Caso do Fabiano (peça protocolada em juízo, sem edição) ainda não é usado como abertura de prospecção — é a prova mais forte disponível e está sendo subutilizada"
     ],
     "prioridades_semana": [
+      {
+        "titulo": "Responder as 2 perguntas de escopo do Stripe antes de Claude comecar a implementar",
+        "motivo": "Pedido de hoje (16/09) pra integrar Stripe e cobrar por uso. Falta saber: (1) ja existe conta Stripe com chaves de API prontas para usar? (2) \"cobrar pela utilizacao\" e ativar os 3 planos fixos ja publicados na landing (Solo/Profissional/Escritorio) ou fazer billing por uso medido (ex.: por peca gerada)? Sao arquiteturas diferentes no Stripe -- comecar sem definir arrisca retrabalho caro numa integracao de pagamento."
+      },
       {
         "titulo": "Responder ao check-in de sexta que ficou sem resposta",
         "motivo": "Rodou automático em 12/09 sem Maurício presente. As 3 perguntas (abordagens da semana, leads do LinkedIn respondidos em <24h, novidades) seguem pendentes — é o primeiro passo antes de qualquer outra prioridade abaixo."
@@ -400,18 +412,28 @@
           "status": "futuro",
           "responsavel": "Maurício",
           "dependencias": "—",
-          "proxima_acao": "—",
-          "prazo": "—",
-          "prioridade": "baixa"
+          "proxima_acao": "Escopo e data de inicio ainda pendentes de definicao com Mauricio -- ele sinalizou em 16/09 que quer avancar (\"quero ja fazer\"), priorizado de baixa pra alta nesta atualizacao",
+          "prazo": "Sem data -- priorizado em 16/09, ainda nao iniciado",
+          "prioridade": "alta"
         },
         {
           "nome": "[Prioridade 1] Rastreio de prazo/andamento processual com alerta",
-          "objetivo": "Dar ao advogado um motivo automático pra reabrir a Pandecta. Hoje não existe nenhum gatilho de retorno — é a hipótese mais provável por trás do sumiço do Fabiano e do Victor depois das respectivas férias, e é o tipo de integração no fluxo de trabalho que um concorrente não replica em uma semana só copiando a geração de texto",
-          "status": "futuro",
+          "objetivo": "Dar ao advogado um motivo automatico pra reabrir a Pandecta. A versao manual ja existe (CRUD de Processos/Prazos/Custas, calculo de vencimento com chips de urgencia, busca e filtros na lista, tela de detalhe com abas) -- o que falta e o gatilho de retorno de verdade: hoje toda a visibilidade e passiva e dentro do app (home, chips, filtros), sem nada que traga o advogado de volta quando ele nao esta olhando. Mauricio confirmou em 16/09 duas coisas concretas: quer uma tela/alerta explicito tipo \"Temos esses prazos proximos do vencimento em nossa pipe-line\" mostrada ativamente ao advogado, e que o canal real que ele quer e WhatsApp, nao e-mail (que era a recomendacao inicial da Claude por ser mais rapido de validar).",
+          "status": "em_andamento",
           "responsavel": "Maurício + Claude",
-          "dependencias": "Fonte de intimação/andamento (Datajud, DJEN) para versão automática — mas a versão manual não depende disso",
-          "proxima_acao": "Versão mínima: usuário registra a data do prazo ao gerar a peça; sistema notifica X dias antes por e-mail/WhatsApp",
-          "prazo": "Sem data — priorizada, não iniciada",
+          "dependencias": "Fonte de intimacao/andamento (Datajud, DJEN) so pra versao automatica -- a versao manual nao depende disso. A integracao de WhatsApp (item novo abaixo) depende de escolher provedor.",
+          "proxima_acao": "Construir a tela de \"pipeline de prazos\" (lista explicita dos processos vencendo/vencidos, mostrada ativamente ao advogado) e avancar na integracao real com WhatsApp como canal de notificacao externa",
+          "prazo": "Sem data -- versao manual em producao, tela de pipeline e alerta externo ainda nao iniciados",
+          "prioridade": "alta"
+        },
+        {
+          "nome": "Integracao com WhatsApp (canal de alerta de prazos)",
+          "objetivo": "Canal de notificacao externa que o advogado realmente usa no dia a dia -- confirmado por Mauricio (16/09) como a prioridade real, acima de e-mail, pra trazer o advogado de volta a Pandecta quando um prazo estiver vencendo ou vencido",
+          "status": "futuro",
+          "responsavel": "Mauricio + Claude",
+          "dependencias": "Escolher provedor (Twilio, Z-API ou Meta Cloud API/WhatsApp Business API) e o custo associado; depende da tela/gatilho de pipeline de prazos (item acima) existir primeiro",
+          "proxima_acao": "Cotar os 3 provedores (Twilio/Z-API/Meta Cloud API) e decidir com Mauricio",
+          "prazo": "Sem data -- adicionada a lista de atividades em 16/09",
           "prioridade": "alta"
         },
         {
@@ -594,13 +616,13 @@
         },
         {
           "nome": "Sistema de pagamento + reativar trial",
-          "objetivo": "Monetização com planos pagos",
-          "status": "pausado",
+          "objetivo": "Monetizacao com planos pagos. Reversao de rota: em 16/09 Mauricio pediu pra iniciar a integracao com Stripe ainda hoje, pra comecar a cobrar pela utilizacao -- antes de fechar a meta de 30/09 (ainda 1 de 3 betas) e sem novo numero de validacao reportado. Reverte a decisao de 25/08 de pausar ate validar com mais advogados.",
+          "status": "em_andamento",
           "responsavel": "Maurício",
-          "dependencias": "Validação com mais advogados",
-          "proxima_acao": "Retomar após 3+ betas ativos",
-          "prazo": "Sem data — depende de validação",
-          "prioridade": "media"
+          "dependencias": "Conta Stripe + chaves de API do Mauricio (Claude nao pode criar conta nem gerar chaves); definicao se \"cobrar pela utilizacao\" significa ativar os 3 planos fixos ja publicados na landing (Solo/Profissional/Escritorio) ou fazer billing por uso medido (ex.: por peca gerada) -- arquiteturas diferentes no Stripe, pergunta ainda sem resposta",
+          "proxima_acao": "Confirmar com Mauricio: (1) ja tem conta Stripe com chaves de API prontas? (2) planos fixos existentes (assinatura) ou billing por uso medido? So depois disso da pra comecar a implementacao",
+          "prazo": "16/09/2026 (hoje) -- pedido explicito do Mauricio",
+          "prioridade": "alta"
         }
       ]
     },

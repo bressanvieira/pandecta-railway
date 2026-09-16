@@ -970,3 +970,40 @@ automação, não do app). Aprovado por Maurício ("otimo... vamos executar") an
 reais via `device_commit_files`.
 
 **Pendente:** `git add / commit / push` via PowerShell.
+
+
+---
+
+## 16/09/2026 — Correção: "Não mostrar novamente" do Tour não persistia
+
+Maurício reportou que marcar "Não mostrar novamente" no popup do Tour não impedia o popup de voltar a
+aparecer.
+
+**Causa raiz:** havia dois blocos de markup pro popup de boas-vindas do tour no `index.html`. Um vivo — o
+popup real, construído dinamicamente por `_abrirTourPopup()` e anexado ao final do `<body>` — e um morto,
+estático, com `style="display:none"` desde sempre (`#tour-welcome-bg` / `#tour-welcome`, junto com
+`#tour-overlay`/`#tour-spotlight`/`#tour-tooltip` estáticos), sobra de uma implementação anterior do tour.
+Nenhum dos dois JS atuais (`iniciarTour`, `_mostrarStep`, `checkTourAutoShow` etc.) referenciava esse bloco
+morto — inclusive o `onclick="endTour()"` que sobrava nele chamava uma função que não existe mais no arquivo.
+
+O problema: os dois blocos usavam o **mesmo id** `tour-nao-mostrar` no checkbox. `fecharTourPopup()` lê o
+estado do checkbox com `document.getElementById('tour-nao-mostrar')` — e `getElementById` sempre retorna o
+primeiro elemento com aquele id na ordem do documento. Como o bloco morto vem **antes** do popup real no
+HTML (o real só é criado e anexado ao `<body>` quando o popup abre), a função sempre lia o checkbox errado
+— o escondido, nunca marcado — então `nao.checked` dava sempre `false` e `localStorage.setItem(
+'pandecta_tour_visto','1')` nunca rodava, não importa o que o usuário marcasse na tela que ele via de
+verdade.
+
+**Fix:** removido o bloco morto inteiro — o HTML estático (`#tour-welcome-bg`/`#tour-welcome` e as divs
+soltas `#tour-overlay`/`#tour-spotlight`/`#tour-tooltip`) e o CSS correspondente (`#tour-welcome*`,
+`.tw-*`, `#tour-overlay`, `#tour-spotlight`, `#tour-tooltip`/`.tt-*` — todo esse CSS também já estava
+inerte, porque o popup e os passos reais do tour usam ids diferentes com estilo 100% inline). Sem
+substituição — é código morto, não uma feature a preservar. Confirmado que nada no JS vivo referenciava
+qualquer um desses seletores antes de remover.
+
+**Verificação:** ambiente local com banco de teste, login real, popup aparecendo no primeiro acesso (como
+esperado), checkbox marcado via Playwright, `localStorage.getItem('pandecta_tour_visto')` confirmado como
+`'1'` depois de fechar o popup, página recarregada (simulando `bootSessao()` de uma nova visita) e o popup
+**não** voltou a aparecer. `node validate.js` OK. Nenhum outro comportamento do tour foi tocado — o botão
+"Tour guiado" da sidebar continua reabrindo o tour manualmente a qualquer momento, e os 8 passos guiados
+(`TOUR_STEPS`) não foram alterados.
