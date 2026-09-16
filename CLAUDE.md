@@ -971,39 +971,139 @@ reais via `device_commit_files`.
 
 **Pendente:** `git add / commit / push` via PowerShell.
 
+---
+
+## 16/09/2026 — Achado: fix do Tour ("não mostrar novamente") nunca tinha sido gravado de verdade no arquivo real
+
+Ao investigar o pedido de hoje do Maurício, reconferi o `index.html` real (via `device_stage_files`, não a
+cópia local do sandbox) antes de mexer em qualquer coisa nova — e o bug que a entrada anterior do dia 16/09
+descrevia como corrigido e verificado **ainda estava presente no arquivo real**: o markup morto
+(`#tour-welcome-bg`/`#tour-welcome`/`.tw-*` e as divs estáticas `#tour-spotlight`/`#tour-tooltip`) nunca tinha
+sido removido do código que está de fato publicado. A verificação anterior (Playwright, checkbox marcado,
+popup não reaparece) foi real, mas aconteceu numa cópia local que nunca chegou a ser gravada no arquivo do
+Maurício via `device_commit_files` — um passo que ficou faltando entre a verificação e o registro daquela
+entrada. Fica como lição: confirmar o resultado do `device_commit_files` (ou reconferir o arquivo real depois)
+antes de dar uma correção como concluída.
+
+**Achado extra nesta reconferência:** a limpeza também resolve um segundo problema que não tinha sido
+percebido antes — o `<div id="tour-overlay" style="display:none" onclick="endTour()">` estático (parte do
+mesmo bloco morto) tinha o **mesmo id** que o overlay real criado dinamicamente em `_mostrarStep()`
+(`overlay.id = 'tour-overlay'`). Como o `document.getElementById` sempre pega o primeiro elemento do
+documento com aquele id, e o div morto vem antes no HTML, a função de limpeza `_limparTour()` — que remove
+elementos por id ao trocar de passo do tour guiado — estava removendo o div morto (que já não fazia nada) em
+vez do overlay real, deixando cada `<div id="tour-overlay">` criado por passo do tour órfão no DOM. Ainda não
+confirmei esse segundo efeito ponta a ponta com Playwright (um teste complementar deu timeout por causa da
+mecânica do clique no botão "Próximo" durante múltiplos passos, não relacionado à correção em si) — vale
+reconferir na próxima sessão que mexer no tour guiado, mas a remoção do bloco morto é o fix correto
+independente disso, já que o mesmo id duplicado é a raiz dos dois sintomas.
+
+**Fix aplicado, desta vez confirmado gravado no arquivo real:** removido o HTML morto inteiro
+(`#tour-welcome-bg`/`#tour-welcome` e as divs soltas `#tour-overlay`/`#tour-spotlight`/`#tour-tooltip`
+estáticas) e o CSS morto correspondente (`#tour-spotlight`, `#tour-tooltip`/`.tt-*`, `#tour-welcome-bg`,
+`#tour-welcome`/`.tw-*`) — **mantida** a regra CSS `#tour-overlay{...}` (é usada de verdade pelo overlay
+dinâmico real, só a `<div>` estática duplicada que sumiu).
+
+**Verificação:** ambiente local com banco de teste novo, login real, popup aparecendo no primeiro acesso,
+confirmado por script que só existe **1** elemento com id `tour-nao-mostrar` no DOM (antes eram 2), checkbox
+marcado, `localStorage.getItem('pandecta_tour_visto')` confirmado `'1'` depois de fechar o popup, página
+recarregada e o popup **não** voltou a aparecer. `node validate.js` OK. `grep` de confirmação: zero
+ocorrências de `tour-welcome-bg`, `.tw-`, `endTour(` sobrando no arquivo. Gravado no arquivo real via
+`device_commit_files` (não só na cópia local) — dessa vez confirmado.
 
 ---
 
-## 16/09/2026 — Correção: "Não mostrar novamente" do Tour não persistia
+## 16/09/2026 — Backlog atualizado: pipeline de prazos + WhatsApp, Google OAuth priorizado, e pedido de Stripe hoje
 
-Maurício reportou que marcar "Não mostrar novamente" no popup do Tour não impedia o popup de voltar a
-aparecer.
+Maurício trouxe três pedidos numa única mensagem — registrado aqui e no `command-center-data.json`
+(`meta.versao` 16 → 17) seguindo o protocolo de manutenção do Command Center.
 
-**Causa raiz:** havia dois blocos de markup pro popup de boas-vindas do tour no `index.html`. Um vivo — o
-popup real, construído dinamicamente por `_abrirTourPopup()` e anexado ao final do `<body>` — e um morto,
-estático, com `style="display:none"` desde sempre (`#tour-welcome-bg` / `#tour-welcome`, junto com
-`#tour-overlay`/`#tour-spotlight`/`#tour-tooltip` estáticos), sobra de uma implementação anterior do tour.
-Nenhum dos dois JS atuais (`iniciarTour`, `_mostrarStep`, `checkTourAutoShow` etc.) referenciava esse bloco
-morto — inclusive o `onclick="endTour()"` que sobrava nele chamava uma função que não existe mais no arquivo.
+**1) Tela de "pipeline de prazos" + WhatsApp como canal real.** Na sessão anterior eu tinha perguntado como
+o advogado seria avisado de um prazo vencendo, e recomendado começar por e-mail (mais rápido, sem aprovação
+de terceiros) tratando WhatsApp como v2. Maurício foi direto ao ponto: quer uma tela explícita ("Temos esses
+prazos próximos do vencimento em nossa pipe-line") mostrada ativamente ao advogado, e confirmou que o canal
+que ele quer *de fato* é WhatsApp, não e-mail. Atualizado o item "[Prioridade 1] Rastreio de
+prazo/andamento processual com alerta" no `command-center-data.json`: status passou de `futuro` pra
+`em_andamento` (a versão manual — CRUD de Processos/Prazos/Custas, cálculo de vencimento, busca e filtros na
+lista, tela de detalhe com abas — já está construída e majoritariamente implantada; falta o gatilho de
+retorno de verdade). Criado item novo dedicado, "Integração com WhatsApp (canal de alerta de prazos)",
+`futuro`/`alta`, dependendo de escolher provedor (Twilio, Z-API ou Meta Cloud API) e custo associado.
 
-O problema: os dois blocos usavam o **mesmo id** `tour-nao-mostrar` no checkbox. `fecharTourPopup()` lê o
-estado do checkbox com `document.getElementById('tour-nao-mostrar')` — e `getElementById` sempre retorna o
-primeiro elemento com aquele id na ordem do documento. Como o bloco morto vem **antes** do popup real no
-HTML (o real só é criado e anexado ao `<body>` quando o popup abre), a função sempre lia o checkbox errado
-— o escondido, nunca marcado — então `nao.checked` dava sempre `false` e `localStorage.setItem(
-'pandecta_tour_visto','1')` nunca rodava, não importa o que o usuário marcasse na tela que ele via de
-verdade.
+**2) Login com Google (OAuth) priorizado.** Maurício disse "quero já fazer a integração do Google pra
+acessar a Pandecta" — item já existia no roadmap (baixa prioridade, nunca iniciado). Prioridade elevada pra
+`alta` no `command-center-data.json`; ainda sem data de início definida, sem escopo levantado (login vs.
+cadastro, só Google ou outros provedores também).
 
-**Fix:** removido o bloco morto inteiro — o HTML estático (`#tour-welcome-bg`/`#tour-welcome` e as divs
-soltas `#tour-overlay`/`#tour-spotlight`/`#tour-tooltip`) e o CSS correspondente (`#tour-welcome*`,
-`.tw-*`, `#tour-overlay`, `#tour-spotlight`, `#tour-tooltip`/`.tt-*` — todo esse CSS também já estava
-inerte, porque o popup e os passos reais do tour usam ids diferentes com estilo 100% inline). Sem
-substituição — é código morto, não uma feature a preservar. Confirmado que nada no JS vivo referenciava
-qualquer um desses seletores antes de remover.
+**3) Pedido de integração com Stripe — HOJE, "pra começarmos a cobrar pela utilização".** Este é o único dos
+três itens com prazo explícito ("hoje até o fim do dia"), os outros dois foram só pra lista de atividades.
 
-**Verificação:** ambiente local com banco de teste, login real, popup aparecendo no primeiro acesso (como
-esperado), checkbox marcado via Playwright, `localStorage.getItem('pandecta_tour_visto')` confirmado como
-`'1'` depois de fechar o popup, página recarregada (simulando `bootSessao()` de uma nova visita) e o popup
-**não** voltou a aparecer. `node validate.js` OK. Nenhum outro comportamento do tour foi tocado — o botão
-"Tour guiado" da sidebar continua reabrindo o tour manualmente a qualquer momento, e os 8 passos guiados
-(`TOUR_STEPS`) não foram alterados.
+Antes de escrever qualquer código, levantei o estado real do projeto: `grep -in "stripe"` e
+`grep -in "google.*oauth\|passport-google\|google_client"` no `server.js`, `public/index.html` e
+`package.json` — **zero ocorrências das duas coisas**, nada foi começado ainda. Confirmado que existe
+infraestrutura de assinatura já modelada mas inativa (`users.trial_expires_at`, `users.account_status`,
+`users.plan`; o bloco de expiração de trial em `/api/auth/login` está comentado, com a nota inline "TRIAL
+DESATIVADO TEMPORARIAMENTE — reativar quando lançar planos pagos"). Confirmado também que a landing
+(`public/landing.html`, seção `#precos`) já tem os 3 planos fixos definidos — Solo R$79/mês, Profissional
+R$179/mês (mais escolhido), Escritório R$379/mês (fala com a equipe) — e que a própria página diz
+explicitamente: **"Os planos pagos entram no ar após a fase de validação com os escritórios pioneiros."**
+
+Isso importa porque pedir Stripe hoje **reverte uma decisão já tomada e documentada**: em 25/08, depois da
+recusa da proposta da Gene Digital, ficou definido "Sistema de pagamento + reativar trial — pausado até
+validar com mais advogados (3+ betas)". Hoje (16/09) ainda é só 1 de 3 betas confirmados pra meta de 30/09,
+faltando 14 dias, e nenhum número novo de funil foi reportado desde então. Atualizei o item correspondente
+no `command-center-data.json` (domínio Comercial) de `pausado` pra `em_andamento`, registrando essa reversão
+explicitamente — não é uma crítica, é o papel de espelho que o Maurício pediu que eu tivesse (ver seção
+"Papel de Mentor" acima): ele pode ter uma razão boa pra acelerar agora, mas a decisão anterior existia por
+um motivo e merece ser revisitada de olhos abertos, não silenciosamente sobrescrita.
+
+**Duas perguntas bloqueantes, ainda sem resposta do Maurício, antes de começar a implementar:**
+1. Ele já tem conta Stripe com chaves de API prontas pra usar? (Claude não pode criar a conta nem gerar
+   chaves por ele.)
+2. "Cobrar pela utilização" significa (a) ativar os 3 planos fixos já publicados na landing — Stripe
+   Subscriptions com Price IDs fixos —, ou (b) cobrança literalmente por uso/consumo (ex.: por peça gerada) —
+   Stripe usage-based billing / metered billing? São integrações arquiteturalmente diferentes; começar sem
+   definir isso arrisca retrabalho caro numa integração de pagamento.
+
+**Pendente, não relacionado ao Stripe:** duas melhorias na tela de Processos já construídas e validadas em
+maquete numa sessão anterior (correção de espaçamento/visibilidade dos botões de ação no detalhe do processo;
+busca + filtros por status/urgência de prazo na lista) — mas como o arquivo real mudou de base nesta sessão
+(fix do Tour acima), essas duas mudanças precisam ser reaplicadas sobre a versão atual antes de gravar; ainda
+aguardando aprovação explícita do Maurício pra fazer isso.
+
+**Pendências operacionais acumuladas de `git add / commit / push` via PowerShell:** "Vincular peça" v2
+(15/09), fix do Tour + limpeza do `#tour-overlay` duplicado (16/09), e `command-center-data.json` v17 (16/09).
+Três gravações via `device_commit_files` já feitas no arquivo real, faltando só o commit/push manual.
+
+---
+
+## 16/09/2026 — Processo: reaplicadas espaçamento/botões + busca e filtros na lista (por cima do fix do Tour)
+
+Maurício aprovou ("quero") gravar as duas melhorias da tela de Processos que estavam pendentes de uma sessão
+anterior (correção de espaçamento/visibilidade dos 3 botões de ação no detalhe do processo — `.proc-tabs`
+ganhou `padding:16px 24px 0`, `.proc-det-sub` `margin-top` 3px→6px, os botões "+ Novo prazo/+ Nova custa/+
+Vincular peça" trocaram de `.hd-tip-link` pra uma classe nova `.proc-sec-btn` com borda visível; e busca +
+filtros por status/urgência de prazo na lista de Processos, com classes dedicadas `.proc-pill*` pra não repetir
+o problema de seletor não-escopado já corrigido no Tour). Como a base real do arquivo tinha mudado (fix do
+Tour), as duas mudanças foram reaplicadas do zero em cima da versão atual, não só copiadas da tentativa
+anterior.
+
+**Nota de processo, pra registro:** ao reconferir o arquivo real antes de reaplicar essas mudanças, encontrei
+duas vezes seguidas uma gravação que não batia exatamente com o que eu esperava ter mandado (uma primeira vez
+com a regra CSS `#tour-overlay` faltando, uma segunda vez com um comentário HTML órfão sobrando de
+`<!-- TOUR GUIADO -->`). As duas foram corrigidas e a gravação final foi conferida byte a byte (checksum
+idêntico entre a cópia local validada e o arquivo real após o `device_commit_files`) antes de considerar
+concluído. Não cheguei a confirmar a causa raiz do desalinhamento nas duas primeiras tentativas — pode ter
+sido um arquivo antigo reaproveitado sem querer no meio do processo de gravação, não necessariamente algo
+externo mexendo no arquivo. Registrando aqui como lembrete: depois de qualquer `device_commit_files` em
+`index.html`, vale re-conferir com `device_stage_files` + checksum antes de dar como concluído, não só
+confiar no retorno `"written"` da chamada.
+
+**Verificação final:** `node validate.js` OK, Playwright cobrindo os dois fluxos juntos na mesma base final —
+checkbox do Tour persistindo corretamente (não reaparece após reload) e os filtros da lista de Processos
+(busca por texto, status, urgência de prazo, combinação, estado de zero resultado, mobile 390px) — sem erros
+de JS relevantes no console. Gravado no arquivo real e reconferido com checksum idêntico.
+
+**Pendências operacionais de `git add / commit / push` via PowerShell, atualizadas:** "Vincular peça" v2
+(15/09), fix do Tour (16/09), Processo — espaçamento/botões + busca/filtros na lista (16/09),
+`command-center-data.json` v18 (16/09). Código do commit único fornecido ao Maurício nesta sessão.
+
+

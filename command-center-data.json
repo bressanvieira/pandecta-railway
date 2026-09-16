@@ -1,7 +1,7 @@
 {
   "meta": {
     "nome": "Pandecta Executive Command Center",
-    "versao": 17,
+    "versao": 18,
     "atualizado_em": "2026-09-16",
     "changelog": [
       {
@@ -88,11 +88,17 @@
         "versao": 17,
         "data": "2026-09-16",
         "mudancas": "Mauricio trouxe tres pedidos novos numa unica mensagem. (1) Confirmou a ideia de uma tela/alerta explicito de \"pipeline de prazos\" (lista dos processos vencendo mostrada ativamente ao advogado, nao so passiva na home) e que o canal real que ele quer de fato e WhatsApp, nao e-mail como Claude tinha recomendado como primeiro passo mais barato -- atualizado o item de Prioridade 1 do roadmap de produto (rastreio de prazo/andamento) pra refletir que a versao manual (CRUD Processos/Prazos/Custas, calculo de vencimento, 4 telas, busca e filtros na lista) ja foi construida e majoritariamente implantada, e criado item novo dedicado so pra integracao de WhatsApp como canal de alerta. (2) Login com Google (OAuth) elevado de prioridade baixa pra alta a pedido dele (\"quero ja fazer\"), ainda sem data de inicio definida. (3) Pediu integracao com Stripe AINDA HOJE pra comecar a cobrar pela utilizacao -- reverte a decisao de 25/08 de pausar monetizacao ate validar com mais advogados (hoje ainda so 1 de 3 betas da meta de 30/09 confirmados, faltando 14 dias). Levantadas duas perguntas bloqueantes antes de comecar a implementar, ainda sem resposta dele: se ja existe conta/chaves de API Stripe prontas, e se \"cobrar pela utilizacao\" significa ativar os 3 planos fixos ja publicados na landing (Solo/Profissional/Escritorio) ou fazer billing por uso medido (ex.: por peca gerada) -- sao arquiteturas de Stripe diferentes. Tambem nesta sessao, ainda nao gravado nos arquivos reais (pendente de aprovacao final do Mauricio): correcao de espacamento/visibilidade dos botoes de acao na tela de detalhe do Processo, e busca + filtros por status/prazo na lista de Processos."
+      },
+      {
+        "versao": 18,
+        "data": "2026-09-16",
+        "mudancas": "Mauricio respondeu as duas perguntas bloqueantes do Stripe: ja tem conta e ja criou os 3 planos la (Solo/Profissional/Escritorio), mas pediu pra adiar a implementacao pra depois -- nao e mais 'hoje ate o fim do dia' como pedido originalmente. Item do dominio Comercial atualizado pra refletir isso (escopo resolvido, inicio da implementacao aguardando sinal dele). Tambem reportou (qualitativo, sem numero fechado de 'quantos advogados abordei essa semana') que esta tendo boa recepcao dos advogados contatados, incluindo procura organica/inbound gerando pecas trabalhistas, e disse estar 'firme na venda' e ate gostando de vender -- sinal positivo depois de ~9 semanas sem numero de pipeline reportado, mas ainda sem o numero fechado em si."
       }
     ]
   },
   "dashboard": {
     "avancou": [
+      "Mauricio reportou (16/09, qualitativo, sem numero fechado ainda) boa recepcao dos advogados contatados, incluindo procura organica/inbound gerando pecas trabalhistas -- primeiro sinal positivo de vendas desde a lacuna de ~9 semanas sem dado de funil",
       "Duas melhorias na tela de Processos prontas e validadas em maquete (espacamento/visibilidade dos botoes de acao no detalhe do processo + busca e filtros por status/prazo na lista) -- aguardando aprovacao final do Mauricio antes de gravar no codigo real",
       "Redesign publicado: landing + app + 4 páginas órfãs no ar em pandecta.com.br (confirmado indiretamente em 04/09, ao verificar a tag do GA4 rodando no site real)",
       "Google Analytics (GA4) instalado na landing com banner de consentimento LGPD; política de privacidade atualizada para mencionar o uso — tag confirmada ativa no site real em 04/09",
@@ -619,9 +625,9 @@
           "objetivo": "Monetizacao com planos pagos. Reversao de rota: em 16/09 Mauricio pediu pra iniciar a integracao com Stripe ainda hoje, pra comecar a cobrar pela utilizacao -- antes de fechar a meta de 30/09 (ainda 1 de 3 betas) e sem novo numero de validacao reportado. Reverte a decisao de 25/08 de pausar ate validar com mais advogados.",
           "status": "em_andamento",
           "responsavel": "Maurício",
-          "dependencias": "Conta Stripe + chaves de API do Mauricio (Claude nao pode criar conta nem gerar chaves); definicao se \"cobrar pela utilizacao\" significa ativar os 3 planos fixos ja publicados na landing (Solo/Profissional/Escritorio) ou fazer billing por uso medido (ex.: por peca gerada) -- arquiteturas diferentes no Stripe, pergunta ainda sem resposta",
-          "proxima_acao": "Confirmar com Mauricio: (1) ja tem conta Stripe com chaves de API prontas? (2) planos fixos existentes (assinatura) ou billing por uso medido? So depois disso da pra comecar a implementacao",
-          "prazo": "16/09/2026 (hoje) -- pedido explicito do Mauricio",
+          "dependencias": "Conta Stripe + 3 planos ja criados no Stripe pelo Mauricio (confirmado 16/09) -- so falta definir a ordem/data de inicio da implementacao com ele",
+          "proxima_acao": "Aguardar sinal do Mauricio pra comecar a implementacao (ele pediu pra adiar em 16/09, nao e mais pra hoje) -- quando ele der o sinal, integrar Stripe Subscriptions com os 3 Price IDs ja criados",
+          "prazo": "Sem data -- escopo/credenciais resolvidos em 16/09, implementacao adiada a pedido dele",
           "prioridade": "alta"
         }
       ]

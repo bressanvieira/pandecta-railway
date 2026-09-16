@@ -750,7 +750,7 @@ html.has-session #screen-login{visibility:hidden;}
 .proc-detalhe.open{display:flex;}
 .proc-det-hd{padding:18px 24px;border-bottom:1px solid var(--bd);background:var(--card);flex-shrink:0;}
 .proc-det-num{font-size:18px;font-weight:700;color:var(--t1);}
-.proc-det-sub{font-size:12.5px;color:var(--t2);margin-top:3px;}
+.proc-det-sub{font-size:12.5px;color:var(--t2);margin-top:6px;}
 .proc-det-body{padding:24px;display:flex;flex-direction:column;gap:22px;max-width:900px;}
 .proc-sec-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .proc-sec-title h3{font-size:13.5px;font-weight:700;color:var(--t1);margin:0;}
@@ -766,7 +766,7 @@ html.has-session #screen-login{visibility:hidden;}
 .proc-pecas-list{display:flex;flex-direction:column;gap:6px;}
 .proc-peca-item{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--card);border:1px solid var(--bd);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--t2);transition:background .12s;}
 .proc-peca-item:hover{background:var(--bg);}
-.proc-tabs{display:flex;gap:22px;border-bottom:1px solid var(--bd);margin-bottom:18px;overflow-x:auto;}
+.proc-tabs{display:flex;gap:22px;border-bottom:1px solid var(--bd);margin-bottom:18px;overflow-x:auto;padding:16px 24px 0;}
 .proc-tab{padding:0 0 11px;font-size:13.5px;font-weight:600;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap;display:flex;align-items:center;gap:7px;}
 .proc-tab:hover{color:var(--t1);}
 .proc-tab.active{color:var(--t1);border-bottom-color:var(--gold);}
@@ -774,6 +774,13 @@ html.has-session #screen-login{visibility:hidden;}
 .proc-tab.active .proc-tab-count{color:var(--t2);}
 .proc-tab-panel{display:none;}
 .proc-tab-panel.active{display:block;}
+.proc-sec-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--card);border:1px solid var(--bd-md);border-radius:8px;color:var(--t1);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .14s;white-space:nowrap;flex-shrink:0;}
+.proc-sec-btn:hover{border-color:var(--bd-dk);background:var(--bg);}
+.proc-filters-row{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:16px;}
+.proc-pill-group{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.proc-pill-label{font-size:11.5px;color:var(--t3);font-weight:600;margin-right:2px;}
+.proc-pill{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bdr);background:var(--bg2);color:var(--t2);transition:all .15s;}
+.proc-pill.active{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-bd);}
 .vinc-peca-search{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--bd-md);border-radius:8px;font-size:13px;font-family:inherit;color:var(--t1);background:var(--bg) url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 22 22%22 fill=%22none%22 stroke=%22%238a8f98%22 stroke-width=%221.6%22%3E%3Ccircle cx=%2210%22 cy=%2210%22 r=%227%22/%3E%3Cpath d=%22M20 20l-4.3-4.3%22/%3E%3C/svg%3E') no-repeat 11px center;box-sizing:border-box;}
 .vinc-peca-search:focus{outline:none;border-color:var(--gold);}
 .vinc-peca-list{margin-top:10px;max-height:260px;overflow-y:auto;border:1px solid var(--bd);border-radius:8px;}
@@ -1112,6 +1119,7 @@ html.has-session #screen-login{visibility:hidden;}
   /* ── HISTÓRICO ── */
   .hist-toolbar{flex-direction:column;gap:8px;}
   .hist-area-pills{flex-wrap:wrap;}
+  .proc-filters-row{flex-direction:column;align-items:flex-start;gap:10px;}
   .hist-viewer-hd{flex-wrap:wrap;gap:8px;}
   .hist-th.th-autor,.hist-row-autor,.hist-th.th-adv,.hist-row-adv,.hist-th.th-reu,.hist-row-reu{display:none;}
   .hist-row-acts{opacity:1;}
@@ -1170,6 +1178,7 @@ html.has-session #screen-login{visibility:hidden;}
 .tour-hl,.tour-hl *{color:#fff!important;}
 .tour-hl{background:rgba(200,164,106,.22)!important;border-radius:8px;text-shadow:0 1px 4px rgba(0,0,0,.6)!important;}
 .tour-hl svg,.tour-hl path,.tour-hl circle,.tour-hl rect,.tour-hl line,.tour-hl polyline{stroke:#fff!important;fill:none!important;}
+#tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:9000;pointer-events:all;}
 /* == PANDECTA MODAL == */
 #pdc-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
 #pdc-modal{background:var(--card);border:1.5px solid var(--bd-md);border-radius:14px;padding:24px 26px 20px;max-width:360px;width:92%;box-shadow:0 6px 10px -6px rgba(16,26,36,.20);}
@@ -1618,7 +1627,27 @@ html.has-session #screen-login{visibility:hidden;}
         </div>
 
         <div class="hist-toolbar">
+          <div class="hist-search-wrap">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="6.5"/><path d="M18 18l-4.3-4.3"/></svg>
+            <input id="proc-search" class="hist-search" type="text" placeholder="Buscar por número, réu, vara ou área..." oninput="renderProcessos()">
+          </div>
           <span class="hist-count" id="proc-count"></span>
+        </div>
+        <div class="proc-filters-row">
+          <div class="proc-pill-group">
+            <span class="proc-pill-label">Status</span>
+            <div class="proc-pill active" data-status="" onclick="selProcStatus(this)">Todos</div>
+            <div class="proc-pill" data-status="ativo" onclick="selProcStatus(this)">Ativo</div>
+            <div class="proc-pill" data-status="suspenso" onclick="selProcStatus(this)">Suspenso</div>
+            <div class="proc-pill" data-status="encerrado" onclick="selProcStatus(this)">Encerrado</div>
+          </div>
+          <div class="proc-pill-group">
+            <span class="proc-pill-label">Prazo</span>
+            <div class="proc-pill active" data-prazo="" onclick="selProcPrazo(this)">Todos</div>
+            <div class="proc-pill" data-prazo="vencido" onclick="selProcPrazo(this)">Vencidos</div>
+            <div class="proc-pill" data-prazo="urgente" onclick="selProcPrazo(this)">Vence em breve</div>
+            <div class="proc-pill" data-prazo="sem" onclick="selProcPrazo(this)">Sem prazo</div>
+          </div>
         </div>
 
         <div class="proc-table">
@@ -1660,13 +1689,13 @@ html.has-session #screen-login{visibility:hidden;}
         <div class="proc-det-body">
 
           <div class="proc-tab-panel active" data-tab-panel="prazos">
-            <div class="proc-sec-title"><h3>Prazos</h3><button class="hd-tip-link" onclick="abrirModalPrazo()">+ Novo prazo</button></div>
+            <div class="proc-sec-title"><h3>Prazos</h3><button class="proc-sec-btn" onclick="abrirModalPrazo()">+ Novo prazo</button></div>
             <div class="proc-timeline" id="proc-tl-wrap" style="display:none"><div id="proc-tl-list"></div></div>
             <div class="proc-empty-sec" id="proc-tl-empty">Nenhum prazo cadastrado para este processo ainda.</div>
           </div>
 
           <div class="proc-tab-panel" data-tab-panel="custas">
-            <div class="proc-sec-title"><h3>Custas</h3><button class="hd-tip-link" onclick="abrirModalCusta()">+ Nova custa</button></div>
+            <div class="proc-sec-title"><h3>Custas</h3><button class="proc-sec-btn" onclick="abrirModalCusta()">+ Nova custa</button></div>
             <div class="ac-table-wrap" id="proc-custas-wrap" style="display:none">
               <table class="ac-table">
                 <thead><tr><th>Descrição</th><th>Previsto</th><th>Pago</th><th>Data</th><th></th></tr></thead>
@@ -1677,7 +1706,7 @@ html.has-session #screen-login{visibility:hidden;}
           </div>
 
           <div class="proc-tab-panel" data-tab-panel="pecas">
-            <div class="proc-sec-title"><h3>Peças vinculadas</h3><button class="hd-tip-link" onclick="abrirModalVincularPeca()">+ Vincular peça</button></div>
+            <div class="proc-sec-title"><h3>Peças vinculadas</h3><button class="proc-sec-btn" onclick="abrirModalVincularPeca()">+ Vincular peça</button></div>
             <div class="proc-pecas-list" id="proc-pecas-list"></div>
             <div class="proc-empty-sec" id="proc-pecas-empty">Nenhuma peça vinculada a este processo ainda.</div>
           </div>
@@ -4271,13 +4300,42 @@ async function loadProcessos(){
   try{ processosList=await api('GET','/api/processos'); }catch(e){ processosList=[]; }
   renderProcessos();
 }
+let procStatusFiltro='', procPrazoFiltro='';
+function selProcStatus(el){
+  el.closest('.proc-pill-group').querySelectorAll('.proc-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  procStatusFiltro=el.dataset.status||'';
+  renderProcessos();
+}
+function selProcPrazo(el){
+  el.closest('.proc-pill-group').querySelectorAll('.proc-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  procPrazoFiltro=el.dataset.prazo||'';
+  renderProcessos();
+}
 function renderProcessos(){
   const grid=document.getElementById('proc-grid'), empty=document.getElementById('proc-empty');
   if(!grid) return;
-  const items=processosList;
+  const q=(document.getElementById('proc-search')?.value||'').toLowerCase().trim();
+  let items=processosList;
+  if(procStatusFiltro) items=items.filter(p=>p.status===procStatusFiltro);
+  if(procPrazoFiltro){
+    items=items.filter(p=>{
+      const prazo=p.proximo_prazo, temData=prazo&&prazo.data_vencimento;
+      if(procPrazoFiltro==='sem') return !temData;
+      if(!temData) return false;
+      const dias=diasParaVencer(prazo.data_vencimento);
+      if(procPrazoFiltro==='vencido') return dias<0;
+      if(procPrazoFiltro==='urgente') return dias>=0&&dias<=3;
+      return true;
+    });
+  }
+  if(q) items=items.filter(p=>[p.numero_cnj,p.reu,p.vara,p.area_label].filter(Boolean).join(' ').toLowerCase().includes(q));
   const countEl=document.getElementById('proc-count');
-  if(countEl) countEl.textContent=items.length+' processo'+(items.length!==1?'s':'');
+  if(countEl) countEl.textContent=items.length===processosList.length?(items.length+' processo'+(items.length!==1?'s':'')):(items.length+' de '+processosList.length);
   empty.style.display=items.length?'none':'block';
+  if(!items.length&&processosList.length) empty.innerHTML='Nenhum processo encontrado para esses filtros.';
+  else if(!items.length) empty.innerHTML='Nenhum processo cadastrado ainda.<br>Clique em <strong>Novo processo</strong> ou use o botão <strong>Protocolar</strong> na peça recém-gerada.';
   grid.innerHTML=items.map(p=>{
     const numTxt=p.numero_cnj||'Sem número CNJ';
     return `<div class="proc-row" onclick="abrirProcessoDetalhe(${p.id})" tabindex="0" onkeydown="if(event.key==='Enter')abrirProcessoDetalhe(${p.id})">
