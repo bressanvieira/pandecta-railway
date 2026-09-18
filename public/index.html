@@ -2049,55 +2049,162 @@ html.has-session #screen-login{visibility:hidden;}
 
 
 <!-- ════ MODAL: NOVO/EDITAR PROCESSO ════ -->
-<div id="modal-processo" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:900;align-items:center;justify-content:center;">
-  <div style="background:var(--card);border:1.5px solid var(--bd-md);border-radius:14px;padding:22px 28px 28px;width:min(480px,92vw);box-shadow:0 2px 6px rgba(16,26,36,.09),0 12px 22px -10px rgba(16,26,36,.24);">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--bd);">
-      <div style="display:flex;align-items:center;gap:10px;">
+<div id="modal-processo" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:900;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:var(--card);border:1.5px solid var(--bd-md);border-radius:14px;width:min(660px,94vw);max-height:88vh;box-shadow:0 2px 6px rgba(16,26,36,.09),0 12px 22px -10px rgba(16,26,36,.24);display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:22px 28px 16px;border-bottom:1px solid var(--bd);flex-shrink:0;">
+      <div style="display:flex;align-items:flex-start;gap:10px;">
         <div style="width:30px;height:30px;border-radius:7px;background:rgba(138,106,34,.10);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
           <svg width="15" height="15" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="12" height="13" rx="1.5"/><path d="M6 3V2a1 1 0 011-1h4a1 1 0 011 1v1"/><circle cx="9" cy="11" r="3"/><path d="M9 9.5V11l1.1.7"/></svg>
         </div>
-        <div style="font-size:16px;font-weight:600;color:var(--t1);" id="modal-processo-titulo">Novo processo</div>
-      </div>
-      <button onclick="fecharModalProcesso()" style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:20px;line-height:1;">×</button>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:14px;">
-      <div class="lf" style="margin-bottom:0;">
-        <label>Número do processo (CNJ) — opcional</label>
-        <input id="proc-form-numero" type="text" class="cfg-inp" placeholder="0000000-00.0000.0.00.0000">
-      </div>
-      <div class="lf" style="margin-bottom:0;">
-        <label>Réu</label>
-        <input id="proc-form-reu" type="text" class="cfg-inp" placeholder="Nome do réu">
-      </div>
-      <div style="display:flex;gap:12px;">
-        <div class="lf" style="margin-bottom:0;flex:1;">
-          <label>Vara/Juízo</label>
-          <input id="proc-form-vara" type="text" class="cfg-inp" placeholder="Ex: 2ª Vara Cível">
-        </div>
-        <div class="lf" style="margin-bottom:0;flex:1;">
-          <label>Área</label>
-          <select id="proc-form-area" class="cfg-inp" style="cursor:pointer;">
-            <option value="Direito do Consumidor">Consumidor</option>
-            <option value="Direito Civil">Civil</option>
-            <option value="Direito Trabalhista">Trabalhista</option>
-            <option value="Direito de Família">Família</option>
-            <option value="Direito Imobiliário">Imobiliário</option>
-            <option value="Direito Previdenciário">Previdenciário</option>
-          </select>
+        <div>
+          <div style="font-size:16px;font-weight:600;color:var(--t1);" id="modal-processo-titulo">Novo processo</div>
+          <div style="font-size:12px;color:var(--t3);margin-top:3px;max-width:42ch;line-height:1.45;">Cadastre os dados e já deixe prazos, custas e peças vinculadas prontos — tudo se salva de uma vez.</div>
         </div>
       </div>
-      <div class="lf" style="margin-bottom:0;">
-        <label>Status</label>
-        <select id="proc-form-status" class="cfg-inp" style="cursor:pointer;">
-          <option value="ativo">Ativo</option>
-          <option value="suspenso">Suspenso</option>
-          <option value="encerrado">Encerrado</option>
-        </select>
-      </div>
+      <button onclick="fecharModalProcesso()" style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:20px;line-height:1;flex-shrink:0;">×</button>
     </div>
-    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
-      <button onclick="fecharModalProcesso()" style="padding:9px 18px;border:1px solid var(--bd-md);border-radius:8px;background:transparent;color:var(--t2);cursor:pointer;font-size:13px;">Cancelar</button>
-      <button onclick="salvarProcesso()" class="btn-primary" style="padding:9px 18px;font-size:13px;">Salvar processo</button>
+
+    <div class="proc-tabs" id="npm-tabs" style="padding:0 28px;margin-bottom:0;flex-shrink:0;">
+      <div class="proc-tab active" data-tab="dados" onclick="npmTab('dados')">Dados</div>
+      <div class="proc-tab" data-tab="prazos" onclick="npmTab('prazos')">Prazos <span class="proc-tab-count" id="npm-count-prazos">0</span></div>
+      <div class="proc-tab" data-tab="custas" onclick="npmTab('custas')">Custas <span class="proc-tab-count" id="npm-count-custas">0</span></div>
+      <div class="proc-tab" data-tab="pecas" onclick="npmTab('pecas')">Peças vinculadas <span class="proc-tab-count" id="npm-count-pecas">0</span></div>
+    </div>
+
+    <div style="padding:20px 28px;overflow-y:auto;flex:1 1 auto;">
+
+      <div class="proc-tab-panel active" data-tab-panel="dados">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="lf" style="margin-bottom:0;">
+            <label>Número do processo (CNJ) — opcional</label>
+            <input id="proc-form-numero" type="text" class="cfg-inp" placeholder="0000000-00.0000.0.00.0000">
+          </div>
+          <div class="lf" style="margin-bottom:0;">
+            <label>Réu</label>
+            <input id="proc-form-reu" type="text" class="cfg-inp" placeholder="Nome do réu">
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div class="lf" style="margin-bottom:0;flex:1;">
+              <label>Vara/Juízo</label>
+              <input id="proc-form-vara" type="text" class="cfg-inp" placeholder="Ex: 2ª Vara Cível">
+            </div>
+            <div class="lf" style="margin-bottom:0;flex:1;">
+              <label>Área</label>
+              <select id="proc-form-area" class="cfg-inp" style="cursor:pointer;">
+                <option value="Direito do Consumidor">Consumidor</option>
+                <option value="Direito Civil">Civil</option>
+                <option value="Direito Trabalhista">Trabalhista</option>
+                <option value="Direito de Família">Família</option>
+                <option value="Direito Imobiliário">Imobiliário</option>
+                <option value="Direito Previdenciário">Previdenciário</option>
+              </select>
+            </div>
+          </div>
+          <div class="lf" style="margin-bottom:0;">
+            <label>Status</label>
+            <select id="proc-form-status" class="cfg-inp" style="cursor:pointer;">
+              <option value="ativo">Ativo</option>
+              <option value="suspenso">Suspenso</option>
+              <option value="encerrado">Encerrado</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="proc-tab-panel" data-tab-panel="prazos">
+        <div class="proc-timeline" id="npm-prazos-wrap" style="display:none"><div id="npm-prazos-list"></div></div>
+        <div class="proc-empty-sec" id="npm-prazos-empty">Nenhum prazo adicionado ainda.</div>
+        <button class="proc-sec-btn" style="margin-top:12px" onclick="npmOpenForm('prazo')">+ Novo prazo</button>
+        <div id="npm-form-prazo" style="display:none;margin-top:12px;padding:16px;border:1px solid var(--bd-md);border-radius:10px;background:var(--bg);">
+          <div class="lf" style="margin-bottom:12px;">
+            <label>Descrição</label>
+            <input id="npm-pz-desc" type="text" class="cfg-inp" placeholder="Ex: Contestação">
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div class="lf" style="margin-bottom:12px;flex:1;">
+              <label>Data da intimação/publicação</label>
+              <input id="npm-pz-data" type="date" class="cfg-inp" oninput="npmUpdatePrazoPreview()">
+            </div>
+            <div class="lf" style="margin-bottom:12px;flex:1;">
+              <label>Tipo de data</label>
+              <select id="npm-pz-tipodata" class="cfg-inp" style="cursor:pointer;">
+                <option value="disponibilizacao">Disponibilização</option>
+                <option value="publicacao">Publicação</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div class="lf" style="margin-bottom:10px;flex:1;">
+              <label>Dias</label>
+              <input id="npm-pz-dias" type="number" min="1" class="cfg-inp" placeholder="15" oninput="npmUpdatePrazoPreview()">
+            </div>
+            <div class="lf" style="margin-bottom:10px;flex:1;">
+              <label>Contagem</label>
+              <select id="npm-pz-contagem" class="cfg-inp" style="cursor:pointer;" onchange="npmUpdatePrazoPreview()">
+                <option value="uteis">Dias úteis</option>
+                <option value="corridos">Dias corridos</option>
+              </select>
+            </div>
+          </div>
+          <div style="font-size:11.5px;color:var(--t2);background:var(--card);border:1px solid var(--bd);border-radius:7px;padding:8px 11px;margin-bottom:12px;" id="npm-pz-preview">Preencha a data e os dias para ver o vencimento estimado.</div>
+          <div style="display:flex;justify-content:flex-end;gap:8px;">
+            <button onclick="npmCloseForm('prazo')" style="padding:7px 14px;border:1px solid var(--bd-md);border-radius:7px;background:transparent;color:var(--t2);cursor:pointer;font-size:12.5px;">Cancelar</button>
+            <button onclick="npmAddPrazo()" class="btn-primary" style="padding:7px 14px;font-size:12.5px;">Adicionar prazo</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="proc-tab-panel" data-tab-panel="custas">
+        <div class="ac-table-wrap" id="npm-custas-wrap" style="display:none">
+          <table class="ac-table">
+            <thead><tr><th>Descrição</th><th>Previsto</th><th>Pago</th><th>Data</th><th></th></tr></thead>
+            <tbody id="npm-custas-body"></tbody>
+          </table>
+        </div>
+        <div class="proc-empty-sec" id="npm-custas-empty">Nenhuma custa adicionada ainda.</div>
+        <button class="proc-sec-btn" style="margin-top:12px" onclick="npmOpenForm('custa')">+ Nova custa</button>
+        <div id="npm-form-custa" style="display:none;margin-top:12px;padding:16px;border:1px solid var(--bd-md);border-radius:10px;background:var(--bg);">
+          <div class="lf" style="margin-bottom:12px;">
+            <label>Descrição</label>
+            <input id="npm-ct-desc" type="text" class="cfg-inp" placeholder="Ex: Custas iniciais">
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div class="lf" style="margin-bottom:12px;flex:1;">
+              <label>Valor previsto (R$)</label>
+              <input id="npm-ct-previsto" type="number" step="0.01" min="0" class="cfg-inp" placeholder="0,00">
+            </div>
+            <div class="lf" style="margin-bottom:12px;flex:1;">
+              <label>Valor pago (R$)</label>
+              <input id="npm-ct-pago" type="number" step="0.01" min="0" class="cfg-inp" placeholder="0,00">
+            </div>
+          </div>
+          <div class="lf" style="margin-bottom:12px;">
+            <label>Data</label>
+            <input id="npm-ct-data" type="date" class="cfg-inp">
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:8px;">
+            <button onclick="npmCloseForm('custa')" style="padding:7px 14px;border:1px solid var(--bd-md);border-radius:7px;background:transparent;color:var(--t2);cursor:pointer;font-size:12.5px;">Cancelar</button>
+            <button onclick="npmAddCusta()" class="btn-primary" style="padding:7px 14px;font-size:12.5px;">Adicionar custa</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="proc-tab-panel" data-tab-panel="pecas">
+        <div style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.5;">Escolha peças já geradas no Histórico pra vincular a este processo. Só aparecem peças que ainda não estão vinculadas a nenhum processo.</div>
+        <input type="text" id="npm-peca-search" class="vinc-peca-search" placeholder="Buscar por tipo, área ou réu..." oninput="npmFiltrarPecas()">
+        <div id="npm-pecas-list" class="vinc-peca-list"></div>
+        <div id="npm-pecas-empty" style="display:none;font-size:12.5px;color:var(--t3);padding:22px 0;text-align:center;">Nenhuma peça sem vínculo no seu Histórico no momento.</div>
+        <div id="npm-pecas-noresult" style="display:none;font-size:12.5px;color:var(--t3);padding:22px 0;text-align:center;">Nenhuma peça encontrada pra essa busca.</div>
+      </div>
+
+    </div>
+
+    <div style="display:flex;align-items:center;gap:14px;padding:16px 28px;border-top:1px solid var(--bd);flex-shrink:0;flex-wrap:wrap;">
+      <div style="flex:1 1 200px;font-size:11.5px;color:var(--t3);line-height:1.4;">Nada se perde ao trocar de aba — tudo é salvo junto ao clicar em <strong style="color:var(--t2);">Salvar processo</strong>.</div>
+      <div style="display:flex;gap:10px;flex-shrink:0;">
+        <button onclick="fecharModalProcesso()" style="padding:9px 18px;border:1px solid var(--bd-md);border-radius:8px;background:transparent;color:var(--t2);cursor:pointer;font-size:13px;">Cancelar</button>
+        <button onclick="salvarProcesso()" class="btn-primary" id="npm-save-btn" style="padding:9px 18px;font-size:13px;">Salvar processo</button>
+      </div>
     </div>
   </div>
 </div>
@@ -4507,9 +4614,18 @@ async function salvarVincularPeca(){
   }catch(e){ toast('Erro: '+e.message,'err'); }
 }
 
-// -- Modal: Novo/editar processo --
+// -- Modal: Novo processo (cadastro + prazos + custas + peças vinculadas em uma etapa, 18/09/2026) --
 let processoEditandoId=null;
-function abrirModalProcesso(){
+let npmPrazos=[], npmCustas=[], npmPecasCandidatos=[], npmPecasSelecionadas=new Set();
+const NPM_TRASH_SVG='<svg width="14" height="14" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 5.8h14.8"/><path d="M8.2 5.8V4.4a1.5 1.5 0 0 1 1.5-1.5h2.6a1.5 1.5 0 0 1 1.5 1.5v1.4"/><path d="M5.4 5.8v12.1a1.5 1.5 0 0 0 1.5 1.5h8.2a1.5 1.5 0 0 0 1.5-1.5V5.8"/><path d="M9.2 9.6v6M12.8 9.6v6"/></svg>';
+
+function npmTab(name){
+  const wrap=document.getElementById('modal-processo'); if(!wrap) return;
+  wrap.querySelectorAll('#npm-tabs .proc-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===name));
+  wrap.querySelectorAll('.proc-tab-panel').forEach(p=>p.classList.toggle('active',p.dataset.tabPanel===name));
+}
+
+async function abrirModalProcesso(){
   processoEditandoId=null;
   document.getElementById('modal-processo-titulo').textContent='Novo processo';
   document.getElementById('proc-form-numero').value='';
@@ -4517,9 +4633,151 @@ function abrirModalProcesso(){
   document.getElementById('proc-form-vara').value='';
   document.getElementById('proc-form-area').value='Direito do Consumidor';
   document.getElementById('proc-form-status').value='ativo';
+  npmPrazos=[]; npmCustas=[]; npmPecasSelecionadas=new Set();
+  npmRenderPrazos(); npmRenderCustas();
+  document.getElementById('npm-form-prazo').style.display='none';
+  document.getElementById('npm-form-custa').style.display='none';
+  document.getElementById('npm-peca-search').value='';
+  try{ const hist=await api('GET','/api/history'); npmPecasCandidatos=hist.filter(x=>!x.processo_id); }
+  catch(e){ npmPecasCandidatos=[]; }
+  npmRenderPecas(npmPecasCandidatos);
+  npmTab('dados');
   document.getElementById('modal-processo').style.display='flex';
 }
 function fecharModalProcesso(){ document.getElementById('modal-processo').style.display='none'; }
+
+// -- Prazos (adicionados localmente, só vão pro servidor quando "Salvar processo" for clicado) --
+function calcVencEstimado(dataIniStr,dias,tipo){
+  if(!dataIniStr||!dias) return '';
+  const [y,m,d]=dataIniStr.split('-').map(Number);
+  let dt=new Date(y,m-1,d);
+  dias=Number(dias)||0;
+  if(tipo==='corridos'){ dt.setDate(dt.getDate()+dias); }
+  else{ let added=0; while(added<dias){ dt.setDate(dt.getDate()+1); const wd=dt.getDay(); if(wd!==0&&wd!==6) added++; } }
+  return fmtISOLocal(dt);
+}
+function npmUpdatePrazoPreview(){
+  const el=document.getElementById('npm-pz-preview'); if(!el) return;
+  const data=document.getElementById('npm-pz-data').value;
+  const dias=document.getElementById('npm-pz-dias').value;
+  const tipo=document.getElementById('npm-pz-contagem').value;
+  if(!data||!dias){ el.textContent='Preencha a data e os dias para ver o vencimento estimado.'; return; }
+  const venc=calcVencEstimado(data,dias,tipo);
+  el.innerHTML='Vencimento estimado: <strong style="color:var(--t1);">'+esc(fmtDataBR(venc))+'</strong> <span style="color:var(--t3);">(recalculado pela regra do CPC ao salvar)</span>';
+}
+function npmOpenForm(kind){
+  document.getElementById('npm-form-'+kind).style.display='block';
+  if(kind==='prazo'){
+    document.getElementById('npm-pz-desc').value='';
+    document.getElementById('npm-pz-data').value='';
+    document.getElementById('npm-pz-tipodata').value='disponibilizacao';
+    document.getElementById('npm-pz-dias').value='';
+    document.getElementById('npm-pz-contagem').value='uteis';
+    npmUpdatePrazoPreview();
+  }else{
+    document.getElementById('npm-ct-desc').value='';
+    document.getElementById('npm-ct-previsto').value='';
+    document.getElementById('npm-ct-pago').value='';
+    document.getElementById('npm-ct-data').value='';
+  }
+}
+function npmCloseForm(kind){ document.getElementById('npm-form-'+kind).style.display='none'; }
+function npmRenderPrazos(){
+  document.getElementById('npm-count-prazos').textContent=npmPrazos.length;
+  const wrap=document.getElementById('npm-prazos-wrap'), empty=document.getElementById('npm-prazos-empty'), list=document.getElementById('npm-prazos-list');
+  if(!npmPrazos.length){ wrap.style.display='none'; empty.style.display='block'; return; }
+  wrap.style.display='block'; empty.style.display='none';
+  list.innerHTML=npmPrazos.map((pr,i)=>{
+    const venc=calcVencEstimado(pr.data_inicio,pr.dias,pr.tipo_contagem);
+    const dias2=diasParaVencer(venc);
+    let cls='ok'; if(dias2<0) cls='venceu'; else if(dias2<=3) cls='urgente';
+    return `<div class="proc-tl-item">
+      <div class="proc-tl-desc">
+        <div class="proc-tl-desc-txt">${esc(pr.descricao||'Prazo')}</div>
+        <div class="proc-tl-desc-sub">${pr.dias} dias ${pr.tipo_contagem==='corridos'?'corridos':'úteis'} a partir de ${fmtDataBR(pr.data_inicio)}</div>
+      </div>
+      <div class="proc-tl-venc"><span class="chip-prazo ${cls}" title="Estimativa — recalculado ao salvar">${esc(fmtDataBR(venc))}</span></div>
+      <div class="proc-tl-acts"><button class="hca-btn danger" title="Remover" onclick="npmRemovePrazo(${i})">${NPM_TRASH_SVG}</button></div>
+    </div>`;
+  }).join('');
+}
+function npmAddPrazo(){
+  const descricao=document.getElementById('npm-pz-desc').value.trim();
+  const data_inicio=document.getElementById('npm-pz-data').value;
+  const tipo_data=document.getElementById('npm-pz-tipodata').value;
+  const dias=Number(document.getElementById('npm-pz-dias').value)||0;
+  const tipo_contagem=document.getElementById('npm-pz-contagem').value;
+  if(!data_inicio||!dias){ toast('Informe a data e a quantidade de dias.','err'); return; }
+  npmPrazos.push({descricao,data_inicio,tipo_data,tipo_contagem,dias});
+  npmRenderPrazos();
+  npmCloseForm('prazo');
+}
+function npmRemovePrazo(i){ npmPrazos.splice(i,1); npmRenderPrazos(); }
+
+// -- Custas (mesmo padrão: locais até salvar o processo) --
+function npmRenderCustas(){
+  document.getElementById('npm-count-custas').textContent=npmCustas.length;
+  const wrap=document.getElementById('npm-custas-wrap'), empty=document.getElementById('npm-custas-empty'), body=document.getElementById('npm-custas-body');
+  if(!npmCustas.length){ wrap.style.display='none'; empty.style.display='block'; return; }
+  wrap.style.display='block'; empty.style.display='none';
+  body.innerHTML=npmCustas.map((c,i)=>`<tr>
+    <td>${esc(c.descricao||'—')}</td>
+    <td>${fmtMoeda(c.valor_previsto)}</td>
+    <td>${fmtMoeda(c.valor_pago)}</td>
+    <td>${c.data?fmtDataBR(c.data):'—'}</td>
+    <td style="text-align:right;"><button class="hca-btn danger" title="Remover" onclick="npmRemoveCusta(${i})">${NPM_TRASH_SVG}</button></td>
+  </tr>`).join('');
+}
+function npmAddCusta(){
+  const descricao=document.getElementById('npm-ct-desc').value.trim();
+  const valor_previsto=Number(document.getElementById('npm-ct-previsto').value)||0;
+  const valor_pago=Number(document.getElementById('npm-ct-pago').value)||0;
+  const data=document.getElementById('npm-ct-data').value;
+  if(!descricao){ toast('Informe uma descrição para a custa.','err'); return; }
+  npmCustas.push({descricao,valor_previsto,valor_pago,data});
+  npmRenderCustas();
+  npmCloseForm('custa');
+}
+function npmRemoveCusta(i){ npmCustas.splice(i,1); npmRenderCustas(); }
+
+// -- Peças vinculadas (seleção local; vinculadas de verdade quando o processo for salvo) --
+function npmRenderPecas(items){
+  const listEl=document.getElementById('npm-pecas-list'), empty=document.getElementById('npm-pecas-empty'), noresult=document.getElementById('npm-pecas-noresult'), searchEl=document.getElementById('npm-peca-search');
+  document.getElementById('npm-count-pecas').textContent=npmPecasSelecionadas.size;
+  if(!npmPecasCandidatos.length){
+    listEl.style.display='none'; searchEl.style.display='none'; empty.style.display='block'; noresult.style.display='none';
+    return;
+  }
+  searchEl.style.display=''; empty.style.display='none';
+  if(!items.length){ listEl.style.display='none'; noresult.style.display='block'; return; }
+  listEl.style.display=''; noresult.style.display='none';
+  listEl.innerHTML=items.map(x=>{
+    const checked=npmPecasSelecionadas.has(x.id)?'checked':'';
+    const sub=[x.area_label,x.reu].filter(Boolean).join(' · ')||'—';
+    return `<label class="vinc-peca-row" for="npm-chk-${x.id}">
+      <input type="checkbox" id="npm-chk-${x.id}" ${checked} onchange="npmTogglePeca(${x.id})">
+      <div class="vinc-peca-row-main">
+        <div class="vinc-peca-row-tipo">${esc(x.tipo_label||'Peça')}</div>
+        <div class="vinc-peca-row-sub">${esc(sub)}</div>
+      </div>
+      <div class="vinc-peca-row-date">${esc(fmtDate(x.created_at).replace(/,.*$/,''))}</div>
+    </label>`;
+  }).join('');
+}
+function npmTogglePeca(id){
+  if(npmPecasSelecionadas.has(id)) npmPecasSelecionadas.delete(id); else npmPecasSelecionadas.add(id);
+  document.getElementById('npm-count-pecas').textContent=npmPecasSelecionadas.size;
+}
+function npmFiltrarPecas(){
+  const q=document.getElementById('npm-peca-search').value.trim().toLowerCase();
+  const filtrados=!q?npmPecasCandidatos:npmPecasCandidatos.filter(x=>
+    (x.tipo_label||'').toLowerCase().includes(q) ||
+    (x.area_label||'').toLowerCase().includes(q) ||
+    (x.reu||'').toLowerCase().includes(q)
+  );
+  npmRenderPecas(filtrados);
+}
+
 async function salvarProcesso(){
   const body={
     numero_cnj:document.getElementById('proc-form-numero').value.trim(),
@@ -4528,13 +4786,30 @@ async function salvarProcesso(){
     area_label:document.getElementById('proc-form-area').value,
     status:document.getElementById('proc-form-status').value
   };
+  const saveBtn=document.getElementById('npm-save-btn');
+  if(saveBtn){ saveBtn.disabled=true; saveBtn.style.opacity='.6'; saveBtn.style.cursor='default'; }
   try{
-    if(processoEditandoId) await api('PUT','/api/processos/'+processoEditandoId,body);
-    else await api('POST','/api/processos',body);
+    const processo=processoEditandoId
+      ? await api('PUT','/api/processos/'+processoEditandoId,body)
+      : await api('POST','/api/processos',body);
+    const pid=processo.id;
+    let falhas=0;
+    const tarefas=[];
+    npmPrazos.forEach(pr=>tarefas.push(api('POST','/api/prazos',Object.assign({processo_id:pid},pr)).catch(()=>{falhas++;})));
+    npmCustas.forEach(c=>tarefas.push(api('POST','/api/custas',Object.assign({processo_id:pid},c)).catch(()=>{falhas++;})));
+    [...npmPecasSelecionadas].forEach(id=>tarefas.push(api('PUT','/api/history/'+id,{processo_id:pid}).catch(()=>{falhas++;})));
+    if(tarefas.length) await Promise.all(tarefas);
     fecharModalProcesso();
+    const partes=[];
+    if(npmPrazos.length) partes.push(npmPrazos.length+' prazo'+(npmPrazos.length>1?'s':''));
+    if(npmCustas.length) partes.push(npmCustas.length+' custa'+(npmCustas.length>1?'s':''));
+    if(npmPecasSelecionadas.size) partes.push(npmPecasSelecionadas.size+' peça'+(npmPecasSelecionadas.size>1?'s':'')+' vinculada'+(npmPecasSelecionadas.size>1?'s':''));
+    if(falhas>0) toast('Processo salvo, mas '+(falhas===1?'1 item não foi salvo':falhas+' itens não foram salvos')+'. Você pode adicionar de novo na tela do processo.','err');
+    else toast(partes.length?('Processo salvo com '+partes.join(', ')+'!'):'Processo salvo!','ok');
     await loadProcessos();
-    toast('Processo salvo!','ok');
+    await abrirProcessoDetalhe(pid);
   }catch(e){ toast('Erro: '+e.message,'err'); }
+  finally{ if(saveBtn){ saveBtn.disabled=false; saveBtn.style.opacity=''; saveBtn.style.cursor=''; } }
 }
 async function confirmarExcluirProcesso(id){
   if(!id) return;
