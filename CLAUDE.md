@@ -214,10 +214,11 @@ Documento completo no Obsidian: `🎯 Plano Mestre/11 - Protocolo Anti-Eu.md`
 ## Pessoas
 
 - **Maurício** — fundador, dev, PO. Atibaia – SP. `mauriciovbressan@gmail.com`
-- **Fabiano** — beta tester principal. 30+ anos, 3 escritórios (Imobiliário ~50% + Consumidor + Contratos). Convite enviado 24/06/2026. Retorno positivo 03/07/2026 — usou 100% da peça, protocolou em juízo. Não conhece o Sistema de Modelos ainda (mostrar). **25/08:** sumiu logo após retornar de férias — Maurício já mandou mensagem de check-in sem cobrança, resposta pendente.
+- **Fabiano** — beta tester principal. 30+ anos, 3 escritórios (Imobiliário ~50% + Consumidor + Contratos). Convite enviado 24/06/2026. Retorno positivo 03/07/2026 — usou 100% da peça, protocolou em juízo. Não conhece o Sistema de Modelos ainda (mostrar). **25/08:** sumiu logo após retornar de férias — Maurício já mandou mensagem de check-in sem cobrança, resposta pendente. **16/09:** está atuando por intermédio de Heloísa, advogada do escritório dele — é ela quem de fato está testando a Pandecta agora (ver abaixo).
 - **Victor** — outro contato próximo (detalhe de papel/histórico ainda não registrado aqui). **25/08:** mesmo padrão do Fabiano — sumiu ao voltar de férias. Maurício já mandou check-in, resposta pendente. Hipótese dele (intuição forte, **não confirmada**): o tempo livre deu espaço pra conversar com alguém que ofereceu construir algo parecido (ex.: amigo diretor de TI do Fabiano).
 - **Kiko** — validou System Prompt v4 (22/05/2026)
-- **Consultora técnica jurídica** *(nome pendente)* — validação pelo olhar jurídico
+- **Consultora técnica jurídica** *(nome pendente)* — validação pelo olhar jurídico. **16/09:** possível sobreposição com Heloísa (abaixo) — mesma origem (indicação do Fabiano), ainda não confirmado se é a mesma pessoa.
+- **Heloísa** — advogada do escritório do Fabiano, 2º beta na prática. Indicada por Fabiano; é quem está de fato testando a Pandecta agora em nome do escritório dele (provavelmente a mesma advogada do bug do upload de modelo .docx registrado em 14/09 — nome só confirmado em 16/09). Deu feedback real de produto: pediu integração com a AASP (aasp.org.br) para consulta de prazos/andamento processual em SP — ver seção datada abaixo.
 
 ---
 
@@ -1105,5 +1106,33 @@ de JS relevantes no console. Gravado no arquivo real e reconferido com checksum 
 **Pendências operacionais de `git add / commit / push` via PowerShell, atualizadas:** "Vincular peça" v2
 (15/09), fix do Tour (16/09), Processo — espaçamento/botões + busca/filtros na lista (16/09),
 `command-center-data.json` v18 (16/09). Código do commit único fornecido ao Maurício nesta sessão.
+**Confirmado por ele: já rodou o push.**
 
+---
 
+## 16/09/2026 — Heloísa (2º beta na prática) pediu integração com a AASP; pesquisa: não tem API viável
+
+Heloísa (advogada do escritório do Fabiano — ver Pessoas) deu um feedback de produto espontâneo enquanto
+testava a Pandecta: para consultar prazos e andamento processual em SP, o escritório usa a ferramenta da
+AASP (Associação dos Advogados de São Paulo, aasp.org.br) e ela queria esse recurso dentro da Pandecta.
+Maurício procurou por conta própria e não achou integração de API — pediu pesquisa.
+
+**Pesquisa (Claude, 16/09):** a AASP não tem API pública de propósito geral. O único recurso próximo é a
+"API de Intimações" — um feed de notificações gratuito, mas fechado a sócios da AASP (associação voluntária
+de advogados, não é a OAB), sem documentação técnica pública e sem indício de venda a terceiros fora desse
+cadastro (`intimacaoapi-cadastro.aasp.org.br`, voltado a fornecedores de software de gestão de escritório).
+Mais importante: a própria ferramenta que a Heloísa citou (AASP Gerenciador) não tem fonte própria de dado
+judicial — é construída em cima das mesmas publicações oficiais (Diário Eletrônico) que o Datajud e o DJEN
+já distribuem publicamente. Ou seja, mirar a AASP especificamente não compensa: não existe lá nenhum dado
+que não esteja disponível, de forma aberta, na fonte oficial.
+
+**Conclusão:** isso não é uma nova direção — é validação real de um usuário confirmando o que já era a
+[Prioridade 1] do roadmap de produto (rastreio de prazo/andamento processual com alerta). O caminho
+recomendado continua sendo **Datajud** (CNJ, API pública gratuita — `https://www.cnj.jus.br/sistemas/datajud/api-publica/`)
+combinado com **DJEN** (Diário de Justiça Eletrônico Nacional, que o TJSP está migrando a usar), com
+agregadores comerciais (Escavador, Jusbrasil Soluções, Judit.io, CodiloTech, ADVBOX) como alternativa mais
+rica e pronta pra usar caso o volume de clientes justifique o custo — esses já têm APIs REST/webhooks
+documentadas cobrindo PJe/e-SAJ/90+ portais de tribunal.
+
+Atualizado em paralelo no `command-center-data.json` (item [Prioridade 1] do domínio Produto + seção
+Pessoas) e no Obsidian, seguindo o protocolo de manutenção dos três.
